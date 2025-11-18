@@ -2,467 +2,324 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import {
-  Card,
-  Text,
-  Button,
-  Spinner,
-  makeStyles,
-  tokens,
-  Body1,
-  Caption1,
-  Badge,
-  Divider,
-} from '@fluentui/react-components';
-import {
-  CheckmarkCircle24Regular,
-  DismissCircle24Regular,
-  Globe24Regular,
-  Chat24Regular,
-} from '@fluentui/react-icons';
 import { projectsAPI } from '@/lib/api';
 import { Project } from '@/lib/types';
-import ReactMarkdown from 'react-markdown';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
-const useStyles = makeStyles({
-  container: {
-    minHeight: '100vh',
-    paddingTop: '40px',
-    paddingBottom: '40px',
-  },
-  header: {
-    background: 'white',
-    borderRadius: '12px',
-    padding: '32px',
-    marginBottom: '24px',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-  },
-  projectHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '24px',
-    marginBottom: '24px',
-  },
-  logo: {
-    width: '80px',
-    height: '80px',
-    borderRadius: '50%',
-    objectFit: 'cover',
-  },
-  projectInfo: {
-    flex: 1,
-  },
-  projectName: {
-    fontSize: '2.5rem',
-    fontWeight: '700',
-    color: tokens.colorNeutralForeground1,
-  },
-  launchpadBadge: {
-    display: 'inline-block',
-    marginLeft: '16px',
-  },
-  socials: {
-    display: 'flex',
-    gap: '12px',
-    marginTop: '16px',
-  },
-  socialLink: {
-    fontSize: '1.5rem',
-    cursor: 'pointer',
-    transition: 'transform 0.2s',
-    '&:hover': {
-      transform: 'scale(1.1)',
-    },
-  },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '24px',
-    marginBottom: '24px',
-  },
-  scoreCard: {
-    textAlign: 'center',
-    padding: '32px',
-  },
-  scoreValue: {
-    fontSize: '4rem',
-    fontWeight: '700',
-    marginBottom: '8px',
-  },
-  infoGrid: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '16px',
-  },
-  infoRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: '12px 0',
-    borderBottom: `1px solid ${tokens.colorNeutralStroke2}`,
-  },
-  checkItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    padding: '8px 0',
-  },
-  findingsSection: {
-    marginTop: '24px',
-  },
-  findingCard: {
-    marginBottom: '12px',
-    padding: '16px',
-    borderLeft: '4px solid',
-  },
-  timeline: {
-    position: 'relative',
-    paddingLeft: '40px',
-  },
-  timelineItem: {
-    position: 'relative',
-    paddingBottom: '24px',
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      left: '-32px',
-      top: '8px',
-      width: '16px',
-      height: '16px',
-      borderRadius: '50%',
-      background: tokens.colorBrandBackground,
-    },
-    '&::after': {
-      content: '""',
-      position: 'absolute',
-      left: '-24px',
-      top: '24px',
-      width: '2px',
-      height: 'calc(100% - 16px)',
-      background: tokens.colorNeutralStroke2,
-    },
-  },
-  loading: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '400px',
-  },
-});
+import styles from './project.module.css';
 
 export default function ProjectPage() {
-  const styles = useStyles();
   const params = useParams();
   const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchProject = async () => {
+      try {
+        const response = await projectsAPI.getBySlug(params.slug as string);
+        setProject(response.data);
+      } catch (error) {
+        console.error('Error fetching project:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (params.slug) {
-      loadProject(params.slug as string);
+      fetchProject();
     }
   }, [params.slug]);
 
-  const loadProject = async (slug: string) => {
-    try {
-      setLoading(true);
-      const response = await projectsAPI.getBySlug(slug);
-      setProject(response.data);
-    } catch (error) {
-      console.error('Failed to load project:', error);
-      router.push('/');
-    } finally {
-      setLoading(false);
-    }
+  const getScoreBadge = (score: number) => {
+    if (score >= 90) return { label: 'HIGH RISK', className: styles.scoreHigh };
+    if (score >= 80) return { label: 'GOOD', className: styles.scoreGood };
+    if (score >= 70) return { label: 'PASS', className: styles.scorePass };
+    return { label: 'FAIL', className: styles.scoreFail };
   };
 
-  const getScoreColor = (score: number) => {
-    if (score >= 90) return tokens.colorPaletteGreenForeground1;
-    if (score >= 80) return tokens.colorPaletteLightGreenForeground1;
-    if (score >= 70) return tokens.colorPaletteYellowForeground1;
-    return tokens.colorPaletteRedForeground1;
-  };
-
-  const getSeverityColor = (severity: string) => {
-    const colors: any = {
-      critical: tokens.colorPaletteRedBackground3,
-      major: tokens.colorPaletteDarkOrangeBackground3,
-      medium: tokens.colorPaletteYellowBackground3,
-      minor: tokens.colorPaletteLightGreenBackground3,
-      informational: tokens.colorPaletteBlueBackground2,
-    };
-    return colors[severity.toLowerCase()] || tokens.colorNeutralBackground3;
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <span key={i} className={i < rating ? styles.starFilled : styles.starEmpty}>
+        ★
+      </span>
+    ));
   };
 
   if (loading) {
     return (
       <div className={styles.loading}>
-        <Spinner size="extra-large" label="Loading project..." />
+        <div className={styles.spinner}></div>
+        <p>Loading project...</p>
       </div>
     );
   }
 
   if (!project) {
-    return null;
+    return (
+      <div className={styles.loading}>
+        <p>Project not found</p>
+        <button onClick={() => router.push('/')} className={styles.navButton}>
+          Back to Home
+        </button>
+      </div>
+    );
   }
 
-  const chartData = project.score_history?.data?.map((score, index) => ({
-    name: `V${index + 1}`,
-    score,
-  })) || [];
+  const scoreBadge = getScoreBadge(project.finalScore || 0);
 
   return (
-    <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 20px' }} className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.projectHeader}>
-          {project.logo && (
-            <img src={project.logo} alt={project.name} className={styles.logo} />
-          )}
-          <div className={styles.projectInfo}>
-            <h1 className={styles.projectName}>
-              {project.name}
-              {project.launchpad && (
-                <Badge className={styles.launchpadBadge} appearance="filled">
-                  {project.launchpad}
-                </Badge>
-              )}
-            </h1>
-            <Text size={500}>{project.symbol}</Text>
-            <div className={styles.socials}>
-              {project.socials.website && (
-                <a href={project.socials.website} target="_blank" rel="noopener noreferrer">
-                  🌐
-                </a>
-              )}
-              {project.socials.telegram && (
-                <a href={project.socials.telegram} target="_blank" rel="noopener noreferrer">
-                  💬
-                </a>
-              )}
-              {project.socials.twitter && (
-                <a href={project.socials.twitter} target="_blank" rel="noopener noreferrer">
-                  🐦
-                </a>
-              )}
-              {project.socials.github && (
-                <a href={project.socials.github} target="_blank" rel="noopener noreferrer">
-                  💻
-                </a>
-              )}
-            </div>
+    <div className={styles.page}>
+      {/* Header */}
+      <header className={styles.header}>
+        <div className={styles.headerContent}>
+          <div className={styles.logo} onClick={() => router.push('/')}>
+            <span className={styles.logoIcon}>🛡️</span>
+            <span>cfg<span className={styles.logoText}>.ninja</span></span>
           </div>
+          <nav className={styles.nav}>
+            <button className={styles.navButton}>Audits</button>
+            <button className={styles.navButton}>Submit Project</button>
+            <button className={styles.signInButton}>Sign In</button>
+          </nav>
         </div>
-        <ReactMarkdown>{project.description}</ReactMarkdown>
-      </div>
+      </header>
 
-      <div className={styles.grid}>
-        <Card className={styles.scoreCard}>
-          <Caption1>Audit Security Score</Caption1>
-          <Text
-            className={styles.scoreValue}
-            style={{ color: getScoreColor(project.audit_score) }}
-          >
-            {project.audit_score}%
-          </Text>
-          <Badge appearance="filled" color={project.audit_confidence === 'High' ? 'success' : 'warning'}>
-            {project.audit_confidence} Confidence
-          </Badge>
-          {chartData.length > 0 && (
-            <div style={{ marginTop: '24px', height: '150px' }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis domain={[0, 100]} />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="score" stroke={tokens.colorBrandBackground} strokeWidth={3} />
-                </LineChart>
-              </ResponsiveContainer>
+      {/* Project Header */}
+      <div className={styles.projectHeader}>
+        <img 
+          src={project.logo || '/default-logo.png'} 
+          alt={project.name}
+          className={styles.projectLogo}
+        />
+        <div className={styles.projectInfo}>
+          <h1 className={styles.projectName}>
+            {project.name}
+            {project.launchpad && (
+              <span className={styles.launchpad}>{project.launchpad}</span>
+            )}
+          </h1>
+          {project.symbol && (
+            <div className={styles.projectMeta}>
+              <span className={styles.symbol}>${project.symbol}</span>
             </div>
           )}
-        </Card>
-
-        <Card>
-          <Text size={600} weight="semibold">Token Analysis</Text>
-          <Divider style={{ margin: '16px 0' }} />
-          <div className={styles.infoGrid}>
-            <div>
-              <Caption1>Token Name</Caption1>
-              <Body1>{project.name}</Body1>
-            </div>
-            <div>
-              <Caption1>Symbol</Caption1>
-              <Body1>{project.symbol}</Body1>
-            </div>
-            <div>
-              <Caption1>Decimals</Caption1>
-              <Body1>{project.decimals}</Body1>
-            </div>
-            <div>
-              <Caption1>Total Supply</Caption1>
-              <Body1>{project.supply}</Body1>
-            </div>
-            <div>
-              <Caption1>Platform</Caption1>
-              <Body1>{project.platform}</Body1>
-            </div>
-            <div>
-              <Caption1>Verified</Caption1>
-              <Body1>{project.contract_info.contract_verified ? '✅ Yes' : '❌ No'}</Body1>
-            </div>
+          <div className={styles.socials}>
+            {project.website && (
+              <a href={project.website} target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+                🌐
+              </a>
+            )}
+            {project.twitter && (
+              <a href={project.twitter} target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+                🐦
+              </a>
+            )}
+            {project.telegram && (
+              <a href={project.telegram} target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+                ✈️
+              </a>
+            )}
+            {project.discord && (
+              <a href={project.discord} target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+                💬
+              </a>
+            )}
           </div>
-        </Card>
-
-        <Card>
-          <Text size={600} weight="semibold">Page Statistics</Text>
-          <Divider style={{ margin: '16px 0' }} />
-          <div style={{ fontSize: '2rem', textAlign: 'center', margin: '24px 0' }}>
-            👁️ {project.page_view} Views
-          </div>
-          <div style={{ fontSize: '2rem', textAlign: 'center', margin: '24px 0' }}>
-            🗳️ {project.total_votes} Votes
-          </div>
-        </Card>
+        </div>
       </div>
 
-      <Card>
-        <Text size={600} weight="semibold">Manual Code Review Risk Results</Text>
-        <Divider style={{ margin: '16px 0' }} />
-        <div className={styles.infoGrid}>
-          {[
-            { label: 'Can Mint?', value: project.overview.mint },
-            { label: 'Edit Taxes over 25%', value: project.overview.modify_tax },
-            { label: 'Max Transaction', value: project.overview.max_transaction },
-            { label: 'Max Wallet', value: project.overview.max_wallet },
-            { label: 'Enable Trade', value: project.overview.enable_trading },
-            { label: 'Honeypot', value: project.overview.honeypot },
-            { label: 'Trading Cooldown', value: project.overview.trading_cooldown },
-            { label: 'Transfer Pausable', value: project.overview.pause_transfer },
-            { label: 'Can Pause Trade?', value: project.overview.pause_trade },
-            { label: 'Anti Bot', value: project.overview.anti_bot },
-            { label: 'Antiwhale', value: project.overview.anit_whale },
-            { label: 'Proxy Contract', value: project.overview.proxy_check },
-            { label: 'Blacklisted', value: project.overview.blacklist },
-            { label: 'Hidden Ownership', value: project.overview.hidden_owner },
-            { label: 'Self-destruct', value: project.overview.self_destruct },
-            { label: 'Whitelisted', value: project.overview.whitelist },
-            { label: 'External Call', value: project.overview.external_call },
-          ].map((item) => (
-            <div key={item.label} className={styles.checkItem}>
-              {item.value ? (
-                <DismissCircle24Regular color={tokens.colorPaletteRedForeground1} />
-              ) : (
-                <CheckmarkCircle24Regular color={tokens.colorPaletteGreenForeground1} />
-              )}
-              <Text>{item.label}</Text>
+      {/* Main Content */}
+      <div className={styles.container}>
+        {/* Left Column */}
+        <div className={styles.leftColumn}>
+          {/* Project Info */}
+          <div className={styles.card}>
+            <h2 className={styles.cardTitle}>Project Information</h2>
+            <div className={styles.infoGrid}>
+              <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>Blockchain</span>
+                <span className={styles.infoValue}>{project.blockchain || 'N/A'}</span>
+              </div>
+              <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>Token Type</span>
+                <span className={styles.infoValue}>{project.tokenType || 'N/A'}</span>
+              </div>
+              <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>Contract Address</span>
+                <span className={styles.infoValue} style={{ fontSize: '0.8rem', wordBreak: 'break-all' }}>
+                  {project.contractAddress || 'N/A'}
+                </span>
+              </div>
+              <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>Deployer Address</span>
+                <span className={styles.infoValue} style={{ fontSize: '0.8rem', wordBreak: 'break-all' }}>
+                  {project.deployerAddress || 'N/A'}
+                </span>
+              </div>
             </div>
-          ))}
-        </div>
-        <Divider style={{ margin: '16px 0' }} />
-        <div className={styles.infoGrid}>
-          <div>
-            <Caption1>Buy Tax</Caption1>
-            <Body1>{project.overview.buy_tax}%</Body1>
           </div>
-          <div>
-            <Caption1>Sell Tax</Caption1>
-            <Body1>{project.overview.sell_tax}%</Body1>
-          </div>
-        </div>
-      </Card>
 
-      <Card>
-        <Text size={600} weight="semibold">Audit History</Text>
-        <Divider style={{ margin: '16px 0' }} />
-        <div className={styles.grid}>
-          {[
-            { label: 'Critical', data: project.critical, color: tokens.colorPaletteRedBackground3 },
-            { label: 'High', data: project.major, color: tokens.colorPaletteDarkOrangeBackground3 },
-            { label: 'Medium', data: project.medium, color: tokens.colorPaletteYellowBackground3 },
-            { label: 'Low', data: project.minor, color: tokens.colorPaletteLightGreenBackground3 },
-            { label: 'Informational', data: project.informational, color: tokens.colorPaletteBlueBackground2 },
-          ].map((severity) => (
-            <div key={severity.label} style={{ padding: '16px', background: severity.color, borderRadius: '8px' }}>
-              <Text size={500} weight="semibold">{severity.label}</Text>
-              <div style={{ marginTop: '12px' }}>
-                <Body1>Found: {severity.data.found}</Body1>
-                <Body1>Pending: {severity.data.pending}</Body1>
-                <Body1>Resolved: {severity.data.resolved}</Body1>
+          {/* Code Security */}
+          <div className={styles.card}>
+            <h2 className={styles.cardTitle}>Code Security</h2>
+            <div className={styles.securityGrid}>
+              <div className={styles.securityItem}>
+                <span className={project.isOwnershipRenounced ? styles.iconPass : styles.iconFail}>
+                  {project.isOwnershipRenounced ? '✓' : '✗'}
+                </span>
+                <span>Ownership Renounced</span>
+              </div>
+              <div className={styles.securityItem}>
+                <span className={project.isMintable ? styles.iconFail : styles.iconPass}>
+                  {project.isMintable ? '✗' : '✓'}
+                </span>
+                <span>Not Mintable</span>
+              </div>
+              <div className={styles.securityItem}>
+                <span className={project.isProxy ? styles.iconFail : styles.iconPass}>
+                  {project.isProxy ? '✗' : '✓'}
+                </span>
+                <span>No Proxy</span>
+              </div>
+              <div className={styles.securityItem}>
+                <span className={project.hasHoneypot ? styles.iconFail : styles.iconPass}>
+                  {project.hasHoneypot ? '✗' : '✓'}
+                </span>
+                <span>No Honeypot</span>
+              </div>
+              <div className={styles.securityItem}>
+                <span className={project.hasBlacklist ? styles.iconFail : styles.iconPass}>
+                  {project.hasBlacklist ? '✗' : '✓'}
+                </span>
+                <span>No Blacklist</span>
+              </div>
+              <div className={styles.securityItem}>
+                <span className={project.hasHiddenOwner ? styles.iconFail : styles.iconPass}>
+                  {project.hasHiddenOwner ? '✗' : '✓'}
+                </span>
+                <span>No Hidden Owner</span>
               </div>
             </div>
-          ))}
+            <div className={styles.taxInfo}>
+              <div>
+                <strong>Buy Tax:</strong> {project.buyTax !== undefined ? `${project.buyTax}%` : 'N/A'}
+              </div>
+              <div>
+                <strong>Sell Tax:</strong> {project.sellTax !== undefined ? `${project.sellTax}%` : 'N/A'}
+              </div>
+            </div>
+          </div>
+
+          {/* Audit Findings */}
+          <div className={styles.card}>
+            <h2 className={styles.cardTitle}>Audit Findings</h2>
+            <div className={styles.findingsGrid}>
+              <div className={styles.findingCard} style={{ borderColor: '#dc2626' }}>
+                <h3>Critical</h3>
+                <div className={styles.findingStats}>
+                  <div>Found: {project.severityCriticalFound || 0}</div>
+                  <div>Fixed: {project.severityCriticalFixed || 0}</div>
+                  <div>Acknowledged: {project.severityCriticalAcknowledged || 0}</div>
+                </div>
+              </div>
+              <div className={styles.findingCard} style={{ borderColor: '#ea580c' }}>
+                <h3>High</h3>
+                <div className={styles.findingStats}>
+                  <div>Found: {project.severityHighFound || 0}</div>
+                  <div>Fixed: {project.severityHighFixed || 0}</div>
+                  <div>Acknowledged: {project.severityHighAcknowledged || 0}</div>
+                </div>
+              </div>
+              <div className={styles.findingCard} style={{ borderColor: '#f59e0b' }}>
+                <h3>Medium</h3>
+                <div className={styles.findingStats}>
+                  <div>Found: {project.severityMediumFound || 0}</div>
+                  <div>Fixed: {project.severityMediumFixed || 0}</div>
+                  <div>Acknowledged: {project.severityMediumAcknowledged || 0}</div>
+                </div>
+              </div>
+              <div className={styles.findingCard} style={{ borderColor: '#eab308' }}>
+                <h3>Low</h3>
+                <div className={styles.findingStats}>
+                  <div>Found: {project.severityLowFound || 0}</div>
+                  <div>Fixed: {project.severityLowFixed || 0}</div>
+                  <div>Acknowledged: {project.severityLowAcknowledged || 0}</div>
+                </div>
+              </div>
+              <div className={styles.findingCard} style={{ borderColor: '#3b82f6' }}>
+                <h3>Info</h3>
+                <div className={styles.findingStats}>
+                  <div>Found: {project.severityInfoFound || 0}</div>
+                  <div>Fixed: {project.severityInfoFixed || 0}</div>
+                  <div>Acknowledged: {project.severityInfoAcknowledged || 0}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Description */}
+          {project.description && (
+            <div className={styles.card}>
+              <h2 className={styles.cardTitle}>About</h2>
+              <p style={{ color: '#ccc', lineHeight: '1.6' }}>{project.description}</p>
+            </div>
+          )}
         </div>
-      </Card>
 
-      {project.timeline && (
-        <Card>
-          <Text size={600} weight="semibold">Timeline</Text>
-          <Divider style={{ margin: '16px 0' }} />
-          <div className={styles.timeline}>
-            {project.timeline.audit_request && (
-              <div className={styles.timelineItem}>
-                <Caption1>Audit Request</Caption1>
-                <Body1>{project.timeline.audit_request}</Body1>
+        {/* Right Column */}
+        <div className={styles.rightColumn}>
+          {/* Score Card */}
+          <div className={styles.scoreCard}>
+            <h2 className={styles.cardTitle}>Audit Score</h2>
+            <div className={styles.scoreCircle}>
+              <div className={styles.scoreValue}>{project.finalScore || 0}</div>
+              <span className={`${styles.scoreBadge} ${scoreBadge.className}`}>
+                {scoreBadge.label}
+              </span>
+            </div>
+            <div className={styles.confidence}>
+              <div style={{ marginBottom: '0.5rem', color: '#888' }}>Confidence</div>
+              <div className={styles.stars}>
+                {renderStars(Math.round((project.confidenceScore || 0) / 20))}
               </div>
-            )}
-            {project.timeline.onboarding_process && (
-              <div className={styles.timelineItem}>
-                <Caption1>Onboarding Process</Caption1>
-                <Body1>{project.timeline.onboarding_process}</Body1>
-              </div>
-            )}
-            {project.timeline.audit_preview && (
-              <div className={styles.timelineItem}>
-                <Caption1>Audit Preview</Caption1>
-                <Body1>{project.timeline.audit_preview}</Body1>
-              </div>
-            )}
-            {project.timeline.audit_release && (
-              <div className={styles.timelineItem}>
-                <Caption1>Audit Release</Caption1>
-                <Body1>{project.timeline.audit_release}</Body1>
-              </div>
-            )}
-          </div>
-        </Card>
-      )}
-
-      {project.contract_info && (
-        <Card>
-          <Text size={600} weight="semibold">Contract Information</Text>
-          <Divider style={{ margin: '16px 0' }} />
-          <div className={styles.infoGrid}>
-            <div>
-              <Caption1>Contract Name</Caption1>
-              <Body1>{project.contract_info.contract_name}</Body1>
-            </div>
-            <div>
-              <Caption1>Language</Caption1>
-              <Body1>{project.contract_info.contract_language}</Body1>
-            </div>
-            <div>
-              <Caption1>Compiler</Caption1>
-              <Body1>{project.contract_info.contract_compiler}</Body1>
-            </div>
-            <div>
-              <Caption1>License</Caption1>
-              <Body1>{project.contract_info.contract_license}</Body1>
-            </div>
-            <div>
-              <Caption1>Owner Address</Caption1>
-              <Body1 style={{ fontSize: '0.75rem', wordBreak: 'break-all' }}>
-                {project.contract_info.contract_owner}
-              </Body1>
-            </div>
-            <div>
-              <Caption1>Contract Address</Caption1>
-              <Body1 style={{ fontSize: '0.75rem', wordBreak: 'break-all' }}>
-                {project.contract_info.contract_address}
-              </Body1>
             </div>
           </div>
-        </Card>
-      )}
+
+          {/* Stats */}
+          <div className={styles.card}>
+            <h2 className={styles.cardTitle}>Votes</h2>
+            <div className={styles.statsValue}>{project.votesCommunity || 0}</div>
+          </div>
+
+          {/* Share */}
+          <div className={styles.card}>
+            <h2 className={styles.cardTitle}>Share</h2>
+            <div className={styles.shareButtons}>
+              <button className={styles.shareButton}>🐦 Share on Twitter</button>
+              <button className={styles.shareButton}>✈️ Share on Telegram</button>
+              <button className={styles.shareButton}>📋 Copy Link</button>
+            </div>
+          </div>
+
+          {/* Timeline */}
+          {(project.auditStartDate || project.auditEndDate) && (
+            <div className={styles.card}>
+              <h2 className={styles.cardTitle}>Audit Timeline</h2>
+              <div className={styles.infoItem} style={{ marginBottom: '1rem' }}>
+                <span className={styles.infoLabel}>Start Date</span>
+                <span className={styles.infoValue}>
+                  {project.auditStartDate ? new Date(project.auditStartDate).toLocaleDateString() : 'N/A'}
+                </span>
+              </div>
+              <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>End Date</span>
+                <span className={styles.infoValue}>
+                  {project.auditEndDate ? new Date(project.auditEndDate).toLocaleDateString() : 'N/A'}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
