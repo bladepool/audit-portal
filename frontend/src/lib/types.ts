@@ -1,3 +1,17 @@
+export interface Finding {
+  id: string;
+  title: string;
+  severity: 'Critical' | 'High' | 'Medium' | 'Low' | 'Informational';
+  status: 'Detected' | 'Not Detected' | 'Pass' | 'Fail' | 'Acknowledge';
+  category: string;
+  description: string;
+  location: string;
+  recommendation: string;
+  alleviation: string;
+  action: string;
+  score: number;
+}
+
 export interface Project {
   _id: string;
   name: string;
@@ -9,6 +23,41 @@ export interface Project {
   launchpad?: string;
   slug: string;
   audit_pdf?: string;
+  auditPdfUrl?: string;
+  
+  // Audit Tool Info
+  auditToolVersion?: string;
+  auditReleaseNotes?: string;
+  auditEdition?: string;
+  paymentHash?: string;
+  
+  // Additional Contract Info
+  address?: string;
+  ownerAddress?: string;
+  ownerScore?: number;
+  blockNumber?: string;
+  dateCreated?: string;
+  baseToken?: string;
+  
+  // KYC Information
+  isKYC?: boolean;
+  kycURL?: string;
+  kycScore?: number;
+  isMainNetAvailable?: boolean;
+  isTestNetAvailable?: boolean;
+  
+  // Token Distribution
+  tokenDistribution?: {
+    isLiquidityLock?: boolean;
+    liquidityLockLink?: string;
+    lockAmount?: string;
+    lockLocation?: string;
+    distributions?: Array<{
+      name: string;
+      amount: string;
+      description: string;
+    }>;
+  };
   
   socials: {
     telegram?: string;
@@ -62,6 +111,25 @@ export interface Project {
     enable_trade_text?: string;
     pause_trade: boolean;
     max_wallet: boolean;
+  };
+  
+  // CFG Findings
+  cfg_findings?: Finding[];
+  
+  // SWC Checks
+  swc_checks?: Array<{
+    id: string;
+    status: string;
+    location: string;
+  }>;
+  
+  // Findings Totals
+  findings_totals?: {
+    critical: { found: number; pending: number; resolved: number };
+    high: { found: number; pending: number; resolved: number };
+    medium: { found: number; pending: number; resolved: number };
+    low: { found: number; pending: number; resolved: number };
+    informational: { found: number; pending: number; resolved: number };
   };
   
   minor: {
@@ -120,6 +188,7 @@ export interface Project {
     current: number;
   };
   
+  status?: 'draft' | 'published';
   published: boolean;
   createdAt: string;
   updatedAt: string;

@@ -115,7 +115,95 @@ const projectSchema = new mongoose.Schema({
   tags: [{ type: String }],
   launchpad_link: { type: String },
   
-  // Findings
+  // Audit Tool Info
+  auditToolVersion: { type: String },
+  auditReleaseNotes: { type: String },
+  auditEdition: { type: String },
+  paymentHash: { type: String },
+  
+  // Contract Details
+  address: { type: String },
+  ownerAddress: { type: String },
+  ownerScore: { type: String },
+  owner: { type: String },
+  blockNumber: { type: String },
+  dateCreated: { type: String },
+  baseToken: { type: String },
+  
+  // Additional Checks
+  isKYC: { type: String },
+  kycURL: { type: String },
+  kycScore: { type: String },
+  isMainNetAvailable: { type: String },
+  isTestNetAvailable: { type: String },
+  testNetAddress: { type: String },
+  testNetCodeBase: { type: String },
+  
+  // Token Distribution
+  tokenDistribution: { type: String },
+  isLiquidityLock: { type: String },
+  liquidityLockLink: { type: String },
+  lockAmount: { type: String },
+  lockLocation: { type: String },
+  unlockAmount: { type: String },
+  distributions: [{
+    name: { type: String },
+    amount: { type: String },
+    description: { type: String }
+  }],
+  
+  // Findings - CFG01 to CFG26
+  cfg_findings: [{
+    id: { type: String }, // CFG01, CFG02, etc.
+    title: { type: String },
+    severity: { type: String }, // Critical, High, Medium, Low, Informational
+    status: { type: String }, // Detected, Not Detected, Pass, Fail
+    category: { type: String },
+    description: { type: String },
+    location: { type: String },
+    recommendation: { type: String },
+    alleviation: { type: String },
+    action: { type: String },
+    score: { type: Number, default: 0 }
+  }],
+  
+  // SWC Checks (SWC100-SWC136)
+  swc_checks: [{
+    id: { type: String }, // SWC100, SWC101, etc.
+    status: { type: String },
+    location: { type: String }
+  }],
+  
+  // Findings Summary Totals
+  findings_totals: {
+    critical: {
+      found: { type: Number, default: 0 },
+      pending: { type: Number, default: 0 },
+      resolved: { type: Number, default: 0 }
+    },
+    high: {
+      found: { type: Number, default: 0 },
+      pending: { type: Number, default: 0 },
+      resolved: { type: Number, default: 0 }
+    },
+    medium: {
+      found: { type: Number, default: 0 },
+      pending: { type: Number, default: 0 },
+      resolved: { type: Number, default: 0 }
+    },
+    low: {
+      found: { type: Number, default: 0 },
+      pending: { type: Number, default: 0 },
+      resolved: { type: Number, default: 0 }
+    },
+    informational: {
+      found: { type: Number, default: 0 },
+      pending: { type: Number, default: 0 },
+      resolved: { type: Number, default: 0 }
+    }
+  },
+  
+  // Legacy Findings (keep for backward compatibility)
   findings: [{
     title: { type: String },
     severity: { type: String },
@@ -133,8 +221,12 @@ const projectSchema = new mongoose.Schema({
     current: { type: Number }
   },
   
+  // Audit PDF URL
+  auditPdfUrl: { type: String },
+  
   // Publishing
-  published: { type: Boolean, default: false }
+  published: { type: Boolean, default: false },
+  status: { type: String, default: 'draft' } // draft, published
 }, {
   timestamps: true
 });

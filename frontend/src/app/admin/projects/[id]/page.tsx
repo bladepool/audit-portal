@@ -16,8 +16,11 @@ import {
   Label,
   Field,
 } from '@fluentui/react-components';
+import { DocumentPdfRegular } from '@fluentui/react-icons';
 import { projectsAPI } from '@/lib/api';
-import { Project } from '@/lib/types';
+import { Project, Finding } from '@/lib/types';
+import FindingsManager from '@/components/FindingsManager';
+import { generateEnhancedAuditPDF } from '@/lib/enhancedPdfGenerator';
 
 const useStyles = makeStyles({
   container: {
@@ -163,6 +166,9 @@ export default function ProjectFormPage() {
   const [auditScore, setAuditScore] = useState(0);
   const [launchpadLink, setLaunchpadLink] = useState('');
   const [published, setPublished] = useState(false);
+  
+  // CFG Findings
+  const [cfgFindings, setCfgFindings] = useState<Finding[]>([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -265,12 +271,12 @@ export default function ProjectFormPage() {
       setPlatform(project.platform || 'Binance Smart Chain');
       setAuditRequest(project.timeline.audit_request || '');
       setOnboarding(project.timeline.onboarding_process || '');
-      setAuditPreview(project.timeline.audit_preview || '');
-      setAuditRelease(project.timeline.audit_release || '');
-      setAuditConfidence(project.audit_confidence || 'Medium');
       setAuditScore(project.audit_score);
       setLaunchpadLink(project.launchpad_link || '');
       setPublished(project.published);
+      
+      // Load CFG Findings
+      setCfgFindings(project.cfg_findings || []);
     } catch (error) {
       console.error('Failed to load project:', error);
       router.push('/admin/dashboard');
@@ -390,6 +396,7 @@ export default function ProjectFormPage() {
       audit_score: auditScore,
       launchpad_link: launchpadLink,
       published,
+      cfg_findings: cfgFindings,
       score_history: {
         data: [auditScore],
         current: auditScore,
@@ -646,9 +653,65 @@ export default function ProjectFormPage() {
           </div>
         </Card>
 
-        {/* Findings */}
+        {/* CFG Findings - Detailed Management */}
         <Card className={styles.section}>
-          <Text className={styles.sectionTitle}>Audit Findings</Text>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <Text className={styles.sectionTitle}>CFG Findings (Detailed)</Text>
+            <Button
+              appearance="primary"
+              icon={<DocumentPdfRegular />}
+              onClick={async () => {
+                // Build current project data for PDF generation
+                const currentProjectData = {
+                  name,
+                  symbol,
+                  decimals,
+                  supply,
+                  description,
+                  slug,
+                  logo,
+                  platform: platform || 'Binance Smart Chain',
+                  audit_score: auditScore,
+                  audit_confidence: auditConfidence,
+                  published,
+                  contract_info: { 
+                    contract_address: contractAddress,
+                    contract_compiler: contractCompiler,
+                    contract_license: contractLicense
+                  },
+                  overview: {
+                    honeypot,
+                    hidden_owner: hiddenOwner,
+                    mint,
+                    blacklist,
+                    whitelist,
+                    proxy_check: proxyCheck,
+                    buy_tax: buyTax,
+                    sell_tax: sellTax,
+                  },
+                  socials: { website, telegram, twitter, github },
+                  cfg_findings: cfgFindings,
+                  critical: { found: criticalFound, pending: criticalPending, resolved: criticalResolved },
+                  major: { found: majorFound, pending: majorPending, resolved: majorResolved },
+                  medium: { found: mediumFound, pending: mediumPending, resolved: mediumResolved },
+                  minor: { found: minorFound, pending: minorPending, resolved: minorResolved },
+                  informational: { found: infoFound, pending: infoPending, resolved: infoResolved },
+                } as Project;
+                await generateEnhancedAuditPDF(currentProjectData);
+              }}
+            >
+              Generate PDF Report
+            </Button>
+          </div>
+          <FindingsManager 
+            findings={cfgFindings}
+            onChange={setCfgFindings}
+          />
+        </Card>
+
+        {/* Findings Summary (Counts) */}
+        <Card className={styles.section}>
+          <Text className={styles.sectionTitle}>Findings Summary (Counts)</Text>
           
           <Text weight="semibold" style={{ marginTop: '16px', marginBottom: '8px' }}>Minor</Text>
           <div className={styles.grid}>

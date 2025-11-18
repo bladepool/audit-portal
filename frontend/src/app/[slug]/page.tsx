@@ -4,7 +4,23 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { projectsAPI } from '@/lib/api';
 import { Project } from '@/lib/types';
+
 import styles from './project.module.css';
+
+// Helper to format date
+function formatDate(dateString?: string | Date): string {
+  if (!dateString) return 'N/A';
+  try {
+    const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  } catch {
+    return 'N/A';
+  }
+}
 
 export default function ProjectPage() {
   const params = useParams();
