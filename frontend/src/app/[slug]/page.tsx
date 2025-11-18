@@ -186,10 +186,10 @@ export default function ProjectPage() {
   const getSeverityColor = (severity: string) => {
     const colors: any = {
       critical: tokens.colorPaletteRedBackground3,
-      major: tokens.colorPaletteOrangeBackground3,
+      major: tokens.colorPaletteDarkOrangeBackground3,
       medium: tokens.colorPaletteYellowBackground3,
       minor: tokens.colorPaletteLightGreenBackground3,
-      informational: tokens.colorPaletteBlueBackground3,
+      informational: tokens.colorPaletteBlueBackground2,
     };
     return colors[severity.toLowerCase()] || tokens.colorNeutralBackground3;
   };
@@ -377,10 +377,10 @@ export default function ProjectPage() {
         <div className={styles.grid}>
           {[
             { label: 'Critical', data: project.critical, color: tokens.colorPaletteRedBackground3 },
-            { label: 'High', data: project.major, color: tokens.colorPaletteOrangeBackground3 },
+            { label: 'High', data: project.major, color: tokens.colorPaletteDarkOrangeBackground3 },
             { label: 'Medium', data: project.medium, color: tokens.colorPaletteYellowBackground3 },
             { label: 'Low', data: project.minor, color: tokens.colorPaletteLightGreenBackground3 },
-            { label: 'Informational', data: project.informational, color: tokens.colorPaletteBlueBackground3 },
+            { label: 'Informational', data: project.informational, color: tokens.colorPaletteBlueBackground2 },
           ].map((severity) => (
             <div key={severity.label} style={{ padding: '16px', background: severity.color, borderRadius: '8px' }}>
               <Text size={500} weight="semibold">{severity.label}</Text>
