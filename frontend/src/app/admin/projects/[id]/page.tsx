@@ -76,6 +76,8 @@ export default function ProjectFormPage() {
   
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
+  const [fetchingGoPlus, setFetchingGoPlus] = useState(false);
+  const [goPlusMessage, setGoPlusMessage] = useState('');
   
   // Basic Info
   const [name, setName] = useState('');
@@ -294,6 +296,66 @@ export default function ProjectFormPage() {
       setSlug(response.data.slug);
     } catch (error) {
       console.error('Failed to generate slug:', error);
+    }
+  };
+
+  const handleFetchGoPlus = async () => {
+    if (isNew) {
+      alert('Please save the project first before fetching GoPlus data');
+      return;
+    }
+    
+    if (!contractAddress) {
+      alert('Contract address is required to fetch GoPlus security data');
+      return;
+    }
+    
+    setFetchingGoPlus(true);
+    setGoPlusMessage('Fetching security data from GoPlus Labs...');
+    
+    try {
+      const response = await projectsAPI.fetchGoPlus(params.id as string);
+      
+      if (response.data.success) {
+        setGoPlusMessage('✓ GoPlus data fetched successfully! Reloading project...');
+        
+        // Update the form with fetched data
+        const overview = response.data.overview;
+        setHoneypot(overview.honeypot || false);
+        setMint(overview.mint || false);
+        setMaxTax(overview.max_tax || false);
+        setMaxTransaction(overview.max_transaction || false);
+        setMaxWallet(overview.max_wallet || false);
+        setEnableTrading(overview.enable_trading || false);
+        setModifyTax(overview.modify_tax || false);
+        setTradingCooldown(overview.trading_cooldown || false);
+        setPauseTransfer(overview.pause_transfer || false);
+        setPauseTrade(overview.pause_trade || false);
+        setAntiBot(overview.anti_bot || false);
+        setAnitWhale(overview.anit_whale || false);
+        setProxyCheck(overview.proxy_check || false);
+        setBlacklist(overview.blacklist || false);
+        setHiddenOwner(overview.hidden_owner || false);
+        setBuyTax(overview.buy_tax || 0);
+        setSellTax(overview.sell_tax || 0);
+        setSelfDestruct(overview.self_destruct || false);
+        setWhitelist(overview.whitelist || false);
+        setExternalCall(overview.external_call || false);
+        setCannotBuy(overview.cannot_buy || false);
+        setCannotSell(overview.cannot_sell || false);
+        setCanTakeOwnership(overview.can_take_ownership || false);
+        
+        setTimeout(() => {
+          setGoPlusMessage('');
+        }, 5000);
+      } else {
+        setGoPlusMessage('✗ Failed to fetch GoPlus data: ' + response.data.error);
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch GoPlus data:', error);
+      setGoPlusMessage('✗ Error: ' + (error.response?.data?.error || error.message));
+    } finally {
+      setFetchingGoPlus(false);
     }
   };
 
@@ -572,7 +634,40 @@ export default function ProjectFormPage() {
 
         {/* Overview / Risk Assessment */}
         <Card className={styles.section}>
-          <Text className={styles.sectionTitle}>Overview / Risk Assessment</Text>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <Text className={styles.sectionTitle}>Overview / Risk Assessment</Text>
+            {!isNew && contractAddress && (
+              <Button 
+                appearance="primary" 
+                onClick={handleFetchGoPlus}
+                disabled={fetchingGoPlus}
+              >
+                {fetchingGoPlus ? 'Fetching...' : 'Fetch GoPlus Security Data'}
+              </Button>
+            )}
+          </div>
+          {goPlusMessage && (
+            <div style={{ 
+              padding: '12px', 
+              marginBottom: '16px', 
+              background: goPlusMessage.includes('✓') ? '#e6f7e6' : '#ffe6e6',
+              color: goPlusMessage.includes('✓') ? '#0a5c0a' : '#c00',
+              borderRadius: '8px',
+              border: `1px solid ${goPlusMessage.includes('✓') ? '#0a5c0a' : '#c00'}`
+            }}>
+              {goPlusMessage}
+            </div>
+          )}
+          <div style={{ 
+            padding: '12px', 
+            marginBottom: '16px', 
+            background: '#e6f3ff',
+            color: '#004085',
+            borderRadius: '8px',
+            fontSize: '0.9rem'
+          }}>
+            <strong>Note:</strong> When you flag a project as "Live", the system will automatically fetch real-time security data from GoPlus Labs API and update all risk assessment fields below. You can also manually fetch this data using the button above.
+          </div>
           <div className={styles.grid}>
             <Field label="Live">
               <Switch checked={live} onChange={(e) => setLive(e.currentTarget.checked)} />

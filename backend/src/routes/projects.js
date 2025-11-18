@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Project = require('../models/Project');
 const auth = require('../middleware/auth');
+const { fetchTokenSecurity, getChainId } = require('../services/goplusService');
 
 // Get all published projects (public)
 router.get('/', async (req, res) => {
@@ -93,18 +94,63 @@ router.post('/', auth, async (req, res) => {
 // Update project (admin only)
 router.put('/:id', auth, async (req, res) => {
   try {
+    const existingProject = await Project.findById(req.params.id);
+    
+    if (!existingProject) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+    
+    // Check if project is being flagged as live
+    const wasNotLive = !existingProject.live;
+    const isNowLive = req.body.live === true;
+    
+    // If project is being set to live, fetch security data from GoPlus
+    if (wasNotLive && isNowLive) {
+      console.log(`Project ${existingProject.name} is being flagged as LIVE. Fetching GoPlus security data...`);
+      
+      const contractAddress = req.body.contract_info?.contract_address || 
+                             req.body.address || 
+                             existingProject.contract_info?.contract_address || 
+                             existingProject.address;
+      
+      if (contractAddress) {
+        const platform = req.body.platform || existingProject.platform;
+        const chainId = getChainId(platform);
+        
+        console.log(`Fetching security data for contract: ${contractAddress} on chain: ${chainId}`);
+        
+        const securityResult = await fetchTokenSecurity(chainId, contractAddress);
+        
+        if (securityResult.success) {
+          console.log('GoPlus security data fetched successfully');
+          
+          // Merge the fetched overview data with existing overview
+          req.body.overview = {
+            ...existingProject.overview?.toObject(),
+            ...req.body.overview,
+            ...securityResult.overview
+          };
+          
+          console.log('Updated overview with GoPlus data:', req.body.overview);
+        } else {
+          console.warn('Failed to fetch GoPlus data:', securityResult.error);
+          // Continue with update even if GoPlus fetch fails
+        }
+      } else {
+        console.warn('No contract address found for GoPlus lookup');
+      }
+    }
+    
+    // Perform the update
     const project = await Project.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true, runValidators: true }
     );
     
-    if (!project) {
-      return res.status(404).json({ error: 'Project not found' });
-    }
-    
     res.json(project);
   } catch (error) {
+    console.error('Error updating project:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -171,6 +217,55 @@ router.post('/generate-slug', auth, async (req, res) => {
     
     res.json({ slug: finalSlug });
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Fetch GoPlus security data manually (admin only)
+router.post('/:id/fetch-goplus', auth, async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id);
+    
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+    
+    const contractAddress = project.contract_info?.contract_address || project.address;
+    
+    if (!contractAddress) {
+      return res.status(400).json({ error: 'No contract address found for this project' });
+    }
+    
+    const chainId = getChainId(project.platform);
+    
+    console.log(`Manually fetching GoPlus data for ${project.name}`);
+    console.log(`Contract: ${contractAddress}, Chain: ${chainId}`);
+    
+    const securityResult = await fetchTokenSecurity(chainId, contractAddress);
+    
+    if (securityResult.success) {
+      // Update project with fetched data
+      project.overview = {
+        ...project.overview?.toObject(),
+        ...securityResult.overview
+      };
+      
+      await project.save();
+      
+      res.json({
+        success: true,
+        message: 'GoPlus security data fetched and updated successfully',
+        overview: project.overview,
+        rawData: securityResult.rawData
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        error: securityResult.error
+      });
+    }
+  } catch (error) {
+    console.error('Error fetching GoPlus data:', error);
     res.status(500).json({ error: error.message });
   }
 });

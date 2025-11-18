@@ -49,6 +49,8 @@ export const projectsAPI = {
     api.patch(`/projects/${id}/publish`, { published }),
   generateSlug: (name: string) =>
     api.post('/projects/generate-slug', { name }),
+  fetchGoPlus: (id: string) =>
+    api.post(`/projects/${id}/fetch-goplus`),
 };
 
 export default api;
