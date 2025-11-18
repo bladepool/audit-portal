@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { Providers } from './providers'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -15,9 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <FluentProvider theme={webLightTheme}>
+        <Providers>
           {children}
-        </FluentProvider>
+        </Providers>
       </body>
     </html>
   )
