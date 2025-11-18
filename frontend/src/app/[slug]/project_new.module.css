@@ -638,6 +638,273 @@
   flex-direction: column;
 }
 
+/* Risk Section Styles */
+.riskSection {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.riskGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.riskItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: #0a0a0a;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.riskLabel {
+  color: #888;
+}
+
+.riskPass {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.riskFail {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.riskValue {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+/* Code Security Section */
+.codeSecuritySection {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.scoreHistory {
+  margin-top: 1rem;
+}
+
+.scoreHistoryLabel {
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.scoreHistoryValues {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #0a0a0a;
+  border-radius: 8px;
+}
+
+.scoreHistoryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.scoreHistoryText {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.scoreHistoryNumber {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Audit History Section */
+.auditHistorySection {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.auditHistoryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.auditHistoryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: #0a0a0a;
+  border-radius: 8px;
+}
+
+.auditHistoryNumber {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.auditHistoryLabel {
+  font-size: 0.85rem;
+  color: #888;
+  text-align: center;
+}
+
+/* Findings Breakdown */
+.findingsBreakdown {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.findingBreakdownItem {
+  padding: 1rem;
+  background: #0a0a0a;
+  border-radius: 8px;
+}
+
+.findingBreakdownHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.findingBreakdownBullet {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.findingBreakdownTitle {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.findingBreakdownStats {
+  color: #888;
+  font-size: 0.85rem;
+  padding-left: 2rem;
+}
+
+/* View Buttons */
+.viewButtons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.viewBtn {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.viewBtn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+/* Audit Confidence Card */
+.auditConfidenceDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 0;
+}
+
+.starsContainer {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.star {
+  font-size: 2.5rem;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.confidenceScore {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* File a Report Section */
+.reportDescription {
+  color: #888;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  line-height: 1.6;
+}
+
+.reportForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reportTextarea {
+  width: 100%;
+  padding: 1rem;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.reportTextarea:focus {
+  outline: none;
+  border-color: #ef4444;
+}
+
+.reportTextarea::placeholder {
+  color: #555;
+}
+
+.reportSubmitBtn {
+  padding: 0.75rem 1.5rem;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: flex-start;
+}
+
+.reportSubmitBtn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .container {
@@ -646,6 +913,14 @@
   
   .tokenGrid {
     grid-template-columns: 1fr;
+  }
+
+  .riskGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .auditHistoryGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -668,5 +943,13 @@
   
   .qualityBadge {
     display: none;
+  }
+
+  .auditHistoryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .viewButtons {
+    flex-direction: column;
   }
 }

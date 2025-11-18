@@ -240,12 +240,12 @@ export default function ProjectPage() {
 
             {/* Owner & Deployer */}
             <div className={styles.addressSection}>
-              <h3 className={styles.sectionTitle}>Owner & Deployer</h3>
+              <h3 className={styles.sectionTitle}>Owner & Deployer Information</h3>
               <div className={styles.addressCards}>
                 <div className={styles.addressCard}>
                   <div className={styles.addressLabel}>Owner Address</div>
                   <div className={styles.addressValue}>
-                    <span>{project.contract_info?.contract_owner || project.ownerAddress || 'N/A'}</span>
+                    <span>{project.contract_info?.contract_owner || project.ownerAddress || 'revoked'}</span>
                     <div className={styles.addressActions}>
                       <button className={styles.addressBtn}>📋</button>
                       <button className={styles.addressBtn}>🔗</button>
@@ -255,7 +255,7 @@ export default function ProjectPage() {
                 <div className={styles.addressCard}>
                   <div className={styles.addressLabel}>Deployer Address</div>
                   <div className={styles.addressValue}>
-                    <span>{project.contract_info?.contract_deployer || 'N/A'}</span>
+                    <span>{project.contract_info?.contract_deployer || project.contract_info?.contract_address || 'N/A'}</span>
                     <div className={styles.addressActions}>
                       <button className={styles.addressBtn}>📋</button>
                       <button className={styles.addressBtn}>🔗</button>
@@ -264,11 +264,263 @@ export default function ProjectPage() {
                 </div>
               </div>
             </div>
+
+            {/* Manual Code Review Risk Results */}
+            <div className={styles.riskSection}>
+              <h3 className={styles.sectionTitle}>Manual Code Review Risk Results</h3>
+              <div className={styles.riskGrid}>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Can Mint?</span>
+                  <span className={project.overview?.mint ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.mint ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Edit Taxes over 25%</span>
+                  <span className={project.overview?.max_tax ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.max_tax ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Max Transaction</span>
+                  <span className={project.overview?.max_transaction ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.max_transaction ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Max Wallet</span>
+                  <span className={project.overview?.max_wallet ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.max_wallet ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Enable Trade</span>
+                  <span className={project.overview?.enable_trading ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.enable_trading ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Modify Tax</span>
+                  <span className={project.overview?.modify_tax ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.modify_tax ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Honeypot</span>
+                  <span className={project.overview?.honeypot ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.honeypot ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Trading Cooldown</span>
+                  <span className={project.overview?.trading_cooldown ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.trading_cooldown ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Transfer Pausable</span>
+                  <span className={project.overview?.pause_transfer ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.pause_transfer ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Can Pause Trade?</span>
+                  <span className={project.overview?.pause_trade ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.pause_trade ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Anti Bot</span>
+                  <span className={project.overview?.anti_bot ? styles.riskPass : styles.riskFail}>
+                    {project.overview?.anti_bot ? 'Pass' : 'Fail'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Antiwhale</span>
+                  <span className={project.overview?.anit_whale ? styles.riskPass : styles.riskFail}>
+                    {project.overview?.anit_whale ? 'Pass' : 'Fail'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Proxy Contract</span>
+                  <span className={project.overview?.proxy_check ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.proxy_check ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Blacklisted</span>
+                  <span className={project.overview?.blacklist ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.blacklist ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Hidden Ownership</span>
+                  <span className={project.overview?.hidden_owner ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.hidden_owner ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Buy Tax</span>
+                  <span className={styles.riskValue}>{project.overview?.buy_tax || 0}</span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Sell Tax</span>
+                  <span className={styles.riskValue}>{project.overview?.sell_tax || 0}</span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Selfdestruct</span>
+                  <span className={project.overview?.self_destruct ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.self_destruct ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>Whitelisted</span>
+                  <span className={project.overview?.whitelist ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.whitelist ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+                <div className={styles.riskItem}>
+                  <span className={styles.riskLabel}>External Call</span>
+                  <span className={project.overview?.external_call ? styles.riskFail : styles.riskPass}>
+                    {project.overview?.external_call ? 'Fail' : 'Pass'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Code Security & Score History */}
+            <div className={styles.codeSecuritySection}>
+              <h3 className={styles.sectionTitle}>Code Security</h3>
+              <div className={styles.scoreHistory}>
+                <div className={styles.scoreHistoryLabel}>Score History</div>
+                <div className={styles.scoreHistoryValues}>
+                  <div className={styles.scoreHistoryItem}>
+                    <span className={styles.scoreHistoryText}>Low</span>
+                    <span className={styles.scoreHistoryNumber}>20</span>
+                  </div>
+                  <div className={styles.scoreHistoryItem}>
+                    <span className={styles.scoreHistoryNumber}>{auditScore}</span>
+                  </div>
+                  <div className={styles.scoreHistoryItem}>
+                    <span className={styles.scoreHistoryText}>High</span>
+                    <span className={styles.scoreHistoryNumber}>{auditScore}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Code Audit History */}
+            <div className={styles.auditHistorySection}>
+              <h3 className={styles.sectionTitle}>Code Audit History</h3>
+              <div className={styles.auditHistoryGrid}>
+                <div className={styles.auditHistoryItem}>
+                  <div className={styles.auditHistoryNumber}>0</div>
+                  <div className={styles.auditHistoryLabel}>All Findings</div>
+                </div>
+                <div className={styles.auditHistoryItem}>
+                  <div className={styles.auditHistoryNumber}>0</div>
+                  <div className={styles.auditHistoryLabel}>Partially Resolved</div>
+                </div>
+                <div className={styles.auditHistoryItem}>
+                  <div className={styles.auditHistoryNumber}>0</div>
+                  <div className={styles.auditHistoryLabel}>Acknowledged</div>
+                </div>
+                <div className={styles.auditHistoryItem}>
+                  <div className={styles.auditHistoryNumber}>0</div>
+                  <div className={styles.auditHistoryLabel}>Resolved</div>
+                </div>
+              </div>
+
+              {/* Findings Breakdown */}
+              <div className={styles.findingsBreakdown}>
+                <div className={styles.findingBreakdownItem}>
+                  <div className={styles.findingBreakdownHeader}>
+                    <span className={styles.findingBreakdownBullet} style={{ color: '#22c55e' }}>●</span>
+                    <span className={styles.findingBreakdownTitle}>{project.minor?.found || 0} Low</span>
+                  </div>
+                  <div className={styles.findingBreakdownStats}>
+                    {project.minor?.resolved || 0} Acknowledged, {project.minor?.pending || 0} Pending, {project.minor?.resolved || 0} Resolved
+                  </div>
+                </div>
+
+                <div className={styles.findingBreakdownItem}>
+                  <div className={styles.findingBreakdownHeader}>
+                    <span className={styles.findingBreakdownBullet} style={{ color: '#f59e0b' }}>●</span>
+                    <span className={styles.findingBreakdownTitle}>{project.medium?.found || 0} Medium</span>
+                  </div>
+                  <div className={styles.findingBreakdownStats}>
+                    {project.medium?.resolved || 0} Acknowledged, {project.medium?.pending || 0} Pending, {project.medium?.resolved || 0} Resolved
+                  </div>
+                </div>
+
+                <div className={styles.findingBreakdownItem}>
+                  <div className={styles.findingBreakdownHeader}>
+                    <span className={styles.findingBreakdownBullet} style={{ color: '#ef4444' }}>●</span>
+                    <span className={styles.findingBreakdownTitle}>{project.major?.found || 0} High</span>
+                  </div>
+                  <div className={styles.findingBreakdownStats}>
+                    {project.major?.resolved || 0} Acknowledged, {project.major?.pending || 0} Pending, {project.major?.resolved || 0} Resolved
+                  </div>
+                </div>
+
+                <div className={styles.findingBreakdownItem}>
+                  <div className={styles.findingBreakdownHeader}>
+                    <span className={styles.findingBreakdownBullet} style={{ color: '#dc2626' }}>●</span>
+                    <span className={styles.findingBreakdownTitle}>{project.critical?.found || 0} Critical</span>
+                  </div>
+                  <div className={styles.findingBreakdownStats}>
+                    {project.critical?.resolved || 0} Acknowledged, {project.critical?.pending || 0} Pending, {project.critical?.resolved || 0} Resolved
+                  </div>
+                </div>
+
+                <div className={styles.findingBreakdownItem}>
+                  <div className={styles.findingBreakdownHeader}>
+                    <span className={styles.findingBreakdownBullet} style={{ color: '#3b82f6' }}>●</span>
+                    <span className={styles.findingBreakdownTitle}>{project.informational?.found || 0} Informational</span>
+                  </div>
+                  <div className={styles.findingBreakdownStats}>
+                    {project.informational?.resolved || 0} Acknowledged, {project.informational?.pending || 0} Pending, {project.informational?.resolved || 0} Resolved
+                  </div>
+                </div>
+              </div>
+
+              {/* View Buttons */}
+              <div className={styles.viewButtons}>
+                {project.audit_pdf && (
+                  <button 
+                    className={styles.viewBtn}
+                    onClick={() => window.open(project.audit_pdf, '_blank')}
+                  >
+                    View Audit
+                  </button>
+                )}
+                <button className={styles.viewBtn}>View Findings</button>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Right Column - Community & Overview */}
         <div className={styles.rightColumn}>
+          {/* Audit Confidence */}
+          <div className={styles.card}>
+            <h2 className={styles.cardTitle}>Audit Confidence</h2>
+            <div className={styles.auditConfidenceDisplay}>
+              <div className={styles.starsContainer}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span 
+                    key={star} 
+                    className={styles.star}
+                    style={{ color: star <= Math.round(auditScore / 20) ? '#f59e0b' : '#333' }}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+              <div className={styles.confidenceScore}>{auditScore}/100</div>
+            </div>
+          </div>
+
           {/* Community Confidence */}
           <div className={styles.card}>
             <h2 className={styles.cardTitle}>Community Confidence</h2>
@@ -400,6 +652,24 @@ export default function ProjectPage() {
                 <span>Copy Link</span>
               </button>
             </div>
+          </div>
+
+          {/* File a Report */}
+          <div className={styles.card}>
+            <h2 className={styles.cardTitle}>File a Report</h2>
+            <p className={styles.reportDescription}>
+              If you find any discrepancies in the project that you would like to report, use the form below.
+            </p>
+            <form className={styles.reportForm}>
+              <textarea 
+                className={styles.reportTextarea}
+                placeholder="Describe the issue you found..."
+                rows={5}
+              />
+              <button type="submit" className={styles.reportSubmitBtn}>
+                Submit Report
+              </button>
+            </form>
           </div>
         </div>
       </div>
