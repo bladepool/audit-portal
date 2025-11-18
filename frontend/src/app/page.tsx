@@ -2,326 +2,219 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Card,
-  Text,
-  Button,
-  Spinner,
-  makeStyles,
-  tokens,
-  Body1,
-  Caption1,
-  Badge,
-} from '@fluentui/react-components';
-import { projectsAPI } from '@/lib/api';
-import { Project } from '@/lib/types';
-import Link from 'next/link';
+import { projectsAPI } from '../lib/api';
+import styles from './page.module.css';
 
-const useStyles = makeStyles({
-  container: {
-    minHeight: '100vh',
-    paddingTop: '40px',
-    paddingBottom: '40px',
-  },
-  header: {
-    textAlign: 'center',
-    marginBottom: '60px',
-    color: 'white',
-  },
-  title: {
-    fontSize: '3rem',
-    fontWeight: '700',
-    marginBottom: '16px',
-    textShadow: '0 2px 4px rgba(0,0,0,0.1)',
-  },
-  subtitle: {
-    fontSize: '1.25rem',
-    opacity: 0.9,
-  },
-  ctaButton: {
-    marginTop: '24px',
-    padding: '12px 32px',
-    fontSize: '1.1rem',
-  },
-  section: {
-    marginBottom: '48px',
-  },
-  sectionTitle: {
-    fontSize: '1.75rem',
-    fontWeight: '600',
-    color: 'white',
-    marginBottom: '24px',
-    textAlign: 'center',
-  },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-    gap: '24px',
-  },
-  projectCard: {
-    cursor: 'pointer',
-    transition: 'transform 0.2s, box-shadow 0.2s',
-    '&:hover': {
-      transform: 'translateY(-4px)',
-      boxShadow: '0 8px 16px rgba(0,0,0,0.15)',
-    },
-  },
-  projectHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    marginBottom: '12px',
-  },
-  projectLogo: {
-    width: '48px',
-    height: '48px',
-    borderRadius: '50%',
-    objectFit: 'cover',
-    backgroundColor: tokens.colorNeutralBackground3,
-  },
-  projectInfo: {
-    flex: 1,
-  },
-  projectName: {
-    fontSize: '1.25rem',
-    fontWeight: '600',
-    color: tokens.colorNeutralForeground1,
-  },
-  projectSymbol: {
-    color: tokens.colorNeutralForeground2,
-  },
-  scoreSection: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: '16px',
-    paddingTop: '16px',
-    borderTop: `1px solid ${tokens.colorNeutralStroke2}`,
-  },
-  score: {
-    fontSize: '2rem',
-    fontWeight: '700',
-  },
-  stats: {
-    display: 'flex',
-    gap: '16px',
-    fontSize: '0.875rem',
-    color: tokens.colorNeutralForeground2,
-  },
-  loading: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '400px',
-  },
-});
+interface Project {
+  _id: string;
+  name: string;
+  slug: string;
+  symbol: string;
+  logo?: string;
+  ecosystem: string;
+  audit_score: number;
+  total_votes: number;
+  total_issues: number;
+  audit_confidence: number;
+  published: boolean;
+}
 
-export default function HomePage() {
-  const styles = useStyles();
+export default function Home() {
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'recent' | 'votes' | 'views'>('recent');
 
   useEffect(() => {
-    loadProjects();
-  }, [filter]);
+    fetchProjects();
+  }, []);
 
-  const loadProjects = async () => {
+  const fetchProjects = async () => {
     try {
-      setLoading(true);
-      const response = await projectsAPI.getAll(filter);
+      const response = await projectsAPI.getAll();
       setProjects(response.data);
     } catch (error) {
-      console.error('Failed to load projects:', error);
+      console.error('Error fetching projects:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const getScoreColor = (score: number) => {
-    if (score >= 90) return tokens.colorPaletteGreenBackground3;
-    if (score >= 80) return tokens.colorPaletteLightGreenBackground3;
-    if (score >= 70) return tokens.colorPaletteYellowBackground3;
-    return tokens.colorPaletteRedBackground3;
+  const renderStars = (score: number) => {
+    const stars = [];
+    const fullStars = Math.floor(score / 20);
+    for (let i = 0; i < 5; i++) {
+      stars.push(
+        <span key={i} className={i < fullStars ? styles.starFilled : styles.starEmpty}>
+          ★
+        </span>
+      );
+    }
+    return stars;
   };
 
-  const getConfidenceBadge = (confidence?: string) => {
-    const colors: any = {
-      High: 'success',
-      Medium: 'warning',
-      Low: 'danger',
-    };
-    return confidence || 'Medium';
+  const getScoreBadge = (score: number) => {
+    if (score >= 90) return <span className={styles.badgeHigh}>HIGH</span>;
+    if (score >= 70) return <span className={styles.badgeMedium}>GOOD</span>;
+    if (score >= 50) return <span className={styles.badgeLow}>PASS</span>;
+    return <span className={styles.badgeFail}>FAIL</span>;
   };
-
-  const mostVoted = [...projects].sort((a, b) => b.total_votes - a.total_votes).slice(0, 3);
-  const mostViewed = [...projects].sort((a, b) => b.page_view - a.page_view).slice(0, 3);
-  const recentlyAdded = [...projects].slice(0, 3);
-
-  if (loading) {
-    return (
-      <div className={styles.loading}>
-        <Spinner size="extra-large" label="Loading audit portal..." />
-      </div>
-    );
-  }
 
   return (
-    <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 20px' }} className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>SmartContract Development</h1>
-        <p className={styles.subtitle}>
-          Smart contract development & audit experts for Blockchain Networks.
-          <br />
-          Customized, secure and fully balanced.
-        </p>
-        <Button
-          appearance="primary"
-          size="large"
-          className={styles.ctaButton}
-          as="a"
-          href="https://t.me/Bladepool"
-          target="_blank"
-        >
-          Request an Audit
-        </Button>
-      </div>
+    <div className={styles.page}>
+      {/* Header */}
+      <header className={styles.header}>
+        <div className={styles.headerContent}>
+          <div className={styles.logo}>
+            <span className={styles.logoIcon}>🛡️</span>
+            <span className={styles.logoText}>CFG.NINJA</span>
+          </div>
+          <nav className={styles.nav}>
+            <button className={styles.navButton}>Request Audit</button>
+            <button className={styles.navButton}>🔍</button>
+            <button className={styles.signInButton} onClick={() => router.push('/admin')}>Sign in</button>
+          </nav>
+        </div>
+      </header>
 
-      {mostVoted.length > 0 && (
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>⭐ Most Voted</h2>
-          <div className={styles.grid}>
-            {mostVoted.map((project) => (
-              <Card
-                key={project._id}
-                className={styles.projectCard}
-                onClick={() => router.push(`/${project.slug}`)}
-              >
-                <div className={styles.projectHeader}>
-                  {project.logo && (
-                    <img
-                      src={project.logo}
-                      alt={project.name}
-                      className={styles.projectLogo}
-                    />
-                  )}
-                  <div className={styles.projectInfo}>
-                    <Text className={styles.projectName}>{project.name}</Text>
-                    <Caption1 className={styles.projectSymbol}>{project.symbol}</Caption1>
-                  </div>
-                </div>
-                <Body1>{project.description?.substring(0, 100)}...</Body1>
-                <div className={styles.scoreSection}>
-                  <div>
-                    <Caption1>Audit Score</Caption1>
-                    <Text
-                      className={styles.score}
-                      style={{ color: getScoreColor(project.audit_score) }}
-                    >
-                      {project.audit_score}
-                    </Text>
-                  </div>
-                  <div className={styles.stats}>
-                    <div>👁️ {project.page_view} Views</div>
-                    <div>🗳️ {project.total_votes} Votes</div>
-                  </div>
-                </div>
-              </Card>
-            ))}
+      {/* Hero Section */}
+      <section className={styles.hero}>
+        <div className={styles.heroContent}>
+          <div className={styles.heroText}>
+            <h1 className={styles.heroTitle}>Smart<br />Contract<br />Development.</h1>
+            <p className={styles.heroSubtitle}>
+              Smart contract development is a skill unique to Blockchain Networks.
+              Customized, secure and fully balanced.
+            </p>
+            <button className={styles.requestButton}>Request an Audit</button>
+          </div>
+          <div className={styles.heroImage}>
+            <div className={styles.shieldIcon}>
+              <svg width="200" height="200" viewBox="0 0 200 200">
+                <path d="M100 20 L160 50 L160 120 C160 150 130 170 100 180 C70 170 40 150 40 120 L40 50 Z" 
+                      fill="#ef4444" opacity="0.2" stroke="#ef4444" strokeWidth="2"/>
+                <path d="M80 100 L95 115 L120 85" 
+                      stroke="#ef4444" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
           </div>
         </div>
-      )}
+      </section>
 
-      {mostViewed.length > 0 && (
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>👁️ Most Viewed</h2>
-          <div className={styles.grid}>
-            {mostViewed.map((project) => (
-              <Card
-                key={project._id}
-                className={styles.projectCard}
-                onClick={() => router.push(`/${project.slug}`)}
-              >
-                <div className={styles.projectHeader}>
-                  {project.logo && (
-                    <img
-                      src={project.logo}
-                      alt={project.name}
-                      className={styles.projectLogo}
-                    />
-                  )}
-                  <div className={styles.projectInfo}>
-                    <Text className={styles.projectName}>{project.name}</Text>
-                    <Caption1 className={styles.projectSymbol}>{project.symbol}</Caption1>
-                  </div>
+      {/* Stats Cards */}
+      <section className={styles.statsSection}>
+        <div className={styles.statsGrid}>
+          <div className={styles.statCard}>
+            <h3 className={styles.statTitle}>Most Voted</h3>
+            <div className={styles.statItems}>
+              {projects.slice(0, 3).map((project, index) => (
+                <div key={project._id} className={styles.statItem}>
+                  <span className={styles.statRank}>{index + 1}</span>
+                  <span className={styles.statName}>{project.name}</span>
+                  <span className={styles.statBadge}>{getScoreBadge(project.audit_score)}</span>
+                  <span className={styles.statVotes}>{project.total_votes} Votes</span>
                 </div>
-                <Body1>{project.description?.substring(0, 100)}...</Body1>
-                <div className={styles.scoreSection}>
-                  <div>
-                    <Caption1>Audit Score</Caption1>
-                    <Text
-                      className={styles.score}
-                      style={{ color: getScoreColor(project.audit_score) }}
-                    >
-                      {project.audit_score}
-                    </Text>
-                  </div>
-                  <div className={styles.stats}>
-                    <div>👁️ {project.page_view} Views</div>
-                    <div>🗳️ {project.total_votes} Votes</div>
-                  </div>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.statCard}>
+            <h3 className={styles.statTitle}>Most Viewed</h3>
+            <div className={styles.statItems}>
+              {projects.slice(0, 3).map((project, index) => (
+                <div key={project._id} className={styles.statItem}>
+                  <span className={styles.statRank}>{index + 1}</span>
+                  <span className={styles.statName}>{project.name}</span>
+                  <span className={styles.statBadge}>{getScoreBadge(project.audit_score)}</span>
+                  <span className={styles.statVotes}>{project.total_votes} Votes</span>
                 </div>
-              </Card>
-            ))}
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.statCard}>
+            <h3 className={styles.statTitle}>Recently Added</h3>
+            <div className={styles.statItems}>
+              {projects.slice(0, 3).map((project, index) => (
+                <div key={project._id} className={styles.statItem}>
+                  <span className={styles.statRank}>{index + 1}</span>
+                  <span className={styles.statName}>{project.name}</span>
+                  <span className={styles.statBadge}>{getScoreBadge(project.audit_score)}</span>
+                  <span className={styles.statVotes}>0 Votes</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      )}
+      </section>
 
-      {recentlyAdded.length > 0 && (
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>🆕 Recently Added</h2>
-          <div className={styles.grid}>
-            {recentlyAdded.map((project) => (
-              <Card
-                key={project._id}
-                className={styles.projectCard}
-                onClick={() => router.push(`/${project.slug}`)}
-              >
-                <div className={styles.projectHeader}>
-                  {project.logo && (
-                    <img
-                      src={project.logo}
-                      alt={project.name}
-                      className={styles.projectLogo}
-                    />
-                  )}
-                  <div className={styles.projectInfo}>
-                    <Text className={styles.projectName}>{project.name}</Text>
-                    <Caption1 className={styles.projectSymbol}>{project.symbol}</Caption1>
-                  </div>
-                </div>
-                <Body1>{project.description?.substring(0, 100)}...</Body1>
-                <div className={styles.scoreSection}>
-                  <div>
-                    <Caption1>Audit Score</Caption1>
-                    <Text
-                      className={styles.score}
-                      style={{ color: getScoreColor(project.audit_score) }}
-                    >
-                      {project.audit_score}
-                    </Text>
-                  </div>
-                  <div className={styles.stats}>
-                    <div>👁️ {project.page_view} Views</div>
-                    <div>🗳️ {project.total_votes} Votes</div>
-                  </div>
-                </div>
-              </Card>
-            ))}
+      {/* Audits Table */}
+      <section className={styles.auditsSection}>
+        <div className={styles.auditsHeader}>
+          <h2 className={styles.auditsTitle}>Audits</h2>
+        </div>
+        
+        {loading ? (
+          <div className={styles.loading}>Loading audits...</div>
+        ) : (
+          <div className={styles.tableContainer}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Score</th>
+                  <th>Ecosystem</th>
+                  <th>Symbol</th>
+                  <th>Total Votes</th>
+                  <th>Audit Confidence</th>
+                </tr>
+              </thead>
+              <tbody>
+                {projects.map((project, index) => (
+                  <tr 
+                    key={project._id} 
+                    onClick={() => router.push(`/${project.slug}`)}
+                    className={styles.tableRow}
+                  >
+                    <td>{index + 1}</td>
+                    <td>
+                      <div className={styles.projectName}>
+                        {project.logo && (
+                          <img src={project.logo} alt={project.name} className={styles.projectLogo} />
+                        )}
+                        <span>{project.name}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <span className={styles.scoreBadge}>
+                        {getScoreBadge(project.audit_score)}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={styles.ecosystem}>{project.ecosystem || 'BINANCE SMART CHAIN'}</span>
+                    </td>
+                    <td>{project.symbol}</td>
+                    <td>{project.total_votes || 0}</td>
+                    <td>
+                      <div className={styles.confidence}>
+                        {renderStars(project.audit_confidence || project.audit_score)}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        
+        <div className={styles.pagination}>
+          <span className={styles.paginationText}>Showing 1-10 out of {projects.length}</span>
+          <div className={styles.paginationButtons}>
+            <button className={styles.paginationButton}>Prev</button>
+            <button className={styles.paginationButton}>Next</button>
           </div>
         </div>
-      )}
+      </section>
     </div>
   );
 }
