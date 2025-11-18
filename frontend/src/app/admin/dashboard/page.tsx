@@ -199,19 +199,31 @@ export default function AdminDashboard() {
           <Button
             size="small"
             icon={item.published ? <EyeOff24Regular /> : <Eye24Regular />}
-            onClick={() => handleTogglePublish(item._id, item.published)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleTogglePublish(item._id, item.published);
+            }}
             title={item.published ? 'Unpublish' : 'Publish'}
           />
           <Button
             size="small"
             icon={<Edit24Regular />}
-            onClick={() => router.push(`/admin/projects/${item._id}`)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              router.push(`/admin/projects/${item._id}`);
+            }}
             title="Edit"
           />
           <Button
             size="small"
             icon={<Delete24Regular />}
-            onClick={() => handleDelete(item._id, item.name)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleDelete(item._id, item.name);
+            }}
             title="Delete"
           />
         </div>
