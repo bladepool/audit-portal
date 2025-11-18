@@ -65,13 +65,18 @@ export default function Home() {
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.logo}>
-            <span className={styles.logoIcon}>🛡️</span>
-            <span className={styles.logoText}>CFG.NINJA</span>
+            <img 
+              src="/pdf-assets/logos/CFG-Logo-red-black-FULL.png" 
+              alt="CFG Ninja" 
+              className={styles.logoImage}
+            />
           </div>
           <nav className={styles.nav}>
-            <button className={styles.navButton}>Request Audit</button>
-            <button className={styles.navButton}>🔍</button>
-            <button className={styles.signInButton} onClick={() => router.push('/admin')}>Sign in</button>
+            <button className={styles.navButton} onClick={() => window.open('https://t.me/Bladepool', '_blank')}>
+              Request an Audit
+            </button>
+            <button className={styles.searchButton}>🔍</button>
+            <span className={styles.qualityBadge}>HIGH QUALITY AUDIT</span>
           </nav>
         </div>
       </header>
@@ -82,10 +87,15 @@ export default function Home() {
           <div className={styles.heroText}>
             <h1 className={styles.heroTitle}>Smart<br />Contract<br />Development.</h1>
             <p className={styles.heroSubtitle}>
-              Smart contract development is a skill unique to Blockchain Networks.
+              Smart contract development & audit experts for Blockchain Networks. 
               Customized, secure and fully balanced.
             </p>
-            <button className={styles.requestButton}>Request an Audit</button>
+            <button 
+              className={styles.requestButton}
+              onClick={() => window.open('https://t.me/Bladepool', '_blank')}
+            >
+              Request an Audit
+            </button>
           </div>
           <div className={styles.heroImage}>
             <div className={styles.shieldIcon}>
