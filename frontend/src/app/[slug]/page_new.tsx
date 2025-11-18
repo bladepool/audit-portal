@@ -319,6 +319,21 @@ export default function ProjectPage() {
                     🌐
                   </a>
                 )}
+                {project.socials?.trustblock && (
+                  <a 
+                    href={project.socials.trustblock} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className={styles.trustblockLink}
+                    title="View on TrustBlock"
+                  >
+                    <img 
+                      src="/trustblock-logo.svg" 
+                      alt="TrustBlock" 
+                      className={styles.trustblockLogo}
+                    />
+                  </a>
+                )}
               </div>
             </div>
 

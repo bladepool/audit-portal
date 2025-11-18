@@ -69,6 +69,7 @@ export interface Project {
     reddit?: string;
     cmc?: string;
     cg?: string;
+    trustblock?: string;
   };
   
   contract_info: {

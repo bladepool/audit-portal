@@ -98,6 +98,7 @@ export default function ProjectFormPage() {
   const [reddit, setReddit] = useState('');
   const [cmc, setCmc] = useState('');
   const [cg, setCg] = useState('');
+  const [trustblock, setTrustblock] = useState('');
   
   // Contract Info
   const [contractName, setContractName] = useState('');
@@ -209,6 +210,7 @@ export default function ProjectFormPage() {
       setReddit(project.socials.reddit || '');
       setCmc(project.socials.cmc || '');
       setCg(project.socials.cg || '');
+      setTrustblock(project.socials.trustblock || '');
       
       // Contract Info
       setContractName(project.contract_info.contract_name || '');
@@ -319,6 +321,7 @@ export default function ProjectFormPage() {
         reddit,
         cmc,
         cg,
+        trustblock,
       },
       contract_info: {
         contract_name: contractName,
@@ -522,6 +525,13 @@ export default function ProjectFormPage() {
             </Field>
             <Field label="CoinGecko">
               <Input value={cg} onChange={(e) => setCg(e.target.value)} />
+            </Field>
+            <Field label="TrustBlock URL" className={styles.gridFull}>
+              <Input 
+                value={trustblock} 
+                onChange={(e) => setTrustblock(e.target.value)}
+                placeholder="https://app.trustblock.run/project/..."
+              />
             </Field>
           </div>
         </Card>

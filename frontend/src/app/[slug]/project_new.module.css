@@ -445,6 +445,32 @@
   transform: translateY(-2px);
 }
 
+.trustblockLink {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  overflow: hidden;
+}
+
+.trustblockLink:hover {
+  background: #2a2a2a;
+  transform: translateY(-2px);
+}
+
+.trustblockLogo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
 /* Audit Score */
 .scoreSection {
   text-align: center;

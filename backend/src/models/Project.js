@@ -22,7 +22,8 @@ const projectSchema = new mongoose.Schema({
     instagram: { type: String },
     reddit: { type: String },
     cmc: { type: String },
-    cg: { type: String }
+    cg: { type: String },
+    trustblock: { type: String }
   },
   
   // Contract Info
