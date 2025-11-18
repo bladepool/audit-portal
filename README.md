@@ -1,6 +1,8 @@
-# Audit Portal - Local Development
+# Audit Portal - CFG Ninja
 
 A high-fidelity prototype of the CFG Ninja Audit Portal with Fluent UI design principles.
+
+🌐 **Live Site**: https://audit-portal-gamma.vercel.app
 
 ## Features
 
