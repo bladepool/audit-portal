@@ -1,0 +1,1506 @@
+[
+  {
+    "slug": "xfrog",
+    "name": "XFrog"
+  },
+  {
+    "slug": "xelliott",
+    "name": "Xelliott"
+  },
+  {
+    "slug": "elongate",
+    "name": "ELONGATE"
+  },
+  {
+    "slug": "anonymous-dao",
+    "name": "ANONYMOUS DAO"
+  },
+  {
+    "slug": "robin-hood",
+    "name": "ROBIN HOOD"
+  },
+  {
+    "slug": "baby-illuminati",
+    "name": "Baby Illuminati"
+  },
+  {
+    "slug": "jaypowell-ai",
+    "name": "JayPowell AI"
+  },
+  {
+    "slug": "coinguilder",
+    "name": "COINGUILDER"
+  },
+  {
+    "slug": "manacoin",
+    "name": "ManaCoin"
+  },
+  {
+    "slug": "fine",
+    "name": "FINE"
+  },
+  {
+    "slug": "one-chance",
+    "name": "One Chance"
+  },
+  {
+    "slug": "dork-lord-bnb",
+    "name": "DORK LORD BNB"
+  },
+  {
+    "slug": "emoji-token",
+    "name": "Emoji Token"
+  },
+  {
+    "slug": "mevdao",
+    "name": "MEVDAO"
+  },
+  {
+    "slug": "real-smurf-pepe",
+    "name": "REAL SMURF PEPE"
+  },
+  {
+    "slug": "ponzi",
+    "name": "PONZI"
+  },
+  {
+    "slug": "pumpy",
+    "name": "PUMPY"
+  },
+  {
+    "slug": "community-inu",
+    "name": "Community INU"
+  },
+  {
+    "slug": "layer4-network",
+    "name": "Layer4 Network"
+  },
+  {
+    "slug": "brrrrr",
+    "name": "BRRRRR"
+  },
+  {
+    "slug": "one-piece-fan-token",
+    "name": "One Piece Fan Token"
+  },
+  {
+    "slug": "nexbox",
+    "name": "Nexbox"
+  },
+  {
+    "slug": "phygiverse-network-token",
+    "name": "PHYGIVERSE NETWORK TOKEN"
+  },
+  {
+    "slug": "bitminer-financial",
+    "name": "Bitminer Financial"
+  },
+  {
+    "slug": "milestonemillions",
+    "name": "MILESTONEMILLIONS"
+  },
+  {
+    "slug": "polfex",
+    "name": "POLFEX"
+  },
+  {
+    "slug": "hyperflxtoken",
+    "name": "HYPERFLXTOKEN"
+  },
+  {
+    "slug": "xprobot",
+    "name": "XProBot"
+  },
+  {
+    "slug": "x-chihuahua",
+    "name": "X Chihuahua"
+  },
+  {
+    "slug": "evergrow-x",
+    "name": "EVERGROW X"
+  },
+  {
+    "slug": "degen-town",
+    "name": "Degen Town"
+  },
+  {
+    "slug": "tombili",
+    "name": "Tombili"
+  },
+  {
+    "slug": "kermit-coin",
+    "name": "KERMIT COIN"
+  },
+  {
+    "slug": "pancakebot",
+    "name": "PANCAKEBOT"
+  },
+  {
+    "slug": "agronium",
+    "name": "Agronium"
+  },
+  {
+    "slug": "enigma-token",
+    "name": "Enigma Token"
+  },
+  {
+    "slug": "original-wassie",
+    "name": "Original Wassie"
+  },
+  {
+    "slug": "elon-mark",
+    "name": "Elon Mark"
+  },
+  {
+    "slug": "kenny-erc20",
+    "name": "KENNY ERC20"
+  },
+  {
+    "slug": "mysterious-giant-dragon",
+    "name": "Mysterious Giant Dragon"
+  },
+  {
+    "slug": "snoopy",
+    "name": "Snoopy"
+  },
+  {
+    "slug": "t-800",
+    "name": "T-800"
+  },
+  {
+    "slug": "zx-token",
+    "name": "ZX Token"
+  },
+  {
+    "slug": "halloween",
+    "name": "Halloween"
+  },
+  {
+    "slug": "minisafereum",
+    "name": "miniSAFEREUM"
+  },
+  {
+    "slug": "saiyan-doge",
+    "name": "Saiyan Doge"
+  },
+  {
+    "slug": "scary-pumpkin",
+    "name": "SCARY PUMPKIN"
+  },
+  {
+    "slug": "pepe-miner",
+    "name": "Pepe Miner"
+  },
+  {
+    "slug": "growtoken",
+    "name": "GrowToken"
+  },
+  {
+    "slug": "data-privacy-token",
+    "name": "Data Privacy Token"
+  },
+  {
+    "slug": "spoony",
+    "name": "Spoony"
+  },
+  {
+    "slug": "pawstars",
+    "name": "PawStars"
+  },
+  {
+    "slug": "kalium-network",
+    "name": "Kalium Network"
+  },
+  {
+    "slug": "meme-stars",
+    "name": "Meme Stars"
+  },
+  {
+    "slug": "dogeboy",
+    "name": "DogeBoy"
+  },
+  {
+    "slug": "memefi",
+    "name": "MemeFi"
+  },
+  {
+    "slug": "cybertruck",
+    "name": "CYBERTRUCK"
+  },
+  {
+    "slug": "groki1",
+    "name": "GROKI1"
+  },
+  {
+    "slug": "dogegrok",
+    "name": "DogeGrok"
+  },
+  {
+    "slug": "bitago",
+    "name": "Bitago"
+  },
+  {
+    "slug": "bnb-gold",
+    "name": "BNB GOLD"
+  },
+  {
+    "slug": "squid-girl",
+    "name": "Squid Girl"
+  },
+  {
+    "slug": "day-of-defeat-mini-100x",
+    "name": "Day of Defeat Mini 100X"
+  },
+  {
+    "slug": "retrocraft",
+    "name": "RetroCraft"
+  },
+  {
+    "slug": "memefarmer",
+    "name": "MemeFarmer"
+  },
+  {
+    "slug": "pipi",
+    "name": "PIPI"
+  },
+  {
+    "slug": "sports-future-exchange-token",
+    "name": "Sports Future Exchange Token"
+  },
+  {
+    "slug": "bitfinance",
+    "name": "Bitfinance"
+  },
+  {
+    "slug": "mini-grok",
+    "name": "Mini Grok"
+  },
+  {
+    "slug": "bingo",
+    "name": "Bingo"
+  },
+  {
+    "slug": "happy-cat-token",
+    "name": "Happy Cat Token"
+  },
+  {
+    "slug": "grok",
+    "name": "GROK"
+  },
+  {
+    "slug": "pumpy-penguin",
+    "name": "Pumpy Penguin"
+  },
+  {
+    "slug": "uwu",
+    "name": "UwU"
+  },
+  {
+    "slug": "omnisource-dex",
+    "name": "Omnisource DEX"
+  },
+  {
+    "slug": "goku-inu",
+    "name": "GOKU INU"
+  },
+  {
+    "slug": "digiverse",
+    "name": "DIGIVERSE"
+  },
+  {
+    "slug": "mintstargram",
+    "name": "Mintstargram"
+  },
+  {
+    "slug": "crypto-gpt",
+    "name": "CRYPTO GPT"
+  },
+  {
+    "slug": "grok-chain",
+    "name": "Grok Chain"
+  },
+  {
+    "slug": "luffy-vuitton-coin",
+    "name": "Luffy Vuitton Coin"
+  },
+  {
+    "slug": "amperechain",
+    "name": "AmpereChain"
+  },
+  {
+    "slug": "unira",
+    "name": "UNIRA"
+  },
+  {
+    "slug": "grokolaus",
+    "name": "GROKolaus"
+  },
+  {
+    "slug": "inblock-ai",
+    "name": "InBlock AI"
+  },
+  {
+    "slug": "baby-byte",
+    "name": "Baby Byte"
+  },
+  {
+    "slug": "alita",
+    "name": "Alita"
+  },
+  {
+    "slug": "sfw",
+    "name": "SFW"
+  },
+  {
+    "slug": "grok-2024",
+    "name": "GROK 2024"
+  },
+  {
+    "slug": "baby-optimus",
+    "name": "Baby Optimus"
+  },
+  {
+    "slug": "gronk",
+    "name": "Gronk"
+  },
+  {
+    "slug": "bonk-ceo",
+    "name": "BONK CEO"
+  },
+  {
+    "slug": "erax-ai",
+    "name": "ERAX AI"
+  },
+  {
+    "slug": "bonkvsgrok",
+    "name": "BONKvsGROK"
+  },
+  {
+    "slug": "moustache-man",
+    "name": "Moustache Man"
+  },
+  {
+    "slug": "cheesypad",
+    "name": "CheesyPad"
+  },
+  {
+    "slug": "coq-inu",
+    "name": "Coq Inu"
+  },
+  {
+    "slug": "basedgrok",
+    "name": "BasedGrok"
+  },
+  {
+    "slug": "minibonk",
+    "name": "MiniBonk"
+  },
+  {
+    "slug": "wojakpot",
+    "name": "Wojakpot"
+  },
+  {
+    "slug": "baby-analos-bsc",
+    "name": "Baby analoS BSC"
+  },
+  {
+    "slug": "dogwifhat",
+    "name": "dogwifhat"
+  },
+  {
+    "slug": "halving4",
+    "name": "HALVING4"
+  },
+  {
+    "slug": "wolf-invest",
+    "name": "Wolf Invest"
+  },
+  {
+    "slug": "unodex",
+    "name": "UNODEX"
+  },
+  {
+    "slug": "elon-grok-cat",
+    "name": "Elon Grok Cat"
+  },
+  {
+    "slug": "dragon-year",
+    "name": "DRAGON YEAR"
+  },
+  {
+    "slug": "moustache-man-mm",
+    "name": "Moustache Man MM"
+  },
+  {
+    "slug": "test2024",
+    "name": "test2024"
+  },
+  {
+    "slug": "testb",
+    "name": "testB"
+  },
+  {
+    "slug": "test2024kb",
+    "name": "TEST2024KB"
+  },
+  {
+    "slug": "doggie-swap",
+    "name": "Doggie Swap"
+  },
+  {
+    "slug": "baby-bnb",
+    "name": "Baby BNB"
+  },
+  {
+    "slug": "testb-176",
+    "name": "testB"
+  },
+  {
+    "slug": "optimus-elon-ai",
+    "name": "Optimus Elon AI"
+  },
+  {
+    "slug": "optimus-elon-ai-178",
+    "name": "Optimus Elon AI"
+  },
+  {
+    "slug": "bitcoin-etf",
+    "name": "Bitcoin ETF"
+  },
+  {
+    "slug": "halving2024",
+    "name": "HALVING2024"
+  },
+  {
+    "slug": "halving2024-181",
+    "name": "HALVING2024"
+  },
+  {
+    "slug": "alita-grok-v2",
+    "name": "Alita Grok v2"
+  },
+  {
+    "slug": "perfect-world-ai",
+    "name": "Perfect World AI"
+  },
+  {
+    "slug": "babycakepie",
+    "name": "BabyCakePie"
+  },
+  {
+    "slug": "arcade-finance",
+    "name": "Arcade Finance"
+  },
+  {
+    "slug": "troy",
+    "name": "TROY"
+  },
+  {
+    "slug": "robobonk",
+    "name": "RoboBonk"
+  },
+  {
+    "slug": "baby-wif-inu",
+    "name": "BABY WIF INU"
+  },
+  {
+    "slug": "gary",
+    "name": "$GARY"
+  },
+  {
+    "slug": "innovator",
+    "name": "Innovator"
+  },
+  {
+    "slug": "burger-ai",
+    "name": "BURGER AI"
+  },
+  {
+    "slug": "mini-myro",
+    "name": "Mini Myro"
+  },
+  {
+    "slug": "peachy",
+    "name": "PEACHY"
+  },
+  {
+    "slug": "babymickey",
+    "name": "BabyMickey"
+  },
+  {
+    "slug": "mini-myro-197",
+    "name": "Mini Myro"
+  },
+  {
+    "slug": "babysamoyed",
+    "name": "BABYSAMOYED"
+  },
+  {
+    "slug": "peachy-201",
+    "name": "PEACHY"
+  },
+  {
+    "slug": "baby-shenlong",
+    "name": "BABY SHENLONG"
+  },
+  {
+    "slug": "trending-tool",
+    "name": "Trending Tool"
+  },
+  {
+    "slug": "cryptoplanes-reborn",
+    "name": "CryptoPlanes Reborn"
+  },
+  {
+    "slug": "baby-usdt",
+    "name": "Baby USDT"
+  },
+  {
+    "slug": "lil-myro",
+    "name": "Lil Myro"
+  },
+  {
+    "slug": "king-myro",
+    "name": "King Myro"
+  },
+  {
+    "slug": "myroceo",
+    "name": "MyroCeo"
+  },
+  {
+    "slug": "baby-mario",
+    "name": "Baby Mario"
+  },
+  {
+    "slug": "skillon",
+    "name": "Skillon"
+  },
+  {
+    "slug": "insurrection",
+    "name": "Insurrection"
+  },
+  {
+    "slug": "meeow",
+    "name": "Meeow"
+  },
+  {
+    "slug": "xquok",
+    "name": "XQUOK"
+  },
+  {
+    "slug": "blast-domains",
+    "name": "Blast Domains"
+  },
+  {
+    "slug": "king-baby-ceo",
+    "name": "KING BABY CEO"
+  },
+  {
+    "slug": "azure-wallet",
+    "name": "AZURE WALLET"
+  },
+  {
+    "slug": "bro",
+    "name": "BRO"
+  },
+  {
+    "slug": "bonko",
+    "name": "BONKO"
+  },
+  {
+    "slug": "bitcoinmemehub",
+    "name": "BitcoinMemeHub"
+  },
+  {
+    "slug": "baby-jared",
+    "name": "BABY JARED"
+  },
+  {
+    "slug": "solanafork",
+    "name": "SolanaFORK"
+  },
+  {
+    "slug": "healthyocean",
+    "name": "HealthyOcean"
+  },
+  {
+    "slug": "grok-404",
+    "name": "GROK 404"
+  },
+  {
+    "slug": "wrekt",
+    "name": "WREKT"
+  },
+  {
+    "slug": "libra-finance",
+    "name": "Libra Finance"
+  },
+  {
+    "slug": "frog-bsc",
+    "name": "Frog Bsc"
+  },
+  {
+    "slug": "ai-sora",
+    "name": "AI Sora"
+  },
+  {
+    "slug": "ltradex",
+    "name": "Ltradex"
+  },
+  {
+    "slug": "solnado-cash",
+    "name": "Solnado Cash"
+  },
+  {
+    "slug": "circle-index",
+    "name": "circle index"
+  },
+  {
+    "slug": "aidoge",
+    "name": "AIDOGE"
+  },
+  {
+    "slug": "babykrypto",
+    "name": "Babykrypto"
+  },
+  {
+    "slug": "chadlink",
+    "name": "Chadlink"
+  },
+  {
+    "slug": "gege",
+    "name": "Gege"
+  },
+  {
+    "slug": "baby-irbis",
+    "name": "BABY IRBIS"
+  },
+  {
+    "slug": "ltradex-244",
+    "name": "LTRADEX"
+  },
+  {
+    "slug": "tom",
+    "name": "TOM"
+  },
+  {
+    "slug": "pepe-ai",
+    "name": "PEPE AI"
+  },
+  {
+    "slug": "xl",
+    "name": "XL"
+  },
+  {
+    "slug": "neko",
+    "name": "NEKO"
+  },
+  {
+    "slug": "op-cat",
+    "name": "OP_CAT"
+  },
+  {
+    "slug": "minipepe-coin",
+    "name": "MiniPepe Coin"
+  },
+  {
+    "slug": "safemoonton",
+    "name": "SafemoonTon"
+  },
+  {
+    "slug": "hemule-wif-hat",
+    "name": "Hemule wif hat"
+  },
+  {
+    "slug": "memecash",
+    "name": "MemeCash"
+  },
+  {
+    "slug": "shibawifhat",
+    "name": "ShibaWifHat"
+  },
+  {
+    "slug": "baby-giggle-learn",
+    "name": "BABY GIGGLE LEARN"
+  },
+  {
+    "slug": "book-of-npc",
+    "name": "BOOK OF NPC"
+  },
+  {
+    "slug": "donald-pump",
+    "name": "Donald Pump"
+  },
+  {
+    "slug": "merv-the-croc",
+    "name": "MERV THE CROC"
+  },
+  {
+    "slug": "cats-of-sol",
+    "name": "Cats Of Sol"
+  },
+  {
+    "slug": "house-of-meme",
+    "name": "House Of Meme"
+  },
+  {
+    "slug": "futuresai",
+    "name": "FuturesAI"
+  },
+  {
+    "slug": "babydoge-2-0",
+    "name": "BabyDoge 2.0"
+  },
+  {
+    "slug": "ai-freedom-token",
+    "name": "AI Freedom Token"
+  },
+  {
+    "slug": "baby-don",
+    "name": "Baby DON"
+  },
+  {
+    "slug": "innit-for-the-tehc",
+    "name": "Innit For The Tehc"
+  },
+  {
+    "slug": "solar-artificial-intelligence",
+    "name": "Solar - Artificial Intelligence"
+  },
+  {
+    "slug": "catdoge",
+    "name": "CATDOGE"
+  },
+  {
+    "slug": "lobotomy-dash",
+    "name": "LOBOTOMY DASH"
+  },
+  {
+    "slug": "meme-crap-book",
+    "name": "Meme Crap Book"
+  },
+  {
+    "slug": "solepe",
+    "name": "SOLEPE"
+  },
+  {
+    "slug": "kangu",
+    "name": "KANGU"
+  },
+  {
+    "slug": "slerf-cat",
+    "name": "Slerf Cat"
+  },
+  {
+    "slug": "fuck-around-to-find-out",
+    "name": "Fuck Around To Find Out"
+  },
+  {
+    "slug": "aperil",
+    "name": "APERIL"
+  },
+  {
+    "slug": "pep",
+    "name": "PeP"
+  },
+  {
+    "slug": "solsearcher",
+    "name": "SolSearcher"
+  },
+  {
+    "slug": "cat-in-a-dogs-world",
+    "name": "Cat in a Dogs World"
+  },
+  {
+    "slug": "sol-hamster",
+    "name": "SOL HAMSTER"
+  },
+  {
+    "slug": "end-of-meme",
+    "name": "End of Meme"
+  },
+  {
+    "slug": "card-of-meme",
+    "name": "CARD OF MEME"
+  },
+  {
+    "slug": "babymew",
+    "name": "BabyMEW"
+  },
+  {
+    "slug": "meowthwifhat",
+    "name": "MeowthWifHat"
+  },
+  {
+    "slug": "flocat",
+    "name": "FLOCAT"
+  },
+  {
+    "slug": "catpaw",
+    "name": "CATPAW"
+  },
+  {
+    "slug": "gorillawifhat",
+    "name": "Gorillawifhat"
+  },
+  {
+    "slug": "trumpbnb",
+    "name": "TrumpBNB"
+  },
+  {
+    "slug": "shiboki",
+    "name": "Shiboki"
+  },
+  {
+    "slug": "junkie-cats",
+    "name": "Junkie Cats"
+  },
+  {
+    "slug": "evil-kermit",
+    "name": "Evil Kermit"
+  },
+  {
+    "slug": "book-of-bonk",
+    "name": "Book of Bonk"
+  },
+  {
+    "slug": "elonxalexandre",
+    "name": "ELONxALEXANDRE"
+  },
+  {
+    "slug": "raveracoon",
+    "name": "RaveRacoon"
+  },
+  {
+    "slug": "memecoins-mania",
+    "name": "MemeCoins Mania"
+  },
+  {
+    "slug": "dragonsol-token",
+    "name": "DragonSol Token"
+  },
+  {
+    "slug": "tomwifhat",
+    "name": "TOMWIFHAT"
+  },
+  {
+    "slug": "book-of-cats",
+    "name": "Book Of Cats"
+  },
+  {
+    "slug": "bitconnect",
+    "name": "Bitconnect"
+  },
+  {
+    "slug": "pepe-family",
+    "name": "pepe family"
+  },
+  {
+    "slug": "chapi-el-cato",
+    "name": "Chapi El Cato"
+  },
+  {
+    "slug": "katy-perry-fans",
+    "name": "Katy Perry Fans"
+  },
+  {
+    "slug": "chi-yamada-cat",
+    "name": "Chi Yamada Cat"
+  },
+  {
+    "slug": "pudgy-puss",
+    "name": "Pudgy Puss"
+  },
+  {
+    "slug": "do-something-ffs",
+    "name": "DO SOMETHING FFS"
+  },
+  {
+    "slug": "eluup-fan-token",
+    "name": "ELUUP Fan Token"
+  },
+  {
+    "slug": "book-of-halving",
+    "name": "Book Of Halving"
+  },
+  {
+    "slug": "parasol",
+    "name": "Parasol"
+  },
+  {
+    "slug": "bloodbath",
+    "name": "Bloodbath"
+  },
+  {
+    "slug": "catewifhat",
+    "name": "CateWifHat"
+  },
+  {
+    "slug": "andy-alter-ego",
+    "name": "Andy Alter Ego"
+  },
+  {
+    "slug": "myro-floki-ceo",
+    "name": "Myro Floki CEO"
+  },
+  {
+    "slug": "smic",
+    "name": "SMIC"
+  },
+  {
+    "slug": "xiaomao",
+    "name": "Xiaomao"
+  },
+  {
+    "slug": "meme101",
+    "name": "MEME101"
+  },
+  {
+    "slug": "falloutbase",
+    "name": "FalloutBase"
+  },
+  {
+    "slug": "meme-wars",
+    "name": "Meme Wars"
+  },
+  {
+    "slug": "vancatwifhat",
+    "name": "VancatWifHat"
+  },
+  {
+    "slug": "book-of-meme-ai",
+    "name": "Book Of Meme AI"
+  },
+  {
+    "slug": "foxfurry",
+    "name": "FoxFurry"
+  },
+  {
+    "slug": "twust",
+    "name": "TWUST"
+  },
+  {
+    "slug": "pecko",
+    "name": "PECKO"
+  },
+  {
+    "slug": "denarius",
+    "name": "Denarius"
+  },
+  {
+    "slug": "baby-gummy",
+    "name": "BABY GUMMY"
+  },
+  {
+    "slug": "mr-beast-goat",
+    "name": "Mr.Beast Goat"
+  },
+  {
+    "slug": "gerku",
+    "name": "Gerku"
+  },
+  {
+    "slug": "dog-robin-hood",
+    "name": "Dog Robin Hood"
+  },
+  {
+    "slug": "vietnam-coin",
+    "name": "Vietnam Coin"
+  },
+  {
+    "slug": "overdome",
+    "name": "Overdome"
+  },
+  {
+    "slug": "falloutbase-sol",
+    "name": "FalloutBase-Sol"
+  },
+  {
+    "slug": "eager-cat",
+    "name": "Eager Cat"
+  },
+  {
+    "slug": "albert-ii",
+    "name": "Albert II"
+  },
+  {
+    "slug": "book-of-duck",
+    "name": "BOOK OF DUCK"
+  },
+  {
+    "slug": "florkwifnohat",
+    "name": "FlorkWifNoHat"
+  },
+  {
+    "slug": "book-of-junkie-memes",
+    "name": "Book Of Junkie Memes"
+  },
+  {
+    "slug": "zydio-ai",
+    "name": "Zydio AI"
+  },
+  {
+    "slug": "fourcz",
+    "name": "FourCZ"
+  },
+  {
+    "slug": "comic-of-meme",
+    "name": "COMIC OF MEME"
+  },
+  {
+    "slug": "bonk-ai",
+    "name": "Bonk AI"
+  },
+  {
+    "slug": "wall-street-cats",
+    "name": "Wall Street Cats"
+  },
+  {
+    "slug": "elon-wif-trump",
+    "name": "Elon Wif Trump"
+  },
+  {
+    "slug": "dogwiftax",
+    "name": "dogwiftax"
+  },
+  {
+    "slug": "sylvesterwifhat",
+    "name": "SylvesterWifHat"
+  },
+  {
+    "slug": "jeb-the-goat",
+    "name": "Jeb the Goat"
+  },
+  {
+    "slug": "pepeq",
+    "name": "PepeQ"
+  },
+  {
+    "slug": "cobra-king",
+    "name": "Cobra King"
+  },
+  {
+    "slug": "lazy-sniper",
+    "name": "Lazy Sniper"
+  },
+  {
+    "slug": "pepe",
+    "name": "Pepe"
+  },
+  {
+    "slug": "joe-rogan",
+    "name": "JOE ROGAN"
+  },
+  {
+    "slug": "maga",
+    "name": "MAGA"
+  },
+  {
+    "slug": "pepe-moon",
+    "name": "Pepe Moon"
+  },
+  {
+    "slug": "naruto-inu",
+    "name": "Naruto Inu"
+  },
+  {
+    "slug": "trog",
+    "name": "TROG"
+  },
+  {
+    "slug": "penaldo",
+    "name": "PENALDO"
+  },
+  {
+    "slug": "trump-frog",
+    "name": "Trump Frog"
+  },
+  {
+    "slug": "elon-floki-ceo",
+    "name": "Elon Floki CEO"
+  },
+  {
+    "slug": "dog-maga",
+    "name": "Dog MAGA"
+  },
+  {
+    "slug": "tate-goat",
+    "name": "Tate Goat"
+  },
+  {
+    "slug": "vote-trump",
+    "name": "Vote Trump"
+  },
+  {
+    "slug": "bozos-soros-the-clown",
+    "name": "Bozos \"Soros\" The Clown"
+  },
+  {
+    "slug": "trump-pump",
+    "name": "Trump Pump"
+  },
+  {
+    "slug": "metakingdom",
+    "name": "metaKingDom"
+  },
+  {
+    "slug": "baby-liger",
+    "name": "BABY LIGER"
+  },
+  {
+    "slug": "furfund",
+    "name": "FurFund"
+  },
+  {
+    "slug": "robokoin",
+    "name": "ROBOkoin"
+  },
+  {
+    "slug": "blocksound",
+    "name": "BlockSound"
+  },
+  {
+    "slug": "dinga-dao",
+    "name": "Dinga DAO"
+  },
+  {
+    "slug": "wat",
+    "name": "Wat"
+  },
+  {
+    "slug": "memex",
+    "name": "Memex"
+  },
+  {
+    "slug": "bib",
+    "name": "BIB"
+  },
+  {
+    "slug": "rocky",
+    "name": "ROCKY"
+  },
+  {
+    "slug": "snailionaire",
+    "name": "Snailionaire"
+  },
+  {
+    "slug": "rivals-token",
+    "name": "Rivals Token"
+  },
+  {
+    "slug": "sting",
+    "name": "$STING"
+  },
+  {
+    "slug": "potus-poll",
+    "name": "POTUS POLL"
+  },
+  {
+    "slug": "7box",
+    "name": "7BOX"
+  },
+  {
+    "slug": "baby-neiro",
+    "name": "Baby Neiro"
+  },
+  {
+    "slug": "trumpwiflife",
+    "name": "TrumpWifLife"
+  },
+  {
+    "slug": "kingtoken",
+    "name": "KingToken"
+  },
+  {
+    "slug": "moriarty",
+    "name": "Moriarty"
+  },
+  {
+    "slug": "mandarin",
+    "name": "Mandarin"
+  },
+  {
+    "slug": "dogs",
+    "name": "DOGS"
+  },
+  {
+    "slug": "slurmium",
+    "name": "Slurmium"
+  },
+  {
+    "slug": "sucre-finance",
+    "name": "Sucre Finance"
+  },
+  {
+    "slug": "babyhmstr",
+    "name": "BabyHMSTR"
+  },
+  {
+    "slug": "dbtcoin",
+    "name": "DBTCoin"
+  },
+  {
+    "slug": "beefund",
+    "name": "Beefund"
+  },
+  {
+    "slug": "czcat",
+    "name": "CZCat"
+  },
+  {
+    "slug": "optmusk",
+    "name": "OPTMUSK"
+  },
+  {
+    "slug": "chronicles-of-meme",
+    "name": "Chronicles of Meme"
+  },
+  {
+    "slug": "winzoneswap",
+    "name": "WinzoneSwap"
+  },
+  {
+    "slug": "bic-coin",
+    "name": "BIC Coin"
+  },
+  {
+    "slug": "woof",
+    "name": "Woof"
+  },
+  {
+    "slug": "baby-trump",
+    "name": "Baby Trump"
+  },
+  {
+    "slug": "trumpwins",
+    "name": "TrumpWins"
+  },
+  {
+    "slug": "baby-pnut",
+    "name": "Baby Pnut"
+  },
+  {
+    "slug": "book-of-trump-club",
+    "name": "Book of Trump Club"
+  },
+  {
+    "slug": "the-solana-of-zelda",
+    "name": "The Solana of Zelda"
+  },
+  {
+    "slug": "santa-doge",
+    "name": "Santa Doge"
+  },
+  {
+    "slug": "the-pug",
+    "name": "The Pug"
+  },
+  {
+    "slug": "lottery-inu",
+    "name": "Lottery Inu"
+  },
+  {
+    "slug": "computer-control-ai",
+    "name": "Computer Control AI"
+  },
+  {
+    "slug": "chinese-new-year-2025",
+    "name": "Chinese New Year 2025"
+  },
+  {
+    "slug": "miaocoin",
+    "name": "MIAOCoin"
+  },
+  {
+    "slug": "rawdog",
+    "name": "RawDog"
+  },
+  {
+    "slug": "miaohcoin",
+    "name": "MIAOHCoin"
+  },
+  {
+    "slug": "fantokenvalorant",
+    "name": "Fantokenvalorant"
+  },
+  {
+    "slug": "the-ai-mascot",
+    "name": "The AI Mascot"
+  },
+  {
+    "slug": "arabian-trump",
+    "name": "Arabian Trump"
+  },
+  {
+    "slug": "julius-czer",
+    "name": "Julius Czer"
+  },
+  {
+    "slug": "lubu",
+    "name": "LuBu"
+  },
+  {
+    "slug": "me",
+    "name": "ME"
+  },
+  {
+    "slug": "mars-coin",
+    "name": "Mars Coin"
+  },
+  {
+    "slug": "blurp",
+    "name": "BLURP"
+  },
+  {
+    "slug": "chi",
+    "name": "CHI"
+  },
+  {
+    "slug": "aix-token",
+    "name": "AIX Token"
+  },
+  {
+    "slug": "flock",
+    "name": "FLOCK"
+  },
+  {
+    "slug": "hero",
+    "name": "HERO"
+  },
+  {
+    "slug": "beevo",
+    "name": "Beevo"
+  },
+  {
+    "slug": "wallstreet-union",
+    "name": "Wallstreet Union"
+  },
+  {
+    "slug": "cluster-yield",
+    "name": "Cluster Yield"
+  },
+  {
+    "slug": "deepshark",
+    "name": "DeepShark"
+  },
+  {
+    "slug": "flo-coin-global",
+    "name": "Flo Coin Global"
+  },
+  {
+    "slug": "most-wanted",
+    "name": "Most Wanted"
+  },
+  {
+    "slug": "nostradamus",
+    "name": "Nostradamus"
+  },
+  {
+    "slug": "fortbanana",
+    "name": "FortBanana"
+  },
+  {
+    "slug": "chainova",
+    "name": "Chainova"
+  },
+  {
+    "slug": "stepzilla",
+    "name": "StepZilla"
+  },
+  {
+    "slug": "burn-x-compound",
+    "name": "Burn X Compound"
+  },
+  {
+    "slug": "jovcoin",
+    "name": "JOVCOIN"
+  },
+  {
+    "slug": "coinpouch",
+    "name": "CoinPouch"
+  },
+  {
+    "slug": "curvency",
+    "name": "Curvency"
+  },
+  {
+    "slug": "hanaai",
+    "name": "HANAAI"
+  },
+  {
+    "slug": "biokript-pro",
+    "name": "Biokript PRO"
+  },
+  {
+    "slug": "moonai",
+    "name": "MOONAI"
+  },
+  {
+    "slug": "pecunity",
+    "name": "Pecunity"
+  },
+  {
+    "slug": "tariff-token",
+    "name": "Tariff Token"
+  },
+  {
+    "slug": "nft-xchange-coin",
+    "name": "NFT Xchange Coin"
+  },
+  {
+    "slug": "phoenix-chicken",
+    "name": "Phoenix Chicken"
+  },
+  {
+    "slug": "sakuraai",
+    "name": "SAKURAAI"
+  },
+  {
+    "slug": "crypto-ira",
+    "name": "Crypto IRA"
+  },
+  {
+    "slug": "cfgninjastd",
+    "name": "CFGNINJASTD"
+  },
+  {
+    "slug": "minerszone",
+    "name": "MinersZone"
+  },
+  {
+    "slug": "l0",
+    "name": "L0"
+  },
+  {
+    "slug": "s2",
+    "name": "S2"
+  },
+  {
+    "slug": "gafa",
+    "name": "GAFA"
+  },
+  {
+    "slug": "future",
+    "name": "Future"
+  },
+  {
+    "slug": "happy-exchange",
+    "name": "Happy Exchange"
+  },
+  {
+    "slug": "auto-defi",
+    "name": "Auto Defi"
+  },
+  {
+    "slug": "crypto-nft-galaxy",
+    "name": "Crypto NFT Galaxy"
+  },
+  {
+    "slug": "kronickatznft",
+    "name": "KronicKatz.NFT"
+  },
+  {
+    "slug": "best-ever-apy",
+    "name": "Best Ever APY"
+  }
+]

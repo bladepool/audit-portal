@@ -1,0 +1,2258 @@
+[
+  {
+    "name": "XFrog",
+    "slug": "xfrog",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Xelliott",
+    "slug": "xelliott",
+    "address": "0x7dbfa930aa3d0553c75e9f993a6bf3d18c41a20e",
+    "found": true
+  },
+  {
+    "name": "ELONGATE",
+    "slug": "elongate",
+    "address": "0x10898352722059a7f56ac72108927b08ae91E647",
+    "found": true
+  },
+  {
+    "name": "ANONYMOUS DAO",
+    "slug": "anonymous-dao",
+    "address": "0x73A16D4Ab95562DF5b1609e2992e1d8e49194575",
+    "found": true
+  },
+  {
+    "name": "ROBIN HOOD",
+    "slug": "robin-hood",
+    "address": "0x7321A13bBF58220BCa94a605EFF3e24DAee86376",
+    "found": true
+  },
+  {
+    "name": "Baby Illuminati",
+    "slug": "baby-illuminati",
+    "address": "0x3Dff6F639552ea59bfB2c5e1bdAAa82Beb635a31",
+    "found": true
+  },
+  {
+    "name": "JayPowell AI",
+    "slug": "jaypowell-ai",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "COINGUILDER",
+    "slug": "coinguilder",
+    "address": "0xf0342039b0e3a327caa328990c6fde6f835a5ba1",
+    "found": true
+  },
+  {
+    "name": "ManaCoin",
+    "slug": "manacoin",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "FINE",
+    "slug": "fine",
+    "address": "0x0Ce985b34B8dBc232c5a9581C86886671A3D1287",
+    "found": true
+  },
+  {
+    "name": "One Chance",
+    "slug": "one-chance",
+    "address": "0xc12bce81346b5dd83e6ce5233607fbd2b1e6d43a",
+    "found": true
+  },
+  {
+    "name": "DORK LORD BNB",
+    "slug": "dork-lord-bnb",
+    "address": "0x680A171f7997bE8c93978350246f427342a5389d",
+    "found": true
+  },
+  {
+    "name": "Emoji Token",
+    "slug": "emoji-token",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "MEVDAO",
+    "slug": "mevdao",
+    "address": "0x3B9C5bF4866EEE8AbeAec504D91d7D76440007c2",
+    "found": true
+  },
+  {
+    "name": "REAL SMURF PEPE",
+    "slug": "real-smurf-pepe",
+    "address": "0xe4F396fe0c8fE26c206D1aD6Aad3D25d99F1522E",
+    "found": true
+  },
+  {
+    "name": "PONZI",
+    "slug": "ponzi",
+    "address": "0x08ac8b94eA29b678593f2c232e46Dde0afaEb183",
+    "found": true
+  },
+  {
+    "name": "PUMPY",
+    "slug": "pumpy",
+    "address": "0x5f7B833489862C8C7a4F8417C55Ca9B0D433baB9",
+    "found": true
+  },
+  {
+    "name": "Community INU",
+    "slug": "community-inu",
+    "address": "0x6b4b961391fe2b1b2b5b7ae6da87bc95831448e0",
+    "found": true
+  },
+  {
+    "name": "Layer4 Network",
+    "slug": "layer4-network",
+    "address": "0x58C473e0f1c2c22a86eE4afdF04a731a1c8381a0",
+    "found": true
+  },
+  {
+    "name": "BRRRRR",
+    "slug": "brrrrr",
+    "address": "0x91cdacba4559ade84daa1a51b6fbd94ec3f1202e",
+    "found": true
+  },
+  {
+    "name": "One Piece Fan Token",
+    "slug": "one-piece-fan-token",
+    "address": "0x29F06AdbcA83B5F68BB0a7e732229734a7b1f187",
+    "found": true
+  },
+  {
+    "name": "Nexbox",
+    "slug": "nexbox",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "PHYGIVERSE NETWORK TOKEN",
+    "slug": "phygiverse-network-token",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Bitminer Financial",
+    "slug": "bitminer-financial",
+    "address": "0x2FeC3902B0d76Dd7D7e4322bD55e249d84b3676d",
+    "found": true
+  },
+  {
+    "name": "MILESTONEMILLIONS",
+    "slug": "milestonemillions",
+    "address": "0xAA72d86210AC33BcA2de6139403F9AF37398E721",
+    "found": true
+  },
+  {
+    "name": "POLFEX",
+    "slug": "polfex",
+    "address": "0x02d35B6698964d104E55bb21bEb157117F64B896",
+    "found": true
+  },
+  {
+    "name": "HYPERFLXTOKEN",
+    "slug": "hyperflxtoken",
+    "address": "0xC574f9f7DE8B07ac7594B195907d3A92124141b4",
+    "found": true
+  },
+  {
+    "name": "XProBot",
+    "slug": "xprobot",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "X Chihuahua",
+    "slug": "x-chihuahua",
+    "address": "0x3bE3A5DC9b417107560feD7D4a3f299554Bea41a",
+    "found": true
+  },
+  {
+    "name": "EVERGROW X",
+    "slug": "evergrow-x",
+    "address": "0xC2b6a23accf6e3fdbf0d24e61De569C02bbe9520",
+    "found": true
+  },
+  {
+    "name": "Degen Town",
+    "slug": "degen-town",
+    "address": "0x0b95bB31C7021fcc67eEd279C81B748D489eC46f",
+    "found": true
+  },
+  {
+    "name": "Tombili",
+    "slug": "tombili",
+    "address": "0x65F7A222BaF435721Cb28613f5aA0C6174Efd9a0",
+    "found": true
+  },
+  {
+    "name": "KERMIT COIN",
+    "slug": "kermit-coin",
+    "address": "0x4C9417dc87cae0ba9913c2C72CD1a7C14a50d733",
+    "found": true
+  },
+  {
+    "name": "PANCAKEBOT",
+    "slug": "pancakebot",
+    "address": "0x94c84379C30e9118AE0F944f0C838983076f9B54",
+    "found": true
+  },
+  {
+    "name": "Agronium",
+    "slug": "agronium",
+    "address": "0x4136fdbe1c41E1eAB87a6689b33D72e604A447a1",
+    "found": true
+  },
+  {
+    "name": "Enigma Token",
+    "slug": "enigma-token",
+    "address": "0xCb8EA387C07D458E4c0d0dC507B156B7a535a48f",
+    "found": true
+  },
+  {
+    "name": "Original Wassie",
+    "slug": "original-wassie",
+    "address": "0x15d5d13fd59a62ef8847332203011e6628cf1cd5",
+    "found": true
+  },
+  {
+    "name": "Elon Mark",
+    "slug": "elon-mark",
+    "address": "0xbB18719c076a474D5207cB13074A7dB8f064c6fd",
+    "found": true
+  },
+  {
+    "name": "KENNY ERC20",
+    "slug": "kenny-erc20",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Mysterious Giant Dragon",
+    "slug": "mysterious-giant-dragon",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Snoopy",
+    "slug": "snoopy",
+    "address": "0x42451D82cF0cCd3D1d32b0D9F8F5021AB3c914E8",
+    "found": true
+  },
+  {
+    "name": "T-800",
+    "slug": "t-800",
+    "address": "0xb790567Ca89ba9FD81488D1a7841581cFb8E9286",
+    "found": true
+  },
+  {
+    "name": "ZX Token",
+    "slug": "zx-token",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Halloween",
+    "slug": "halloween",
+    "address": "0xe2b067FF210b4dA97AA2fA474142e0489F4269c8",
+    "found": true
+  },
+  {
+    "name": "miniSAFEREUM",
+    "slug": "minisafereum",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Saiyan Doge",
+    "slug": "saiyan-doge",
+    "address": "0x036eF1b2c7c597AB246443Cfd566F6BaC85f1D0e",
+    "found": true
+  },
+  {
+    "name": "SCARY PUMPKIN",
+    "slug": "scary-pumpkin",
+    "address": "0x7c66683130b02C0Df54017B9531D49C5ef46023E",
+    "found": true
+  },
+  {
+    "name": "Pepe Miner",
+    "slug": "pepe-miner",
+    "address": "0x8245E32D54a6fedA19DDCAFD816ceF3f27daF22e",
+    "found": true
+  },
+  {
+    "name": "GrowToken",
+    "slug": "growtoken",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Data Privacy Token",
+    "slug": "data-privacy-token",
+    "address": "0xe12f5C988164BB978A059bd2974C2f53e60dA02F",
+    "found": true
+  },
+  {
+    "name": "Spoony",
+    "slug": "spoony",
+    "address": "0xc5B18dC5302f76c96A8f627E018a0e4D359C8eDC",
+    "found": true
+  },
+  {
+    "name": "PawStars",
+    "slug": "pawstars",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Kalium Network",
+    "slug": "kalium-network",
+    "address": "0x33f68242547c8499e98461bd53d0492aa538e257",
+    "found": true
+  },
+  {
+    "name": "Meme Stars",
+    "slug": "meme-stars",
+    "address": "0x5A3616581dd9f3C8C3cc42578a407A63Ce42F6b4",
+    "found": true
+  },
+  {
+    "name": "DogeBoy",
+    "slug": "dogeboy",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "MemeFi",
+    "slug": "memefi",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "CYBERTRUCK",
+    "slug": "cybertruck",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "GROKI1",
+    "slug": "groki1",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "DogeGrok",
+    "slug": "dogegrok",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Bitago",
+    "slug": "bitago",
+    "address": "0x94280A2C7Ae819e6E1b25F21c80334159019a164",
+    "found": true
+  },
+  {
+    "name": "BNB GOLD",
+    "slug": "bnb-gold",
+    "address": "0x8552Df3d44a94A1f757a6258a3258dA094114348",
+    "found": true
+  },
+  {
+    "name": "Squid Girl",
+    "slug": "squid-girl",
+    "address": "0xa60b8883a78CA068d30BEe270EE78428CaC8D7F5",
+    "found": true
+  },
+  {
+    "name": "Day of Defeat Mini 100X",
+    "slug": "day-of-defeat-mini-100x",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "RetroCraft",
+    "slug": "retrocraft",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "MemeFarmer",
+    "slug": "memefarmer",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "PIPI",
+    "slug": "pipi",
+    "address": "0x8bfe05115cb206bf070da3ff22f5a095a9fd920e",
+    "found": true
+  },
+  {
+    "name": "Sports Future Exchange Token",
+    "slug": "sports-future-exchange-token",
+    "address": "0xd8C9091a2Bd78477bFeE618EAB5864715e405513",
+    "found": true
+  },
+  {
+    "name": "Bitfinance",
+    "slug": "bitfinance",
+    "address": "0x30E072d31FF427EeFC6fB19Aa1be2484BEB15209",
+    "found": true
+  },
+  {
+    "name": "Mini Grok",
+    "slug": "mini-grok",
+    "address": "0x2DF0b6729A1C6ADaFa781479FDb4319b8F84A085",
+    "found": true
+  },
+  {
+    "name": "Bingo",
+    "slug": "bingo",
+    "address": "0xb62C5D0DA07B0Aef8feBCDa6F37b30fa21DA8CB7",
+    "found": true
+  },
+  {
+    "name": "Happy Cat Token",
+    "slug": "happy-cat-token",
+    "address": "0x3a713C19131667F4e9A56c44f896844A9845764c",
+    "found": true
+  },
+  {
+    "name": "GROK",
+    "slug": "grok",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Pumpy Penguin",
+    "slug": "pumpy-penguin",
+    "address": "0xEF91428F4C578e149A5572B25917f7472af6bFaB",
+    "found": true
+  },
+  {
+    "name": "UwU",
+    "slug": "uwu",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Omnisource DEX",
+    "slug": "omnisource-dex",
+    "address": "0x6d65951cb92999c1209842ae7f12c8e7e64da030",
+    "found": true
+  },
+  {
+    "name": "GOKU INU",
+    "slug": "goku-inu",
+    "address": "0x7de5ca7b0b5e590b6767869f854077d7b4dd7985",
+    "found": true
+  },
+  {
+    "name": "DIGIVERSE",
+    "slug": "digiverse",
+    "address": "0x4f35fdbcde54d01610cdcb5615187d252e66638c",
+    "found": true
+  },
+  {
+    "name": "Mintstargram",
+    "slug": "mintstargram",
+    "address": "0xb82386Da1Fce533A56FB59BEBdB323AE3CFE4826",
+    "found": true
+  },
+  {
+    "name": "CRYPTO GPT",
+    "slug": "crypto-gpt",
+    "address": "0x50739bd5b6afF093ba2371365727C48a420a060D",
+    "found": true
+  },
+  {
+    "name": "Grok Chain",
+    "slug": "grok-chain",
+    "address": "0xc08f1A61614f5132975088bEd28c1BF9843533C3",
+    "found": true
+  },
+  {
+    "name": "Luffy Vuitton Coin",
+    "slug": "luffy-vuitton-coin",
+    "address": "0xaf291F0be99F55753A5a907a13EF62085c871C02",
+    "found": true
+  },
+  {
+    "name": "AmpereChain",
+    "slug": "amperechain",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "UNIRA",
+    "slug": "unira",
+    "address": "0x7Bf6622eaD9e728138c9CDE15a5FB17d6c84795e",
+    "found": true
+  },
+  {
+    "name": "GROKolaus",
+    "slug": "grokolaus",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "InBlock AI",
+    "slug": "inblock-ai",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Baby Byte",
+    "slug": "baby-byte",
+    "address": "0x63B8e2109fA2E5ec8D26A19632E50560DbF310bf",
+    "found": true
+  },
+  {
+    "name": "Alita",
+    "slug": "alita",
+    "address": "0x33679898CEb9DC930024dE84E7339d403191d8f6",
+    "found": true
+  },
+  {
+    "name": "SFW",
+    "slug": "sfw",
+    "address": "0x63B8e2109fA2E5ec8D26A19632E50560DbF310bf",
+    "found": true
+  },
+  {
+    "name": "GROK 2024",
+    "slug": "grok-2024",
+    "address": "0x8E95ABB1E2d2715aC1ae123511A1b4647F4ddE89",
+    "found": true
+  },
+  {
+    "name": "Baby Optimus",
+    "slug": "baby-optimus",
+    "address": "0x9b660f827019c73d8FE2668c5aD6426addc9a3d7",
+    "found": true
+  },
+  {
+    "name": "Gronk",
+    "slug": "gronk",
+    "address": "0x46cb8bb9cC5f17dBfE50bAc73a5c1b2bE4667e6b",
+    "found": true
+  },
+  {
+    "name": "BONK CEO",
+    "slug": "bonk-ceo",
+    "address": "0xb7287c3E5f205573c202426ebDF0E9d452E0e148",
+    "found": true
+  },
+  {
+    "name": "ERAX AI",
+    "slug": "erax-ai",
+    "address": "0xe18cff148b2761a2d1295a710cb06869a988870d",
+    "found": true
+  },
+  {
+    "name": "BONKvsGROK",
+    "slug": "bonkvsgrok",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Moustache Man",
+    "slug": "moustache-man",
+    "address": "0x6628bc5da65eb29b716763537367fe41da4de999",
+    "found": true
+  },
+  {
+    "name": "CheesyPad",
+    "slug": "cheesypad",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Coq Inu",
+    "slug": "coq-inu",
+    "address": "0x8d9efF57cbAbBb16D07C08Fd336A743C91bBf18F",
+    "found": true
+  },
+  {
+    "name": "BasedGrok",
+    "slug": "basedgrok",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "MiniBonk",
+    "slug": "minibonk",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Wojakpot",
+    "slug": "wojakpot",
+    "address": "0x066D75d3c0fA22c3819b2Bb4c096480b1C557DCF",
+    "found": true
+  },
+  {
+    "name": "Baby analoS BSC",
+    "slug": "baby-analos-bsc",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "dogwifhat",
+    "slug": "dogwifhat",
+    "address": "0x09Ab61BD94d05b8AC5FAc95743B59417df936F5C",
+    "found": true
+  },
+  {
+    "name": "HALVING4",
+    "slug": "halving4",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Wolf Invest",
+    "slug": "wolf-invest",
+    "address": "0x8c5F77C9E587584982534c28a74Eb5677af052D7",
+    "found": true
+  },
+  {
+    "name": "UNODEX",
+    "slug": "unodex",
+    "address": "0x185ece9bc75164f9fc0fbe44738e8dd1863f8464",
+    "found": true
+  },
+  {
+    "name": "Elon Grok Cat",
+    "slug": "elon-grok-cat",
+    "address": "0x884bb07AC22F48ef3Eb32763563d6F4c18773C81",
+    "found": true
+  },
+  {
+    "name": "DRAGON YEAR",
+    "slug": "dragon-year",
+    "address": "0xd066641BFD8Cb7da4523C32ca27c539A3150fb76",
+    "found": true
+  },
+  {
+    "name": "Moustache Man MM",
+    "slug": "moustache-man-mm",
+    "address": "0xFC7fc6b54DE8901D98827f411192B86C888DeDb8",
+    "found": true
+  },
+  {
+    "name": "test2024",
+    "slug": "test2024",
+    "address": "0xFC7fc6b54DE8901D98827f411192B86C888DeDb8",
+    "found": true
+  },
+  {
+    "name": "testB",
+    "slug": "testb",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "TEST2024KB",
+    "slug": "test2024kb",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Doggie Swap",
+    "slug": "doggie-swap",
+    "address": "0xe4c054868e2b9a2666cedb25ab22fd1839c503a8",
+    "found": true
+  },
+  {
+    "name": "Baby BNB",
+    "slug": "baby-bnb",
+    "address": "0x7cc1E96ee6b2458b74822204aa0EBc278c41Bd5B",
+    "found": true
+  },
+  {
+    "name": "testB",
+    "slug": "testb-176",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Optimus Elon AI",
+    "slug": "optimus-elon-ai",
+    "address": "0xecd042fe089473194dCe264A4686298003fC173e",
+    "found": true
+  },
+  {
+    "name": "Optimus Elon AI",
+    "slug": "optimus-elon-ai-178",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Bitcoin ETF",
+    "slug": "bitcoin-etf",
+    "address": "0x6747a1f8ba15485b2a9bf3828d818a6b4f949e81",
+    "found": true
+  },
+  {
+    "name": "HALVING2024",
+    "slug": "halving2024",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "HALVING2024",
+    "slug": "halving2024-181",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Alita Grok v2",
+    "slug": "alita-grok-v2",
+    "address": "0xF33A65304746f09f85dF701D33E02327ddED34AA",
+    "found": true
+  },
+  {
+    "name": "Perfect World AI",
+    "slug": "perfect-world-ai",
+    "address": "0xd3BED50a38334Cb1B5c4C2357fb6e81E5d8b704e",
+    "found": true
+  },
+  {
+    "name": "BabyCakePie",
+    "slug": "babycakepie",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Arcade Finance",
+    "slug": "arcade-finance",
+    "address": "0x8098e32db2813519568D65c8158952A03Dc9a5Ae",
+    "found": true
+  },
+  {
+    "name": "TROY",
+    "slug": "troy",
+    "address": "0x9299e4Ca258A8C6623708828Ac3F87E515FD831A",
+    "found": true
+  },
+  {
+    "name": "RoboBonk",
+    "slug": "robobonk",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BABY WIF INU",
+    "slug": "baby-wif-inu",
+    "address": "0xbDe31cabC17C512480c68dbB2577f691c01a50c6",
+    "found": true
+  },
+  {
+    "name": "$GARY",
+    "slug": "gary",
+    "address": "0x1654eAACf14632428241171648C95c9E4f892672",
+    "found": true
+  },
+  {
+    "name": "Innovator",
+    "slug": "innovator",
+    "address": "0x89ad3eEa300fe99a2151ABa2D0E437E2820163EF",
+    "found": true
+  },
+  {
+    "name": "BURGER AI",
+    "slug": "burger-ai",
+    "address": "0xA44D7c1Fd70a6Af492D8016bb9FC8c847a91aa04",
+    "found": true
+  },
+  {
+    "name": "Mini Myro",
+    "slug": "mini-myro",
+    "address": "0xbd380F0D61694053250c64A4edCb71bD2AA5f5fB",
+    "found": true
+  },
+  {
+    "name": "PEACHY",
+    "slug": "peachy",
+    "address": "0x4e393936abe68371b1563ad5f8a76c54aecdf72e",
+    "found": true
+  },
+  {
+    "name": "BabyMickey",
+    "slug": "babymickey",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Mini Myro",
+    "slug": "mini-myro-197",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BABYSAMOYED",
+    "slug": "babysamoyed",
+    "address": "0xAb6bCe858cbC176CCAb75c640Ff9aba66dfd6EE5",
+    "found": true
+  },
+  {
+    "name": "PEACHY",
+    "slug": "peachy-201",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BABY SHENLONG",
+    "slug": "baby-shenlong",
+    "address": "0x11358784f71b9eFB136ee47f57E00bd99AF81894",
+    "found": true
+  },
+  {
+    "name": "Trending Tool",
+    "slug": "trending-tool",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "CryptoPlanes Reborn",
+    "slug": "cryptoplanes-reborn",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Baby USDT",
+    "slug": "baby-usdt",
+    "address": "0x33629ca408B20Db391B37A200c141A35A6692aa5",
+    "found": true
+  },
+  {
+    "name": "Lil Myro",
+    "slug": "lil-myro",
+    "address": "0x706627d25f1f40C27f6D60e6E6272A9880420bf4",
+    "found": true
+  },
+  {
+    "name": "King Myro",
+    "slug": "king-myro",
+    "address": "0x70f8c9CE371D36B5852aD215b9F9C24D9933de03",
+    "found": true
+  },
+  {
+    "name": "MyroCeo",
+    "slug": "myroceo",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Baby Mario",
+    "slug": "baby-mario",
+    "address": "0x3489f297e1113b775e4532494ab4f5f44815c98b",
+    "found": true
+  },
+  {
+    "name": "Skillon",
+    "slug": "skillon",
+    "address": "0x46721c3bFC1aC425EA5aAEc3d37B02F45E917B55",
+    "found": true
+  },
+  {
+    "name": "Insurrection",
+    "slug": "insurrection",
+    "address": "0xe9eea2724fa380ae3ceecd7902065a90313bbc96",
+    "found": true
+  },
+  {
+    "name": "Meeow",
+    "slug": "meeow",
+    "address": "0xF44600737F9022b08F5df35cfab8967409a31d70",
+    "found": true
+  },
+  {
+    "name": "XQUOK",
+    "slug": "xquok",
+    "address": "0x695adae22c14c3a166afeb46f15ab7262c5d5bc2",
+    "found": true
+  },
+  {
+    "name": "Blast Domains",
+    "slug": "blast-domains",
+    "address": "0x35404bCF27188e7252DF6b723A06969A3c04501C",
+    "found": true
+  },
+  {
+    "name": "KING BABY CEO",
+    "slug": "king-baby-ceo",
+    "address": "0x3A1E06080968600D9a86C209F5a273E29Dd57b12",
+    "found": true
+  },
+  {
+    "name": "AZURE WALLET",
+    "slug": "azure-wallet",
+    "address": "0x1f769203d2abcb78f5a77dd15c0078c50fb13287",
+    "found": true
+  },
+  {
+    "name": "BRO",
+    "slug": "bro",
+    "address": "0x432afdc4f83feedbae1b891111b1f9911afc6994",
+    "found": true
+  },
+  {
+    "name": "BONKO",
+    "slug": "bonko",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BitcoinMemeHub",
+    "slug": "bitcoinmemehub",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BABY JARED",
+    "slug": "baby-jared",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "SolanaFORK",
+    "slug": "solanafork",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "HealthyOcean",
+    "slug": "healthyocean",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "GROK 404",
+    "slug": "grok-404",
+    "address": "0x4ff81b058819ee1d0ef1589106e906f8eefd2a1c",
+    "found": true
+  },
+  {
+    "name": "WREKT",
+    "slug": "wrekt",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Libra Finance",
+    "slug": "libra-finance",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Frog Bsc",
+    "slug": "frog-bsc",
+    "address": "0x0b98814e29a9731Daed49D301e09AAF508408e28",
+    "found": true
+  },
+  {
+    "name": "AI Sora",
+    "slug": "ai-sora",
+    "address": "0x467171615241bdb8948c1452b1458ad6fa79f39a",
+    "found": true
+  },
+  {
+    "name": "Ltradex",
+    "slug": "ltradex",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Solnado Cash",
+    "slug": "solnado-cash",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "circle index",
+    "slug": "circle-index",
+    "address": "0xA9279A1C36093185671676695EEDb22F3330fb84",
+    "found": true
+  },
+  {
+    "name": "AIDOGE",
+    "slug": "aidoge",
+    "address": "0xd43da7dda163f7952a632e732cc307914f6bf053",
+    "found": true
+  },
+  {
+    "name": "Babykrypto",
+    "slug": "babykrypto",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Chadlink",
+    "slug": "chadlink",
+    "address": "0x81Dc357973bfe1B8efbEf29604E89BBF5e38998f",
+    "found": true
+  },
+  {
+    "name": "Gege",
+    "slug": "gege",
+    "address": "0x3228d1624759deAf3D967B2c1214B4ace65A4F6a",
+    "found": true
+  },
+  {
+    "name": "BABY IRBIS",
+    "slug": "baby-irbis",
+    "address": "0x514e0E6806541a1F53Db0A07a75962FeF9E5EB15",
+    "found": true
+  },
+  {
+    "name": "LTRADEX",
+    "slug": "ltradex-244",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "TOM",
+    "slug": "tom",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "PEPE AI",
+    "slug": "pepe-ai",
+    "address": "0x87053aFEd327D6F77fF3e6dC4744AA9933ae9B2E",
+    "found": true
+  },
+  {
+    "name": "XL",
+    "slug": "xl",
+    "address": "0x1233b829a4181ac42724f287de076bd598908d45",
+    "found": true
+  },
+  {
+    "name": "NEKO",
+    "slug": "neko",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "OP_CAT",
+    "slug": "op-cat",
+    "address": "0xdaa7699352ac8709f3d2fd092226d3dd7da40474",
+    "found": true
+  },
+  {
+    "name": "MiniPepe Coin",
+    "slug": "minipepe-coin",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "SafemoonTon",
+    "slug": "safemoonton",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Hemule wif hat",
+    "slug": "hemule-wif-hat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "MemeCash",
+    "slug": "memecash",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "ShibaWifHat",
+    "slug": "shibawifhat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BABY GIGGLE LEARN",
+    "slug": "baby-giggle-learn",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BOOK OF NPC",
+    "slug": "book-of-npc",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Donald Pump",
+    "slug": "donald-pump",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "MERV THE CROC",
+    "slug": "merv-the-croc",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Cats Of Sol",
+    "slug": "cats-of-sol",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "House Of Meme",
+    "slug": "house-of-meme",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "FuturesAI",
+    "slug": "futuresai",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BabyDoge 2.0",
+    "slug": "babydoge-2-0",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "AI Freedom Token",
+    "slug": "ai-freedom-token",
+    "address": "0x1C8108dBB5a2746E12CDd2b79bFA5E5EEebBb0A1",
+    "found": true
+  },
+  {
+    "name": "Baby DON",
+    "slug": "baby-don",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Innit For The Tehc",
+    "slug": "innit-for-the-tehc",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Solar - Artificial Intelligence",
+    "slug": "solar-artificial-intelligence",
+    "address": "0xc8a9f2d0b14c4d986e4c421e003b4eb4492c3937",
+    "found": true
+  },
+  {
+    "name": "CATDOGE",
+    "slug": "catdoge",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "LOBOTOMY DASH",
+    "slug": "lobotomy-dash",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Meme Crap Book",
+    "slug": "meme-crap-book",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "SOLEPE",
+    "slug": "solepe",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "KANGU",
+    "slug": "kangu",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Slerf Cat",
+    "slug": "slerf-cat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Fuck Around To Find Out",
+    "slug": "fuck-around-to-find-out",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "APERIL",
+    "slug": "aperil",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "PeP",
+    "slug": "pep",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "SolSearcher",
+    "slug": "solsearcher",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Cat in a Dogs World",
+    "slug": "cat-in-a-dogs-world",
+    "address": "0x7D3F850a228D4BC2e2d47963f6AADA6A8D02111b",
+    "found": true
+  },
+  {
+    "name": "SOL HAMSTER",
+    "slug": "sol-hamster",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "End of Meme",
+    "slug": "end-of-meme",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "CARD OF MEME",
+    "slug": "card-of-meme",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BabyMEW",
+    "slug": "babymew",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "MeowthWifHat",
+    "slug": "meowthwifhat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "FLOCAT",
+    "slug": "flocat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "CATPAW",
+    "slug": "catpaw",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Gorillawifhat",
+    "slug": "gorillawifhat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "TrumpBNB",
+    "slug": "trumpbnb",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Shiboki",
+    "slug": "shiboki",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Junkie Cats",
+    "slug": "junkie-cats",
+    "address": "0x353d21dabdb6dd97958a95df13e0753a24b561b1",
+    "found": true
+  },
+  {
+    "name": "Evil Kermit",
+    "slug": "evil-kermit",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Book of Bonk",
+    "slug": "book-of-bonk",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "ELONxALEXANDRE",
+    "slug": "elonxalexandre",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "RaveRacoon",
+    "slug": "raveracoon",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "MemeCoins Mania",
+    "slug": "memecoins-mania",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "DragonSol Token",
+    "slug": "dragonsol-token",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "TOMWIFHAT",
+    "slug": "tomwifhat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Book Of Cats",
+    "slug": "book-of-cats",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Bitconnect",
+    "slug": "bitconnect",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "pepe family",
+    "slug": "pepe-family",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Chapi El Cato",
+    "slug": "chapi-el-cato",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Katy Perry Fans",
+    "slug": "katy-perry-fans",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Chi Yamada Cat",
+    "slug": "chi-yamada-cat",
+    "address": "0x8f14c2fbb6a14f10ad92449c846015ed48a89739",
+    "found": true
+  },
+  {
+    "name": "Pudgy Puss",
+    "slug": "pudgy-puss",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "DO SOMETHING FFS",
+    "slug": "do-something-ffs",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "ELUUP Fan Token",
+    "slug": "eluup-fan-token",
+    "address": "0xDe730154C096B18fBc2a62202FcEB263fF47D03d",
+    "found": true
+  },
+  {
+    "name": "Book Of Halving",
+    "slug": "book-of-halving",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Parasol",
+    "slug": "parasol",
+    "address": "0x87dd6d9333a78ca70470b5e5cfb757eb629158bb",
+    "found": true
+  },
+  {
+    "name": "Bloodbath",
+    "slug": "bloodbath",
+    "address": "0x1c9718449c06F4D63e57B330C9D71849F1a72670",
+    "found": true
+  },
+  {
+    "name": "CateWifHat",
+    "slug": "catewifhat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Andy Alter Ego",
+    "slug": "andy-alter-ego",
+    "address": "0xe4042c7c1bf740b8ddb2ab43df6d9ed766b2513e",
+    "found": true
+  },
+  {
+    "name": "Myro Floki CEO",
+    "slug": "myro-floki-ceo",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "SMIC",
+    "slug": "smic",
+    "address": "0x51E5c8Ae7Dda825c1936C716DAF3518E2645F2E9",
+    "found": true
+  },
+  {
+    "name": "Xiaomao",
+    "slug": "xiaomao",
+    "address": "0x4c254b92E0D82904c66385Cf1cdd309020DA70a3",
+    "found": true
+  },
+  {
+    "name": "MEME101",
+    "slug": "meme101",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "FalloutBase",
+    "slug": "falloutbase",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Meme Wars",
+    "slug": "meme-wars",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "VancatWifHat",
+    "slug": "vancatwifhat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Book Of Meme AI",
+    "slug": "book-of-meme-ai",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "FoxFurry",
+    "slug": "foxfurry",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "TWUST",
+    "slug": "twust",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "PECKO",
+    "slug": "pecko",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Denarius",
+    "slug": "denarius",
+    "address": "0xdf1f7AdF59a178BA83f6140a4930cf3BEB7b73BF",
+    "found": true
+  },
+  {
+    "name": "BABY GUMMY",
+    "slug": "baby-gummy",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Mr.Beast Goat",
+    "slug": "mr-beast-goat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Gerku",
+    "slug": "gerku",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Dog Robin Hood",
+    "slug": "dog-robin-hood",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Vietnam Coin",
+    "slug": "vietnam-coin",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Overdome",
+    "slug": "overdome",
+    "address": "0xf9ba4B77e9A5e7D16633191932F95eAF70086dc0",
+    "found": true
+  },
+  {
+    "name": "FalloutBase-Sol",
+    "slug": "falloutbase-sol",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Eager Cat",
+    "slug": "eager-cat",
+    "address": "0xd3975dc2DD5252f2e07C154ca0be5e3e92057fE9",
+    "found": true
+  },
+  {
+    "name": "Albert II",
+    "slug": "albert-ii",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BOOK OF DUCK",
+    "slug": "book-of-duck",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "FlorkWifNoHat",
+    "slug": "florkwifnohat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Book Of Junkie Memes",
+    "slug": "book-of-junkie-memes",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Zydio AI",
+    "slug": "zydio-ai",
+    "address": "0x8b683c400457ef31f3c27c90acb6ab69304d1b77",
+    "found": true
+  },
+  {
+    "name": "FourCZ",
+    "slug": "fourcz",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "COMIC OF MEME",
+    "slug": "comic-of-meme",
+    "address": "0x3e200570B5d31C6c665e95b296eEe2e5FA6F182C",
+    "found": true
+  },
+  {
+    "name": "Bonk AI",
+    "slug": "bonk-ai",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Wall Street Cats",
+    "slug": "wall-street-cats",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Elon Wif Trump",
+    "slug": "elon-wif-trump",
+    "address": "0x8b683c400457ef31f3c27c90acb6ab69304d1b77",
+    "found": true
+  },
+  {
+    "name": "dogwiftax",
+    "slug": "dogwiftax",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "SylvesterWifHat",
+    "slug": "sylvesterwifhat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Jeb the Goat",
+    "slug": "jeb-the-goat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "PepeQ",
+    "slug": "pepeq",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Cobra King",
+    "slug": "cobra-king",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Lazy Sniper",
+    "slug": "lazy-sniper",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Pepe",
+    "slug": "pepe",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "JOE ROGAN",
+    "slug": "joe-rogan",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "MAGA",
+    "slug": "maga",
+    "address": "0x11Cee2f0F707810c98382724fb6D5e14972366dC",
+    "found": true
+  },
+  {
+    "name": "Pepe Moon",
+    "slug": "pepe-moon",
+    "address": "0xB88A5aBcCA3Aa2a9fF0503d8E9D02A6f207c20FC",
+    "found": true
+  },
+  {
+    "name": "Naruto Inu",
+    "slug": "naruto-inu",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "TROG",
+    "slug": "trog",
+    "address": "0xCCf15Cf6e1b65c935572564185701A9E740DA8a5",
+    "found": true
+  },
+  {
+    "name": "PENALDO",
+    "slug": "penaldo",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Trump Frog",
+    "slug": "trump-frog",
+    "address": "0x3AC2852A661E5CFA3164640Ac4C738eFDE130DBf",
+    "found": true
+  },
+  {
+    "name": "Elon Floki CEO",
+    "slug": "elon-floki-ceo",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Dog MAGA",
+    "slug": "dog-maga",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Tate Goat",
+    "slug": "tate-goat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Vote Trump",
+    "slug": "vote-trump",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Bozos \"Soros\" The Clown",
+    "slug": "bozos-soros-the-clown",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Trump Pump",
+    "slug": "trump-pump",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "metaKingDom",
+    "slug": "metakingdom",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BABY LIGER",
+    "slug": "baby-liger",
+    "address": "0xd9300ee734640f2a6687eaec10eef61d592e435b",
+    "found": true
+  },
+  {
+    "name": "FurFund",
+    "slug": "furfund",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "ROBOkoin",
+    "slug": "robokoin",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BlockSound",
+    "slug": "blocksound",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Dinga DAO",
+    "slug": "dinga-dao",
+    "address": "0x73C70aE4B7E2eddbeEf94d96064aA33b6f44C943",
+    "found": true
+  },
+  {
+    "name": "Wat",
+    "slug": "wat",
+    "address": "0x0B1d4c430dE9fC309e38826729aC9cfF7070d0A5",
+    "found": true
+  },
+  {
+    "name": "Memex",
+    "slug": "memex",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BIB",
+    "slug": "bib",
+    "address": "0x3CB20d96E866D128BC469a6e66505d46D7F9BaBa",
+    "found": true
+  },
+  {
+    "name": "ROCKY",
+    "slug": "rocky",
+    "address": "0x52039558372601dD68E42f8A63ab42b62F3775Ea",
+    "found": true
+  },
+  {
+    "name": "Snailionaire",
+    "slug": "snailionaire",
+    "address": "0xa4EcD076E956Fde75b83fC75E62DA9002E321828",
+    "found": true
+  },
+  {
+    "name": "Rivals Token",
+    "slug": "rivals-token",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "$STING",
+    "slug": "sting",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "POTUS POLL",
+    "slug": "potus-poll",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "7BOX",
+    "slug": "7box",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Baby Neiro",
+    "slug": "baby-neiro",
+    "address": "0x82d35350147cc95e3dfEB0692cFAdC4A8429D7bC",
+    "found": true
+  },
+  {
+    "name": "TrumpWifLife",
+    "slug": "trumpwiflife",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "KingToken",
+    "slug": "kingtoken",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Moriarty",
+    "slug": "moriarty",
+    "address": "0x13aAC25C16a8c1FA93D78C4026CEE7166403A595",
+    "found": true
+  },
+  {
+    "name": "Mandarin",
+    "slug": "mandarin",
+    "address": "0x94bF6538b6853008A556FC7766f02b437b7A1997",
+    "found": true
+  },
+  {
+    "name": "DOGS",
+    "slug": "dogs",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Slurmium",
+    "slug": "slurmium",
+    "address": "0x3cf585A1DBa0D63017d717264a89d1bB5f6DbEd9",
+    "found": true
+  },
+  {
+    "name": "Sucre Finance",
+    "slug": "sucre-finance",
+    "address": "0xa05DD3Ae5a1407B45Ec119a1e290aafe4847e440",
+    "found": true
+  },
+  {
+    "name": "BabyHMSTR",
+    "slug": "babyhmstr",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "DBTCoin",
+    "slug": "dbtcoin",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Beefund",
+    "slug": "beefund",
+    "address": "0xfdda2c39a3fc17be37d636370a29b174783cc13e",
+    "found": true
+  },
+  {
+    "name": "CZCat",
+    "slug": "czcat",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "OPTMUSK",
+    "slug": "optmusk",
+    "address": "0x6cb536591c65f2090e14e8d8bd5c64f3f0d41bf6",
+    "found": true
+  },
+  {
+    "name": "Chronicles of Meme",
+    "slug": "chronicles-of-meme",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "WinzoneSwap",
+    "slug": "winzoneswap",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BIC Coin",
+    "slug": "bic-coin",
+    "address": "0xc5a5CC0606fD7652C712b59c1Cce70F5fcB6CC1E",
+    "found": true
+  },
+  {
+    "name": "Woof",
+    "slug": "woof",
+    "address": "0xAB367c3FBbf0d303aea226441EC109361e6E95FC",
+    "found": true
+  },
+  {
+    "name": "Baby Trump",
+    "slug": "baby-trump",
+    "address": "0xD1A9242de5843A4782940Eb320E52Ee41DB6F3E3",
+    "found": true
+  },
+  {
+    "name": "TrumpWins",
+    "slug": "trumpwins",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Baby Pnut",
+    "slug": "baby-pnut",
+    "address": "0x31c0c9a0afa705E1d4cf80A36C48249EEbb5E7AE",
+    "found": true
+  },
+  {
+    "name": "Book of Trump Club",
+    "slug": "book-of-trump-club",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "The Solana of Zelda",
+    "slug": "the-solana-of-zelda",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Santa Doge",
+    "slug": "santa-doge",
+    "address": "0xd6e20acdf0b69292289a027cc91272c5f6fc59e5",
+    "found": true
+  },
+  {
+    "name": "The Pug",
+    "slug": "the-pug",
+    "address": "0xd0a5fc79Cc1f56BE6c58e1cf41983818b3F9Fc86",
+    "found": true
+  },
+  {
+    "name": "Lottery Inu",
+    "slug": "lottery-inu",
+    "address": "0x597eeAF9ee81411734e64eb5053339d145f7c0F1",
+    "found": true
+  },
+  {
+    "name": "Computer Control AI",
+    "slug": "computer-control-ai",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Chinese New Year 2025",
+    "slug": "chinese-new-year-2025",
+    "address": "0x5D6105E59c4217EA3167B93f4389e7c2f305cb78",
+    "found": true
+  },
+  {
+    "name": "MIAOCoin",
+    "slug": "miaocoin",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "RawDog",
+    "slug": "rawdog",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "MIAOHCoin",
+    "slug": "miaohcoin",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Fantokenvalorant",
+    "slug": "fantokenvalorant",
+    "address": "0x5181ab18384CE7D6C2Fd1B9833C94f772a6CeE67",
+    "found": true
+  },
+  {
+    "name": "The AI Mascot",
+    "slug": "the-ai-mascot",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Arabian Trump",
+    "slug": "arabian-trump",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Julius Czer",
+    "slug": "julius-czer",
+    "address": "0xe0D1b76dC809bA58817EF33Ff37C826F2B59e3c0",
+    "found": true
+  },
+  {
+    "name": "LuBu",
+    "slug": "lubu",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "ME",
+    "slug": "me",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Mars Coin",
+    "slug": "mars-coin",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "BLURP",
+    "slug": "blurp",
+    "address": "0xe9EFa1FD82307CfBe2c0B5D4AdfFC9750F5314D4",
+    "found": true
+  },
+  {
+    "name": "CHI",
+    "slug": "chi",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "AIX Token",
+    "slug": "aix-token",
+    "address": "0x0550d58794d94de810257a6356eb65ee51450a27",
+    "found": true
+  },
+  {
+    "name": "FLOCK",
+    "slug": "flock",
+    "address": "0x0413757605422A2db08dD71209F1c12828b6D669",
+    "found": true
+  },
+  {
+    "name": "HERO",
+    "slug": "hero",
+    "address": "0xfe79d722527d1661cd1ee7891cd2dc1add4b6590",
+    "found": true
+  },
+  {
+    "name": "Beevo",
+    "slug": "beevo",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Wallstreet Union",
+    "slug": "wallstreet-union",
+    "address": "0x89FbA1790590E568D971052451B8b387f7aBa29d",
+    "found": true
+  },
+  {
+    "name": "Cluster Yield",
+    "slug": "cluster-yield",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "DeepShark",
+    "slug": "deepshark",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Flo Coin Global",
+    "slug": "flo-coin-global",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Most Wanted",
+    "slug": "most-wanted",
+    "address": "0xbc1af7122afc986db9da654dd98a03aa929fe5cc",
+    "found": true
+  },
+  {
+    "name": "Nostradamus",
+    "slug": "nostradamus",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "FortBanana",
+    "slug": "fortbanana",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Chainova",
+    "slug": "chainova",
+    "address": "0x35D62Da15f2f3C2e1B10a7cd02333288E832ADb6",
+    "found": true
+  },
+  {
+    "name": "StepZilla",
+    "slug": "stepzilla",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Burn X Compound",
+    "slug": "burn-x-compound",
+    "address": "0xec40ef3742e41289fd8082afcf572f8ea7077777",
+    "found": true
+  },
+  {
+    "name": "JOVCOIN",
+    "slug": "jovcoin",
+    "address": "0xbfdd6a43fef24f18a3003a71011c0652e1658eb1",
+    "found": true
+  },
+  {
+    "name": "CoinPouch",
+    "slug": "coinpouch",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Curvency",
+    "slug": "curvency",
+    "address": "0x82355C4Fbd4d40758403fd4ea2436e853371F501",
+    "found": true
+  },
+  {
+    "name": "HANAAI",
+    "slug": "hanaai",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Biokript PRO",
+    "slug": "biokript-pro",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "MOONAI",
+    "slug": "moonai",
+    "address": "0x0918CBBdb58FCd29Be89DeB0851f729643A07324",
+    "found": true
+  },
+  {
+    "name": "Pecunity",
+    "slug": "pecunity",
+    "address": "0x413c2834f02003752d6Cc0Bcd1cE85Af04D62fBE",
+    "found": true
+  },
+  {
+    "name": "Tariff Token",
+    "slug": "tariff-token",
+    "address": "0x09d2666A3Cff9AcD962E706547905F2C4090857B",
+    "found": true
+  },
+  {
+    "name": "NFT Xchange Coin",
+    "slug": "nft-xchange-coin",
+    "address": "0x19c4671a340023e7e61a5d35cdceef3ae8e1c318",
+    "found": true
+  },
+  {
+    "name": "Phoenix Chicken",
+    "slug": "phoenix-chicken",
+    "address": "0x204815eD207e9670357823538FE784ffD7caAb6e",
+    "found": true
+  },
+  {
+    "name": "SAKURAAI",
+    "slug": "sakuraai",
+    "address": "0x6F9524d64d5D4bb53C98817F9EaE3C69f94789f3",
+    "found": true
+  },
+  {
+    "name": "Crypto IRA",
+    "slug": "crypto-ira",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "CFGNINJASTD",
+    "slug": "cfgninjastd",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "MinersZone",
+    "slug": "minerszone",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "L0",
+    "slug": "l0",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "S2",
+    "slug": "s2",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "GAFA",
+    "slug": "gafa",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Future",
+    "slug": "future",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Happy Exchange",
+    "slug": "happy-exchange",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Auto Defi",
+    "slug": "auto-defi",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Crypto NFT Galaxy",
+    "slug": "crypto-nft-galaxy",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "KronicKatz.NFT",
+    "slug": "kronickatznft",
+    "address": null,
+    "found": false
+  },
+  {
+    "name": "Best Ever APY",
+    "slug": "best-ever-apy",
+    "address": null,
+    "found": false
+  }
+]
