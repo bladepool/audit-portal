@@ -22,6 +22,9 @@ import { Project, Finding } from '@/lib/types';
 import FindingsManager from '@/components/FindingsManager';
 import { generateEnhancedAuditPDF } from '@/lib/enhancedPdfGenerator';
 
+// Global build version - update this with each new build
+const AUDIT_TOOL_VERSION = '3.4';
+
 const useStyles = makeStyles({
   container: {
     minHeight: '100vh',
@@ -169,7 +172,6 @@ export default function ProjectFormPage() {
   const [auditScore, setAuditScore] = useState(0);
   const [launchpadLink, setLaunchpadLink] = useState('');
   const [published, setPublished] = useState(false);
-  const [auditToolVersion, setAuditToolVersion] = useState('');
   const [auditEdition, setAuditEdition] = useState('');
   const [paymentHash, setPaymentHash] = useState('');
   
@@ -292,7 +294,6 @@ export default function ProjectFormPage() {
   setAuditScore(project.audit_score);
   setLaunchpadLink(project.launchpad_link || '');
   setPublished(project.published);
-  setAuditToolVersion(project.auditToolVersion || '');
   setAuditEdition(project.auditEdition || '');
   setPaymentHash(project.paymentHash || '');
 
@@ -483,7 +484,7 @@ export default function ProjectFormPage() {
         data: [auditScore],
         current: auditScore,
       },
-      auditToolVersion,
+      auditToolVersion: AUDIT_TOOL_VERSION,
       auditEdition,
       paymentHash,
     };
@@ -909,7 +910,8 @@ export default function ProjectFormPage() {
           <Text className={styles.sectionTitle}>Additional Information</Text>
           <div className={styles.grid}>
             <Field label="Audit Tool Version">
-              <Input value={auditToolVersion} onChange={(e) => setAuditToolVersion(e.target.value)} />
+              <Input value={AUDIT_TOOL_VERSION} disabled />
+              <Text size={200} style={{ color: '#666', marginTop: '4px' }}>Auto-set based on current build</Text>
             </Field>
             <Field label="Audit Edition">
               <Input value={auditEdition} onChange={(e) => setAuditEdition(e.target.value)} />
