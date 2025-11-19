@@ -6,8 +6,8 @@ async function countProjects() {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     const total = await Project.countDocuments();
-    const published = await Project.countDocuments({ status: 'published' });
-    const draft = await Project.countDocuments({ status: 'draft' });
+    const published = await Project.countDocuments({ published: true });
+    const draft = await Project.countDocuments({ published: false });
     
     console.log('\n📊 Project Statistics:');
     console.log(`Total Projects: ${total}`);
