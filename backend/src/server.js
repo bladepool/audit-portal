@@ -7,6 +7,7 @@ const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
 const blockchainRoutes = require('./routes/blockchains');
 const advertisementRoutes = require('./routes/advertisements');
+const marketCapRoutes = require('./routes/marketcap');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/blockchains', blockchainRoutes);
 app.use('/api/advertisements', advertisementRoutes);
+app.use('/api/marketcap', marketCapRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

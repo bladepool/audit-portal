@@ -77,4 +77,12 @@ export const advertisementsAPI = {
     api.post(`/advertisements/${id}/duplicate`),
 };
 
+// Market Cap API
+export const marketCapAPI = {
+  getSecured: () =>
+    api.get('/marketcap/secured'),
+  refresh: () =>
+    api.post('/marketcap/refresh'),
+};
+
 export default api;

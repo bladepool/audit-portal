@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { projectsAPI } from '../lib/api';
+import { projectsAPI, marketCapAPI } from '../lib/api';
 import styles from './page.module.css';
 
 interface Project {
@@ -36,6 +36,7 @@ interface Stats {
   totalIssuesResolved: number;
   criticalIssues: number;
   highRiskProjects: number;
+  securedMarketCap: string;
 }
 
 export default function Home() {
@@ -55,10 +56,12 @@ export default function Home() {
     totalIssuesResolved: 0,
     criticalIssues: 0,
     highRiskProjects: 0,
+    securedMarketCap: '$2.5B',
   });
 
   useEffect(() => {
     fetchProjects();
+    fetchMarketCap();
   }, []);
 
   // Reset to page 1 when search query changes
@@ -76,6 +79,19 @@ export default function Home() {
       console.error('Error fetching projects:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchMarketCap = async () => {
+    try {
+      const response = await marketCapAPI.getSecured();
+      setStats(prev => ({
+        ...prev,
+        securedMarketCap: response.data.formatted || '$2.5B'
+      }));
+    } catch (error) {
+      console.error('Error fetching market cap:', error);
+      // Keep default value
     }
   };
 
@@ -109,7 +125,8 @@ export default function Home() {
       if (critical > 0 || major > 2) highRiskProjects++;
     });
 
-    setStats({
+    setStats(prev => ({
+      ...prev,
       totalProjects,
       totalPass,
       totalFail,
@@ -118,7 +135,7 @@ export default function Home() {
       totalIssuesResolved,
       criticalIssues,
       highRiskProjects,
-    });
+    }));
   };
 
   const renderStars = (confidence: string | number) => {
@@ -426,9 +443,9 @@ export default function Home() {
           <div className={styles.statCard2}>
             <div className={styles.statHeader}>
               <span className={styles.statLabel2}>Secured Market Cap</span>
-              <span className={styles.infoIcon}>ⓘ</span>
+              <span className={styles.infoIcon} title="Total market capitalization of audited projects">ⓘ</span>
             </div>
-            <div className={styles.statValue2}>$2.5B</div>
+            <div className={styles.statValue2}>{stats.securedMarketCap}</div>
           </div>
         </div>
       </section>
