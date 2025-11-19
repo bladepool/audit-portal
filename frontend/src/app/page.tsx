@@ -153,7 +153,7 @@ export default function Home() {
         <div className={styles.headerContent}>
           <div className={styles.logo}>
             <img 
-              src="/pdf-assets/logos/CFG-Logo-red-black-FULL.png" 
+              src="/pdf-assets/logos/CFG-Logo-WHITE.png" 
               alt="CFG Ninja" 
               className={styles.logoImage}
             />
