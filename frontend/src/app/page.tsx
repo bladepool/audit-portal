@@ -60,7 +60,7 @@ export default function Home() {
   const fetchProjects = async () => {
     try {
       const response = await projectsAPI.getAll();
-      const projectsData = response.data.filter((p: Project) => p.published);
+      const projectsData = response.data; // All published projects from API
       setProjects(projectsData);
       calculateStats(projectsData);
     } catch (error) {
@@ -205,15 +205,6 @@ export default function Home() {
           <div className={styles.statCard2}>
             <div className={styles.statHeader}>
               <span className={styles.statLabel2}>Total Audits</span>
-              <span className={styles.infoIcon}>ⓘ</span>
-            </div>
-            <div className={styles.statValue2}>{stats.totalProjects}</div>
-          </div>
-          
-          {/* Total Companies Card */}
-          <div className={styles.statCard2}>
-            <div className={styles.statHeader}>
-              <span className={styles.statLabel2}>Total Audited Companies</span>
               <span className={styles.infoIcon}>ⓘ</span>
             </div>
             <div className={styles.statValue2}>{stats.totalProjects}</div>
