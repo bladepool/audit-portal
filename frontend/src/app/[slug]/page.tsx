@@ -4,15 +4,13 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { projectsAPI } from '@/lib/api';
 import { Project } from '@/lib/types';
-import Advertisement from '@/components/Advertisement';
-
 import styles from './project.module.css';
 
 // Helper to format date
-function formatDate(dateString?: string | Date): string {
+function formatDate(dateString?: string): string {
   if (!dateString) return 'N/A';
   try {
-    const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
+    const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { 
       day: '2-digit',
       month: '2-digit', 
@@ -23,14 +21,21 @@ function formatDate(dateString?: string | Date): string {
   }
 }
 
-// Helper to render pass/fail badge
-function renderBadge(value: boolean | string | undefined, passCondition: boolean = true) {
-  const isPassing = passCondition ? value : !value;
-  return (
-    <span className={isPassing ? styles.badgePass : styles.badgeFail}>
-      {isPassing ? 'Pass' : 'Fail'}
-    </span>
-  );
+// Helper to render stars for confidence
+function renderStars(confidence: string | number): JSX.Element[] {
+  let rating = 3;
+  if (typeof confidence === 'string') {
+    const confMap: Record<string, number> = {
+      'Very High': 5, 'High': 4, 'Medium': 3, 'Low': 2, 'Very Low': 1
+    };
+    rating = confMap[confidence] || 3;
+  } else {
+    rating = Math.floor(confidence / 20);
+  }
+  
+  return Array.from({ length: 5 }, (_, i) => (
+    <span key={i} className={i < rating ? styles.starFilled : styles.starEmpty}>★</span>
+  ));
 }
 
 export default function ProjectPage() {
@@ -38,12 +43,19 @@ export default function ProjectPage() {
   const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+  const [secureVotes, setSecureVotes] = useState(0);
+  const [insecureVotes, setInsecureVotes] = useState(0);
 
   useEffect(() => {
     const fetchProject = async () => {
       try {
         const response = await projectsAPI.getBySlug(params.slug as string);
         setProject(response.data);
+        
+        // Simulate vote counts (would come from API in production)
+        const totalVotes = response.data.total_votes || 0;
+        setSecureVotes(Math.floor(totalVotes * 0.99));
+        setInsecureVotes(totalVotes - Math.floor(totalVotes * 0.99));
       } catch (error) {
         console.error('Error fetching project:', error);
       } finally {
