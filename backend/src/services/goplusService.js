@@ -1,4 +1,9 @@
-const axios = require('axios');
+let axios;
+try {
+  axios = require('axios');
+} catch (error) {
+  console.error('⚠️ Failed to load axios in goplusService:', error.message);
+}
 
 /**
  * GoPlus Labs API Service
@@ -100,6 +105,14 @@ function mapGoPlusToOverview(securityData) {
  */
 async function fetchTokenSecurity(chainId, contractAddress) {
   try {
+    if (!axios) {
+      return {
+        success: false,
+        error: 'HTTP client not available',
+        overview: null
+      };
+    }
+    
     if (!contractAddress) {
       throw new Error('Contract address is required');
     }

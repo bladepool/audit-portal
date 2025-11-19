@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const axios = require('axios');
+
+let axios;
+try {
+  axios = require('axios');
+} catch (error) {
+  console.error('⚠️ Failed to load axios in blockchains route:', error.message);
+}
 
 const CMC_API_KEY = '23955f35-bd18-4f6b-9246-0e9a8a22f319';
 const CMC_API_URL = 'https://pro-api.coinmarketcap.com/v1';
@@ -12,8 +18,49 @@ let blockchainCache = {
   ttl: 24 * 60 * 60 * 1000 // 24 hours
 };
 
+function getFallbackBlockchains() {
+  const fallbackBlockchains = [
+    { name: 'Algorand', symbol: 'ALGO', slug: 'algorand' },
+    { name: 'Aptos', symbol: 'APT', slug: 'aptos' },
+    { name: 'Arbitrum', symbol: 'ARB', slug: 'arbitrum' },
+    { name: 'Avalanche', symbol: 'AVAX', slug: 'avalanche' },
+    { name: 'Base', symbol: 'BASE', slug: 'base' },
+    { name: 'Binance Smart Chain', symbol: 'BSC', slug: 'binance-smart-chain' },
+    { name: 'Bitcoin', symbol: 'BTC', slug: 'bitcoin' },
+    { name: 'BNB Chain', symbol: 'BNB', slug: 'bnb-chain' },
+    { name: 'Cardano', symbol: 'ADA', slug: 'cardano' },
+    { name: 'Cosmos', symbol: 'ATOM', slug: 'cosmos' },
+    { name: 'Cronos', symbol: 'CRO', slug: 'cronos' },
+    { name: 'Ethereum', symbol: 'ETH', slug: 'ethereum' },
+    { name: 'Fantom', symbol: 'FTM', slug: 'fantom' },
+    { name: 'Hedera', symbol: 'HBAR', slug: 'hedera' },
+    { name: 'Linea', symbol: 'LINEA', slug: 'linea' },
+    { name: 'Near Protocol', symbol: 'NEAR', slug: 'near-protocol' },
+    { name: 'Optimism', symbol: 'OP', slug: 'optimism' },
+    { name: 'Polygon', symbol: 'MATIC', slug: 'polygon' },
+    { name: 'Polkadot', symbol: 'DOT', slug: 'polkadot' },
+    { name: 'Solana', symbol: 'SOL', slug: 'solana' },
+    { name: 'Stellar', symbol: 'XLM', slug: 'stellar' },
+    { name: 'Sui', symbol: 'SUI', slug: 'sui' },
+    { name: 'Tron', symbol: 'TRX', slug: 'tron' },
+    { name: 'zkSync Era', symbol: 'ZK', slug: 'zksync' }
+  ];
+  
+  return {
+    blockchains: fallbackBlockchains,
+    count: fallbackBlockchains.length,
+    lastUpdated: new Date().toISOString(),
+    fallback: true
+  };
+}
+
 // Get list of blockchains/platforms
 router.get('/list', async (req, res) => {
+  // If axios not available, return fallback immediately
+  if (!axios) {
+    return res.json(getFallbackBlockchains());
+  }
+  
   try {
     // Check if cache is valid
     if (blockchainCache.data && blockchainCache.timestamp && 
@@ -109,40 +156,9 @@ router.get('/list', async (req, res) => {
     console.error('Error fetching blockchains:', error.message);
     
     // Return fallback list if API fails
-    const fallbackBlockchains = [
-      { name: 'Algorand', symbol: 'ALGO', slug: 'algorand' },
-      { name: 'Aptos', symbol: 'APT', slug: 'aptos' },
-      { name: 'Arbitrum', symbol: 'ARB', slug: 'arbitrum' },
-      { name: 'Avalanche', symbol: 'AVAX', slug: 'avalanche' },
-      { name: 'Base', symbol: 'BASE', slug: 'base' },
-      { name: 'Binance Smart Chain', symbol: 'BSC', slug: 'binance-smart-chain' },
-      { name: 'Bitcoin', symbol: 'BTC', slug: 'bitcoin' },
-      { name: 'BNB Chain', symbol: 'BNB', slug: 'bnb-chain' },
-      { name: 'Cardano', symbol: 'ADA', slug: 'cardano' },
-      { name: 'Cosmos', symbol: 'ATOM', slug: 'cosmos' },
-      { name: 'Cronos', symbol: 'CRO', slug: 'cronos' },
-      { name: 'Ethereum', symbol: 'ETH', slug: 'ethereum' },
-      { name: 'Fantom', symbol: 'FTM', slug: 'fantom' },
-      { name: 'Hedera', symbol: 'HBAR', slug: 'hedera' },
-      { name: 'Linea', symbol: 'LINEA', slug: 'linea' },
-      { name: 'Near Protocol', symbol: 'NEAR', slug: 'near-protocol' },
-      { name: 'Optimism', symbol: 'OP', slug: 'optimism' },
-      { name: 'Polygon', symbol: 'MATIC', slug: 'polygon' },
-      { name: 'Polkadot', symbol: 'DOT', slug: 'polkadot' },
-      { name: 'Solana', symbol: 'SOL', slug: 'solana' },
-      { name: 'Stellar', symbol: 'XLM', slug: 'stellar' },
-      { name: 'Sui', symbol: 'SUI', slug: 'sui' },
-      { name: 'Tron', symbol: 'TRX', slug: 'tron' },
-      { name: 'zkSync Era', symbol: 'ZK', slug: 'zksync' }
-    ];
-
-    res.json({
-      blockchains: fallbackBlockchains,
-      count: fallbackBlockchains.length,
-      lastUpdated: new Date().toISOString(),
-      fallback: true,
-      error: error.message
-    });
+    const fallbackData = getFallbackBlockchains();
+    fallbackData.error = error.message;
+    return res.json(fallbackData);
   }
 });
 
