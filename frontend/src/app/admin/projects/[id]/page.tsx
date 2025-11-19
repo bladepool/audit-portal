@@ -899,22 +899,23 @@ export default function ProjectFormPage() {
         <Card className={styles.section}>
           <Text className={styles.sectionTitle}>Additional Information</Text>
           <div className={styles.grid}>
+            <Field label="Audit Tool Version">
+              <Input value={auditToolVersion} onChange={(e) => setAuditToolVersion(e.target.value)} />
+            </Field>
+            <Field label="Audit Edition">
+              <Input value={auditEdition} onChange={(e) => setAuditEdition(e.target.value)} />
+            </Field>
+            <Field label="Payment Hash">
+              <Input value={paymentHash} onChange={(e) => setPaymentHash(e.target.value)} />
+            </Field>
             <Field label="Platform">
               <Input value={platform} onChange={(e) => setPlatform(e.target.value)} />
             </Field>
             <Field label="Audit Score (0-100)">
-              <Input
-                type="number"
-                value={auditScore.toString()}
-                onChange={(e) => setAuditScore(parseInt(e.target.value) || 0)}
-              />
+              <Input type="number" value={auditScore.toString()} onChange={(e) => setAuditScore(parseInt(e.target.value) || 0)} />
             </Field>
             <Field label="Audit Confidence">
-              <select
-                value={auditConfidence}
-                onChange={(e) => setAuditConfidence(e.target.value)}
-                style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', width: '100%' }}
-              >
+              <select value={auditConfidence} onChange={(e) => setAuditConfidence(e.target.value)} style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', width: '100%' }}>
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
                 <option value="High">High</option>
@@ -922,6 +923,199 @@ export default function ProjectFormPage() {
             </Field>
             <Field label="Codebase URL" className={styles.gridFull}>
               <Input value={codebase} onChange={(e) => setCodebase(e.target.value)} />
+            </Field>
+            <Field label="Owner Score">
+              <Input type="number" value={ownerScore?.toString() || ''} onChange={(e) => setOwnerScore(parseInt(e.target.value) || 0)} />
+            </Field>
+            <Field label="Social Score">
+              <Input type="number" value={socialScore?.toString() || ''} onChange={(e) => setSocialScore(parseInt(e.target.value) || 0)} />
+            </Field>
+            <Field label="Security Score">
+              <Input type="number" value={securityScore?.toString() || ''} onChange={(e) => setSecurityScore(parseInt(e.target.value) || 0)} />
+            </Field>
+            <Field label="Auditor Score">
+              <Input type="number" value={auditorScore?.toString() || ''} onChange={(e) => setAuditorScore(parseInt(e.target.value) || 0)} />
+            </Field>
+            <Field label="Audit Status">
+              <Input value={auditStatus || ''} onChange={(e) => setAuditStatus(e.target.value)} />
+            </Field>
+          </div>
+        </Card>
+
+        {/* KYC Section */}
+        <Card className={styles.section}>
+          <Text className={styles.sectionTitle}>KYC Information</Text>
+          <div className={styles.grid}>
+            <Field label="KYC Verified">
+              <Switch checked={isKYC} onChange={(e) => setIsKYC(e.currentTarget.checked)} />
+            </Field>
+            <Field label="KYC URL">
+              <Input value={kycUrl || ''} onChange={(e) => setKycUrl(e.target.value)} />
+            </Field>
+            <Field label="KYC Score">
+              <Input type="number" value={kycScore?.toString() || ''} onChange={(e) => setKycScore(parseInt(e.target.value) || 0)} />
+            </Field>
+            <Field label="KYC Score Notes">
+              <Textarea value={kycScoreNotes || ''} onChange={(e) => setKycScoreNotes(e.target.value)} rows={2} />
+            </Field>
+          </div>
+        </Card>
+
+        {/* Token Distribution Section */}
+        <Card className={styles.section}>
+          <Text className={styles.sectionTitle}>Token Distribution</Text>
+          <div className={styles.grid}>
+            <Field label="Token Distribution Enabled">
+              <Switch checked={tokenDistributionEnabled} onChange={(e) => setTokenDistributionEnabled(e.currentTarget.checked)} />
+            </Field>
+            <Field label="Distribution Name 1">
+              <Input value={distributionName1 || ''} onChange={(e) => setDistributionName1(e.target.value)} />
+            </Field>
+            <Field label="Distribution Amount 1">
+              <Input type="number" value={distributionAmount1?.toString() || ''} onChange={(e) => setDistributionAmount1(parseInt(e.target.value) || 0)} />
+            </Field>
+            <Field label="Distribution Description 1">
+              <Input value={distributionDescription1 || ''} onChange={(e) => setDistributionDescription1(e.target.value)} />
+            </Field>
+            <Field label="Distribution Name 2">
+              <Input value={distributionName2 || ''} onChange={(e) => setDistributionName2(e.target.value)} />
+            </Field>
+            <Field label="Distribution Amount 2">
+              <Input type="number" value={distributionAmount2?.toString() || ''} onChange={(e) => setDistributionAmount2(parseInt(e.target.value) || 0)} />
+            </Field>
+            <Field label="Distribution Description 2">
+              <Input value={distributionDescription2 || ''} onChange={(e) => setDistributionDescription2(e.target.value)} />
+            </Field>
+            <Field label="Distribution Name 3">
+              <Input value={distributionName3 || ''} onChange={(e) => setDistributionName3(e.target.value)} />
+            </Field>
+            <Field label="Distribution Amount 3">
+              <Input type="number" value={distributionAmount3?.toString() || ''} onChange={(e) => setDistributionAmount3(parseInt(e.target.value) || 0)} />
+            </Field>
+            <Field label="Distribution Description 3">
+              <Input value={distributionDescription3 || ''} onChange={(e) => setDistributionDescription3(e.target.value)} />
+            </Field>
+            <Field label="Distribution Name 4">
+              <Input value={distributionName4 || ''} onChange={(e) => setDistributionName4(e.target.value)} />
+            </Field>
+            <Field label="Distribution Amount 4">
+              <Input type="number" value={distributionAmount4?.toString() || ''} onChange={(e) => setDistributionAmount4(parseInt(e.target.value) || 0)} />
+            </Field>
+            <Field label="Distribution Description 4">
+              <Input value={distributionDescription4 || ''} onChange={(e) => setDistributionDescription4(e.target.value)} />
+            </Field>
+            <Field label="Distribution Name 5">
+              <Input value={distributionName5 || ''} onChange={(e) => setDistributionName5(e.target.value)} />
+            </Field>
+            <Field label="Distribution Amount 5">
+              <Input type="number" value={distributionAmount5?.toString() || ''} onChange={(e) => setDistributionAmount5(parseInt(e.target.value) || 0)} />
+            </Field>
+            <Field label="Distribution Description 5">
+              <Input value={distributionDescription5 || ''} onChange={(e) => setDistributionDescription5(e.target.value)} />
+            </Field>
+            <Field label="Distribution Name 6">
+              <Input value={distributionName6 || ''} onChange={(e) => setDistributionName6(e.target.value)} />
+            </Field>
+            <Field label="Distribution Amount 6">
+              <Input type="number" value={distributionAmount6?.toString() || ''} onChange={(e) => setDistributionAmount6(parseInt(e.target.value) || 0)} />
+            </Field>
+            <Field label="Distribution Description 6">
+              <Input value={distributionDescription6 || ''} onChange={(e) => setDistributionDescription6(e.target.value)} />
+            </Field>
+          </div>
+        </Card>
+
+        {/* SWC Checks Section */}
+        <Card className={styles.section}>
+          <Text className={styles.sectionTitle}>SWC Checks</Text>
+          <div className={styles.grid}>
+            {[...Array(37)].map((_, i) => {
+              const swcNum = 100 + i;
+              return (
+                <React.Fragment key={`swc${swcNum}`}>
+                  <Field label={`SWC${swcNum} Result`}>
+                    <Input value={swcResults[swcNum]?.result || ''} onChange={(e) => setSwcResult(swcNum, e.target.value)} />
+                  </Field>
+                  <Field label={`SWC${swcNum} Location`}>
+                    <Input value={swcResults[swcNum]?.location || ''} onChange={(e) => setSwcLocation(swcNum, e.target.value)} />
+                  </Field>
+                </React.Fragment>
+              );
+            })}
+          </div>
+        </Card>
+
+        {/* CFG Findings Section (CFG01–CFG26) */}
+        <Card className={styles.section}>
+          <Text className={styles.sectionTitle}>CFG Findings (CFG01–CFG26)</Text>
+          <div className={styles.grid}>
+            {[...Array(26)].map((_, i) => {
+              const cfgNum = (i + 1).toString().padStart(2, '0');
+              return (
+                <React.Fragment key={`cfg${cfgNum}`}>
+                  <Field label={`CFG${cfgNum} Result`}>
+                    <Input value={cfgFindings[cfgNum]?.result || ''} onChange={(e) => setCfgFinding(cfgNum, 'result', e.target.value)} />
+                  </Field>
+                  <Field label={`CFG${cfgNum} Title`}>
+                    <Input value={cfgFindings[cfgNum]?.title || ''} onChange={(e) => setCfgFinding(cfgNum, 'title', e.target.value)} />
+                  </Field>
+                  <Field label={`CFG${cfgNum} Description`}>
+                    <Textarea value={cfgFindings[cfgNum]?.description || ''} onChange={(e) => setCfgFinding(cfgNum, 'description', e.target.value)} rows={2} />
+                  </Field>
+                  <Field label={`CFG${cfgNum} Severity`}>
+                    <Input value={cfgFindings[cfgNum]?.severity || ''} onChange={(e) => setCfgFinding(cfgNum, 'severity', e.target.value)} />
+                  </Field>
+                  <Field label={`CFG${cfgNum} Status`}>
+                    <Input value={cfgFindings[cfgNum]?.status || ''} onChange={(e) => setCfgFinding(cfgNum, 'status', e.target.value)} />
+                  </Field>
+                  <Field label={`CFG${cfgNum} Location`}>
+                    <Input value={cfgFindings[cfgNum]?.location || ''} onChange={(e) => setCfgFinding(cfgNum, 'location', e.target.value)} />
+                  </Field>
+                  <Field label={`CFG${cfgNum} Recommendation`}>
+                    <Textarea value={cfgFindings[cfgNum]?.recommendation || ''} onChange={(e) => setCfgFinding(cfgNum, 'recommendation', e.target.value)} rows={2} />
+                  </Field>
+                  <Field label={`CFG${cfgNum} Alleviation`}>
+                    <Textarea value={cfgFindings[cfgNum]?.alleviation || ''} onChange={(e) => setCfgFinding(cfgNum, 'alleviation', e.target.value)} rows={2} />
+                  </Field>
+                  <Field label={`CFG${cfgNum} Category`}>
+                    <Input value={cfgFindings[cfgNum]?.category || ''} onChange={(e) => setCfgFinding(cfgNum, 'category', e.target.value)} />
+                  </Field>
+                  <Field label={`CFG${cfgNum} Score`}>
+                    <Input type="number" value={cfgFindings[cfgNum]?.score?.toString() || ''} onChange={(e) => setCfgFinding(cfgNum, 'score', parseInt(e.target.value) || 0)} />
+                  </Field>
+                </React.Fragment>
+              );
+            })}
+          </div>
+        </Card>
+
+        {/* Advanced Metadata Section */}
+        <Card className={styles.section}>
+          <Text className={styles.sectionTitle}>Advanced Metadata</Text>
+          <div className={styles.grid}>
+            <Field label="Is Graph">
+              <Switch checked={isGraph} onChange={(e) => setIsGraph(e.currentTarget.checked)} />
+            </Field>
+            <Field label="Is Inheritance">
+              <Switch checked={isInheritance} onChange={(e) => setIsInheritance(e.currentTarget.checked)} />
+            </Field>
+            <Field label="Is EVM Contract">
+              <Switch checked={isEVMContract} onChange={(e) => setIsEVMContract(e.currentTarget.checked)} />
+            </Field>
+            <Field label="Is Solana">
+              <Switch checked={isSolana} onChange={(e) => setIsSolana(e.currentTarget.checked)} />
+            </Field>
+            <Field label="Is NFT">
+              <Switch checked={isNFT} onChange={(e) => setIsNFT(e.currentTarget.checked)} />
+            </Field>
+            <Field label="Is Token">
+              <Switch checked={isToken} onChange={(e) => setIsToken(e.currentTarget.checked)} />
+            </Field>
+            <Field label="Is Staking">
+              <Switch checked={isStaking} onChange={(e) => setIsStaking(e.currentTarget.checked)} />
+            </Field>
+            <Field label="Is Other">
+              <Switch checked={isOther} onChange={(e) => setIsOther(e.currentTarget.checked)} />
             </Field>
           </div>
         </Card>

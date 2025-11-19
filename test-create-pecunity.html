@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Pecunity Test Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #dc2626;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            display: none;
+        }
+        .success {
+            background: #d1fae5 !important;
+            color: #065f46;
+        }
+        .error {
+            background: #fee2e2 !important;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <h1>Create Pecunity Test Project</h1>
+    <p>Click the button below to create a test project based on the Pecunity data.json file.</p>
+    <button onclick="createProject()">Create Pecunity Project</button>
+    <div id="result"></div>
+
+    <script>
+        async function createProject() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = '';
+            resultDiv.textContent = 'Creating project...';
+
+            const projectData = {
+                name: 'Pecunity',
+                symbol: 'PEC',
+                decimals: 18,
+                supply: '25,000,000',
+                description: 'Controlled ERC20 Token with Launch & Transfer Management',
+                slug: 'pecunity',
+                logo: '/img/projects/pecunity.png',
+                platform: 'BNBCHAIN',
+                auditToolVersion: '3.4',
+                auditReleaseNotes: 'This version have new pinksale parameters and new test cases.',
+                auditEdition: 'Standard',
+                paymentHash: '0xbed8f924faa48f7abaceba774dc14803f6a9f0b8155a80795ced52c289b201d5',
+                address: '0x413c2834f02003752d6Cc0Bcd1cE85Af04D62fBE',
+                ownerAddress: '0x353527391365b7589503eCfFcafDFBAFf0a24D1B',
+                ownerScore: 5,
+                blockNumber: '65067908',
+                dateCreated: 'Oct-18-2025',
+                baseToken: 'Solidity',
+                socials: {
+                    website: 'https://pecunity.io',
+                    telegram: 't.me/pecunity',
+                    twitter: 'https://x.com/pecunity_app',
+                    github: 'https://github.com/Pecunity/pecunity-protocol',
+                },
+                contract_info: {
+                    contract_name: 'Pecunity',
+                    contract_language: 'Solidity',
+                    contract_owner: 'Yes',
+                    contract_address: '0x413c2834f02003752d6Cc0Bcd1cE85Af04D62fBE',
+                    contract_created: '10/18/2025',
+                    contract_verified: true,
+                    contract_compiler: '^0.8.28',
+                    contract_license: 'UNLICENSED',
+                },
+                live: false,
+                overview: {
+                    honeypot: false,
+                    hidden_owner: false,
+                    trading_cooldown: false,
+                    max_tax: false,
+                    anit_whale: false,
+                    blacklist: false,
+                    buy_tax: 0,
+                    sell_tax: 0,
+                    max_transaction: false,
+                    can_take_ownership: false,
+                    external_call: false,
+                    self_destruct: false,
+                    proxy_check: false,
+                    anti_bot: false,
+                    mint: false,
+                    enable_trading: true,
+                    cannot_buy: false,
+                    cannot_sell: false,
+                    modify_tax: false,
+                    whitelist: true,
+                    pause_transfer: true,
+                    others: false,
+                    enable_trade_text: 'Owner must call launch to enable unrestricted transfers',
+                    pause_trade: true,
+                    max_wallet: false,
+                },
+                timeline: {
+                    audit_request: '2025-10-19',
+                    onboarding_process: '2025-10-19',
+                    audit_preview: '2025-10-19',
+                    audit_release: '2025-10-19',
+                },
+                isKYC: true,
+                kycURL: 'https://pinksale.notion.site/Pecunity-KYC-Verification-292d7dc69b3e8087961ae410cdc4409d?source=copy_link',
+                kycScore: 3,
+                socialScore: -15,
+                securityScore: 85,
+                auditorScore: 85,
+                audit_score: 85,
+                audit_confidence: 'Very High',
+                auditStatus: 'Pass',
+                critical: { found: 1, pending: 1, resolved: 0 },
+                major: { found: 1, pending: 1, resolved: 0 },
+                medium: { found: 0, pending: 0, resolved: 0 },
+                minor: { found: 2, pending: 2, resolved: 1 },
+                informational: { found: 0, pending: 0, resolved: 0 },
+                cfg_findings: [
+                    {
+                        id: 'CFG01',
+                        title: 'Potential Sandwich Attacks',
+                        severity: 'Medium',
+                        status: 'Detected',
+                        category: 'Security',
+                        description: 'A sandwich attack might happen when an attacker observes a transaction swapping tokens or adding liquidity without setting restrictions on slippage or minimum output amount.',
+                        location: 'L:479, C:14',
+                        recommendation: 'We recommend setting reasonable minimum output amounts, instead of 0, based on token prices when calling the aforementioned functions.',
+                        alleviation: '',
+                        action: '',
+                        score: 2
+                    },
+                    {
+                        id: 'CFG20',
+                        title: 'Centralization Risk in Launch Mechanism',
+                        severity: 'Critical',
+                        status: 'Detected',
+                        category: 'Centralization',
+                        description: 'The launch mechanism is controlled by a single owner address without any timelock or multisig protection.',
+                        location: 'launch(), enableTransfer(), disableTransfer() functions',
+                        recommendation: 'Implement a timelock mechanism for launch-related functions and consider using a multisig wallet for ownership.',
+                        alleviation: '',
+                        action: 'Implement timelock and multisig controls',
+                        score: 2
+                    }
+                ],
+                swc_checks: [
+                    { id: 'SWC100', status: 'Pass', location: 'L: 0 C: 0' },
+                    { id: 'SWC101', status: 'Pass', location: 'L: 0 C: 0' },
+                    { id: 'SWC102', status: 'Pass', location: 'L: 0 C: 0' },
+                ],
+                tokenDistribution: {
+                    isLiquidityLock: false,
+                    liquidityLockLink: '',
+                    lockAmount: '0',
+                    lockLocation: 'Pinksale',
+                    distributions: [
+                        { name: 'Burn', amount: '0', description: 'Burned amount send to the deadWallet.' },
+                        { name: 'Liquidity', amount: '18', description: 'Liquidity tokens are split from sale into the pool.' },
+                    ]
+                },
+                isGraph: true,
+                isInheritance: true,
+                isEVMContract: true,
+                isSolana: false,
+                isNFT: false,
+                isToken: true,
+                isStaking: false,
+                isOther: false,
+                codebase: 'https://bscscan.com/address/0x413c2834f02003752d6Cc0Bcd1cE85Af04D62fBE#code',
+                published: true,
+                tags: ['DeFi', 'Token', 'BNBCHAIN'],
+                score_history: {
+                    data: [85, 85, 85],
+                    current: 85
+                },
+                findings: [],
+                page_view: 0,
+                total_votes: 0,
+            };
+
+            try {
+                const response = await fetch('http://localhost:5001/api/projects', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(projectData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.className = 'success';
+                    resultDiv.textContent = `✓ Success! Project created with ID: ${data._id}\n\nAdmin URL: http://localhost:3000/admin/projects/${data._id}\nPublic URL: http://localhost:3000/${data.slug}`;
+                } else {
+                    resultDiv.className = 'error';
+                    resultDiv.textContent = `Error: ${data.message || 'Failed to create project'}\n\n${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'error';
+                resultDiv.textContent = `Error: ${error.message}\n\nMake sure the backend is running on http://localhost:5001`;
+            }
+        }
+    </script>
+</body>
+</html>

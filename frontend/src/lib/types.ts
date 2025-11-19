@@ -46,6 +46,22 @@ export interface Project {
   isMainNetAvailable?: boolean;
   isTestNetAvailable?: boolean;
   
+  // Advanced Metadata
+  isGraph?: boolean;
+  isInheritance?: boolean;
+  isEVMContract?: boolean;
+  isSolana?: boolean;
+  isNFT?: boolean;
+  isToken?: boolean;
+  isStaking?: boolean;
+  isOther?: boolean;
+  
+  // Scores
+  socialScore?: number;
+  securityScore?: number;
+  auditorScore?: number;
+  auditStatus?: string;
+  
   // Token Distribution
   tokenDistribution?: {
     isLiquidityLock?: boolean;
