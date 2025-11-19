@@ -59,4 +59,22 @@ export const blockchainsAPI = {
     api.get('/blockchains/list'),
 };
 
+// Advertisements API
+export const advertisementsAPI = {
+  getAll: (publishedOnly?: boolean) =>
+    api.get('/advertisements', { params: { published: publishedOnly } }),
+  getById: (id: string) =>
+    api.get(`/advertisements/${id}`),
+  getRandom: () =>
+    api.get('/advertisements/random'),
+  create: (data: any) =>
+    api.post('/advertisements', data),
+  update: (id: string, data: any) =>
+    api.put(`/advertisements/${id}`, data),
+  delete: (id: string) =>
+    api.delete(`/advertisements/${id}`),
+  duplicate: (id: string) =>
+    api.post(`/advertisements/${id}/duplicate`),
+};
+
 export default api;

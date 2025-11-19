@@ -210,8 +210,27 @@ export default function ProjectFormPage() {
   const [distributionAmount6, setDistributionAmount6] = useState(0);
   const [distributionDescription6, setDistributionDescription6] = useState('');
   
-  // SWC Results
-  const [swcResults, setSwcResults] = useState<Record<number, { result: string; location: string }>>({});
+  // Solana-specific fields
+  const [program, setProgram] = useState('');
+  const [authority, setAuthority] = useState('None');
+  const [freeze, setFreeze] = useState('');
+  const [metadataFileType, setMetadataFileType] = useState('JSON');
+  const [creatorName, setCreatorName] = useState('TBD');
+  const [creatorSite, setCreatorSite] = useState('TBD');
+  const [solanaImage, setSolanaImage] = useState('Not Live');
+  const [solanaSourceFile, setSolanaSourceFile] = useState('Not Live.');
+  const [key, setKey] = useState('');
+  const [updateAuthority, setUpdateAuthority] = useState('TBD');
+  const [mintAddress, setMintAddress] = useState('TBD');
+  const [data, setData] = useState(':');
+  const [uri, setUri] = useState('TBD');
+  const [sellerFeeBasisPoints, setSellerFeeBasisPoints] = useState('0');
+  const [primarySaleHappened, setPrimarySaleHappened] = useState('0');
+  const [isMutable, setIsMutable] = useState('1');
+  const [editionNonce, setEditionNonce] = useState('254');
+  const [tokenStandard, setTokenStandard] = useState('2');
+  const [authorityCheck, setAuthorityCheck] = useState('Pass');
+  const [freezeCheck, setFreezeCheck] = useState('Pass');
   
   // Advanced Metadata
   const [isGraph, setIsGraph] = useState(false);
@@ -233,21 +252,6 @@ export default function ProjectFormPage() {
   
   // CFG Findings (for FindingsManager - array format)
   const [cfgFindings, setCfgFindings] = useState<Finding[]>([]);
-
-  // Helper functions for SWC results
-  const setSwcResult = (swcNum: number, value: string) => {
-    setSwcResults(prev => ({
-      ...prev,
-      [swcNum]: { ...prev[swcNum], result: value }
-    }));
-  };
-
-  const setSwcLocation = (swcNum: number, value: string) => {
-    setSwcResults(prev => ({
-      ...prev,
-      [swcNum]: { ...prev[swcNum], location: value }
-    }));
-  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -426,8 +430,27 @@ export default function ProjectFormPage() {
   setDistributionAmount6((project as any).distributionAmount6 || 0);
   setDistributionDescription6((project as any).distributionDescription6 || '');
 
-  // SWC Results
-  setSwcResults((project as any).swcResults || {});
+  // Solana-specific fields
+  setProgram((project as any).program || '');
+  setAuthority((project as any).authority || 'None');
+  setFreeze((project as any).freeze || '');
+  setMetadataFileType((project as any).metadataFileType || 'JSON');
+  setCreatorName((project as any).creatorName || 'TBD');
+  setCreatorSite((project as any).creatorSite || 'TBD');
+  setSolanaImage((project as any).solanaImage || 'Not Live');
+  setSolanaSourceFile((project as any).solanaSourceFile || 'Not Live.');
+  setKey((project as any).key || '');
+  setUpdateAuthority((project as any).updateAuthority || 'TBD');
+  setMintAddress((project as any).mintAddress || 'TBD');
+  setData((project as any).data || ':');
+  setUri((project as any).uri || 'TBD');
+  setSellerFeeBasisPoints((project as any).sellerFeeBasisPoints || '0');
+  setPrimarySaleHappened((project as any).primarySaleHappened || '0');
+  setIsMutable((project as any).isMutable || '1');
+  setEditionNonce((project as any).editionNonce || '254');
+  setTokenStandard((project as any).tokenStandard || '2');
+  setAuthorityCheck((project as any).authorityCheck || 'Pass');
+  setFreezeCheck((project as any).freezeCheck || 'Pass');
 
   // Advanced Metadata
   setIsGraph((project as any).isGraph || false);
@@ -665,7 +688,6 @@ export default function ProjectFormPage() {
       distributionName6,
       distributionAmount6,
       distributionDescription6,
-      swcResults,
       isGraph,
       isInheritance,
       isEVMContract,
@@ -674,6 +696,27 @@ export default function ProjectFormPage() {
       isToken,
       isStaking,
       isOther,
+      // Solana Metadata (conditional - only saved when isSolana is true)
+      program,
+      authority,
+      freeze,
+      metadataFileType,
+      creatorName,
+      creatorSite,
+      solanaImage,
+      solanaSourceFile,
+      key,
+      updateAuthority,
+      mintAddress,
+      data,
+      uri,
+      sellerFeeBasisPoints,
+      primarySaleHappened,
+      isMutable,
+      editionNonce,
+      tokenStandard,
+      authorityCheck,
+      freezeCheck,
       // PDF Generation Toggles
       enableSummary,
       enableSWCSummary: false, // DEPRECATED - Always false, SWC checks removed
@@ -1251,25 +1294,78 @@ export default function ProjectFormPage() {
           </div>
         </Card>
 
-        {/* SWC Checks Section */}
-        <Card className={styles.section}>
-          <Text className={styles.sectionTitle}>SWC Checks</Text>
-          <div className={styles.grid}>
-            {[...Array(37)].map((_, i) => {
-              const swcNum = 100 + i;
-              return (
-                <React.Fragment key={`swc${swcNum}`}>
-                  <Field label={`SWC${swcNum} Result`}>
-                    <Input value={swcResults[swcNum]?.result || ''} onChange={(e) => setSwcResult(swcNum, e.target.value)} />
-                  </Field>
-                  <Field label={`SWC${swcNum} Location`}>
-                    <Input value={swcResults[swcNum]?.location || ''} onChange={(e) => setSwcLocation(swcNum, e.target.value)} />
-                  </Field>
-                </React.Fragment>
-              );
-            })}
-          </div>
-        </Card>
+        {/* Solana-Specific Metadata Section - Only shows when isSolana is true */}
+        {isSolana && (
+          <Card className={styles.section}>
+            <Text className={styles.sectionTitle}>Solana Metadata</Text>
+            <div className={styles.grid}>
+              <Field label="Program">
+                <Input value={program} onChange={(e) => setProgram(e.target.value)} placeholder="Program address" />
+              </Field>
+              <Field label="Authority">
+                <Input value={authority} onChange={(e) => setAuthority(e.target.value)} placeholder="None" />
+              </Field>
+              <Field label="Authority Check">
+                <Input value={authorityCheck} onChange={(e) => setAuthorityCheck(e.target.value)} placeholder="Pass/Fail" />
+              </Field>
+              <Field label="Freeze">
+                <Input value={freeze} onChange={(e) => setFreeze(e.target.value)} placeholder="Freeze authority" />
+              </Field>
+              <Field label="Freeze Check">
+                <Input value={freezeCheck} onChange={(e) => setFreezeCheck(e.target.value)} placeholder="Pass/Fail" />
+              </Field>
+              <Field label="Metadata File Type">
+                <Input value={metadataFileType} onChange={(e) => setMetadataFileType(e.target.value)} placeholder="JSON" />
+              </Field>
+              <Field label="Creator Name">
+                <Input value={creatorName} onChange={(e) => setCreatorName(e.target.value)} placeholder="Creator name" />
+              </Field>
+              <Field label="Creator Site">
+                <Input value={creatorSite} onChange={(e) => setCreatorSite(e.target.value)} placeholder="Creator website" />
+              </Field>
+              <Field label="Solana Image URL">
+                <Input value={solanaImage} onChange={(e) => setSolanaImage(e.target.value)} placeholder="Image URL or 'Not Live'" />
+              </Field>
+              <Field label="Solana Source File">
+                <Input value={solanaSourceFile} onChange={(e) => setSolanaSourceFile(e.target.value)} placeholder="Source file or 'Not Live'" />
+              </Field>
+              <Field label="Key">
+                <Input value={key} onChange={(e) => setKey(e.target.value)} placeholder="Metadata key" />
+              </Field>
+              <Field label="Update Authority">
+                <Input value={updateAuthority} onChange={(e) => setUpdateAuthority(e.target.value)} placeholder="Update authority address" />
+              </Field>
+              <Field label="Mint Address" className={styles.gridFull}>
+                <Input value={mintAddress} onChange={(e) => setMintAddress(e.target.value)} placeholder="Mint address" />
+              </Field>
+              <Field label="Data">
+                <Input value={data} onChange={(e) => setData(e.target.value)} placeholder="Token data" />
+              </Field>
+              <Field label="URI" className={styles.gridFull}>
+                <Input value={uri} onChange={(e) => setUri(e.target.value)} placeholder="Metadata URI" />
+              </Field>
+              <Field label="Seller Fee Basis Points">
+                <Input value={sellerFeeBasisPoints} onChange={(e) => setSellerFeeBasisPoints(e.target.value)} placeholder="0-10000" />
+              </Field>
+              <Field label="Primary Sale Happened">
+                <Input value={primarySaleHappened} onChange={(e) => setPrimarySaleHappened(e.target.value)} placeholder="0 or 1" />
+              </Field>
+              <Field label="Is Mutable">
+                <Input value={isMutable} onChange={(e) => setIsMutable(e.target.value)} placeholder="0 or 1" />
+              </Field>
+              <Field label="Edition Nonce">
+                <Input value={editionNonce} onChange={(e) => setEditionNonce(e.target.value)} placeholder="Edition nonce" />
+              </Field>
+              <Field label="Token Standard">
+                <Input value={tokenStandard} onChange={(e) => setTokenStandard(e.target.value)} placeholder="Token standard (0-4)" />
+              </Field>
+            </div>
+            <Divider style={{ marginTop: '16px', marginBottom: '8px' }} />
+            <Text size={200} style={{ color: '#666', fontStyle: 'italic' }}>
+              Note: These fields are specific to Solana token metadata and will only be saved when "Is Solana" is enabled.
+            </Text>
+          </Card>
+        )}
 
         {/* Advanced Metadata Section */}
         <Card className={styles.section}>
@@ -1335,17 +1431,33 @@ export default function ProjectFormPage() {
         <Card className={styles.section}>
           <Text className={styles.sectionTitle}>Timeline</Text>
           <div className={styles.grid}>
-            <Field label="Audit Request (MM/DD/YYYY)">
-              <Input value={auditRequest} onChange={(e) => setAuditRequest(e.target.value)} />
+            <Field label="Audit Request">
+              <Input 
+                type="date" 
+                value={auditRequest} 
+                onChange={(e) => setAuditRequest(e.target.value)} 
+              />
             </Field>
-            <Field label="Onboarding Process (MM/DD/YYYY)">
-              <Input value={onboarding} onChange={(e) => setOnboarding(e.target.value)} />
+            <Field label="Onboarding Process">
+              <Input 
+                type="date" 
+                value={onboarding} 
+                onChange={(e) => setOnboarding(e.target.value)} 
+              />
             </Field>
-            <Field label="Audit Preview (MM/DD/YYYY)">
-              <Input value={auditPreview} onChange={(e) => setAuditPreview(e.target.value)} />
+            <Field label="Audit Preview">
+              <Input 
+                type="date" 
+                value={auditPreview} 
+                onChange={(e) => setAuditPreview(e.target.value)} 
+              />
             </Field>
-            <Field label="Audit Release (MM/DD/YYYY)">
-              <Input value={auditRelease} onChange={(e) => setAuditRelease(e.target.value)} />
+            <Field label="Audit Release">
+              <Input 
+                type="date" 
+                value={auditRelease} 
+                onChange={(e) => setAuditRelease(e.target.value)} 
+              />
             </Field>
           </div>
         </Card>

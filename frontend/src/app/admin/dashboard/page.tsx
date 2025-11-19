@@ -254,6 +254,9 @@ export default function AdminDashboard() {
           >
             New Project
           </Button>
+          <Button onClick={() => router.push('/admin/advertisements')}>
+            Manage Ads
+          </Button>
           <Button onClick={() => router.push('/')}>View Portal</Button>
           <Button onClick={handleLogout}>Logout</Button>
         </div>

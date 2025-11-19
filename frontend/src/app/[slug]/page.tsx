@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { projectsAPI } from '@/lib/api';
 import { Project } from '@/lib/types';
+import Advertisement from '@/components/Advertisement';
 
 import styles from './project.module.css';
 
@@ -109,9 +110,6 @@ export default function ProjectPage() {
               Request an Audit
             </button>
             <button className={styles.searchButton}>🔍</button>
-            <button className={styles.qualityIcon} title="High Quality Audit">
-              <img src="/quality.png" alt="High Quality Audit" />
-            </button>
           </nav>
         </div>
       </header>
@@ -300,6 +298,9 @@ export default function ProjectPage() {
 
         {/* Right Column */}
         <div className={styles.rightColumn}>
+          {/* Advertisement */}
+          <Advertisement />
+
           {/* Score Card */}
           <div className={styles.scoreCard}>
             <h2 className={styles.cardTitle}>Audit Score</h2>

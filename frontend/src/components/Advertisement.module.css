@@ -1,0 +1,36 @@
+.adContainer {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.adLabel {
+  background: #f5f5f5;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.adLink {
+  display: block;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.adLink:hover {
+  opacity: 0.9;
+}
+
+.adImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 250px;
+  object-fit: cover;
+}

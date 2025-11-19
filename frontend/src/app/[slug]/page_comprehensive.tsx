@@ -107,9 +107,6 @@ export default function ProjectPage() {
               Request an Audit
             </button>
             <button className={styles.searchButton}>🔍</button>
-            <button className={styles.qualityIcon} title="High Quality Audit">
-              <img src="/quality.png" alt="High Quality Audit" />
-            </button>
           </nav>
         </div>
       </header>

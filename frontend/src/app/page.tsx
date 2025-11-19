@@ -160,8 +160,9 @@ export default function Home() {
     if (!searchQuery.trim()) return true;
     const query = searchQuery.toLowerCase();
     return (
-      project.name.toLowerCase().includes(query) ||
+      project.name?.toLowerCase().includes(query) ||
       project.symbol?.toLowerCase().includes(query) ||
+      project.slug?.toLowerCase().includes(query) ||
       project.ecosystem?.toLowerCase().includes(query) ||
       project.platform?.toLowerCase().includes(query)
     );
@@ -189,9 +190,6 @@ export default function Home() {
               title="Search projects"
             >
               🔍
-            </button>
-            <button className={styles.qualityIcon} title="High Quality Audit">
-              <img src="/quality.png" alt="High Quality Audit" />
             </button>
           </nav>
         </div>
