@@ -1,4 +1,18 @@
-const axios = require('axios');
+let axios;
+try {
+  axios = require('axios');
+} catch (error) {
+  console.error('Failed to load axios:', error.message);
+  // Export stub functions if axios fails to load
+  module.exports = {
+    getTokenMarketCap: async () => null,
+    calculateTotalSecuredMarketCap: async () => ({ totalSecured: 2500000000, fallback: true }),
+    formatMarketCap: (value) => `$${(value / 1e9).toFixed(2)}B`,
+    clearCache: () => {}
+  };
+  return;
+}
+
 const Project = require('../models/Project');
 
 const CMC_API_KEY = '23955f35-bd18-4f6b-9246-0e9a8a22f319';
