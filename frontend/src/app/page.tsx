@@ -12,17 +12,46 @@ interface Project {
   symbol: string;
   logo?: string;
   ecosystem: string;
+  platform?: string;
   audit_score: number;
+  auditStatus?: string;
   total_votes: number;
+  page_view?: number;
   total_issues: number;
-  audit_confidence: number;
+  audit_confidence: string;
   published: boolean;
+  createdAt?: string;
+  critical?: { found: number; pending: number; resolved: number };
+  major?: { found: number; pending: number; resolved: number };
+  medium?: { found: number; pending: number; resolved: number };
+  minor?: { found: number; pending: number; resolved: number };
+}
+
+interface Stats {
+  totalProjects: number;
+  totalPass: number;
+  totalFail: number;
+  averageScore: number;
+  totalIssuesFound: number;
+  totalIssuesResolved: number;
+  criticalIssues: number;
+  highRiskProjects: number;
 }
 
 export default function Home() {
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<Stats>({
+    totalProjects: 0,
+    totalPass: 0,
+    totalFail: 0,
+    averageScore: 0,
+    totalIssuesFound: 0,
+    totalIssuesResolved: 0,
+    criticalIssues: 0,
+    highRiskProjects: 0,
+  });
 
   useEffect(() => {
     fetchProjects();
@@ -31,7 +60,9 @@ export default function Home() {
   const fetchProjects = async () => {
     try {
       const response = await projectsAPI.getAll();
-      setProjects(response.data);
+      const projectsData = response.data.filter((p: Project) => p.published);
+      setProjects(projectsData);
+      calculateStats(projectsData);
     } catch (error) {
       console.error('Error fetching projects:', error);
     } finally {
@@ -39,9 +70,65 @@ export default function Home() {
     }
   };
 
-  const renderStars = (score: number) => {
+  const calculateStats = (projectsData: Project[]) => {
+    const totalProjects = projectsData.length;
+    const totalPass = projectsData.filter(p => 
+      p.auditStatus === 'Pass' || p.audit_score >= 70
+    ).length;
+    const totalFail = totalProjects - totalPass;
+    
+    const averageScore = projectsData.length > 0
+      ? Math.round(projectsData.reduce((sum, p) => sum + (p.audit_score || 0), 0) / projectsData.length)
+      : 0;
+
+    let totalIssuesFound = 0;
+    let totalIssuesResolved = 0;
+    let criticalIssues = 0;
+    let highRiskProjects = 0;
+
+    projectsData.forEach(p => {
+      const critical = p.critical?.found || 0;
+      const major = p.major?.found || 0;
+      const medium = p.medium?.found || 0;
+      const minor = p.minor?.found || 0;
+      
+      totalIssuesFound += critical + major + medium + minor;
+      totalIssuesResolved += (p.critical?.resolved || 0) + (p.major?.resolved || 0) + 
+                             (p.medium?.resolved || 0) + (p.minor?.resolved || 0);
+      
+      criticalIssues += critical;
+      if (critical > 0 || major > 2) highRiskProjects++;
+    });
+
+    setStats({
+      totalProjects,
+      totalPass,
+      totalFail,
+      averageScore,
+      totalIssuesFound,
+      totalIssuesResolved,
+      criticalIssues,
+      highRiskProjects,
+    });
+  };
+
+  const renderStars = (confidence: string | number) => {
     const stars = [];
-    const fullStars = Math.floor(score / 20);
+    let fullStars = 3; // default
+    
+    if (typeof confidence === 'string') {
+      const confMap: { [key: string]: number } = {
+        'Very High': 5,
+        'High': 4,
+        'Medium': 3,
+        'Low': 2,
+        'Very Low': 1
+      };
+      fullStars = confMap[confidence] || 3;
+    } else {
+      fullStars = Math.floor(confidence / 20);
+    }
+    
     for (let i = 0; i < 5; i++) {
       stars.push(
         <span key={i} className={i < fullStars ? styles.starFilled : styles.starEmpty}>
@@ -110,46 +197,120 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Global Stats Dashboard */}
+      <section className={styles.globalStats}>
+        <div className={styles.statsContainer}>
+          <div className={styles.statBox}>
+            <div className={styles.statIcon}>📊</div>
+            <div className={styles.statValue}>{stats.totalProjects}</div>
+            <div className={styles.statLabel}>Total Audits</div>
+          </div>
+          
+          <div className={styles.statBox}>
+            <div className={styles.statIcon}>✅</div>
+            <div className={styles.statValue}>{stats.totalPass}</div>
+            <div className={styles.statLabel}>Passed Audits</div>
+            <div className={styles.statPercentage}>
+              {stats.totalProjects > 0 ? Math.round((stats.totalPass / stats.totalProjects) * 100) : 0}%
+            </div>
+          </div>
+          
+          <div className={styles.statBox}>
+            <div className={styles.statIcon}>❌</div>
+            <div className={styles.statValue}>{stats.totalFail}</div>
+            <div className={styles.statLabel}>Failed Audits</div>
+            <div className={styles.statPercentage}>
+              {stats.totalProjects > 0 ? Math.round((stats.totalFail / stats.totalProjects) * 100) : 0}%
+            </div>
+          </div>
+          
+          <div className={styles.statBox}>
+            <div className={styles.statIcon}>⭐</div>
+            <div className={styles.statValue}>{stats.averageScore}</div>
+            <div className={styles.statLabel}>Average Score</div>
+          </div>
+          
+          <div className={styles.statBox}>
+            <div className={styles.statIcon}>🔍</div>
+            <div className={styles.statValue}>{stats.totalIssuesFound}</div>
+            <div className={styles.statLabel}>Issues Found</div>
+          </div>
+          
+          <div className={styles.statBox}>
+            <div className={styles.statIcon}>✓</div>
+            <div className={styles.statValue}>{stats.totalIssuesResolved}</div>
+            <div className={styles.statLabel}>Issues Resolved</div>
+            <div className={styles.statPercentage}>
+              {stats.totalIssuesFound > 0 ? Math.round((stats.totalIssuesResolved / stats.totalIssuesFound) * 100) : 0}%
+            </div>
+          </div>
+          
+          <div className={styles.statBox}>
+            <div className={styles.statIcon}>🚨</div>
+            <div className={styles.statValue}>{stats.criticalIssues}</div>
+            <div className={styles.statLabel}>Critical Issues</div>
+          </div>
+          
+          <div className={styles.statBox}>
+            <div className={styles.statIcon}>⚠️</div>
+            <div className={styles.statValue}>{stats.highRiskProjects}</div>
+            <div className={styles.statLabel}>High Risk Projects</div>
+          </div>
+        </div>
+      </section>
+
       {/* Stats Cards */}
       <section className={styles.statsSection}>
         <div className={styles.statsGrid}>
           <div className={styles.statCard}>
-            <h3 className={styles.statTitle}>Most Voted</h3>
+            <h3 className={styles.statTitle}>🔥 Most Voted</h3>
             <div className={styles.statItems}>
-              {projects.slice(0, 3).map((project, index) => (
-                <div key={project._id} className={styles.statItem}>
-                  <span className={styles.statRank}>{index + 1}</span>
+              {projects
+                .sort((a, b) => (b.total_votes || 0) - (a.total_votes || 0))
+                .slice(0, 5)
+                .map((project, index) => (
+                <div key={project._id} className={styles.statItem} onClick={() => router.push(`/${project.slug}`)}>
+                  <span className={styles.statRank}>#{index + 1}</span>
+                  <img src={project.logo || '/default-logo.png'} alt={project.name} className={styles.statLogo} />
                   <span className={styles.statName}>{project.name}</span>
                   <span className={styles.statBadge}>{getScoreBadge(project.audit_score)}</span>
-                  <span className={styles.statVotes}>{project.total_votes} Votes</span>
+                  <span className={styles.statVotes}>👍 {project.total_votes || 0}</span>
                 </div>
               ))}
             </div>
           </div>
 
           <div className={styles.statCard}>
-            <h3 className={styles.statTitle}>Most Viewed</h3>
+            <h3 className={styles.statTitle}>👀 Most Viewed</h3>
             <div className={styles.statItems}>
-              {projects.slice(0, 3).map((project, index) => (
-                <div key={project._id} className={styles.statItem}>
-                  <span className={styles.statRank}>{index + 1}</span>
+              {projects
+                .sort((a, b) => (b.page_view || 0) - (a.page_view || 0))
+                .slice(0, 5)
+                .map((project, index) => (
+                <div key={project._id} className={styles.statItem} onClick={() => router.push(`/${project.slug}`)}>
+                  <span className={styles.statRank}>#{index + 1}</span>
+                  <img src={project.logo || '/default-logo.png'} alt={project.name} className={styles.statLogo} />
                   <span className={styles.statName}>{project.name}</span>
                   <span className={styles.statBadge}>{getScoreBadge(project.audit_score)}</span>
-                  <span className={styles.statVotes}>{project.total_votes} Votes</span>
+                  <span className={styles.statVotes}>👁️ {project.page_view || 0}</span>
                 </div>
               ))}
             </div>
           </div>
 
           <div className={styles.statCard}>
-            <h3 className={styles.statTitle}>Recently Added</h3>
+            <h3 className={styles.statTitle}>🆕 Recently Added</h3>
             <div className={styles.statItems}>
-              {projects.slice(0, 3).map((project, index) => (
-                <div key={project._id} className={styles.statItem}>
-                  <span className={styles.statRank}>{index + 1}</span>
+              {projects
+                .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+                .slice(0, 5)
+                .map((project, index) => (
+                <div key={project._id} className={styles.statItem} onClick={() => router.push(`/${project.slug}`)}>
+                  <span className={styles.statRank}>#{index + 1}</span>
+                  <img src={project.logo || '/default-logo.png'} alt={project.name} className={styles.statLogo} />
                   <span className={styles.statName}>{project.name}</span>
                   <span className={styles.statBadge}>{getScoreBadge(project.audit_score)}</span>
-                  <span className={styles.statVotes}>0 Votes</span>
+                  <span className={styles.statVotes}>⭐ {project.audit_score}</span>
                 </div>
               ))}
             </div>
