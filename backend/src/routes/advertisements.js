@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Advertisement = require('../models/Advertisement');
-const { auth } = require('../middleware/auth');
+const auth = require('../middleware/auth');
 
 // Get all advertisements (public - for getting random published ads)
 router.get('/', async (req, res) => {
