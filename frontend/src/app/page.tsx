@@ -172,26 +172,94 @@ export default function Home() {
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
-            <h1 className={styles.heroTitle}>Smart<br />Contract<br />Development.</h1>
+            <h1 className={styles.heroTitle}>Smart Contract<br />Development.</h1>
             <p className={styles.heroSubtitle}>
               Smart contract development & audit experts for Blockchain Networks. 
               Customized, secure and fully balanced.
             </p>
-            <button 
-              className={styles.requestButton}
-              onClick={() => window.open('https://t.me/Bladepool', '_blank')}
-            >
-              Request an Audit
-            </button>
           </div>
           <div className={styles.heroImage}>
-            <div className={styles.shieldIcon}>
-              <svg width="200" height="200" viewBox="0 0 200 200">
-                <path d="M100 20 L160 50 L160 120 C160 150 130 170 100 180 C70 170 40 150 40 120 L40 50 Z" 
-                      fill="#ef4444" opacity="0.2" stroke="#ef4444" strokeWidth="2"/>
-                <path d="M80 100 L95 115 L120 85" 
-                      stroke="#ef4444" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+            <div className={styles.animatedGraphic}>
+              {/* Rotating gears */}
+              <div className={styles.gear1}>
+                <svg width="80" height="80" viewBox="0 0 80 80">
+                  <path d="M40 10 L45 20 L55 20 L60 10 L65 15 L70 25 L70 35 L65 45 L55 50 L45 50 L35 50 L25 45 L20 35 L20 25 L25 15 L30 10 Z" 
+                        fill="#333" stroke="#444" strokeWidth="2"/>
+                  <circle cx="40" cy="30" r="8" fill="#555"/>
+                </svg>
+              </div>
+              
+              <div className={styles.gear2}>
+                <svg width="60" height="60" viewBox="0 0 60 60">
+                  <path d="M30 5 L35 12 L42 12 L47 5 L50 10 L55 18 L55 25 L50 33 L42 37 L35 37 L28 37 L20 33 L15 25 L15 18 L20 10 L23 5 Z" 
+                        fill="#333" stroke="#444" strokeWidth="2"/>
+                  <circle cx="30" cy="22" r="6" fill="#555"/>
+                </svg>
+              </div>
+
+              {/* Documents */}
+              <div className={styles.document1}>
+                <svg width="50" height="60" viewBox="0 0 50 60">
+                  <rect x="5" y="5" width="40" height="50" fill="#fff" stroke="#ccc" strokeWidth="1" rx="2"/>
+                  <rect x="35" y="5" width="10" height="10" fill="#ef4444"/>
+                  <line x1="12" y1="20" x2="38" y2="20" stroke="#ddd" strokeWidth="2"/>
+                  <line x1="12" y1="28" x2="38" y2="28" stroke="#ddd" strokeWidth="2"/>
+                  <line x1="12" y1="36" x2="30" y2="36" stroke="#ddd" strokeWidth="2"/>
+                </svg>
+              </div>
+
+              <div className={styles.document2}>
+                <svg width="50" height="60" viewBox="0 0 50 60">
+                  <rect x="5" y="5" width="40" height="50" fill="#fff" stroke="#ccc" strokeWidth="1" rx="2"/>
+                  <rect x="35" y="5" width="10" height="10" fill="#ef4444"/>
+                  <line x1="12" y1="20" x2="38" y2="20" stroke="#ddd" strokeWidth="2"/>
+                  <line x1="12" y1="28" x2="38" y2="28" stroke="#ddd" strokeWidth="2"/>
+                </svg>
+              </div>
+
+              {/* Main Shield with Checkmark */}
+              <div className={styles.mainShield}>
+                <svg width="180" height="180" viewBox="0 0 180 180">
+                  {/* Red circle background */}
+                  <circle cx="90" cy="90" r="70" fill="#ef4444" className={styles.pulseCircle}/>
+                  
+                  {/* Shield */}
+                  <path d="M90 30 L130 50 L130 100 C130 120 110 135 90 142 C70 135 50 120 50 100 L50 50 Z" 
+                        fill="#fff" stroke="#ddd" strokeWidth="2"/>
+                  
+                  {/* Inner shield gradient */}
+                  <path d="M90 40 L120 55 L120 95 C120 110 105 120 90 125 C75 120 60 110 60 95 L60 55 Z" 
+                        fill="url(#shieldGradient)"/>
+                  
+                  {/* Checkmark */}
+                  <path d="M75 90 L85 100 L105 75" 
+                        stroke="#ef4444" strokeWidth="6" fill="none" 
+                        strokeLinecap="round" strokeLinejoin="round"
+                        className={styles.checkmark}/>
+                  
+                  <defs>
+                    <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#f5f5f5"/>
+                      <stop offset="100%" stopColor="#e0e0e0"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+
+              {/* Settings Icon */}
+              <div className={styles.settingsIcon}>
+                <svg width="50" height="50" viewBox="0 0 50 50">
+                  <path d="M25 15 L28 20 L33 20 L36 15 L38 17 L40 22 L40 28 L38 33 L33 36 L28 36 L23 36 L18 33 L16 28 L16 22 L18 17 L20 15 Z" 
+                        fill="#ef4444" stroke="#ef4444" strokeWidth="1"/>
+                  <circle cx="25" cy="25" r="5" fill="#fff"/>
+                </svg>
+              </div>
+
+              {/* Floating Dots */}
+              <div className={styles.dot1}></div>
+              <div className={styles.dot2}></div>
+              <div className={styles.dot3}></div>
+              <div className={styles.dot4}></div>
             </div>
           </div>
         </div>

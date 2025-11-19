@@ -239,7 +239,7 @@
 
 /* Hero */
 .hero {
-  padding: 4rem 0;
+  padding: 2rem 0;
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
 }
 
@@ -258,34 +258,17 @@
 }
 
 .heroTitle {
-  font-size: 4rem;
+  font-size: 3rem;
   font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
   color: #ffffff;
 }
 
 .heroSubtitle {
-  font-size: 1.125rem;
-  color: #a1a1aa;
-  margin-bottom: 2rem;
-  max-width: 500px;
-}
-
-.requestButton {
-  background: #ef4444;
-  border: none;
-  color: #ffffff;
-  padding: 0.875rem 2rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
   font-size: 1rem;
-  transition: background 0.2s;
-}
-
-.requestButton:hover {
-  background: #dc2626;
+  color: #a1a1aa;
+  max-width: 500px;
 }
 
 .heroImage {
@@ -293,15 +276,134 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  height: 300px;
 }
 
-.shieldIcon {
-  animation: float 3s ease-in-out infinite;
+.animatedGraphic {
+  position: relative;
+  width: 400px;
+  height: 300px;
 }
 
-@keyframes float {
+/* Rotating Gears */
+.gear1 {
+  position: absolute;
+  top: 20px;
+  left: 50px;
+  animation: rotateClockwise 8s linear infinite;
+}
+
+.gear2 {
+  position: absolute;
+  bottom: 40px;
+  right: 80px;
+  animation: rotateCounterClockwise 6s linear infinite;
+}
+
+@keyframes rotateClockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rotateCounterClockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+/* Documents */
+.document1 {
+  position: absolute;
+  top: 30px;
+  left: 150px;
+  animation: float1 3s ease-in-out infinite;
+}
+
+.document2 {
+  position: absolute;
+  bottom: 60px;
+  right: 180px;
+  animation: float2 4s ease-in-out infinite;
+}
+
+@keyframes float1 {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes float2 {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-20px); }
+}
+
+/* Main Shield */
+.mainShield {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.pulseCircle {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.checkmark {
+  animation: drawCheck 1s ease-in-out 0.5s infinite;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+
+@keyframes drawCheck {
+  0% { stroke-dashoffset: 100; }
+  50%, 100% { stroke-dashoffset: 0; }
+}
+
+/* Settings Icon */
+.settingsIcon {
+  position: absolute;
+  top: 50px;
+  right: 40px;
+  animation: rotateClockwise 10s linear infinite;
+}
+
+/* Floating Dots */
+.dot1, .dot2, .dot3, .dot4 {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+}
+
+.dot1 {
+  top: 80px;
+  left: 30px;
+  animation: float1 2s ease-in-out infinite;
+}
+
+.dot2 {
+  top: 140px;
+  right: 60px;
+  animation: float2 3s ease-in-out infinite;
+}
+
+.dot3 {
+  bottom: 100px;
+  left: 100px;
+  animation: float1 2.5s ease-in-out infinite;
+}
+
+.dot4 {
+  bottom: 50px;
+  right: 120px;
+  animation: float2 3.5s ease-in-out infinite;
 }
 
 /* Stats Section */
