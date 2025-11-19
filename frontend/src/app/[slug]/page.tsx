@@ -268,123 +268,104 @@ export default function ProjectPage() {
           {/* Manual Code Review Risk Results */}
           <div className={styles.card}>
             <h2 className={styles.cardTitle}>Manual Code Review Risk Results</h2>
-            <div className={styles.riskGrid}>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Can Mint?</span>
-                <span className={!project.overview?.mint ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.mint ? 'Pass' : 'Fail'}
-                </span>
+            <div className={styles.riskIconGrid}>
+              <div className={styles.riskIcon}>
+                <div className={!project.overview?.mint ? styles.iconPass : styles.iconFail}>●</div>
+                <span className={styles.iconLabel}>Can Mint?</span>
+                <span className={styles.iconStatus}>{!project.overview?.mint ? 'Pass' : 'Fail'}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Edit Taxes over 25%</span>
-                <span className={!project.overview?.modify_tax ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.modify_tax ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={!project.overview?.modify_tax ? styles.iconPass : styles.iconFail}>●</div>
+                <span className={styles.iconLabel}>Modify Tax</span>
+                <span className={styles.iconStatus}>{!project.overview?.modify_tax ? 'Pass' : 'Fail'}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Max Transaction</span>
-                <span className={!project.overview?.max_transaction ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.max_transaction ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={!project.overview?.honeypot ? styles.iconPass : styles.iconFail}>●</div>
+                <span className={styles.iconLabel}>Honeypot</span>
+                <span className={styles.iconStatus}>{!project.overview?.honeypot ? 'Pass' : 'Fail'}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Max Wallet</span>
-                <span className={!project.overview?.max_wallet ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.max_wallet ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={!project.overview?.trading_cooldown ? styles.iconPass : styles.iconFail}>●</div>
+                <span className={styles.iconLabel}>Trading Cooldown</span>
+                <span className={styles.iconStatus}>{!project.overview?.trading_cooldown ? 'Pass' : 'Fail'}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Enable Trade</span>
-                <span className={!project.overview?.enable_trading ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.enable_trading ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={!project.overview?.anti_bot ? styles.iconPass : styles.iconFail}>●</div>
+                <span className={styles.iconLabel}>Anti Bot</span>
+                <span className={styles.iconStatus}>{!project.overview?.anti_bot ? 'Pass' : 'Fail'}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Modify Tax</span>
-                <span className={!project.overview?.modify_tax ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.modify_tax ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={!project.overview?.blacklist ? styles.iconPass : styles.iconFail}>●</div>
+                <span className={styles.iconLabel}>Blacklist</span>
+                <span className={styles.iconStatus}>{!project.overview?.blacklist ? 'Pass' : 'Fail'}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Honeypot</span>
-                <span className={!project.overview?.honeypot ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.honeypot ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={!project.overview?.whitelist ? styles.iconPass : styles.iconFail}>●</div>
+                <span className={styles.iconLabel}>Whitelist</span>
+                <span className={styles.iconStatus}>{!project.overview?.whitelist ? 'Pass' : 'Fail'}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Trading Cooldown</span>
-                <span className={!project.overview?.trading_cooldown ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.trading_cooldown ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={!project.overview?.anit_whale ? styles.iconPass : styles.iconFail}>●</div>
+                <span className={styles.iconLabel}>Anti Whale</span>
+                <span className={styles.iconStatus}>{!project.overview?.anit_whale ? 'Pass' : 'Fail'}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Transfer Pausable</span>
-                <span className={!project.overview?.pause_transfer ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.pause_transfer ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={!project.overview?.proxy_check ? styles.iconPass : styles.iconFail}>●</div>
+                <span className={styles.iconLabel}>Proxy Contract</span>
+                <span className={styles.iconStatus}>{!project.overview?.proxy_check ? 'Pass' : 'Fail'}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Can Pause Trade?</span>
-                <span className={!project.overview?.pause_trade ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.pause_trade ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={!project.overview?.pause_transfer ? styles.iconPass : styles.iconFail}>●</div>
+                <span className={styles.iconLabel}>Pause Transfer</span>
+                <span className={styles.iconStatus}>{!project.overview?.pause_transfer ? 'Pass' : 'Fail'}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Anti Bot</span>
-                <span className={project.overview?.anti_bot ? styles.badgePass : styles.badgeFail}>
-                  {project.overview?.anti_bot ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={!project.overview?.pause_trade ? styles.iconPass : styles.iconFail}>●</div>
+                <span className={styles.iconLabel}>Pause Trade</span>
+                <span className={styles.iconStatus}>{!project.overview?.pause_trade ? 'Pass' : 'Fail'}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Antiwhale</span>
-                <span className={project.overview?.anit_whale ? styles.badgePass : styles.badgeFail}>
-                  {project.overview?.anit_whale ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={!project.overview?.hidden_owner ? styles.iconPass : styles.iconFail}>●</div>
+                <span className={styles.iconLabel}>Hidden Ownership</span>
+                <span className={styles.iconStatus}>{!project.overview?.hidden_owner ? 'Pass' : 'Fail'}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Proxy Contract</span>
-                <span className={!project.overview?.proxy_check ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.proxy_check ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={styles.iconNeutral}>●</div>
+                <span className={styles.iconLabel}>Buy Tax</span>
+                <span className={styles.iconStatus}>{project.overview?.buy_tax || 0}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Blacklisted</span>
-                <span className={!project.overview?.blacklist ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.blacklist ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={styles.iconNeutral}>●</div>
+                <span className={styles.iconLabel}>Sell Tax</span>
+                <span className={styles.iconStatus}>{project.overview?.sell_tax || 0}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Hidden Ownership</span>
-                <span className={!project.overview?.hidden_owner ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.hidden_owner ? 'Pass' : 'Fail'}
-                </span>
+              <div className={styles.riskIcon}>
+                <div className={!project.overview?.external_call ? styles.iconPass : styles.iconFail}>●</div>
+                <span className={styles.iconLabel}>External Call</span>
+                <span className={styles.iconStatus}>{!project.overview?.external_call ? 'Pass' : 'Fail'}</span>
               </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Buy Tax</span>
-                <span className={styles.value}>{project.overview?.buy_tax || 0}%</span>
-              </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Sell Tax</span>
-                <span className={styles.value}>{project.overview?.sell_tax || 0}%</span>
-              </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Selfdestruct</span>
-                <span className={!project.overview?.self_destruct ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.self_destruct ? 'Pass' : 'Fail'}
-                </span>
-              </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>Whitelisted</span>
-                <span className={project.overview?.whitelist ? styles.badgePass : styles.badgeFail}>
-                  {project.overview?.whitelist ? 'Pass' : 'Fail'}
-                </span>
-              </div>
-              <div className={styles.riskRow}>
-                <span className={styles.label}>External Call</span>
-                <span className={!project.overview?.external_call ? styles.badgePass : styles.badgeFail}>
-                  {!project.overview?.external_call ? 'Pass' : 'Fail'}
-                </span>
-              </div>
+            </div>
+            
+            {/* Audit Action Buttons */}
+            <div className={styles.auditActions}>
+              {project.audit_pdf && (
+                <a 
+                  href={project.audit_pdf} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={styles.auditButton}
+                >
+                  📄 View Audit PDF
+                </a>
+              )}
+              {project.cfg_findings && project.cfg_findings.length > 0 && (
+                <button className={styles.auditButton} onClick={() => {
+                  const findingsSection = document.getElementById('cfg-findings');
+                  findingsSection?.scrollIntoView({ behavior: 'smooth' });
+                }}>
+                  🔍 View CFG Findings ({project.cfg_findings.length})
+                </button>
+              )}
             </div>
           </div>
 
@@ -496,6 +477,43 @@ export default function ProjectPage() {
               <button className={styles.actionButton}>View Findings</button>
             </div>
           </div>
+
+          {/* CFG Findings Section */}
+          {project.cfg_findings && project.cfg_findings.length > 0 && (
+            <div className={styles.card} id="cfg-findings">
+              <h2 className={styles.cardTitle}>CFG Findings (1-25)</h2>
+              <div className={styles.findingsGrid}>
+                {project.cfg_findings.map((finding, index) => (
+                  <div key={finding.id || index} className={styles.findingItem}>
+                    <div className={styles.findingHeader}>
+                      <span className={styles.findingNumber}>#{index + 1}</span>
+                      <span className={`${styles.findingSeverity} ${styles[`severity${finding.severity}`]}`}>
+                        {finding.severity}
+                      </span>
+                      <span className={`${styles.findingStatus} ${styles[`status${finding.status.replace(' ', '')}`]}`}>
+                        {finding.status}
+                      </span>
+                    </div>
+                    <h3 className={styles.findingTitle}>{finding.title}</h3>
+                    <p className={styles.findingCategory}>{finding.category}</p>
+                    {finding.description && (
+                      <p className={styles.findingDescription}>{finding.description}</p>
+                    )}
+                    {finding.location && (
+                      <div className={styles.findingLocation}>
+                        <strong>Location:</strong> {finding.location}
+                      </div>
+                    )}
+                    {finding.recommendation && (
+                      <div className={styles.findingRecommendation}>
+                        <strong>Recommendation:</strong> {finding.recommendation}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Description */}
           {project.description && (
