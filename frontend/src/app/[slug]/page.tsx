@@ -21,6 +21,21 @@ function formatDate(dateString?: string): string {
   }
 }
 
+// Helper to ensure URL has proper protocol
+function ensureUrl(url?: string): string {
+  if (!url) return '#';
+  // If it already has a protocol, return as is
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  // If it's a telegram link
+  if (url.includes('t.me/')) {
+    return `https://${url}`;
+  }
+  // For other cases, add https://
+  return `https://${url}`;
+}
+
 // Helper to render stars for confidence
 function renderStars(confidence: string | number): JSX.Element[] {
   let rating = 3;
@@ -160,27 +175,27 @@ export default function ProjectPage() {
               {/* Social Media Icons */}
               <div className={styles.socialMediaIcons}>
                 {project.socials?.website && (
-                  <a href={project.socials.website} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="Website">
+                  <a href={ensureUrl(project.socials.website)} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="Website">
                     🌐
                   </a>
                 )}
                 {project.socials?.twitter && (
-                  <a href={project.socials.twitter} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="Twitter">
+                  <a href={ensureUrl(project.socials.twitter)} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="Twitter">
                     𝕏
                   </a>
                 )}
                 {project.socials?.telegram && (
-                  <a href={project.socials.telegram} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="Telegram">
+                  <a href={ensureUrl(project.socials.telegram)} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="Telegram">
                     ✈️
                   </a>
                 )}
                 {project.socials?.discord && (
-                  <a href={project.socials.discord} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="Discord">
+                  <a href={ensureUrl(project.socials.discord)} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="Discord">
                     💬
                   </a>
                 )}
                 {project.socials?.github && (
-                  <a href={project.socials.github} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="GitHub">
+                  <a href={ensureUrl(project.socials.github)} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="GitHub">
                     💻
                   </a>
                 )}
