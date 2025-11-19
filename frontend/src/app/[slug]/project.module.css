@@ -183,6 +183,31 @@
   max-width: 600px;
 }
 
+.socialMediaIcons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.socialIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.3rem;
+  transition: all 0.2s;
+}
+
+.socialIcon:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
 .projectHeroRight {
   flex-shrink: 0;
 }
@@ -796,6 +821,45 @@
   transform: translateY(-1px);
 }
 
+/* Share Card */
+.qrCodeContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.qrCode {
+  width: 200px;
+  height: 200px;
+  border-radius: 4px;
+}
+
+.shareButton {
+  width: 100%;
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.shareButton:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
 /* Votes Section */
 .votesSection {
   padding: 1.5rem;
@@ -1211,13 +1275,13 @@
 }
 
 .iconLabel {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: #888;
   font-weight: 500;
 }
 
 .iconStatus {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: #fff;
   font-weight: 600;
 }

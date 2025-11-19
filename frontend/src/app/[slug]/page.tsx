@@ -157,6 +157,34 @@ export default function ProjectPage() {
               {project.description && (
                 <p className={styles.projectDescription}>{project.description}</p>
               )}
+              {/* Social Media Icons */}
+              <div className={styles.socialMediaIcons}>
+                {project.socials?.website && (
+                  <a href={project.socials.website} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="Website">
+                    🌐
+                  </a>
+                )}
+                {project.socials?.twitter && (
+                  <a href={project.socials.twitter} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="Twitter">
+                    𝕏
+                  </a>
+                )}
+                {project.socials?.telegram && (
+                  <a href={project.socials.telegram} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="Telegram">
+                    ✈️
+                  </a>
+                )}
+                {project.socials?.discord && (
+                  <a href={project.socials.discord} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="Discord">
+                    💬
+                  </a>
+                )}
+                {project.socials?.github && (
+                  <a href={project.socials.github} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} title="GitHub">
+                    💻
+                  </a>
+                )}
+              </div>
             </div>
           </div>
           <div className={styles.projectHeroRight}>
@@ -586,7 +614,25 @@ export default function ProjectPage() {
           {/* Share Card */}
           <div className={styles.card}>
             <h2 className={styles.cardTitle}>Share</h2>
-            <button className={styles.shareButton}>
+            <div className={styles.qrCodeContainer}>
+              <img 
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                alt="QR Code"
+                className={styles.qrCode}
+              />
+            </div>
+            <button className={styles.shareButton} onClick={() => {
+              if (navigator.share) {
+                navigator.share({
+                  title: project.name,
+                  text: `Check out ${project.name} audit on CFG Ninja`,
+                  url: window.location.href
+                }).catch(() => {});
+              } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('Link copied to clipboard!');
+              }
+            }}>
               <span>📤</span> Share
             </button>
           </div>
