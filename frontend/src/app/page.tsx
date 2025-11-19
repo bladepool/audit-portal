@@ -165,10 +165,9 @@ export default function Home() {
               Request an Audit
             </button>
             <button className={styles.searchButton}>🔍</button>
-            <span className={styles.qualityBadge}>
-              <img src="/quality.png" alt="Quality" style={{ height: '20px', marginRight: '8px', verticalAlign: 'middle' }} />
-              HIGH QUALITY AUDIT
-            </span>
+            <button className={styles.qualityIcon} title="High Quality Audit">
+              <img src="/quality.png" alt="High Quality Audit" />
+            </button>
           </nav>
         </div>
       </header>

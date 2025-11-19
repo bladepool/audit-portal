@@ -289,15 +289,15 @@ export default function FindingsManager({ findings, onChange }: FindingsManagerP
     const newFinding: Finding = {
       id: `CFG${String(findings.length + 1).padStart(2, '0')}`,
       title: '',
-      severity: 'Medium',
-      status: 'Not Detected',
+      severity: 'Low',
+      status: 'Pass',
       category: 'Security',
       description: '',
       location: '',
       recommendation: '',
       alleviation: '',
       action: '',
-      score: 0,
+      score: 0
     };
     onChange([...findings, newFinding]);
   };
@@ -310,7 +310,7 @@ export default function FindingsManager({ findings, onChange }: FindingsManagerP
       id: cfgId,
       title: template.title || '',
       severity: template.severity || 'Medium',
-      status: 'Not Detected',
+      status: 'Pass',
       category: template.category || 'Security',
       description: template.description || '',
       location: '',

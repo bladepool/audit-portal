@@ -13,13 +13,23 @@ function formatDate(dateString?: string | Date): string {
   try {
     const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
     return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+      day: '2-digit',
+      month: '2-digit', 
+      year: 'numeric'
     });
   } catch {
     return 'N/A';
   }
+}
+
+// Helper to render pass/fail badge
+function renderBadge(value: boolean | string | undefined, passCondition: boolean = true) {
+  const isPassing = passCondition ? value : !value;
+  return (
+    <span className={isPassing ? styles.badgePass : styles.badgeFail}>
+      {isPassing ? 'Pass' : 'Fail'}
+    </span>
+  );
 }
 
 export default function ProjectPage() {

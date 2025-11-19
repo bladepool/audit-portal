@@ -121,6 +121,24 @@ const projectSchema = new mongoose.Schema({
   auditReleaseNotes: { type: String },
   auditEdition: { type: String },
   paymentHash: { type: String },
+  auditStatus: { type: String, default: 'In Progress' },
+  
+  // PDF Generation Toggles - Control what sections appear in PDF
+  enableSummary: { type: Boolean, default: true }, // Show Risk Analysis Summary section
+  enableSWCSummary: { type: Boolean, default: false }, // DEPRECATED - SWC checks removed
+  enableSimulation: { type: Boolean, default: false }, // Show simulation/testing section
+  enableOnlyOwner: { type: Boolean, default: false }, // Show onlyOwner functions table
+  enableTradeCheck: { type: Boolean, default: false }, // Show trading checks section
+  isFlat: { type: String, default: 'No' }, // Is contract flattened (Yes/No)
+  isReentrant: { type: Boolean, default: false }, // Reentrancy vulnerability check
+  isGraph: { type: Boolean, default: false }, // Include call graph
+  isInheritance: { type: Boolean, default: false }, // Include inheritance diagram
+  isEVMContract: { type: Boolean, default: true }, // EVM contract
+  isSolana: { type: Boolean, default: false }, // Solana program
+  isNFT: { type: Boolean, default: false }, // NFT contract
+  isToken: { type: Boolean, default: true }, // Token contract (default)
+  isStaking: { type: Boolean, default: false }, // Staking contract
+  isOther: { type: Boolean, default: false }, // Other contract type
   
   // Contract Details
   address: { type: String },
@@ -135,10 +153,16 @@ const projectSchema = new mongoose.Schema({
   isKYC: { type: String },
   kycURL: { type: String },
   kycScore: { type: String },
+  kycScoreNotes: { type: String },
   isMainNetAvailable: { type: String },
   isTestNetAvailable: { type: String },
   testNetAddress: { type: String },
   testNetCodeBase: { type: String },
+  
+  // Scores
+  socialScore: { type: Number, default: 0 },
+  securityScore: { type: Number, default: 0 },
+  auditorScore: { type: Number, default: 0 },
   
   // Token Distribution
   tokenDistribution: { type: String },

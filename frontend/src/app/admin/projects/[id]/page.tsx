@@ -216,18 +216,23 @@ export default function ProjectFormPage() {
   // Advanced Metadata
   const [isGraph, setIsGraph] = useState(false);
   const [isInheritance, setIsInheritance] = useState(false);
-  const [isEVMContract, setIsEVMContract] = useState(false);
+  const [isEVMContract, setIsEVMContract] = useState(true);
   const [isSolana, setIsSolana] = useState(false);
   const [isNFT, setIsNFT] = useState(false);
-  const [isToken, setIsToken] = useState(false);
+  const [isToken, setIsToken] = useState(true);
   const [isStaking, setIsStaking] = useState(false);
   const [isOther, setIsOther] = useState(false);
   
+  // PDF Generation Toggles (Control what sections appear in PDF)
+  const [enableSummary, setEnableSummary] = useState(true);
+  const [enableSimulation, setEnableSimulation] = useState(false);
+  const [enableOnlyOwner, setEnableOnlyOwner] = useState(false);
+  const [enableTradeCheck, setEnableTradeCheck] = useState(false);
+  const [isFlat, setIsFlat] = useState('No');
+  const [isReentrant, setIsReentrant] = useState(false);
+  
   // CFG Findings (for FindingsManager - array format)
   const [cfgFindings, setCfgFindings] = useState<Finding[]>([]);
-  
-  // CFG Findings (legacy object format for CFG01-CFG26 section)
-  const [cfgFindingsLegacy, setCfgFindingsLegacy] = useState<Record<string, any>>({});
 
   // Helper functions for SWC results
   const setSwcResult = (swcNum: number, value: string) => {
@@ -241,14 +246,6 @@ export default function ProjectFormPage() {
     setSwcResults(prev => ({
       ...prev,
       [swcNum]: { ...prev[swcNum], location: value }
-    }));
-  };
-
-  // Helper function for CFG legacy findings
-  const setCfgFinding = (cfgNum: string, field: string, value: any) => {
-    setCfgFindingsLegacy(prev => ({
-      ...prev,
-      [cfgNum]: { ...prev[cfgNum], [field]: value }
     }));
   };
 
@@ -435,16 +432,23 @@ export default function ProjectFormPage() {
   // Advanced Metadata
   setIsGraph((project as any).isGraph || false);
   setIsInheritance((project as any).isInheritance || false);
-  setIsEVMContract((project as any).isEVMContract || false);
+  setIsEVMContract((project as any).isEVMContract !== undefined ? (project as any).isEVMContract : true);
   setIsSolana((project as any).isSolana || false);
   setIsNFT((project as any).isNFT || false);
-  setIsToken((project as any).isToken || false);
+  setIsToken((project as any).isToken !== undefined ? (project as any).isToken : true);
   setIsStaking((project as any).isStaking || false);
   setIsOther((project as any).isOther || false);
+  
+  // PDF Generation Toggles
+  setEnableSummary((project as any).enableSummary !== undefined ? (project as any).enableSummary : true);
+  setEnableSimulation((project as any).enableSimulation || false);
+  setEnableOnlyOwner((project as any).enableOnlyOwner || false);
+  setEnableTradeCheck((project as any).enableTradeCheck || false);
+  setIsFlat((project as any).isFlat || 'No');
+  setIsReentrant((project as any).isReentrant || false);
 
-  // Load CFG Findings
+  // Load CFG Findings - default to Pass if not set
   setCfgFindings(project.cfg_findings || []);
-  setCfgFindingsLegacy((project as any).cfgFindingsLegacy || {});
     } catch (error) {
       console.error('Failed to load project:', error);
       router.push('/admin/dashboard');
@@ -670,7 +674,14 @@ export default function ProjectFormPage() {
       isToken,
       isStaking,
       isOther,
-      cfgFindingsLegacy,
+      // PDF Generation Toggles
+      enableSummary,
+      enableSWCSummary: false, // DEPRECATED - Always false, SWC checks removed
+      enableSimulation,
+      enableOnlyOwner,
+      enableTradeCheck,
+      isFlat,
+      isReentrant,
     };
 
     try {
@@ -1260,50 +1271,6 @@ export default function ProjectFormPage() {
           </div>
         </Card>
 
-        {/* CFG Findings Section (CFG01–CFG26) */}
-        <Card className={styles.section}>
-          <Text className={styles.sectionTitle}>CFG Findings (CFG01–CFG26)</Text>
-          <div className={styles.grid}>
-            {[...Array(26)].map((_, i) => {
-              const cfgNum = (i + 1).toString().padStart(2, '0');
-              return (
-                <React.Fragment key={`cfg${cfgNum}`}>
-                  <Field label={`CFG${cfgNum} Result`}>
-                    <Input value={cfgFindingsLegacy[cfgNum]?.result || ''} onChange={(e) => setCfgFinding(cfgNum, 'result', e.target.value)} />
-                  </Field>
-                  <Field label={`CFG${cfgNum} Title`}>
-                    <Input value={cfgFindingsLegacy[cfgNum]?.title || ''} onChange={(e) => setCfgFinding(cfgNum, 'title', e.target.value)} />
-                  </Field>
-                  <Field label={`CFG${cfgNum} Description`}>
-                    <Textarea value={cfgFindingsLegacy[cfgNum]?.description || ''} onChange={(e) => setCfgFinding(cfgNum, 'description', e.target.value)} rows={2} />
-                  </Field>
-                  <Field label={`CFG${cfgNum} Severity`}>
-                    <Input value={cfgFindingsLegacy[cfgNum]?.severity || ''} onChange={(e) => setCfgFinding(cfgNum, 'severity', e.target.value)} />
-                  </Field>
-                  <Field label={`CFG${cfgNum} Status`}>
-                    <Input value={cfgFindingsLegacy[cfgNum]?.status || ''} onChange={(e) => setCfgFinding(cfgNum, 'status', e.target.value)} />
-                  </Field>
-                  <Field label={`CFG${cfgNum} Location`}>
-                    <Input value={cfgFindingsLegacy[cfgNum]?.location || ''} onChange={(e) => setCfgFinding(cfgNum, 'location', e.target.value)} />
-                  </Field>
-                  <Field label={`CFG${cfgNum} Recommendation`}>
-                    <Textarea value={cfgFindingsLegacy[cfgNum]?.recommendation || ''} onChange={(e) => setCfgFinding(cfgNum, 'recommendation', e.target.value)} rows={2} />
-                  </Field>
-                  <Field label={`CFG${cfgNum} Alleviation`}>
-                    <Textarea value={cfgFindingsLegacy[cfgNum]?.alleviation || ''} onChange={(e) => setCfgFinding(cfgNum, 'alleviation', e.target.value)} rows={2} />
-                  </Field>
-                  <Field label={`CFG${cfgNum} Category`}>
-                    <Input value={cfgFindingsLegacy[cfgNum]?.category || ''} onChange={(e) => setCfgFinding(cfgNum, 'category', e.target.value)} />
-                  </Field>
-                  <Field label={`CFG${cfgNum} Score`}>
-                    <Input type="number" value={cfgFindingsLegacy[cfgNum]?.score?.toString() || ''} onChange={(e) => setCfgFinding(cfgNum, 'score', parseInt(e.target.value) || 0)} />
-                  </Field>
-                </React.Fragment>
-              );
-            })}
-          </div>
-        </Card>
-
         {/* Advanced Metadata Section */}
         <Card className={styles.section}>
           <Text className={styles.sectionTitle}>Advanced Metadata</Text>
@@ -1333,6 +1300,35 @@ export default function ProjectFormPage() {
               <Switch checked={isOther} onChange={(e) => setIsOther(e.currentTarget.checked)} />
             </Field>
           </div>
+        </Card>
+
+        {/* PDF Generation Options Section */}
+        <Card className={styles.section}>
+          <Text className={styles.sectionTitle}>PDF Generation Options</Text>
+          <div className={styles.grid}>
+            <Field label="Enable Summary Section" hint="Show Risk Analysis Summary in PDF">
+              <Switch checked={enableSummary} onChange={(e) => setEnableSummary(e.currentTarget.checked)} />
+            </Field>
+            <Field label="Enable Simulation Section" hint="Show simulation/testing section in PDF">
+              <Switch checked={enableSimulation} onChange={(e) => setEnableSimulation(e.currentTarget.checked)} />
+            </Field>
+            <Field label="Enable OnlyOwner Functions" hint="Show privileged functions table in PDF">
+              <Switch checked={enableOnlyOwner} onChange={(e) => setEnableOnlyOwner(e.currentTarget.checked)} />
+            </Field>
+            <Field label="Enable Trade Check Section" hint="Show trading checks in PDF">
+              <Switch checked={enableTradeCheck} onChange={(e) => setEnableTradeCheck(e.currentTarget.checked)} />
+            </Field>
+            <Field label="Is Flattened Contract" hint="Contract source is flattened (Yes/No)">
+              <Input value={isFlat} onChange={(e) => setIsFlat(e.target.value)} placeholder="Yes or No" />
+            </Field>
+            <Field label="Is Reentrant" hint="Contract has reentrancy vulnerability">
+              <Switch checked={isReentrant} onChange={(e) => setIsReentrant(e.currentTarget.checked)} />
+            </Field>
+          </div>
+          <Divider style={{ marginTop: '16px', marginBottom: '8px' }} />
+          <Text size={200} style={{ color: '#666', fontStyle: 'italic' }}>
+            Note: SWC Summary is deprecated and will not appear in PDFs regardless of settings.
+          </Text>
         </Card>
 
         {/* Timeline */}

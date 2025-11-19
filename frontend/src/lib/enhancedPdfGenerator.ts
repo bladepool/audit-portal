@@ -120,30 +120,29 @@ export async function generateEnhancedAuditPDF(project: Project) {
   currentY = (doc as any).lastAutoTable.finalY + 30;
 
   // KYC Section
-  doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('KYC Information', 60, currentY); currentY += 15;
-  const kycInfo = [
-    ['KYC Verified', project.isKYC ? 'Yes' : 'No'],
-    ['KYC URL', project.kycURL || ''],
-    ['KYC Score', project.kycScore?.toString() || ''],
-  ];
-  autoTable(doc, { startY: currentY, head: [['Field', 'Value']], body: kycInfo, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
-  currentY = (doc as any).lastAutoTable.finalY + 30;
+  if ((project as any).isKYC) {
+    if (currentY > pageHeight - 150) { doc.addPage(); currentY = 60; }
+    doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('KYC Information', 60, currentY); currentY += 15;
+    const kycInfo = [
+      ['KYC Verified', 'Yes'],
+      ['KYC URL', project.kycURL || ''],
+      ['KYC Score', project.kycScore?.toString() || ''],
+    ];
+    autoTable(doc, { startY: currentY, head: [['Field', 'Value']], body: kycInfo, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
+    currentY = (doc as any).lastAutoTable.finalY + 30;
+  }
 
-  // Token Distribution Section
-  if (project.tokenDistribution && project.tokenDistribution.distributions?.length) {
+  // Token Distribution Section (Only show if tokenDistributionEnabled is true)
+  if ((project as any).tokenDistributionEnabled && project.tokenDistribution && project.tokenDistribution.distributions?.length) {
+    if (currentY > pageHeight - 150) { doc.addPage(); currentY = 60; }
     doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Token Distribution', 60, currentY); currentY += 15;
     const distTable = project.tokenDistribution.distributions.map(d => [d.name, d.amount, d.description]);
     autoTable(doc, { startY: currentY, head: [['Name', 'Amount', 'Description']], body: distTable, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
     currentY = (doc as any).lastAutoTable.finalY + 30;
   }
 
-  // SWC Checks Section
-  if (project.swc_checks && project.swc_checks.length) {
-    doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('SWC Checks', 60, currentY); currentY += 15;
-    const swcTable = project.swc_checks.map(swc => [swc.id, swc.status, swc.location]);
-    autoTable(doc, { startY: currentY, head: [['SWC ID', 'Status', 'Location']], body: swcTable, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
-    currentY = (doc as any).lastAutoTable.finalY + 30;
-  }
+  // SWC Checks Section - DEPRECATED: SWC checks are no longer used
+  // Keeping comment for backward compatibility reference
 
   // Advanced Metadata Section
   doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Advanced Metadata', 60, currentY); currentY += 15;
@@ -187,25 +186,87 @@ export async function generateEnhancedAuditPDF(project: Project) {
   autoTable(doc, { startY: currentY, head: [['Severity', 'Found', 'Pending', 'Resolved']], body: findingsSummary, theme: 'grid', headStyles: { fillColor: [239, 68, 68], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
   currentY = (doc as any).lastAutoTable.finalY + 30;
 
-  // Detailed CFG Findings (all 26)
-  if (project.cfg_findings && project.cfg_findings.length > 0) {
+  // Detailed CFG Findings - Only show findings that are NOT "Pass" or "Not Detected"
+  const activeFindings = (project.cfg_findings || []).filter(f => 
+    f.status && !['Pass', 'Not Detected'].includes(f.status)
+  );
+  
+  if (activeFindings.length > 0) {
     if (currentY > pageHeight - 100) { doc.addPage(); currentY = 60; }
     doc.setFontSize(18); doc.setTextColor(0, 0, 0); doc.text('Detailed Findings', 60, currentY); currentY += 10;
     doc.setDrawColor(239, 68, 68); doc.setLineWidth(2); doc.line(60, currentY, 200, currentY); currentY += 25;
-    for (const finding of project.cfg_findings) {
+    
+    for (const finding of activeFindings) {
       if (currentY > pageHeight - 150) { doc.addPage(); currentY = 60; }
-      doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); doc.text(`${finding.id}: ${finding.title}`, 60, currentY); currentY += 18;
-      const severityColors: Record<string, number[]> = { 'Critical': [220, 38, 38], 'High': [249, 115, 22], 'Medium': [234, 179, 8], 'Low': [34, 197, 94], 'Informational': [156, 163, 175] };
+      
+      // Finding header with ID and title
+      doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); 
+      doc.text(`${finding.id}: ${finding.title}`, 60, currentY); currentY += 18;
+      
+      // Severity badge
+      const severityColors: Record<string, number[]> = { 
+        'Critical': [220, 38, 38], 
+        'High': [249, 115, 22], 
+        'Medium': [234, 179, 8], 
+        'Low': [34, 197, 94], 
+        'Informational': [156, 163, 175] 
+      };
       const color = severityColors[finding.severity] || [156, 163, 175];
-      doc.setFillColor(color[0], color[1], color[2]); doc.roundedRect(60, currentY, 80, 16, 3, 3, 'F');
-      doc.setFontSize(9); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.text(finding.severity, 70, currentY + 11); currentY += 22;
-      doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'normal'); doc.text(`Status: ${finding.status}`, 60, currentY);
+      doc.setFillColor(color[0], color[1], color[2]); 
+      doc.roundedRect(60, currentY, 80, 16, 3, 3, 'F');
+      doc.setFontSize(9); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); 
+      doc.text(finding.severity, 70, currentY + 11); currentY += 22;
+      
+      // Status and Location
+      doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'normal'); 
+      doc.text(`Status: ${finding.status}`, 60, currentY);
       if (finding.location) doc.text(`Location: ${finding.location}`, 200, currentY);
+      if (finding.category) doc.text(`Category: ${finding.category}`, 350, currentY);
       currentY += 15;
-      if (finding.description) { doc.setFontSize(9); doc.setTextColor(60, 60, 60); const splitDesc = doc.splitTextToSize(finding.description, pageWidth - 140); doc.text(splitDesc, 70, currentY); currentY += (splitDesc.length * 11) + 10; }
-      if (finding.recommendation) { doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); doc.text('Recommendation:', 70, currentY); currentY += 12; doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60); const splitRec = doc.splitTextToSize(finding.recommendation, pageWidth - 140); doc.text(splitRec, 70, currentY); currentY += (splitRec.length * 11) + 20; }
-      doc.setDrawColor(220, 220, 220); doc.setLineWidth(0.5); doc.line(60, currentY, pageWidth - 60, currentY); currentY += 15;
+      
+      // Description
+      if (finding.description) { 
+        doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+        doc.text('Description:', 70, currentY); currentY += 12;
+        doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60); 
+        const splitDesc = doc.splitTextToSize(finding.description, pageWidth - 140); 
+        doc.text(splitDesc, 70, currentY); 
+        currentY += (splitDesc.length * 11) + 10; 
+      }
+      
+      // Recommendation
+      if (finding.recommendation) { 
+        doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); 
+        doc.text('Recommendation:', 70, currentY); currentY += 12; 
+        doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60); 
+        const splitRec = doc.splitTextToSize(finding.recommendation, pageWidth - 140); 
+        doc.text(splitRec, 70, currentY); 
+        currentY += (splitRec.length * 11) + 10; 
+      }
+      
+      // Alleviation/Mitigation
+      if (finding.alleviation) { 
+        doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); 
+        doc.text('Mitigation:', 70, currentY); currentY += 12; 
+        doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60); 
+        const splitMit = doc.splitTextToSize(finding.alleviation, pageWidth - 140); 
+        doc.text(splitMit, 70, currentY); 
+        currentY += (splitMit.length * 11) + 10; 
+      }
+      
+      // Divider
+      doc.setDrawColor(220, 220, 220); doc.setLineWidth(0.5); 
+      doc.line(60, currentY, pageWidth - 60, currentY); currentY += 15;
     }
+  } else {
+    // If no active findings, show a message
+    if (currentY > pageHeight - 100) { doc.addPage(); currentY = 60; }
+    doc.setFontSize(16); doc.setTextColor(34, 197, 94); 
+    doc.text('✓ No Critical Findings Detected', 60, currentY); 
+    doc.setFontSize(12); doc.setTextColor(100, 100, 100);
+    currentY += 20;
+    doc.text('All CFG security checks passed successfully.', 60, currentY);
+    currentY += 30;
   }
 
   // Contract Overview
