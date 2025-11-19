@@ -143,8 +143,13 @@ export default function ProjectPage() {
     }
 
     try {
-      // Send vote to backend API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/projects/${project.slug}/vote`, {
+      // Use relative URL for API calls (works with Next.js API routes)
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
+      const url = `${apiUrl}/projects/${project.slug}/vote`;
+      
+      console.log('Submitting vote to:', url);
+      
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -156,7 +161,9 @@ export default function ProjectPage() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit vote');
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        console.error('Vote submission failed:', errorData);
+        throw new Error(errorData.error || 'Failed to submit vote');
       }
 
       const data = await response.json();
@@ -177,7 +184,7 @@ export default function ProjectPage() {
       alert(`Thank you for voting ${voteType}! Your vote has been recorded.`);
     } catch (error) {
       console.error('Error submitting vote:', error);
-      alert('Failed to submit vote. Please try again.');
+      alert(`Failed to submit vote: ${error instanceof Error ? error.message : 'Please try again.'}`);
     }
   };
 
