@@ -107,54 +107,124 @@
   border-bottom: 1px solid #2a2a2a;
 }
 
+.insightsTitle {
+  max-width: 1400px;
+  margin: 0 auto 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
 .statsContainer {
   max-width: 1400px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
 }
 
-.statBox {
-  background: #1f1f1f;
-  border: 1px solid #2a2a2a;
+@media (max-width: 1200px) {
+  .statsContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .statsContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+.statCard2 {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
   border-radius: 12px;
   padding: 1.5rem;
-  text-align: center;
   transition: all 0.3s ease;
 }
 
-.statBox:hover {
-  transform: translateY(-4px);
-  border-color: #ef4444;
-  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.2);
+.statCard2:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.statIcon {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+.statCard2Large {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 1.5rem;
+  grid-column: span 2;
+  transition: all 0.3s ease;
 }
 
-.statValue {
+.statCard2Large:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.statHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.statLabel2 {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.infoIcon {
+  color: #999;
+  font-size: 1rem;
+  cursor: help;
+}
+
+.statValue2 {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #ef4444;
-  margin-bottom: 0.5rem;
-  display: block;
+  color: #000;
 }
 
-.statLabel {
+.chartContainer {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.donutChart {
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+}
+
+.chartLegend {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   font-size: 0.9rem;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
 }
 
-.statPercentage {
-  font-size: 0.85rem;
-  color: #4ade80;
-  margin-top: 0.5rem;
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.legendText {
+  flex: 1;
+  color: #666;
+}
+
+.legendValue {
+  color: #000;
   font-weight: 600;
 }
 

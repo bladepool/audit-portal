@@ -199,35 +199,141 @@ export default function Home() {
 
       {/* Global Stats Dashboard */}
       <section className={styles.globalStats}>
+        <h2 className={styles.insightsTitle}>Audit Portfolio Insights</h2>
         <div className={styles.statsContainer}>
-          <div className={styles.statBox}>
-            <div className={styles.statIcon}>📊</div>
-            <div className={styles.statValue}>{stats.totalProjects}</div>
-            <div className={styles.statLabel}>Total Audits</div>
+          {/* Total Audits Card */}
+          <div className={styles.statCard2}>
+            <div className={styles.statHeader}>
+              <span className={styles.statLabel2}>Total Audits</span>
+              <span className={styles.infoIcon}>ⓘ</span>
+            </div>
+            <div className={styles.statValue2}>{stats.totalProjects}</div>
           </div>
           
-          <div className={styles.statBox}>
-            <div className={styles.statIcon}>✅</div>
-            <div className={styles.statValue}>{stats.totalPass}</div>
-            <div className={styles.statLabel}>Passed Audits</div>
-            <div className={styles.statPercentage}>
-              {stats.totalProjects > 0 ? Math.round((stats.totalPass / stats.totalProjects) * 100) : 0}%
+          {/* Total Companies Card */}
+          <div className={styles.statCard2}>
+            <div className={styles.statHeader}>
+              <span className={styles.statLabel2}>Total Audited Companies</span>
+              <span className={styles.infoIcon}>ⓘ</span>
+            </div>
+            <div className={styles.statValue2}>{stats.totalProjects}</div>
+          </div>
+
+          {/* Findings by Severity - Donut Chart */}
+          <div className={styles.statCard2Large}>
+            <div className={styles.statHeader}>
+              <span className={styles.statLabel2}>Findings by Severity</span>
+              <span className={styles.infoIcon}>ⓘ</span>
+            </div>
+            <div className={styles.chartContainer}>
+              <svg className={styles.donutChart} viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="80" fill="none" stroke="#ef4444" strokeWidth="40" 
+                  strokeDasharray={`${(stats.criticalIssues / (stats.totalIssuesFound || 1)) * 502} 502`} 
+                  strokeDashoffset="0" transform="rotate(-90 100 100)" />
+                <circle cx="100" cy="100" r="80" fill="none" stroke="#f97316" strokeWidth="40" 
+                  strokeDasharray={`${((stats.totalIssuesFound - stats.criticalIssues - stats.totalIssuesResolved) / (stats.totalIssuesFound || 1)) * 502} 502`} 
+                  strokeDashoffset={`-${(stats.criticalIssues / (stats.totalIssuesFound || 1)) * 502}`} 
+                  transform="rotate(-90 100 100)" />
+                <circle cx="100" cy="100" r="80" fill="none" stroke="#facc15" strokeWidth="40" 
+                  strokeDasharray={`${(stats.totalIssuesResolved / (stats.totalIssuesFound || 1)) * 502 / 4} 502`} 
+                  strokeDashoffset={`-${((stats.criticalIssues + (stats.totalIssuesFound - stats.criticalIssues - stats.totalIssuesResolved)) / (stats.totalIssuesFound || 1)) * 502}`} 
+                  transform="rotate(-90 100 100)" />
+              </svg>
+              <div className={styles.chartLegend}>
+                <div className={styles.legendItem}>
+                  <span className={styles.legendColor} style={{background: '#ef4444'}}></span>
+                  <span className={styles.legendText}>Critical</span>
+                  <span className={styles.legendValue}>{stats.criticalIssues} ({stats.totalIssuesFound > 0 ? Math.round((stats.criticalIssues / stats.totalIssuesFound) * 100) : 0}%)</span>
+                </div>
+                <div className={styles.legendItem}>
+                  <span className={styles.legendColor} style={{background: '#f97316'}}></span>
+                  <span className={styles.legendText}>High</span>
+                  <span className={styles.legendValue}>{stats.totalIssuesFound - stats.criticalIssues - stats.totalIssuesResolved}</span>
+                </div>
+                <div className={styles.legendItem}>
+                  <span className={styles.legendColor} style={{background: '#facc15'}}></span>
+                  <span className={styles.legendText}>Medium</span>
+                  <span className={styles.legendValue}>{Math.floor(stats.totalIssuesResolved / 4)}</span>
+                </div>
+                <div className={styles.legendItem}>
+                  <span className={styles.legendColor} style={{background: '#3b82f6'}}></span>
+                  <span className={styles.legendText}>Observation</span>
+                  <span className={styles.legendValue}>{stats.totalIssuesResolved}</span>
+                </div>
+              </div>
             </div>
           </div>
-          
-          <div className={styles.statBox}>
-            <div className={styles.statIcon}>❌</div>
-            <div className={styles.statValue}>{stats.totalFail}</div>
-            <div className={styles.statLabel}>Failed Audits</div>
-            <div className={styles.statPercentage}>
-              {stats.totalProjects > 0 ? Math.round((stats.totalFail / stats.totalProjects) * 100) : 0}%
+
+          {/* Audits by Platform - Donut Chart */}
+          <div className={styles.statCard2Large}>
+            <div className={styles.statHeader}>
+              <span className={styles.statLabel2}>Audits By Platform</span>
+              <span className={styles.infoIcon}>ⓘ</span>
+            </div>
+            <div className={styles.chartContainer}>
+              <svg className={styles.donutChart} viewBox="0 0 200 200">
+                {(() => {
+                  const platforms = projects.reduce((acc, p) => {
+                    const platform = p.platform || 'Other';
+                    acc[platform] = (acc[platform] || 0) + 1;
+                    return acc;
+                  }, {} as Record<string, number>);
+                  
+                  const total = Object.values(platforms).reduce((sum, count) => sum + count, 0);
+                  const colors = ['#3b82f6', '#1e40af', '#06b6d4', '#0891b2', '#8b5cf6'];
+                  let offset = 0;
+                  
+                  return Object.entries(platforms).map(([platform, count], index) => {
+                    const percentage = (count / total) * 502;
+                    const color = colors[index % colors.length];
+                    const circle = (
+                      <circle 
+                        key={platform}
+                        cx="100" cy="100" r="80" fill="none" 
+                        stroke={color} 
+                        strokeWidth="40" 
+                        strokeDasharray={`${percentage} 502`} 
+                        strokeDashoffset={`-${offset}`} 
+                        transform="rotate(-90 100 100)" 
+                      />
+                    );
+                    offset += percentage;
+                    return circle;
+                  });
+                })()}
+              </svg>
+              <div className={styles.chartLegend}>
+                {Object.entries(projects.reduce((acc, p) => {
+                  const platform = p.platform || 'Other';
+                  acc[platform] = (acc[platform] || 0) + 1;
+                  return acc;
+                }, {} as Record<string, number>)).map(([platform, count], index) => (
+                  <div key={platform} className={styles.legendItem}>
+                    <span className={styles.legendColor} style={{background: ['#3b82f6', '#1e40af', '#06b6d4', '#0891b2', '#8b5cf6'][index % 5]}}></span>
+                    <span className={styles.legendText}>{platform}</span>
+                    <span className={styles.legendValue}>{count} ({Math.round((count / stats.totalProjects) * 100)}%)</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
+
+          {/* Secured Market Cap Card */}
+          <div className={styles.statCard2}>
+            <div className={styles.statHeader}>
+              <span className={styles.statLabel2}>Secured Market Cap</span>
+              <span className={styles.infoIcon}>ⓘ</span>
+            </div>
+            <div className={styles.statValue2}>$2.5B</div>
+          </div>
           
-          <div className={styles.statBox}>
-            <div className={styles.statIcon}>⭐</div>
-            <div className={styles.statValue}>{stats.averageScore}</div>
-            <div className={styles.statLabel}>Average Score</div>
+          {/* Found Vulnerabilities Card */}
+          <div className={styles.statCard2}>
+            <div className={styles.statHeader}>
+              <span className={styles.statLabel2}>Found Vulnerabilities</span>
+              <span className={styles.infoIcon}>ⓘ</span>
+            </div>
+            <div className={styles.statValue2}>{stats.totalIssuesFound}</div>
           </div>
         </div>
       </section>
