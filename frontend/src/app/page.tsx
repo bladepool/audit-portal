@@ -229,33 +229,6 @@ export default function Home() {
             <div className={styles.statValue}>{stats.averageScore}</div>
             <div className={styles.statLabel}>Average Score</div>
           </div>
-          
-          <div className={styles.statBox}>
-            <div className={styles.statIcon}>🔍</div>
-            <div className={styles.statValue}>{stats.totalIssuesFound}</div>
-            <div className={styles.statLabel}>Issues Found</div>
-          </div>
-          
-          <div className={styles.statBox}>
-            <div className={styles.statIcon}>✓</div>
-            <div className={styles.statValue}>{stats.totalIssuesResolved}</div>
-            <div className={styles.statLabel}>Issues Resolved</div>
-            <div className={styles.statPercentage}>
-              {stats.totalIssuesFound > 0 ? Math.round((stats.totalIssuesResolved / stats.totalIssuesFound) * 100) : 0}%
-            </div>
-          </div>
-          
-          <div className={styles.statBox}>
-            <div className={styles.statIcon}>🚨</div>
-            <div className={styles.statValue}>{stats.criticalIssues}</div>
-            <div className={styles.statLabel}>Critical Issues</div>
-          </div>
-          
-          <div className={styles.statBox}>
-            <div className={styles.statIcon}>⚠️</div>
-            <div className={styles.statValue}>{stats.highRiskProjects}</div>
-            <div className={styles.statLabel}>High Risk Projects</div>
-          </div>
         </div>
       </section>
 
