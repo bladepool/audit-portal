@@ -83,7 +83,123 @@
   transform: translateY(-1px);
 }
 
-/* Hero Section */
+/* Project Header */
+.projectHeader {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-bottom: 1px solid #222;
+  padding: 2rem 0;
+}
+
+.projectHeaderContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.projectLogo {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid #333;
+  flex-shrink: 0;
+}
+
+.projectInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.projectTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.projectName {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  color: #ffffff;
+}
+
+.badges {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.launchpadBadge {
+  display: inline-block;
+  background: #007bff;
+  color: #fff;
+  padding: 0.35rem 0.85rem;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.trustblockBadge {
+  display: inline-block;
+  background: #22c55e;
+  color: #fff;
+  padding: 0.35rem 0.85rem;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.projectMeta {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.symbol {
+  color: #888;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.projectDescription {
+  color: #aaa;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 800px;
+}
+
+.heroSocials {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.socialBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+}
+
+.socialBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Hero Section (Legacy) */
 .hero {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   border-bottom: 1px solid #222;
