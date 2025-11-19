@@ -175,22 +175,45 @@ export default function ProjectPage() {
             
             {/* Timeline */}
             <h3 className={styles.sectionTitle}>Timeline</h3>
-            <div className={styles.timelineGrid}>
-              <div className={styles.timelineItem}>
-                <div className={styles.timelineLabel}>Audit Request</div>
-                <div className={styles.timelineDate}>{formatDate(project.timeline?.audit_request)}</div>
+            <div className={styles.timelineFlow}>
+              <div className={styles.timelineStep}>
+                <div className={styles.timelineIcon}>
+                  <img src="https://audit.cfg.ninja/icons/request.png" alt="Audit Request" />
+                </div>
+                <div className={styles.timelineContent}>
+                  <div className={styles.timelineLabel}>Audit Request</div>
+                  <div className={styles.timelineDate}>{formatDate(project.timeline?.audit_request)}</div>
+                </div>
               </div>
-              <div className={styles.timelineItem}>
-                <div className={styles.timelineLabel}>Onboarding Process</div>
-                <div className={styles.timelineDate}>{formatDate(project.timeline?.onboarding_process)}</div>
+              <div className={styles.timelineLine}></div>
+              <div className={styles.timelineStep}>
+                <div className={styles.timelineIcon}>
+                  <img src="https://audit.cfg.ninja/icons/audit.png" alt="Onboarding Process" />
+                </div>
+                <div className={styles.timelineContent}>
+                  <div className={styles.timelineLabel}>Onboarding Process</div>
+                  <div className={styles.timelineDate}>{formatDate(project.timeline?.onboarding_process)}</div>
+                </div>
               </div>
-              <div className={styles.timelineItem}>
-                <div className={styles.timelineLabel}>Audit Preview</div>
-                <div className={styles.timelineDate}>{formatDate(project.timeline?.audit_preview)}</div>
+              <div className={styles.timelineLine}></div>
+              <div className={styles.timelineStep}>
+                <div className={styles.timelineIcon}>
+                  <img src="https://audit.cfg.ninja/icons/revision.png" alt="Audit Preview" />
+                </div>
+                <div className={styles.timelineContent}>
+                  <div className={styles.timelineLabel}>Audit Preview</div>
+                  <div className={styles.timelineDate}>{formatDate(project.timeline?.audit_preview)}</div>
+                </div>
               </div>
-              <div className={styles.timelineItem}>
-                <div className={styles.timelineLabel}>Audit Release</div>
-                <div className={styles.timelineDate}>{formatDate(project.timeline?.audit_release)}</div>
+              <div className={styles.timelineLine}></div>
+              <div className={styles.timelineStep}>
+                <div className={styles.timelineIcon}>
+                  <img src="https://audit.cfg.ninja/icons/rocket.png" alt="Audit Release" />
+                </div>
+                <div className={styles.timelineContent}>
+                  <div className={styles.timelineLabel}>Audit Release</div>
+                  <div className={styles.timelineDate}>{formatDate(project.timeline?.audit_release)}</div>
+                </div>
               </div>
             </div>
           </div>
