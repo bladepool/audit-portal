@@ -44,6 +44,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [stats, setStats] = useState<Stats>({
     totalProjects: 0,
     totalPass: 0,
@@ -58,6 +60,11 @@ export default function Home() {
   useEffect(() => {
     fetchProjects();
   }, []);
+
+  // Reset to page 1 when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
 
   const fetchProjects = async () => {
     try {
@@ -148,6 +155,18 @@ export default function Home() {
     return <span className={styles.badgeFail}>FAIL</span>;
   };
 
+  // Filter projects based on search query
+  const filteredProjects = projects.filter(project => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      project.name.toLowerCase().includes(query) ||
+      project.symbol?.toLowerCase().includes(query) ||
+      project.ecosystem?.toLowerCase().includes(query) ||
+      project.platform?.toLowerCase().includes(query)
+    );
+  });
+
   return (
     <div className={styles.page}>
       {/* Header */}
@@ -164,12 +183,36 @@ export default function Home() {
             <button className={styles.navButton} onClick={() => window.open('https://t.me/Bladepool', '_blank')}>
               Request an Audit
             </button>
-            <button className={styles.searchButton}>🔍</button>
+            <button 
+              className={styles.searchButton} 
+              onClick={() => setSearchOpen(!searchOpen)}
+              title="Search projects"
+            >
+              🔍
+            </button>
             <button className={styles.qualityIcon} title="High Quality Audit">
               <img src="/quality.png" alt="High Quality Audit" />
             </button>
           </nav>
         </div>
+        {searchOpen && (
+          <div className={styles.searchBar}>
+            <input
+              type="text"
+              placeholder="Search projects by name, symbol, ecosystem, or platform..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.searchInput}
+              autoFocus
+            />
+            <button 
+              className={styles.searchClose} 
+              onClick={() => { setSearchOpen(false); setSearchQuery(''); }}
+            >
+              ✕
+            </button>
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
@@ -454,7 +497,9 @@ export default function Home() {
       {/* Audits Table */}
       <section className={styles.auditsSection}>
         <div className={styles.auditsHeader}>
-          <h2 className={styles.auditsTitle}>Audits</h2>
+          <h2 className={styles.auditsTitle}>
+            Audits {searchQuery && `(${filteredProjects.length} results)`}
+          </h2>
         </div>
         
         {loading ? (
@@ -474,35 +519,42 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                {projects
-                  .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-                  .map((project, index) => {
-                    const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
-                    return (
-                      <tr 
-                        key={project._id} 
-                        onClick={() => router.push(`/${project.slug}`)}
-                        className={styles.tableRow}
-                      >
-                        <td>{globalIndex}</td>
-                        <td>
-                          <div className={styles.projectName}>
-                            {project.logo && (
-                              <img src={project.logo} alt={project.name} className={styles.projectLogo} />
-                            )}
-                            <span>{project.name}</span>
-                          </div>
-                        </td>
-                        <td>
-                          <span className={styles.scoreBadge}>
-                            {getScoreBadge(project.audit_score)}
-                          </span>
-                        </td>
-                        <td>
-                          <span className={styles.ecosystem}>{project.platform || 'BINANCE SMART CHAIN'}</span>
-                        </td>
-                        <td>{project.symbol}</td>
-                        <td>{project.total_votes || 0}</td>
+                {filteredProjects.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} style={{ textAlign: 'center', padding: '3rem', color: '#666' }}>
+                      {searchQuery ? `No projects found matching "${searchQuery}"` : 'No projects found'}
+                    </td>
+                  </tr>
+                ) : (
+                  filteredProjects
+                    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                    .map((project, index) => {
+                      const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
+                      return (
+                        <tr 
+                          key={project._id} 
+                          onClick={() => router.push(`/${project.slug}`)}
+                          className={styles.tableRow}
+                        >
+                          <td>{globalIndex}</td>
+                          <td>
+                            <div className={styles.projectName}>
+                              {project.logo && (
+                                <img src={project.logo} alt={project.name} className={styles.projectLogo} />
+                              )}
+                              <span>{project.name}</span>
+                            </div>
+                          </td>
+                          <td>
+                            <span className={styles.scoreBadge}>
+                              {getScoreBadge(project.audit_score)}
+                            </span>
+                          </td>
+                          <td>
+                            <span className={styles.ecosystem}>{project.platform || 'BINANCE SMART CHAIN'}</span>
+                          </td>
+                          <td>{project.symbol}</td>
+                          <td>{project.total_votes || 0}</td>
                         <td>
                           <div className={styles.confidence}>
                             {renderStars(project.audit_confidence || project.audit_score)}
@@ -510,7 +562,8 @@ export default function Home() {
                         </td>
                       </tr>
                     );
-                  })}
+                  })
+                )}
               </tbody>
             </table>
           </div>
@@ -518,7 +571,7 @@ export default function Home() {
         
         <div className={styles.pagination}>
           <span className={styles.paginationText}>
-            Showing {(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, projects.length)} out of {projects.length}
+            Showing {(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, filteredProjects.length)} out of {filteredProjects.length}
           </span>
           <div className={styles.paginationButtons}>
             <button 
@@ -528,11 +581,11 @@ export default function Home() {
             >
               Prev
             </button>
-            <span className={styles.pageNumber}>Page {currentPage} of {Math.ceil(projects.length / itemsPerPage)}</span>
+            <span className={styles.pageNumber}>Page {currentPage} of {Math.ceil(filteredProjects.length / itemsPerPage)}</span>
             <button 
               className={styles.paginationButton}
-              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(projects.length / itemsPerPage), prev + 1))}
-              disabled={currentPage === Math.ceil(projects.length / itemsPerPage)}
+              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(filteredProjects.length / itemsPerPage), prev + 1))}
+              disabled={currentPage === Math.ceil(filteredProjects.length / itemsPerPage)}
             >
               Next
             </button>

@@ -25,9 +25,12 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.5rem;
-  font-weight: 700;
+  cursor: pointer;
+}
+
+.logoImage {
+  height: 40px;
+  width: auto;
 }
 
 .logoIcon {
@@ -45,33 +48,60 @@
 }
 
 .navButton {
-  background: transparent;
+  background: #ef4444;
+  border: none;
   color: #ffffff;
-  border: 1px solid #2a2a2a;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
   transition: all 0.2s;
 }
 
 .navButton:hover {
-  background: #2a2a2a;
-  border-color: #ef4444;
+  background: #dc2626;
+  transform: translateY(-1px);
 }
 
-.signInButton {
-  background: #ef4444;
+.searchButton {
+  background: transparent;
+  border: 1px solid #2a2a2a;
   color: #ffffff;
-  border: none;
-  padding: 0.5rem 1.5rem;
-  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
+  font-size: 1.2rem;
   transition: all 0.2s;
 }
 
-.signInButton:hover {
+.searchButton:hover {
+  background: #2a2a2a;
+}
+
+.qualityIcon {
+  background: #ef4444;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  width: 40px;
+  height: 40px;
+}
+
+.qualityIcon:hover {
   background: #dc2626;
+  transform: scale(1.05);
+}
+
+.qualityIcon img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 
 .projectHeader {

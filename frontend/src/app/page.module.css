@@ -116,16 +116,79 @@
   transition: background 0.2s;
 }
 
+/* Search Bar */
+.searchBar {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 2rem 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  background: #1a1a1a;
+  border-top: 1px solid #2a2a2a;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.searchInput {
+  flex: 1;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: #ffffff;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.searchInput:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.searchInput::placeholder {
+  color: #666666;
+}
+
+.searchClose {
+  background: transparent;
+  border: 1px solid #2a2a2a;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+  min-width: 45px;
+}
+
+.searchClose:hover {
+  background: #2a2a2a;
+  border-color: #ef4444;
+}
+
 /* Global Stats Dashboard */
 .globalStats {
   background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-  padding: 1.5rem 2rem;
+  padding: 1.5rem 0;
   border-bottom: 1px solid #2a2a2a;
 }
 
 .insightsTitle {
   max-width: 1400px;
   margin: 0 auto 1rem;
+  padding: 0 2rem;
   font-size: 1.5rem;
   font-weight: 700;
   color: #ffffff;
@@ -135,6 +198,7 @@
 .statsContainer {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 2rem;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.75rem;

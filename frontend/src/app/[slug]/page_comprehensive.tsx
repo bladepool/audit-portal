@@ -103,8 +103,9 @@ export default function ProjectPage() {
             <img src="/logo.svg" alt="CFG Ninja" className={styles.logoImage} />
           </div>
           <nav className={styles.nav}>
-            <button className={styles.navButton} onClick={() => router.push('/')}>Audits</button>
-            <button className={styles.navButton}>Submit Project</button>
+            <button className={styles.navButton} onClick={() => window.open('https://t.me/Bladepool', '_blank')}>
+              Request an Audit
+            </button>
             <button className={styles.searchButton}>🔍</button>
             <button className={styles.qualityIcon} title="High Quality Audit">
               <img src="/quality.png" alt="High Quality Audit" />
