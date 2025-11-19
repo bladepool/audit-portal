@@ -402,10 +402,10 @@ export default function ProjectPage() {
                 <h3 className={styles.subsectionTitle}>Score History</h3>
                 <div className={styles.spiderChartContainer}>
                   <div className={styles.scoreDisplay}>
-                    <div className={styles.scoreNumber}>{project.audit_score || 95}</div>
+                    <div className={styles.scoreNumber}>{project.audit_score || 0}</div>
                     <div className={styles.scoreRange}>
                       <span className={styles.rangeLow}>Low<br/>20</span>
-                      <span className={styles.rangeHigh}>High<br/>95</span>
+                      <span className={styles.rangeHigh}>High<br/>{project.audit_score >= 90 ? project.audit_score : 95}</span>
                     </div>
                   </div>
                   <svg className={styles.spiderChart} viewBox="0 0 200 140">
@@ -452,43 +452,68 @@ export default function ProjectPage() {
                 <div className={styles.severityBars}>
                   <div className={styles.severityBar}>
                     <span className={styles.severityDot} style={{ background: '#22c55e' }}>●</span>
-                    <span className={styles.severityName}>0 Low</span>
+                    <span className={styles.severityName}>{project.minor?.found || 0} Low</span>
                     <div className={styles.severityProgress}>
-                      <div className={styles.severityFill} style={{ width: '0%', background: '#22c55e' }}></div>
+                      <div className={styles.severityFill} style={{ 
+                        width: `${((project.minor?.resolved || 0) / (project.minor?.found || 1)) * 100}%`, 
+                        background: '#22c55e' 
+                      }}></div>
                     </div>
-                    <span className={styles.severityText}>0 Acknowledged, 0 Pending, 0 Resolved</span>
+                    <span className={styles.severityText}>
+                      {project.minor?.pending || 0} Acknowledged, {project.minor?.pending || 0} Pending, {project.minor?.resolved || 0} Resolved
+                    </span>
                   </div>
                   <div className={styles.severityBar}>
                     <span className={styles.severityDot} style={{ background: '#f59e0b' }}>●</span>
-                    <span className={styles.severityName}>0 Medium</span>
+                    <span className={styles.severityName}>{project.medium?.found || 0} Medium</span>
                     <div className={styles.severityProgress}>
-                      <div className={styles.severityFill} style={{ width: '0%', background: '#f59e0b' }}></div>
+                      <div className={styles.severityFill} style={{ 
+                        width: `${((project.medium?.resolved || 0) / (project.medium?.found || 1)) * 100}%`, 
+                        background: '#f59e0b' 
+                      }}></div>
                     </div>
-                    <span className={styles.severityText}>0 Acknowledged, 0 Pending, 0 Resolved</span>
+                    <span className={styles.severityText}>
+                      {project.medium?.pending || 0} Acknowledged, {project.medium?.pending || 0} Pending, {project.medium?.resolved || 0} Resolved
+                    </span>
                   </div>
                   <div className={styles.severityBar}>
                     <span className={styles.severityDot} style={{ background: '#f97316' }}>●</span>
-                    <span className={styles.severityName}>0 High</span>
+                    <span className={styles.severityName}>{project.major?.found || 0} High</span>
                     <div className={styles.severityProgress}>
-                      <div className={styles.severityFill} style={{ width: '0%', background: '#f97316' }}></div>
+                      <div className={styles.severityFill} style={{ 
+                        width: `${((project.major?.resolved || 0) / (project.major?.found || 1)) * 100}%`, 
+                        background: '#f97316' 
+                      }}></div>
                     </div>
-                    <span className={styles.severityText}>0 Acknowledged, 0 Pending, 0 Resolved</span>
+                    <span className={styles.severityText}>
+                      {project.major?.pending || 0} Acknowledged, {project.major?.pending || 0} Pending, {project.major?.resolved || 0} Resolved
+                    </span>
                   </div>
                   <div className={styles.severityBar}>
                     <span className={styles.severityDot} style={{ background: '#ef4444' }}>●</span>
-                    <span className={styles.severityName}>0 Critical</span>
+                    <span className={styles.severityName}>{project.critical?.found || 0} Critical</span>
                     <div className={styles.severityProgress}>
-                      <div className={styles.severityFill} style={{ width: '0%', background: '#ef4444' }}></div>
+                      <div className={styles.severityFill} style={{ 
+                        width: `${((project.critical?.resolved || 0) / (project.critical?.found || 1)) * 100}%`, 
+                        background: '#ef4444' 
+                      }}></div>
                     </div>
-                    <span className={styles.severityText}>0 Acknowledged, 0 Pending, 0 Resolved</span>
+                    <span className={styles.severityText}>
+                      {project.critical?.pending || 0} Acknowledged, {project.critical?.pending || 0} Pending, {project.critical?.resolved || 0} Resolved
+                    </span>
                   </div>
                   <div className={styles.severityBar}>
                     <span className={styles.severityDot} style={{ background: '#3b82f6' }}>●</span>
-                    <span className={styles.severityName}>0 Informational</span>
+                    <span className={styles.severityName}>{project.informational?.found || 0} Informational</span>
                     <div className={styles.severityProgress}>
-                      <div className={styles.severityFill} style={{ width: '0%', background: '#3b82f6' }}></div>
+                      <div className={styles.severityFill} style={{ 
+                        width: `${((project.informational?.resolved || 0) / (project.informational?.found || 1)) * 100}%`, 
+                        background: '#3b82f6' 
+                      }}></div>
                     </div>
-                    <span className={styles.severityText}>0 Acknowledged, 0 Pending, 0 Resolved</span>
+                    <span className={styles.severityText}>
+                      {project.informational?.pending || 0} Acknowledged, {project.informational?.pending || 0} Pending, {project.informational?.resolved || 0} Resolved
+                    </span>
                   </div>
                 </div>
               </div>
@@ -558,45 +583,6 @@ export default function ProjectPage() {
 
         {/* Right Column */}
         <div className={styles.rightColumn}>
-          {/* Audit Security Score Card */}
-          <div className={styles.card}>
-            <h2 className={styles.cardTitle}>Audit Security Score</h2>
-            <div className={styles.mainScore}>
-              <div className={styles.scoreCircle}>
-                <span className={styles.scoreNumber}>{project.audit_score || 0}%</span>
-              </div>
-              <div className={styles.scoreStatus} style={{ color: scoreBadge.color }}>
-                {scoreBadge.label}
-              </div>
-            </div>
-            <div className={styles.safetyOverview}>
-              <div className={styles.safetyTitle}>Safety Overview:</div>
-              <div className={styles.safetyStats}>
-                <div className={styles.safetyStat}>
-                  <span className={styles.safetyCount} style={{ color: '#22c55e' }}>{project.minor?.found || 0}</span>
-                  <span className={styles.safetyLabel}>Low</span>
-                </div>
-                <div className={styles.safetyStat}>
-                  <span className={styles.safetyCount} style={{ color: '#f59e0b' }}>{project.medium?.found || 0}</span>
-                  <span className={styles.safetyLabel}>Medium</span>
-                </div>
-                <div className={styles.safetyStat}>
-                  <span className={styles.safetyCount} style={{ color: '#f97316' }}>{project.major?.found || 0}</span>
-                  <span className={styles.safetyLabel}>High</span>
-                </div>
-                <div className={styles.safetyStat}>
-                  <span className={styles.safetyCount} style={{ color: '#ef4444' }}>{project.critical?.found || 0}</span>
-                  <span className={styles.safetyLabel}>Critical</span>
-                </div>
-                <div className={styles.safetyStat}>
-                  <span className={styles.safetyCount} style={{ color: '#3b82f6' }}>{project.informational?.found || 0}</span>
-                  <span className={styles.safetyLabel}>Informational</span>
-                </div>
-              </div>
-            </div>
-            <div className={styles.mainnetBadge}>Mainnet</div>
-          </div>
-
           {/* Share Card */}
           <div className={styles.card}>
             <h2 className={styles.cardTitle}>Share</h2>
