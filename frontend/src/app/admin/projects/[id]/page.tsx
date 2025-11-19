@@ -169,6 +169,9 @@ export default function ProjectFormPage() {
   const [auditScore, setAuditScore] = useState(0);
   const [launchpadLink, setLaunchpadLink] = useState('');
   const [published, setPublished] = useState(false);
+  const [auditToolVersion, setAuditToolVersion] = useState('');
+  const [auditEdition, setAuditEdition] = useState('');
+  const [paymentHash, setPaymentHash] = useState('');
   
   // CFG Findings
   const [cfgFindings, setCfgFindings] = useState<Finding[]>([]);
@@ -289,6 +292,9 @@ export default function ProjectFormPage() {
   setAuditScore(project.audit_score);
   setLaunchpadLink(project.launchpad_link || '');
   setPublished(project.published);
+  setAuditToolVersion(project.auditToolVersion || '');
+  setAuditEdition(project.auditEdition || '');
+  setPaymentHash(project.paymentHash || '');
 
   // Load CFG Findings
   setCfgFindings(project.cfg_findings || []);
@@ -477,6 +483,9 @@ export default function ProjectFormPage() {
         data: [auditScore],
         current: auditScore,
       },
+      auditToolVersion,
+      auditEdition,
+      paymentHash,
     };
 
     try {
