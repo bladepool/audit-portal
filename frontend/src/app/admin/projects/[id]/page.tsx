@@ -17,7 +17,7 @@ import {
   Field,
 } from '@fluentui/react-components';
 import { DocumentPdfRegular } from '@fluentui/react-icons';
-import { projectsAPI } from '@/lib/api';
+import { projectsAPI, blockchainsAPI } from '@/lib/api';
 import { Project, Finding } from '@/lib/types';
 import FindingsManager from '@/components/FindingsManager';
 import { generateEnhancedAuditPDF } from '@/lib/enhancedPdfGenerator';
@@ -81,6 +81,7 @@ export default function ProjectFormPage() {
   const [saving, setSaving] = useState(false);
   const [fetchingGoPlus, setFetchingGoPlus] = useState(false);
   const [goPlusMessage, setGoPlusMessage] = useState('');
+  const [blockchains, setBlockchains] = useState<Array<{ name: string; symbol: string; slug: string }>>([]);
   
   // Basic Info
   const [name, setName] = useState('');
@@ -258,10 +259,34 @@ export default function ProjectFormPage() {
       return;
     }
     
+    // Load blockchains list
+    loadBlockchains();
+    
     if (!isNew) {
       loadProject();
     }
   }, []);
+
+  const loadBlockchains = async () => {
+    try {
+      const response = await blockchainsAPI.getList();
+      if (response.data && response.data.blockchains) {
+        setBlockchains(response.data.blockchains);
+      }
+    } catch (error) {
+      console.error('Failed to load blockchains:', error);
+      // Set fallback list if API fails
+      setBlockchains([
+        { name: 'Binance Smart Chain', symbol: 'BSC', slug: 'binance-smart-chain' },
+        { name: 'Ethereum', symbol: 'ETH', slug: 'ethereum' },
+        { name: 'Polygon', symbol: 'MATIC', slug: 'polygon' },
+        { name: 'Solana', symbol: 'SOL', slug: 'solana' },
+        { name: 'Avalanche', symbol: 'AVAX', slug: 'avalanche' },
+        { name: 'Arbitrum', symbol: 'ARB', slug: 'arbitrum' },
+        { name: 'Optimism', symbol: 'OP', slug: 'optimism' }
+      ]);
+    }
+  };
 
   const loadProject = async () => {
     try {
@@ -1078,8 +1103,28 @@ export default function ProjectFormPage() {
             <Field label="Payment Hash">
               <Input value={paymentHash} onChange={(e) => setPaymentHash(e.target.value)} />
             </Field>
-            <Field label="Platform">
-              <Input value={platform} onChange={(e) => setPlatform(e.target.value)} />
+            <Field label="Platform / Blockchain">
+              <select 
+                value={platform} 
+                onChange={(e) => setPlatform(e.target.value)} 
+                style={{ 
+                  padding: '8px', 
+                  borderRadius: '4px', 
+                  border: '1px solid #ccc', 
+                  width: '100%',
+                  fontSize: '14px'
+                }}
+              >
+                <option value="">Select Blockchain...</option>
+                {blockchains.map((blockchain) => (
+                  <option key={blockchain.slug} value={blockchain.name}>
+                    {blockchain.name} ({blockchain.symbol})
+                  </option>
+                ))}
+              </select>
+              <Text size={200} style={{ color: '#666', marginTop: '4px' }}>
+                Fetched from CoinMarketCap API
+              </Text>
             </Field>
             <Field label="Audit Score (0-100)">
               <Input type="number" value={auditScore.toString()} onChange={(e) => setAuditScore(parseInt(e.target.value) || 0)} />

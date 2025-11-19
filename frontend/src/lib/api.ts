@@ -53,4 +53,10 @@ export const projectsAPI = {
     api.post(`/projects/${id}/fetch-goplus`),
 };
 
+// Blockchains API
+export const blockchainsAPI = {
+  getList: () =>
+    api.get('/blockchains/list'),
+};
+
 export default api;

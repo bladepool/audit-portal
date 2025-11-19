@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
+const blockchainRoutes = require('./routes/blockchains');
 
 const app = express();
 
@@ -24,6 +25,7 @@ mongoose.connect(process.env.MONGODB_URI)
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/blockchains', blockchainRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
