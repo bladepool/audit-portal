@@ -48,6 +48,55 @@ router.get('/:slug', async (req, res) => {
   }
 });
 
+// Submit vote for project (public)
+router.post('/:slug/vote', async (req, res) => {
+  try {
+    const { wallet_address, vote_type } = req.body;
+    
+    if (!wallet_address || !vote_type) {
+      return res.status(400).json({ error: 'Wallet address and vote type are required' });
+    }
+    
+    if (!['secure', 'insecure'].includes(vote_type)) {
+      return res.status(400).json({ error: 'Vote type must be "secure" or "insecure"' });
+    }
+    
+    const project = await Project.findOne({ 
+      slug: req.params.slug,
+      published: true 
+    });
+    
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+    
+    // TODO: Add vote tracking in separate collection to prevent duplicate votes
+    // For now, just increment the vote counts
+    
+    if (vote_type === 'secure') {
+      project.secure_votes = (project.secure_votes || 0) + 1;
+    } else {
+      project.insecure_votes = (project.insecure_votes || 0) + 1;
+    }
+    
+    project.total_votes = (project.secure_votes || 0) + (project.insecure_votes || 0);
+    
+    await project.save();
+    
+    res.json({
+      success: true,
+      message: 'Vote submitted successfully',
+      votes: {
+        secure: project.secure_votes || 0,
+        insecure: project.insecure_votes || 0,
+        total: project.total_votes
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Get all projects including unpublished (admin only)
 router.get('/admin/all', auth, async (req, res) => {
   try {

@@ -239,6 +239,8 @@ const projectSchema = new mongoose.Schema({
   // Stats
   page_view: { type: Number, default: 0 },
   total_votes: { type: Number, default: 0 },
+  secure_votes: { type: Number, default: 0 },
+  insecure_votes: { type: Number, default: 0 },
   
   // Score History
   score_history: {

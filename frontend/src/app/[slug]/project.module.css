@@ -1598,6 +1598,366 @@
   }
 }
 
+/* Community Confidence - Gradient Progress Bar */
+.gradientVoteContainer {
+  margin: 1.5rem 0;
+}
+
+.voteLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.voteLabelLeft {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.voteLabelRight {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.gradientBar {
+  width: 100%;
+  height: 24px;
+  background: linear-gradient(to right, #ef4444, #22c55e);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.gradientProgress {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  transition: width 0.5s ease;
+  backdrop-filter: blur(2px);
+}
+
+/* Wallet Options */
+.walletOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.connectWalletBtn {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.connectWalletBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.connectWalletBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Wallet Connected State */
+.walletConnected {
+  margin-top: 1.5rem;
+}
+
+.connectedAddress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.disconnectBtn {
+  background: #ef4444;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s ease;
+}
+
+.disconnectBtn:hover {
+  background: #dc2626;
+}
+
+/* Vote Buttons */
+.voteButtons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.voteBtn {
+  padding: 0.75rem 1rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.voteSecure {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.voteSecure:hover {
+  background: rgba(34, 197, 94, 0.2);
+  transform: translateY(-2px);
+}
+
+.voteInsecure {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.voteInsecure:hover {
+  background: rgba(239, 68, 68, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Voted Today Message */
+.votedToday {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 8px;
+  color: #22c55e;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.voteCount {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 1rem 0;
+}
+
+/* Findings Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.modalTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s ease;
+  line-height: 1;
+}
+
+.modalClose:hover {
+  color: #ffffff;
+}
+
+.modalBody {
+  overflow-y: auto;
+  padding: 1.5rem 2rem;
+  flex: 1;
+}
+
+.findingCard {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.findingCard:last-child {
+  margin-bottom: 0;
+}
+
+.findingHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.findingNumber {
+  background: #2a2a2a;
+  color: #ffffff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.findingSeverity {
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.severityCritical {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+
+.severityHigh {
+  background: rgba(249, 115, 22, 0.2);
+  color: #f97316;
+  border: 1px solid #f97316;
+}
+
+.severityMedium {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid #f59e0b;
+}
+
+.severityLow {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+  border: 1px solid #22c55e;
+}
+
+.severityInformational {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
+}
+
+.findingStatus {
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.statusDetected {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+
+.statusNotDetected,
+.statusPass {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+  border: 1px solid #22c55e;
+}
+
+.statusFail {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+
+.statusAcknowledge {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid #f59e0b;
+}
+
+.findingTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 0.75rem 0;
+}
+
+.findingCategory {
+  color: #888;
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+}
+
+.findingSection {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #2a2a2a;
+}
+
+.findingSection strong {
+  color: #ffffff;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.findingDescription,
+.findingLocation,
+.findingRecommendation {
+  color: #ccc;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
 @media (max-width: 768px) {
   .riskIconGrid {
     grid-template-columns: repeat(2, 1fr);
@@ -1621,5 +1981,37 @@
   
   .auditHistoryStats {
     grid-template-columns: 1fr;
+  }
+  
+  .voteButtons {
+    grid-template-columns: 1fr;
+  }
+  
+  .walletOptions {
+    gap: 0.5rem;
+  }
+
+  .modalOverlay {
+    padding: 1rem;
+  }
+
+  .modalContent {
+    max-height: 90vh;
+  }
+
+  .modalHeader {
+    padding: 1rem 1.5rem;
+  }
+
+  .modalBody {
+    padding: 1rem 1.5rem;
+  }
+
+  .modalTitle {
+    font-size: 1.25rem;
+  }
+
+  .findingCard {
+    padding: 1rem;
   }
 }

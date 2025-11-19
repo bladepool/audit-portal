@@ -80,6 +80,7 @@ export interface Project {
     twitter?: string;
     website?: string;
     github?: string;
+    discord?: string;
     facebook?: string;
     instagram?: string;
     reddit?: string;
@@ -199,6 +200,8 @@ export interface Project {
   
   page_view: number;
   total_votes: number;
+  secure_votes?: number;
+  insecure_votes?: number;
   
   score_history: {
     data: number[];

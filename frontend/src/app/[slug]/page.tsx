@@ -6,6 +6,13 @@ import { projectsAPI } from '@/lib/api';
 import { Project } from '@/lib/types';
 import styles from './project.module.css';
 
+// Extend Window interface for ethereum
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}
+
 // Helper to format date
 function formatDate(dateString?: string): string {
   if (!dateString) return 'N/A';
@@ -58,7 +65,10 @@ export default function ProjectPage() {
   const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [walletConnecting, setWalletConnecting] = useState(false);
+  const [hasVotedToday, setHasVotedToday] = useState(false);
+  const [showFindingsModal, setShowFindingsModal] = useState(false);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -66,7 +76,10 @@ export default function ProjectPage() {
         const response = await projectsAPI.getBySlug(params.slug as string);
         setProject(response.data);
         
-
+        // Check if wallet has voted today
+        if (walletAddress && response.data._id) {
+          checkIfVotedToday(response.data._id, walletAddress);
+        }
       } catch (error) {
         console.error('Error fetching project:', error);
       } finally {
@@ -77,7 +90,96 @@ export default function ProjectPage() {
     if (params.slug) {
       fetchProject();
     }
-  }, [params.slug]);
+  }, [params.slug, walletAddress]);
+
+  const checkIfVotedToday = (projectId: string, wallet: string) => {
+    const voteKey = `vote_${projectId}_${wallet}`;
+    const lastVote = localStorage.getItem(voteKey);
+    if (lastVote) {
+      const lastVoteDate = new Date(lastVote);
+      const today = new Date();
+      const isSameDay = lastVoteDate.toDateString() === today.toDateString();
+      setHasVotedToday(isSameDay);
+    }
+  };
+
+  const connectWallet = async (walletType: 'metamask' | 'walletconnect' | 'fathom') => {
+    setWalletConnecting(true);
+    try {
+      if (walletType === 'metamask') {
+        if (typeof window.ethereum !== 'undefined') {
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          setWalletAddress(accounts[0]);
+          if (project?._id) {
+            checkIfVotedToday(project._id, accounts[0]);
+          }
+        } else {
+          alert('MetaMask is not installed. Please install it to continue.');
+        }
+      } else if (walletType === 'walletconnect') {
+        alert('WalletConnect integration coming soon!');
+      } else if (walletType === 'fathom') {
+        alert('Fathom Wallet integration coming soon!');
+      }
+    } catch (error) {
+      console.error('Error connecting wallet:', error);
+      alert('Failed to connect wallet. Please try again.');
+    } finally {
+      setWalletConnecting(false);
+    }
+  };
+
+  const disconnectWallet = () => {
+    setWalletAddress(null);
+    setHasVotedToday(false);
+  };
+
+  const submitVote = async (voteType: 'secure' | 'insecure') => {
+    if (!walletAddress || !project?.slug) return;
+    
+    if (hasVotedToday) {
+      alert('You have already voted today. Please come back tomorrow!');
+      return;
+    }
+
+    try {
+      // Send vote to backend API
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/projects/${project.slug}/vote`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          wallet_address: walletAddress, 
+          vote_type: voteType 
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit vote');
+      }
+
+      const data = await response.json();
+      
+      // Store vote locally to prevent duplicate votes
+      const voteKey = `vote_${project._id}_${walletAddress}`;
+      localStorage.setItem(voteKey, new Date().toISOString());
+      
+      // Update local state with response from backend
+      setHasVotedToday(true);
+      setProject(prev => prev ? {
+        ...prev,
+        secure_votes: data.votes.secure,
+        insecure_votes: data.votes.insecure,
+        total_votes: data.votes.total
+      } : null);
+      
+      alert(`Thank you for voting ${voteType}! Your vote has been recorded.`);
+    } catch (error) {
+      console.error('Error submitting vote:', error);
+      alert('Failed to submit vote. Please try again.');
+    }
+  };
 
   const getScoreBadge = (score: number) => {
     if (score >= 90) return { label: 'PASS', color: '#22c55e' };
@@ -115,9 +217,9 @@ export default function ProjectPage() {
 
   const scoreBadge = getScoreBadge(project.audit_score || 0);
   
-  // Calculate vote breakdown
-  const secureVotes = Math.floor((project.total_votes || 0) * 0.6);
-  const insecureVotes = (project.total_votes || 0) - secureVotes;
+  // Calculate vote breakdown - use actual votes from database or fallback to 60/40 split
+  const secureVotes = project.secure_votes ?? Math.floor((project.total_votes || 0) * 0.6);
+  const insecureVotes = project.insecure_votes ?? ((project.total_votes || 0) - secureVotes);
 
   return (
     <div className={styles.page}>
@@ -413,7 +515,7 @@ export default function ProjectPage() {
             </div>
             
             {/* Audit Action Buttons */}
-            <div className={styles.auditActions}>
+            <div className={styles.manualReviewButtons}>
               {project.audit_pdf && (
                 <a 
                   href={project.audit_pdf} 
@@ -425,12 +527,19 @@ export default function ProjectPage() {
                 </a>
               )}
               {project.cfg_findings && project.cfg_findings.length > 0 && (
-                <button className={styles.auditButton} onClick={() => {
-                  const findingsSection = document.getElementById('cfg-findings');
-                  findingsSection?.scrollIntoView({ behavior: 'smooth' });
-                }}>
-                  🔍 View CFG Findings ({project.cfg_findings.length})
+                <button className={styles.auditButton} onClick={() => setShowFindingsModal(true)}>
+                  🔍 View Findings ({project.cfg_findings.length})
                 </button>
+              )}
+              {project.socials?.github && (
+                <a 
+                  href={ensureUrl(project.socials.github)} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={styles.auditButton}
+                >
+                  🔗 View on GitHub
+                </a>
               )}
             </div>
           </div>
@@ -562,58 +671,7 @@ export default function ProjectPage() {
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className={styles.auditActions}>
-              {project.audit_pdf && (
-                <button className={styles.auditButton} onClick={() => window.open(project.audit_pdf, '_blank')}>
-                  View Audit
-                </button>
-              )}
-              <button className={styles.auditButton} onClick={() => {
-                const findingsSection = document.getElementById('cfg-findings');
-                findingsSection?.scrollIntoView({ behavior: 'smooth' });
-              }}>
-                View Findings
-              </button>
-            </div>
           </div>
-
-          {/* CFG Findings Section */}
-          {project.cfg_findings && project.cfg_findings.length > 0 && (
-            <div className={styles.card} id="cfg-findings">
-              <h2 className={styles.cardTitle}>CFG Findings (1-25)</h2>
-              <div className={styles.findingsGrid}>
-                {project.cfg_findings.map((finding, index) => (
-                  <div key={finding.id || index} className={styles.findingItem}>
-                    <div className={styles.findingHeader}>
-                      <span className={styles.findingNumber}>#{index + 1}</span>
-                      <span className={`${styles.findingSeverity} ${styles[`severity${finding.severity}`]}`}>
-                        {finding.severity}
-                      </span>
-                      <span className={`${styles.findingStatus} ${styles[`status${finding.status.replace(' ', '')}`]}`}>
-                        {finding.status}
-                      </span>
-                    </div>
-                    <h3 className={styles.findingTitle}>{finding.title}</h3>
-                    <p className={styles.findingCategory}>{finding.category}</p>
-                    {finding.description && (
-                      <p className={styles.findingDescription}>{finding.description}</p>
-                    )}
-                    {finding.location && (
-                      <div className={styles.findingLocation}>
-                        <strong>Location:</strong> {finding.location}
-                      </div>
-                    )}
-                    {finding.recommendation && (
-                      <div className={styles.findingRecommendation}>
-                        <strong>Recommendation:</strong> {finding.recommendation}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Description */}
           {project.description && (
@@ -668,21 +726,72 @@ export default function ProjectPage() {
           <div className={styles.card}>
             <h2 className={styles.cardTitle}>Community Confidence</h2>
             <div className={styles.voteCount}>{project.total_votes || 0} Votes</div>
-            <div className={styles.voteBreakdown}>
-              <div className={styles.voteRow}>
-                <span className={styles.voteLabel}>Secure ({secureVotes})</span>
-                <span className={styles.voteBar}>
-                  <span className={styles.voteProgress} style={{ width: `${(secureVotes / (project.total_votes || 1)) * 100}%`, background: '#22c55e' }}></span>
-                </span>
+            
+            <div className={styles.gradientVoteContainer}>
+              <div className={styles.voteLabels}>
+                <span className={styles.voteLabelLeft}>Insecure ({insecureVotes})</span>
+                <span className={styles.voteLabelRight}>Secure ({secureVotes})</span>
               </div>
-              <div className={styles.voteRow}>
-                <span className={styles.voteLabel}>Insecure ({insecureVotes})</span>
-                <span className={styles.voteBar}>
-                  <span className={styles.voteProgress} style={{ width: `${(insecureVotes / (project.total_votes || 1)) * 100}%`, background: '#ef4444' }}></span>
-                </span>
+              <div className={styles.gradientBar}>
+                <div 
+                  className={styles.gradientProgress} 
+                  style={{ width: `${((secureVotes / (project.total_votes || 1)) * 100)}%` }}
+                ></div>
               </div>
             </div>
-            <button className={styles.connectWalletBtn}>Connect Wallet</button>
+
+            {!walletAddress ? (
+              <div className={styles.walletOptions}>
+                <button 
+                  className={styles.connectWalletBtn} 
+                  onClick={() => connectWallet('metamask')}
+                  disabled={walletConnecting}
+                >
+                  {walletConnecting ? 'Connecting...' : 'Connect MetaMask'}
+                </button>
+                <button 
+                  className={styles.connectWalletBtn} 
+                  onClick={() => connectWallet('walletconnect')}
+                  disabled={walletConnecting}
+                >
+                  Connect WalletConnect
+                </button>
+                <button 
+                  className={styles.connectWalletBtn} 
+                  onClick={() => connectWallet('fathom')}
+                  disabled={walletConnecting}
+                >
+                  Connect Fathom
+                </button>
+              </div>
+            ) : (
+              <div className={styles.walletConnected}>
+                <div className={styles.connectedAddress}>
+                  Connected: {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                  <button className={styles.disconnectBtn} onClick={disconnectWallet}>✕</button>
+                </div>
+                {!hasVotedToday ? (
+                  <div className={styles.voteButtons}>
+                    <button 
+                      className={`${styles.voteBtn} ${styles.voteSecure}`}
+                      onClick={() => submitVote('secure')}
+                    >
+                      Vote Secure
+                    </button>
+                    <button 
+                      className={`${styles.voteBtn} ${styles.voteInsecure}`}
+                      onClick={() => submitVote('insecure')}
+                    >
+                      Vote Insecure
+                    </button>
+                  </div>
+                ) : (
+                  <div className={styles.votedToday}>
+                    ✓ You voted today. Come back tomorrow!
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Page Visits Card */}
@@ -715,6 +824,53 @@ export default function ProjectPage() {
           </div>
         </div>
       </div>
+
+      {/* Findings Modal */}
+      {showFindingsModal && project.cfg_findings && (
+        <div className={styles.modalOverlay} onClick={() => setShowFindingsModal(false)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h2 className={styles.modalTitle}>CFG Findings ({project.cfg_findings.length})</h2>
+              <button className={styles.modalClose} onClick={() => setShowFindingsModal(false)}>✕</button>
+            </div>
+            <div className={styles.modalBody}>
+              {project.cfg_findings.map((finding, index) => (
+                <div key={finding.id || index} className={styles.findingCard}>
+                  <div className={styles.findingHeader}>
+                    <span className={styles.findingNumber}>#{index + 1}</span>
+                    <span className={`${styles.findingSeverity} ${styles[`severity${finding.severity}`]}`}>
+                      {finding.severity}
+                    </span>
+                    <span className={`${styles.findingStatus} ${styles[`status${finding.status.replace(' ', '')}`]}`}>
+                      {finding.status}
+                    </span>
+                  </div>
+                  <h3 className={styles.findingTitle}>{finding.title}</h3>
+                  <p className={styles.findingCategory}><strong>Category:</strong> {finding.category}</p>
+                  {finding.description && (
+                    <div className={styles.findingSection}>
+                      <strong>Description:</strong>
+                      <p className={styles.findingDescription}>{finding.description}</p>
+                    </div>
+                  )}
+                  {finding.location && (
+                    <div className={styles.findingSection}>
+                      <strong>Location:</strong>
+                      <p className={styles.findingLocation}>{finding.location}</p>
+                    </div>
+                  )}
+                  {finding.recommendation && (
+                    <div className={styles.findingSection}>
+                      <strong>Recommendation:</strong>
+                      <p className={styles.findingRecommendation}>{finding.recommendation}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
