@@ -36,6 +36,9 @@ interface Stats {
   totalIssuesFound: number;
   totalIssuesResolved: number;
   criticalIssues: number;
+  highIssues: number;
+  mediumIssues: number;
+  lowIssues: number;
   highRiskProjects: number;
   securedMarketCap: string;
 }
@@ -56,6 +59,9 @@ export default function Home() {
     totalIssuesFound: 0,
     totalIssuesResolved: 0,
     criticalIssues: 0,
+    highIssues: 0,
+    mediumIssues: 0,
+    lowIssues: 0,
     highRiskProjects: 0,
     securedMarketCap: '$2.5B',
   });
@@ -94,6 +100,9 @@ export default function Home() {
         totalProjects: statsData.totalProjects,
         totalIssuesFound: statsData.findings.total,
         criticalIssues: statsData.findings.critical,
+        highIssues: statsData.findings.high,
+        mediumIssues: statsData.findings.medium,
+        lowIssues: statsData.findings.low + statsData.findings.informational,
       }));
     } catch (error) {
       console.error('Error fetching portfolio stats:', error);
@@ -368,9 +377,9 @@ export default function Home() {
               {(() => {
                 const total = stats.totalIssuesFound || 1;
                 const criticalPct = (stats.criticalIssues / total) * 100;
-                const highPct = (projects.reduce((sum, p) => sum + (p.major?.found || 0), 0) / total) * 100;
-                const mediumPct = (projects.reduce((sum, p) => sum + (p.medium?.found || 0), 0) / total) * 100;
-                const lowPct = (projects.reduce((sum, p) => sum + (p.minor?.found || 0) + ((p as any).informational?.found || 0), 0) / total) * 100;
+                const highPct = (stats.highIssues / total) * 100;
+                const mediumPct = (stats.mediumIssues / total) * 100;
+                const lowPct = (stats.lowIssues / total) * 100;
                 
                 return (
                   <>
@@ -383,17 +392,17 @@ export default function Home() {
                       <div className={styles.legendItem}>
                         <span className={styles.legendColor} style={{background: '#f97316'}}></span>
                         <span className={styles.legendText}>High</span>
-                        <span className={styles.legendValue}>{projects.reduce((sum, p) => sum + (p.major?.found || 0), 0)} ({Math.round(highPct)}%)</span>
+                        <span className={styles.legendValue}>{stats.highIssues} ({Math.round(highPct)}%)</span>
                       </div>
                       <div className={styles.legendItem}>
                         <span className={styles.legendColor} style={{background: '#f59e0b'}}></span>
                         <span className={styles.legendText}>Medium</span>
-                        <span className={styles.legendValue}>{projects.reduce((sum, p) => sum + (p.medium?.found || 0), 0)} ({Math.round(mediumPct)}%)</span>
+                        <span className={styles.legendValue}>{stats.mediumIssues} ({Math.round(mediumPct)}%)</span>
                       </div>
                       <div className={styles.legendItem}>
                         <span className={styles.legendColor} style={{background: '#3b82f6'}}></span>
                         <span className={styles.legendText}>Observation</span>
-                        <span className={styles.legendValue}>{projects.reduce((sum, p) => sum + (p.minor?.found || 0) + ((p as any).informational?.found || 0), 0)} ({Math.round(lowPct)}%)</span>
+                        <span className={styles.legendValue}>{stats.lowIssues} ({Math.round(lowPct)}%)</span>
                       </div>
                     </div>
                   </>
