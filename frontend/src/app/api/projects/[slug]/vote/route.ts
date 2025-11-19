@@ -8,8 +8,8 @@ export async function POST(
     const body = await request.json();
     const { slug } = params;
 
-    // Get backend API URL from environment or use default
-    const backendUrl = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    // Get backend API URL from environment (should be the full base URL)
+    const backendUrl = process.env.BACKEND_API_URL || 'http://localhost:5000';
     const apiUrl = `${backendUrl}/api/projects/${slug}/vote`;
 
     console.log('Proxying vote request to:', apiUrl);
