@@ -16,7 +16,7 @@ import {
   Label,
   Field,
 } from '@fluentui/react-components';
-import { DocumentPdfRegular } from '@fluentui/react-icons';
+import { DocumentPdfRegular, CalculatorRegular } from '@fluentui/react-icons';
 import { projectsAPI, blockchainsAPI } from '@/lib/api';
 import { Project, Finding } from '@/lib/types';
 import FindingsManager from '@/components/FindingsManager';
@@ -188,6 +188,7 @@ export default function ProjectFormPage() {
   const [kycUrl, setKycUrl] = useState('');
   const [kycScore, setKycScore] = useState(0);
   const [kycScoreNotes, setKycScoreNotes] = useState('');
+  const [kycVendor, setKycVendor] = useState('');
   
   // Token Distribution
   const [tokenDistributionEnabled, setTokenDistributionEnabled] = useState(false);
@@ -408,6 +409,7 @@ export default function ProjectFormPage() {
   setKycUrl((project as any).kycUrl || '');
   setKycScore((project as any).kycScore || 0);
   setKycScoreNotes((project as any).kycScoreNotes || '');
+  setKycVendor((project as any).kycVendor || '');
 
   // Token Distribution
   setTokenDistributionEnabled((project as any).tokenDistributionEnabled || false);
@@ -478,6 +480,68 @@ export default function ProjectFormPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const calculateFromFindings = () => {
+    // Initialize all counts to 0
+    let lowFound = 0, lowPending = 0, lowResolved = 0;
+    let medFound = 0, medPending = 0, medResolved = 0;
+    let highFound = 0, highPending = 0, highResolved = 0;
+    let critFound = 0, critPending = 0, critResolved = 0;
+    let infoFoundCount = 0, infoPendingCount = 0, infoResolvedCount = 0;
+
+    // Count findings by severity and status
+    // Status mapping: "Detected" = Found, "Fail" = Pending, others = Resolved
+    cfgFindings.forEach((finding) => {
+      const severity = finding.severity;
+      const status = finding.status;
+
+      // Map severity to count variables
+      if (severity === 'Low') {
+        if (status === 'Detected') lowFound++;
+        else if (status === 'Fail') lowPending++;
+        else lowResolved++;
+      } else if (severity === 'Medium') {
+        if (status === 'Detected') medFound++;
+        else if (status === 'Fail') medPending++;
+        else medResolved++;
+      } else if (severity === 'High') {
+        if (status === 'Detected') highFound++;
+        else if (status === 'Fail') highPending++;
+        else highResolved++;
+      } else if (severity === 'Critical') {
+        if (status === 'Detected') critFound++;
+        else if (status === 'Fail') critPending++;
+        else critResolved++;
+      } else if (severity === 'Informational') {
+        if (status === 'Detected') infoFoundCount++;
+        else if (status === 'Fail') infoPendingCount++;
+        else infoResolvedCount++;
+      }
+    });
+
+    // Update all state variables
+    setMinorFound(lowFound);
+    setMinorPending(lowPending);
+    setMinorResolved(lowResolved);
+    
+    setMediumFound(medFound);
+    setMediumPending(medPending);
+    setMediumResolved(medResolved);
+    
+    setMajorFound(highFound);
+    setMajorPending(highPending);
+    setMajorResolved(highResolved);
+    
+    setCriticalFound(critFound);
+    setCriticalPending(critPending);
+    setCriticalResolved(critResolved);
+    
+    setInfoFound(infoFoundCount);
+    setInfoPending(infoPendingCount);
+    setInfoResolved(infoResolvedCount);
+
+    alert(`Calculated findings summary from ${cfgFindings.length} findings`);
   };
 
   const handleGenerateSlug = async () => {
@@ -669,6 +733,7 @@ export default function ProjectFormPage() {
       kycUrl,
       kycScore,
       kycScoreNotes,
+      kycVendor,
       tokenDistributionEnabled,
       distributionName1,
       distributionAmount1,
@@ -1075,7 +1140,16 @@ export default function ProjectFormPage() {
 
         {/* Findings Summary (Counts) */}
         <Card className={styles.section}>
-          <Text className={styles.sectionTitle}>Findings Summary (Counts)</Text>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <Text className={styles.sectionTitle}>Findings Summary (Counts)</Text>
+            <Button 
+              appearance="primary" 
+              icon={<CalculatorRegular />}
+              onClick={calculateFromFindings}
+            >
+              Calculate from Findings
+            </Button>
+          </div>
           
           <Text weight="semibold" style={{ marginTop: '16px', marginBottom: '8px' }}>Minor</Text>
           <div className={styles.grid}>
@@ -1218,13 +1292,16 @@ export default function ProjectFormPage() {
             <Field label="KYC Verified">
               <Switch checked={isKYC} onChange={(e) => setIsKYC(e.currentTarget.checked)} />
             </Field>
+            <Field label="KYC Vendor Name">
+              <Input value={kycVendor || ''} onChange={(e) => setKycVendor(e.target.value)} placeholder="e.g., AssureDefi, SolidProof" />
+            </Field>
             <Field label="KYC URL">
               <Input value={kycUrl || ''} onChange={(e) => setKycUrl(e.target.value)} />
             </Field>
             <Field label="KYC Score">
               <Input type="number" value={kycScore?.toString() || ''} onChange={(e) => setKycScore(parseInt(e.target.value) || 0)} />
             </Field>
-            <Field label="KYC Score Notes">
+            <Field label="KYC Score Notes" className={styles.gridFull}>
               <Textarea value={kycScoreNotes || ''} onChange={(e) => setKycScoreNotes(e.target.value)} rows={2} />
             </Field>
           </div>

@@ -171,6 +171,25 @@
   transform: translateY(-1px);
 }
 
+.kycBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #22c55e;
+  color: #ffffff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: help;
+  transition: all 0.2s;
+}
+
+.kycBadge:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+}
+
 .externalIcon {
   font-size: 0.7rem;
 }
@@ -1576,6 +1595,50 @@
   color: #888;
   font-size: 0.8rem;
   white-space: nowrap;
+}
+
+/* Findings by Severity (Right Column Card) */
+.findingsSeverityList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.severityItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.severityItem:last-child {
+  border-bottom: none;
+}
+
+.severityLabel {
+  color: #ffffff;
+  font-weight: 500;
+  flex: 1;
+}
+
+.severityCount {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.visitsCount {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #007bff;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.visitsLabel {
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
 }
 
 @media (max-width: 1024px) {

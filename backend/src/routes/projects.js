@@ -285,10 +285,12 @@ router.post('/:id/fetch-goplus', auth, async (req, res) => {
       return res.status(400).json({ error: 'No contract address found for this project' });
     }
     
-    const chainId = getChainId(project.platform);
+    const platform = project.platform || 'Binance Smart Chain';
+    const chainId = getChainId(platform);
     
     console.log(`Manually fetching GoPlus data for ${project.name}`);
-    console.log(`Contract: ${contractAddress}, Chain: ${chainId}`);
+    console.log(`Platform: ${platform}`);
+    console.log(`Contract: ${contractAddress}, Chain ID: ${chainId}`);
     
     const securityResult = await fetchTokenSecurity(chainId, contractAddress);
     

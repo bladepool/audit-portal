@@ -152,8 +152,10 @@ const projectSchema = new mongoose.Schema({
   // Additional Checks
   isKYC: { type: String },
   kycURL: { type: String },
+  kycUrl: { type: String },
   kycScore: { type: String },
   kycScoreNotes: { type: String },
+  kycVendor: { type: String },
   isMainNetAvailable: { type: String },
   isTestNetAvailable: { type: String },
   testNetAddress: { type: String },

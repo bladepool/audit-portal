@@ -267,6 +267,11 @@ export default function ProjectPage() {
             <div className={styles.projectInfo}>
               <div className={styles.projectTitleRow}>
                 <h1 className={styles.projectName}>{project.name}</h1>
+                {project.isKYC && (
+                  <span className={styles.kycBadge} title={`KYC Verified${project.kycVendor ? ` by ${project.kycVendor}` : ''}`}>
+                    ✓ KYC{project.kycVendor ? ` (${project.kycVendor})` : ''}
+                  </span>
+                )}
                 {project.launchpad && (
                   <a 
                     href={project.socials?.website || '#'} 
@@ -538,16 +543,6 @@ export default function ProjectPage() {
                   🔍 View Findings ({project.cfg_findings.length})
                 </button>
               )}
-              {project.socials?.github && (
-                <a 
-                  href={ensureUrl(project.socials.github)} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className={styles.auditButton}
-                >
-                  🔗 View on GitHub
-                </a>
-              )}
             </div>
           </div>
 
@@ -799,6 +794,33 @@ export default function ProjectPage() {
                 )}
               </div>
             )}
+          </div>
+
+          {/* Findings by Severity Card */}
+          <div className={styles.card}>
+            <h2 className={styles.cardTitle}>FINDINGS BY SEVERITY</h2>
+            <div className={styles.findingsSeverityList}>
+              <div className={styles.severityItem}>
+                <div className={styles.severityDot} style={{ background: '#ef4444' }}>●</div>
+                <span className={styles.severityLabel}>Critical</span>
+                <span className={styles.severityCount}>{project.critical?.found || 0} (0%)</span>
+              </div>
+              <div className={styles.severityItem}>
+                <div className={styles.severityDot} style={{ background: '#f97316' }}>●</div>
+                <span className={styles.severityLabel}>High</span>
+                <span className={styles.severityCount}>{project.major?.found || 0} (0%)</span>
+              </div>
+              <div className={styles.severityItem}>
+                <div className={styles.severityDot} style={{ background: '#f59e0b' }}>●</div>
+                <span className={styles.severityLabel}>Medium</span>
+                <span className={styles.severityCount}>{project.medium?.found || 0} (0%)</span>
+              </div>
+              <div className={styles.severityItem}>
+                <div className={styles.severityDot} style={{ background: '#3b82f6' }}>●</div>
+                <span className={styles.severityLabel}>Observation</span>
+                <span className={styles.severityCount}>{(project.minor?.found || 0) + (project.informational?.found || 0)} (0%)</span>
+              </div>
+            </div>
           </div>
 
           {/* Page Visits Card */}

@@ -172,20 +172,32 @@ function getChainId(platform) {
     'ethereum': '1',
     'eth': '1',
     'bsc': '56',
+    'bnb': '56',
+    'bnb chain': '56',
     'binance smart chain': '56',
+    'binance': '56',
     'polygon': '137',
     'matic': '137',
     'arbitrum': '42161',
+    'arbitrum one': '42161',
     'optimism': '10',
+    'op': '10',
     'avalanche': '43114',
+    'avax': '43114',
     'fantom': '250',
+    'ftm': '250',
     'cronos': '25',
+    'cro': '25',
     'base': '8453',
     'solana': 'solana', // GoPlus supports Solana differently
+    'sol': 'solana',
   };
   
-  const platformLower = (platform || 'ethereum').toLowerCase();
-  return chainMap[platformLower] || '1'; // Default to Ethereum
+  const platformLower = (platform || 'ethereum').toLowerCase().trim();
+  const chainId = chainMap[platformLower] || '56'; // Default to BSC (most common)
+  
+  console.log(`Platform "${platform}" mapped to Chain ID: ${chainId}`);
+  return chainId;
 }
 
 module.exports = {

@@ -42,7 +42,10 @@ export interface Project {
   // KYC Information
   isKYC?: boolean;
   kycURL?: string;
+  kycUrl?: string;
   kycScore?: number;
+  kycScoreNotes?: string;
+  kycVendor?: string;
   isMainNetAvailable?: boolean;
   isTestNetAvailable?: boolean;
   
