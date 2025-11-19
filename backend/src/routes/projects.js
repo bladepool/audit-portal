@@ -26,6 +26,45 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get portfolio stats (includes all projects for total count)
+router.get('/stats/portfolio', async (req, res) => {
+  try {
+    // Get all projects (including unpublished) for total count
+    const allProjects = await Project.find({});
+    const publishedProjects = allProjects.filter(p => p.published);
+    
+    // Calculate findings by severity across all published projects
+    let criticalFound = 0;
+    let highFound = 0;
+    let mediumFound = 0;
+    let lowFound = 0;
+    let infoFound = 0;
+    
+    publishedProjects.forEach(project => {
+      criticalFound += project.critical?.found || 0;
+      highFound += project.major?.found || 0;
+      mediumFound += project.medium?.found || 0;
+      lowFound += project.minor?.found || 0;
+      infoFound += project.informational?.found || 0;
+    });
+    
+    res.json({
+      totalProjects: allProjects.length,
+      publishedProjects: publishedProjects.length,
+      findings: {
+        critical: criticalFound,
+        high: highFound,
+        medium: mediumFound,
+        low: lowFound,
+        informational: infoFound,
+        total: criticalFound + highFound + mediumFound + lowFound + infoFound
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Get project by slug (public)
 router.get('/:slug', async (req, res) => {
   try {

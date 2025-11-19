@@ -51,6 +51,8 @@ export const projectsAPI = {
     api.post('/projects/generate-slug', { name }),
   fetchGoPlus: (id: string) =>
     api.post(`/projects/${id}/fetch-goplus`),
+  getStats: () =>
+    api.get('/projects/stats/portfolio'),
 };
 
 // Blockchains API

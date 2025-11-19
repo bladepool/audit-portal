@@ -25,6 +25,7 @@ interface Project {
   major?: { found: number; pending: number; resolved: number };
   medium?: { found: number; pending: number; resolved: number };
   minor?: { found: number; pending: number; resolved: number };
+  informational?: { found: number; pending: number; resolved: number };
 }
 
 interface Stats {
@@ -62,6 +63,7 @@ export default function Home() {
   useEffect(() => {
     fetchProjects();
     fetchMarketCap();
+    fetchPortfolioStats();
   }, []);
 
   // Reset to page 1 when search query changes
@@ -79,6 +81,22 @@ export default function Home() {
       console.error('Error fetching projects:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchPortfolioStats = async () => {
+    try {
+      const response = await projectsAPI.getStats();
+      const statsData = response.data;
+      
+      setStats(prev => ({
+        ...prev,
+        totalProjects: statsData.totalProjects,
+        totalIssuesFound: statsData.findings.total,
+        criticalIssues: statsData.findings.critical,
+      }));
+    } catch (error) {
+      console.error('Error fetching portfolio stats:', error);
     }
   };
 
@@ -347,41 +365,40 @@ export default function Home() {
               <span className={styles.infoIcon}>ⓘ</span>
             </div>
             <div className={styles.chartContainer}>
-              <svg className={styles.donutChart} viewBox="0 0 200 200">
-                <circle cx="100" cy="100" r="80" fill="none" stroke="#ef4444" strokeWidth="40" 
-                  strokeDasharray={`${(stats.criticalIssues / (stats.totalIssuesFound || 1)) * 502} 502`} 
-                  strokeDashoffset="0" transform="rotate(-90 100 100)" />
-                <circle cx="100" cy="100" r="80" fill="none" stroke="#f97316" strokeWidth="40" 
-                  strokeDasharray={`${((stats.totalIssuesFound - stats.criticalIssues - stats.totalIssuesResolved) / (stats.totalIssuesFound || 1)) * 502} 502`} 
-                  strokeDashoffset={`-${(stats.criticalIssues / (stats.totalIssuesFound || 1)) * 502}`} 
-                  transform="rotate(-90 100 100)" />
-                <circle cx="100" cy="100" r="80" fill="none" stroke="#facc15" strokeWidth="40" 
-                  strokeDasharray={`${(stats.totalIssuesResolved / (stats.totalIssuesFound || 1)) * 502 / 4} 502`} 
-                  strokeDashoffset={`-${((stats.criticalIssues + (stats.totalIssuesFound - stats.criticalIssues - stats.totalIssuesResolved)) / (stats.totalIssuesFound || 1)) * 502}`} 
-                  transform="rotate(-90 100 100)" />
-              </svg>
-              <div className={styles.chartLegend}>
-                <div className={styles.legendItem}>
-                  <span className={styles.legendColor} style={{background: '#ef4444'}}></span>
-                  <span className={styles.legendText}>Critical</span>
-                  <span className={styles.legendValue}>{stats.criticalIssues} ({stats.totalIssuesFound > 0 ? Math.round((stats.criticalIssues / stats.totalIssuesFound) * 100) : 0}%)</span>
-                </div>
-                <div className={styles.legendItem}>
-                  <span className={styles.legendColor} style={{background: '#f97316'}}></span>
-                  <span className={styles.legendText}>High</span>
-                  <span className={styles.legendValue}>{stats.totalIssuesFound - stats.criticalIssues - stats.totalIssuesResolved}</span>
-                </div>
-                <div className={styles.legendItem}>
-                  <span className={styles.legendColor} style={{background: '#facc15'}}></span>
-                  <span className={styles.legendText}>Medium</span>
-                  <span className={styles.legendValue}>{Math.floor(stats.totalIssuesResolved / 4)}</span>
-                </div>
-                <div className={styles.legendItem}>
-                  <span className={styles.legendColor} style={{background: '#3b82f6'}}></span>
-                  <span className={styles.legendText}>Observation</span>
-                  <span className={styles.legendValue}>{stats.totalIssuesResolved}</span>
-                </div>
-              </div>
+              {(() => {
+                const total = stats.totalIssuesFound || 1;
+                const criticalPct = (stats.criticalIssues / total) * 100;
+                const highPct = (projects.reduce((sum, p) => sum + (p.major?.found || 0), 0) / total) * 100;
+                const mediumPct = (projects.reduce((sum, p) => sum + (p.medium?.found || 0), 0) / total) * 100;
+                const lowPct = (projects.reduce((sum, p) => sum + (p.minor?.found || 0) + ((p as any).informational?.found || 0), 0) / total) * 100;
+                
+                return (
+                  <>
+                    <div className={styles.chartLegend}>
+                      <div className={styles.legendItem}>
+                        <span className={styles.legendColor} style={{background: '#ef4444'}}></span>
+                        <span className={styles.legendText}>Critical</span>
+                        <span className={styles.legendValue}>{stats.criticalIssues} ({Math.round(criticalPct)}%)</span>
+                      </div>
+                      <div className={styles.legendItem}>
+                        <span className={styles.legendColor} style={{background: '#f97316'}}></span>
+                        <span className={styles.legendText}>High</span>
+                        <span className={styles.legendValue}>{projects.reduce((sum, p) => sum + (p.major?.found || 0), 0)} ({Math.round(highPct)}%)</span>
+                      </div>
+                      <div className={styles.legendItem}>
+                        <span className={styles.legendColor} style={{background: '#f59e0b'}}></span>
+                        <span className={styles.legendText}>Medium</span>
+                        <span className={styles.legendValue}>{projects.reduce((sum, p) => sum + (p.medium?.found || 0), 0)} ({Math.round(mediumPct)}%)</span>
+                      </div>
+                      <div className={styles.legendItem}>
+                        <span className={styles.legendColor} style={{background: '#3b82f6'}}></span>
+                        <span className={styles.legendText}>Observation</span>
+                        <span className={styles.legendValue}>{projects.reduce((sum, p) => sum + (p.minor?.found || 0) + ((p as any).informational?.found || 0), 0)} ({Math.round(lowPct)}%)</span>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
 
