@@ -191,96 +191,107 @@ export default function ProjectFormPage() {
       const response = await projectsAPI.getById(params.id as string);
       const project: Project = response.data;
       
-      // Basic Info
-      setName(project.name);
-      setSymbol(project.symbol);
-      setDecimals(project.decimals);
-      setSupply(project.supply);
-      setDescription(project.description);
-      setLogo(project.logo || '');
-      setLaunchpad(project.launchpad || '');
-      setSlug(project.slug);
-      setAuditPdf(project.audit_pdf || '');
-      
-      // Socials
-      setTelegram(project.socials.telegram || '');
-      setTwitter(project.socials.twitter || '');
-      setWebsite(project.socials.website || '');
-      setGithub(project.socials.github || '');
-      setFacebook(project.socials.facebook || '');
-      setInstagram(project.socials.instagram || '');
-      setReddit(project.socials.reddit || '');
-      setCmc(project.socials.cmc || '');
-      setCg(project.socials.cg || '');
-      setTrustblock(project.socials.trustblock || '');
-      
-      // Contract Info
-      setContractName(project.contract_info.contract_name || '');
-      setContractLanguage(project.contract_info.contract_language || 'Solidity');
-      setContractOwner(project.contract_info.contract_owner || '');
-      setContractDeployer(project.contract_info.contract_deployer || '');
-      setContractAddress(project.contract_info.contract_address || '');
-      setContractCreated(project.contract_info.contract_created || '');
-      setContractVerified(project.contract_info.contract_verified);
-      setContractCompiler(project.contract_info.contract_compiler || '');
-      setContractLicense(project.contract_info.contract_license || 'No License (None)');
-      
-      // Overview
-      setLive(project.live);
-      setHoneypot(project.overview.honeypot);
-      setHiddenOwner(project.overview.hidden_owner);
-      setTradingCooldown(project.overview.trading_cooldown);
-      setMaxTax(project.overview.max_tax);
-      setAnitWhale(project.overview.anit_whale);
-      setBlacklist(project.overview.blacklist);
-      setBuyTax(project.overview.buy_tax);
-      setSellTax(project.overview.sell_tax);
-      setMaxTransaction(project.overview.max_transaction);
-      setCanTakeOwnership(project.overview.can_take_ownership);
-      setExternalCall(project.overview.external_call);
-      setSelfDestruct(project.overview.self_destruct);
-      setProxyCheck(project.overview.proxy_check);
-      setAntiBot(project.overview.anti_bot);
-      setMint(project.overview.mint);
-      setEnableTrading(project.overview.enable_trading);
-      setCannotBuy(project.overview.cannot_buy);
-      setCannotSell(project.overview.cannot_sell);
-      setModifyTax(project.overview.modify_tax);
-      setWhitelist(project.overview.whitelist);
-      setPauseTransfer(project.overview.pause_transfer);
-      setOthers(project.overview.others);
-      setEnableTradeText(project.overview.enable_trade_text || '');
-      setPauseTrade(project.overview.pause_trade);
-      setMaxWallet(project.overview.max_wallet);
-      
-      // Severity
-      setMinorFound(project.minor.found);
-      setMinorPending(project.minor.pending);
-      setMinorResolved(project.minor.resolved);
-      setMediumFound(project.medium.found);
-      setMediumPending(project.medium.pending);
-      setMediumResolved(project.medium.resolved);
-      setMajorFound(project.major.found);
-      setMajorPending(project.major.pending);
-      setMajorResolved(project.major.resolved);
-      setCriticalFound(project.critical.found);
-      setCriticalPending(project.critical.pending);
-      setCriticalResolved(project.critical.resolved);
-      setInfoFound(project.informational.found);
-      setInfoPending(project.informational.pending);
-      setInfoResolved(project.informational.resolved);
-      
-      // Additional
-      setCodebase(project.codebase || '');
-      setPlatform(project.platform || 'Binance Smart Chain');
-      setAuditRequest(project.timeline.audit_request || '');
-      setOnboarding(project.timeline.onboarding_process || '');
-      setAuditScore(project.audit_score);
-      setLaunchpadLink(project.launchpad_link || '');
-      setPublished(project.published);
-      
-      // Load CFG Findings
-      setCfgFindings(project.cfg_findings || []);
+  // Defensive: use default empty objects for socials and timeline
+  const socials = project.socials || {};
+  const timeline = project.timeline || {};
+  const contract_info = project.contract_info || {};
+  const overview = project.overview || {};
+  const minor = project.minor || {};
+  const medium = project.medium || {};
+  const major = project.major || {};
+  const critical = project.critical || {};
+  const informational = project.informational || {};
+
+  // Basic Info
+  setName(project.name);
+  setSymbol(project.symbol);
+  setDecimals(project.decimals);
+  setSupply(project.supply);
+  setDescription(project.description);
+  setLogo(project.logo || '');
+  setLaunchpad(project.launchpad || '');
+  setSlug(project.slug);
+  setAuditPdf(project.audit_pdf || '');
+
+  // Socials
+  setTelegram(socials.telegram || '');
+  setTwitter(socials.twitter || '');
+  setWebsite(socials.website || '');
+  setGithub(socials.github || '');
+  setFacebook(socials.facebook || '');
+  setInstagram(socials.instagram || '');
+  setReddit(socials.reddit || '');
+  setCmc(socials.cmc || '');
+  setCg(socials.cg || '');
+  setTrustblock(socials.trustblock || '');
+
+  // Contract Info
+  setContractName(contract_info.contract_name || '');
+  setContractLanguage(contract_info.contract_language || 'Solidity');
+  setContractOwner(contract_info.contract_owner || '');
+  setContractDeployer(contract_info.contract_deployer || '');
+  setContractAddress(contract_info.contract_address || '');
+  setContractCreated(contract_info.contract_created || '');
+  setContractVerified(contract_info.contract_verified);
+  setContractCompiler(contract_info.contract_compiler || '');
+  setContractLicense(contract_info.contract_license || 'No License (None)');
+
+  // Overview
+  setLive(project.live);
+  setHoneypot(overview.honeypot);
+  setHiddenOwner(overview.hidden_owner);
+  setTradingCooldown(overview.trading_cooldown);
+  setMaxTax(overview.max_tax);
+  setAnitWhale(overview.anit_whale);
+  setBlacklist(overview.blacklist);
+  setBuyTax(overview.buy_tax);
+  setSellTax(overview.sell_tax);
+  setMaxTransaction(overview.max_transaction);
+  setCanTakeOwnership(overview.can_take_ownership);
+  setExternalCall(overview.external_call);
+  setSelfDestruct(overview.self_destruct);
+  setProxyCheck(overview.proxy_check);
+  setAntiBot(overview.anti_bot);
+  setMint(overview.mint);
+  setEnableTrading(overview.enable_trading);
+  setCannotBuy(overview.cannot_buy);
+  setCannotSell(overview.cannot_sell);
+  setModifyTax(overview.modify_tax);
+  setWhitelist(overview.whitelist);
+  setPauseTransfer(overview.pause_transfer);
+  setOthers(overview.others);
+  setEnableTradeText(overview.enable_trade_text || '');
+  setPauseTrade(overview.pause_trade);
+  setMaxWallet(overview.max_wallet);
+
+  // Severity
+  setMinorFound(minor.found);
+  setMinorPending(minor.pending);
+  setMinorResolved(minor.resolved);
+  setMediumFound(medium.found);
+  setMediumPending(medium.pending);
+  setMediumResolved(medium.resolved);
+  setMajorFound(major.found);
+  setMajorPending(major.pending);
+  setMajorResolved(major.resolved);
+  setCriticalFound(critical.found);
+  setCriticalPending(critical.pending);
+  setCriticalResolved(critical.resolved);
+  setInfoFound(informational.found);
+  setInfoPending(informational.pending);
+  setInfoResolved(informational.resolved);
+
+  // Additional
+  setCodebase(project.codebase || '');
+  setPlatform(project.platform || 'Binance Smart Chain');
+  setAuditRequest(timeline.audit_request || '');
+  setOnboarding(timeline.onboarding_process || '');
+  setAuditScore(project.audit_score);
+  setLaunchpadLink(project.launchpad_link || '');
+  setPublished(project.published);
+
+  // Load CFG Findings
+  setCfgFindings(project.cfg_findings || []);
     } catch (error) {
       console.error('Failed to load project:', error);
       router.push('/admin/dashboard');
