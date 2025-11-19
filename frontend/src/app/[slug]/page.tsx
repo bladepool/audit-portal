@@ -120,7 +120,13 @@ export default function ProjectPage() {
             <button className={styles.navButton} onClick={() => window.open('https://t.me/Bladepool', '_blank')}>
               Request an Audit
             </button>
-            <button className={styles.searchButton}>🔍</button>
+            <button 
+              className={styles.searchButton}
+              onClick={() => router.push('/')}
+              title="Search projects"
+            >
+              🔍
+            </button>
           </nav>
         </div>
       </header>
@@ -128,53 +134,33 @@ export default function ProjectPage() {
       {/* Project Header */}
       <div className={styles.projectHeader}>
         <div className={styles.projectHeaderContent}>
-          <img 
-            src={project.logo || '/default-logo.png'} 
-            alt={project.name}
-            className={styles.projectLogo}
-          />
-          <div className={styles.projectInfo}>
-            <div className={styles.projectTitleRow}>
-              <h1 className={styles.projectName}>{project.name}</h1>
-              <div className={styles.badges}>
+          <div className={styles.projectHeroLeft}>
+            <img 
+              src={project.logo || '/default-logo.png'} 
+              alt={project.name}
+              className={styles.projectLogo}
+            />
+            <div className={styles.projectInfo}>
+              <div className={styles.projectTitleRow}>
+                <h1 className={styles.projectName}>{project.name}</h1>
                 {project.launchpad && (
-                  <span className={styles.launchpadBadge}>{project.launchpad}</span>
-                )}
-                {project.trustblock && (
-                  <span className={styles.trustblockBadge}>TrustBlock</span>
+                  <a 
+                    href={project.socials?.website || '#'} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={styles.launchpadBadge}
+                  >
+                    {project.launchpad} <span className={styles.externalIcon}>↗</span>
+                  </a>
                 )}
               </div>
-            </div>
-            {project.symbol && (
-              <div className={styles.projectMeta}>
-                <span className={styles.symbol}>${project.symbol}</span>
-              </div>
-            )}
-            {project.description && (
-              <p className={styles.projectDescription}>{project.description}</p>
-            )}
-            <div className={styles.heroSocials}>
-              {project.socials?.website && (
-                <a href={project.socials.website} target="_blank" rel="noopener noreferrer" className={styles.socialBtn}>
-                  🌐
-                </a>
-              )}
-              {project.socials?.twitter && (
-                <a href={project.socials.twitter} target="_blank" rel="noopener noreferrer" className={styles.socialBtn}>
-                  𝕏
-                </a>
-              )}
-              {project.socials?.telegram && (
-                <a href={project.socials.telegram} target="_blank" rel="noopener noreferrer" className={styles.socialBtn}>
-                  ✈️
-                </a>
-              )}
-              {project.socials?.github && (
-                <a href={project.socials.github} target="_blank" rel="noopener noreferrer" className={styles.socialBtn}>
-                  💻
-                </a>
+              {project.description && (
+                <p className={styles.projectDescription}>{project.description}</p>
               )}
             </div>
+          </div>
+          <div className={styles.projectHeroRight}>
+            <div className={styles.adPlaceholder}>YOUR AD HERE</div>
           </div>
         </div>
       </div>
