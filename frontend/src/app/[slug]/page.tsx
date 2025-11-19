@@ -395,109 +395,118 @@ export default function ProjectPage() {
           {/* Code Security */}
           <div className={styles.card}>
             <h2 className={styles.cardTitle}>Code Security</h2>
-            <div className={styles.scoreHistoryContainer}>
-              <div className={styles.scoreLabel}>Score History</div>
-              <div className={styles.scoreRange}>
-                <span>Low</span>
-                <div className={styles.scoreBar}>
-                  <div className={styles.scoreProgress} style={{ width: `${project.audit_score}%` }}></div>
+            
+            <div className={styles.codeSecurityContainer}>
+              {/* Score History - Spider Chart */}
+              <div className={styles.scoreHistorySection}>
+                <h3 className={styles.subsectionTitle}>Score History</h3>
+                <div className={styles.spiderChartContainer}>
+                  <div className={styles.scoreDisplay}>
+                    <div className={styles.scoreNumber}>{project.audit_score || 95}</div>
+                    <div className={styles.scoreRange}>
+                      <span className={styles.rangeLow}>Low<br/>20</span>
+                      <span className={styles.rangeHigh}>High<br/>95</span>
+                    </div>
+                  </div>
+                  <svg className={styles.spiderChart} viewBox="0 0 200 140">
+                    {/* Grid lines */}
+                    <polyline points="20,70 100,20 180,70 180,120 20,120" fill="none" stroke="#333" strokeWidth="1"/>
+                    <polyline points="40,70 100,40 160,70 160,110 40,110" fill="none" stroke="#333" strokeWidth="1"/>
+                    <polyline points="60,70 100,55 140,70 140,100 60,100" fill="none" stroke="#333" strokeWidth="1"/>
+                    {/* Data line */}
+                    <polyline points="30,85 120,35 170,90 150,110 50,105" fill="rgba(59, 130, 246, 0.2)" stroke="#3b82f6" strokeWidth="2"/>
+                    <circle cx="30" cy="85" r="3" fill="#3b82f6"/>
+                    <circle cx="120" cy="35" r="3" fill="#3b82f6"/>
+                    <circle cx="170" cy="90" r="3" fill="#3b82f6"/>
+                    <circle cx="150" cy="110" r="3" fill="#3b82f6"/>
+                    <circle cx="50" cy="105" r="3" fill="#3b82f6"/>
+                  </svg>
                 </div>
-                <span>High</span>
               </div>
-              <div className={styles.scoreValue}>{project.audit_score || 0}</div>
-            </div>
-          </div>
 
-          {/* Code Audit History */}
-          <div className={styles.card}>
-            <h2 className={styles.cardTitle}>Code Audit History</h2>
-            <div className={styles.auditHistoryGrid}>
-              <div className={styles.historyItem}>
-                <div className={styles.historyLabel}>All Findings</div>
-                <div className={styles.historyValue}>{(project.critical?.found || 0) + (project.major?.found || 0) + (project.medium?.found || 0) + (project.minor?.found || 0) + (project.informational?.found || 0)}</div>
-              </div>
-              <div className={styles.historyItem}>
-                <div className={styles.historyLabel}>Partially Resolved</div>
-                <div className={styles.historyValue}>{(project.critical?.pending || 0) + (project.major?.pending || 0) + (project.medium?.pending || 0) + (project.minor?.pending || 0) + (project.informational?.pending || 0)}</div>
-              </div>
-              <div className={styles.historyItem}>
-                <div className={styles.historyLabel}>Resolved</div>
-                <div className={styles.historyValue}>{(project.critical?.resolved || 0) + (project.major?.resolved || 0) + (project.medium?.resolved || 0) + (project.minor?.resolved || 0) + (project.informational?.resolved || 0)}</div>
-              </div>
-            </div>
-          </div>
+              {/* Code Audit History */}
+              <div className={styles.auditHistorySection}>
+                <h3 className={styles.subsectionTitle}>Code Audit History</h3>
+                <div className={styles.auditHistoryStats}>
+                  <div className={styles.auditStat}>
+                    <div className={styles.auditStatNumber}>
+                      {(project.critical?.found || 0) + (project.major?.found || 0) + (project.medium?.found || 0) + (project.minor?.found || 0) + (project.informational?.found || 0)}
+                    </div>
+                    <div className={styles.auditStatLabel}>All Findings</div>
+                  </div>
+                  <div className={styles.auditStat}>
+                    <div className={styles.auditStatNumber}>
+                      {(project.critical?.pending || 0) + (project.major?.pending || 0) + (project.medium?.pending || 0) + (project.minor?.pending || 0) + (project.informational?.pending || 0)}
+                    </div>
+                    <div className={styles.auditStatLabel}>Partially Resolved</div>
+                  </div>
+                  <div className={styles.auditStat}>
+                    <div className={styles.auditStatNumber}>
+                      {(project.critical?.resolved || 0) + (project.major?.resolved || 0) + (project.medium?.resolved || 0) + (project.minor?.resolved || 0) + (project.informational?.resolved || 0)}
+                    </div>
+                    <div className={styles.auditStatLabel}>Resolved</div>
+                  </div>
+                </div>
 
-          {/* Severity Breakdown */}
-          <div className={styles.card}>
-            <h2 className={styles.cardTitle}>Severity Breakdown</h2>
-            <div className={styles.severityGrid}>
-              <div className={styles.severityItem}>
-                <div className={styles.severityHeader} style={{ background: '#22c55e' }}>
-                  <span className={styles.severityCount}>{project.minor?.found || 0}</span>
-                  <span className={styles.severityLabel}>Low</span>
-                </div>
-                <div className={styles.severityStats}>
-                  <div>Acknowledged: {project.minor?.pending || 0}</div>
-                  <div>Pending: {project.minor?.pending || 0}</div>
-                  <div>Resolved: {project.minor?.resolved || 0}</div>
-                </div>
-              </div>
-              
-              <div className={styles.severityItem}>
-                <div className={styles.severityHeader} style={{ background: '#f59e0b' }}>
-                  <span className={styles.severityCount}>{project.medium?.found || 0}</span>
-                  <span className={styles.severityLabel}>Medium</span>
-                </div>
-                <div className={styles.severityStats}>
-                  <div>Acknowledged: {project.medium?.pending || 0}</div>
-                  <div>Pending: {project.medium?.pending || 0}</div>
-                  <div>Resolved: {project.medium?.resolved || 0}</div>
-                </div>
-              </div>
-              
-              <div className={styles.severityItem}>
-                <div className={styles.severityHeader} style={{ background: '#f97316' }}>
-                  <span className={styles.severityCount}>{project.major?.found || 0}</span>
-                  <span className={styles.severityLabel}>High</span>
-                </div>
-                <div className={styles.severityStats}>
-                  <div>Acknowledged: {project.major?.pending || 0}</div>
-                  <div>Pending: {project.major?.pending || 0}</div>
-                  <div>Resolved: {project.major?.resolved || 0}</div>
-                </div>
-              </div>
-              
-              <div className={styles.severityItem}>
-                <div className={styles.severityHeader} style={{ background: '#ef4444' }}>
-                  <span className={styles.severityCount}>{project.critical?.found || 0}</span>
-                  <span className={styles.severityLabel}>Critical</span>
-                </div>
-                <div className={styles.severityStats}>
-                  <div>Acknowledged: {project.critical?.pending || 0}</div>
-                  <div>Pending: {project.critical?.pending || 0}</div>
-                  <div>Resolved: {project.critical?.resolved || 0}</div>
-                </div>
-              </div>
-              
-              <div className={styles.severityItem}>
-                <div className={styles.severityHeader} style={{ background: '#3b82f6' }}>
-                  <span className={styles.severityCount}>{project.informational?.found || 0}</span>
-                  <span className={styles.severityLabel}>Informational</span>
-                </div>
-                <div className={styles.severityStats}>
-                  <div>Acknowledged: {project.informational?.pending || 0}</div>
-                  <div>Pending: {project.informational?.pending || 0}</div>
-                  <div>Resolved: {project.informational?.resolved || 0}</div>
+                {/* Severity Bars */}
+                <div className={styles.severityBars}>
+                  <div className={styles.severityBar}>
+                    <span className={styles.severityDot} style={{ background: '#22c55e' }}>●</span>
+                    <span className={styles.severityName}>0 Low</span>
+                    <div className={styles.severityProgress}>
+                      <div className={styles.severityFill} style={{ width: '0%', background: '#22c55e' }}></div>
+                    </div>
+                    <span className={styles.severityText}>0 Acknowledged, 0 Pending, 0 Resolved</span>
+                  </div>
+                  <div className={styles.severityBar}>
+                    <span className={styles.severityDot} style={{ background: '#f59e0b' }}>●</span>
+                    <span className={styles.severityName}>0 Medium</span>
+                    <div className={styles.severityProgress}>
+                      <div className={styles.severityFill} style={{ width: '0%', background: '#f59e0b' }}></div>
+                    </div>
+                    <span className={styles.severityText}>0 Acknowledged, 0 Pending, 0 Resolved</span>
+                  </div>
+                  <div className={styles.severityBar}>
+                    <span className={styles.severityDot} style={{ background: '#f97316' }}>●</span>
+                    <span className={styles.severityName}>0 High</span>
+                    <div className={styles.severityProgress}>
+                      <div className={styles.severityFill} style={{ width: '0%', background: '#f97316' }}></div>
+                    </div>
+                    <span className={styles.severityText}>0 Acknowledged, 0 Pending, 0 Resolved</span>
+                  </div>
+                  <div className={styles.severityBar}>
+                    <span className={styles.severityDot} style={{ background: '#ef4444' }}>●</span>
+                    <span className={styles.severityName}>0 Critical</span>
+                    <div className={styles.severityProgress}>
+                      <div className={styles.severityFill} style={{ width: '0%', background: '#ef4444' }}></div>
+                    </div>
+                    <span className={styles.severityText}>0 Acknowledged, 0 Pending, 0 Resolved</span>
+                  </div>
+                  <div className={styles.severityBar}>
+                    <span className={styles.severityDot} style={{ background: '#3b82f6' }}>●</span>
+                    <span className={styles.severityName}>0 Informational</span>
+                    <div className={styles.severityProgress}>
+                      <div className={styles.severityFill} style={{ width: '0%', background: '#3b82f6' }}></div>
+                    </div>
+                    <span className={styles.severityText}>0 Acknowledged, 0 Pending, 0 Resolved</span>
+                  </div>
                 </div>
               </div>
             </div>
+
+            {/* Action Buttons */}
             <div className={styles.auditActions}>
               {project.audit_pdf && (
-                <button className={styles.actionButton} onClick={() => window.open(project.audit_pdf, '_blank')}>
+                <button className={styles.auditButton} onClick={() => window.open(project.audit_pdf, '_blank')}>
                   View Audit
                 </button>
               )}
-              <button className={styles.actionButton}>View Findings</button>
+              <button className={styles.auditButton} onClick={() => {
+                const findingsSection = document.getElementById('cfg-findings');
+                findingsSection?.scrollIntoView({ behavior: 'smooth' });
+              }}>
+                View Findings
+              </button>
             </div>
           </div>
 
