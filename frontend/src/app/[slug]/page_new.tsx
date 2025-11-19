@@ -104,7 +104,10 @@ export default function ProjectPage() {
           <div className={styles.headerActions}>
             <button className={styles.requestAuditBtn}>Request an Audit</button>
             <button className={styles.searchBtn}>🔍</button>
-            <span className={styles.qualityBadge}>HIGH QUALITY AUDIT</span>
+            <span className={styles.qualityBadge}>
+              <img src="/quality.png" alt="Quality" style={{ height: '20px', marginRight: '8px', verticalAlign: 'middle' }} />
+              HIGH QUALITY AUDIT
+            </span>
           </div>
         </div>
       </header>

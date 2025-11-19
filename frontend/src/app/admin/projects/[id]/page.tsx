@@ -175,8 +175,81 @@ export default function ProjectFormPage() {
   const [auditEdition, setAuditEdition] = useState('');
   const [paymentHash, setPaymentHash] = useState('');
   
-  // CFG Findings
+  // Scores
+  const [ownerScore, setOwnerScore] = useState(0);
+  const [socialScore, setSocialScore] = useState(0);
+  const [securityScore, setSecurityScore] = useState(0);
+  const [auditorScore, setAuditorScore] = useState(0);
+  const [auditStatus, setAuditStatus] = useState('');
+  
+  // KYC
+  const [isKYC, setIsKYC] = useState(false);
+  const [kycUrl, setKycUrl] = useState('');
+  const [kycScore, setKycScore] = useState(0);
+  const [kycScoreNotes, setKycScoreNotes] = useState('');
+  
+  // Token Distribution
+  const [tokenDistributionEnabled, setTokenDistributionEnabled] = useState(false);
+  const [distributionName1, setDistributionName1] = useState('');
+  const [distributionAmount1, setDistributionAmount1] = useState(0);
+  const [distributionDescription1, setDistributionDescription1] = useState('');
+  const [distributionName2, setDistributionName2] = useState('');
+  const [distributionAmount2, setDistributionAmount2] = useState(0);
+  const [distributionDescription2, setDistributionDescription2] = useState('');
+  const [distributionName3, setDistributionName3] = useState('');
+  const [distributionAmount3, setDistributionAmount3] = useState(0);
+  const [distributionDescription3, setDistributionDescription3] = useState('');
+  const [distributionName4, setDistributionName4] = useState('');
+  const [distributionAmount4, setDistributionAmount4] = useState(0);
+  const [distributionDescription4, setDistributionDescription4] = useState('');
+  const [distributionName5, setDistributionName5] = useState('');
+  const [distributionAmount5, setDistributionAmount5] = useState(0);
+  const [distributionDescription5, setDistributionDescription5] = useState('');
+  const [distributionName6, setDistributionName6] = useState('');
+  const [distributionAmount6, setDistributionAmount6] = useState(0);
+  const [distributionDescription6, setDistributionDescription6] = useState('');
+  
+  // SWC Results
+  const [swcResults, setSwcResults] = useState<Record<number, { result: string; location: string }>>({});
+  
+  // Advanced Metadata
+  const [isGraph, setIsGraph] = useState(false);
+  const [isInheritance, setIsInheritance] = useState(false);
+  const [isEVMContract, setIsEVMContract] = useState(false);
+  const [isSolana, setIsSolana] = useState(false);
+  const [isNFT, setIsNFT] = useState(false);
+  const [isToken, setIsToken] = useState(false);
+  const [isStaking, setIsStaking] = useState(false);
+  const [isOther, setIsOther] = useState(false);
+  
+  // CFG Findings (for FindingsManager - array format)
   const [cfgFindings, setCfgFindings] = useState<Finding[]>([]);
+  
+  // CFG Findings (legacy object format for CFG01-CFG26 section)
+  const [cfgFindingsLegacy, setCfgFindingsLegacy] = useState<Record<string, any>>({});
+
+  // Helper functions for SWC results
+  const setSwcResult = (swcNum: number, value: string) => {
+    setSwcResults(prev => ({
+      ...prev,
+      [swcNum]: { ...prev[swcNum], result: value }
+    }));
+  };
+
+  const setSwcLocation = (swcNum: number, value: string) => {
+    setSwcResults(prev => ({
+      ...prev,
+      [swcNum]: { ...prev[swcNum], location: value }
+    }));
+  };
+
+  // Helper function for CFG legacy findings
+  const setCfgFinding = (cfgNum: string, field: string, value: any) => {
+    setCfgFindingsLegacy(prev => ({
+      ...prev,
+      [cfgNum]: { ...prev[cfgNum], [field]: value }
+    }));
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -297,8 +370,56 @@ export default function ProjectFormPage() {
   setAuditEdition(project.auditEdition || '');
   setPaymentHash(project.paymentHash || '');
 
+  // Scores
+  setOwnerScore((project as any).ownerScore || 0);
+  setSocialScore((project as any).socialScore || 0);
+  setSecurityScore((project as any).securityScore || 0);
+  setAuditorScore((project as any).auditorScore || 0);
+  setAuditStatus((project as any).auditStatus || '');
+
+  // KYC
+  setIsKYC((project as any).isKYC || false);
+  setKycUrl((project as any).kycUrl || '');
+  setKycScore((project as any).kycScore || 0);
+  setKycScoreNotes((project as any).kycScoreNotes || '');
+
+  // Token Distribution
+  setTokenDistributionEnabled((project as any).tokenDistributionEnabled || false);
+  setDistributionName1((project as any).distributionName1 || '');
+  setDistributionAmount1((project as any).distributionAmount1 || 0);
+  setDistributionDescription1((project as any).distributionDescription1 || '');
+  setDistributionName2((project as any).distributionName2 || '');
+  setDistributionAmount2((project as any).distributionAmount2 || 0);
+  setDistributionDescription2((project as any).distributionDescription2 || '');
+  setDistributionName3((project as any).distributionName3 || '');
+  setDistributionAmount3((project as any).distributionAmount3 || 0);
+  setDistributionDescription3((project as any).distributionDescription3 || '');
+  setDistributionName4((project as any).distributionName4 || '');
+  setDistributionAmount4((project as any).distributionAmount4 || 0);
+  setDistributionDescription4((project as any).distributionDescription4 || '');
+  setDistributionName5((project as any).distributionName5 || '');
+  setDistributionAmount5((project as any).distributionAmount5 || 0);
+  setDistributionDescription5((project as any).distributionDescription5 || '');
+  setDistributionName6((project as any).distributionName6 || '');
+  setDistributionAmount6((project as any).distributionAmount6 || 0);
+  setDistributionDescription6((project as any).distributionDescription6 || '');
+
+  // SWC Results
+  setSwcResults((project as any).swcResults || {});
+
+  // Advanced Metadata
+  setIsGraph((project as any).isGraph || false);
+  setIsInheritance((project as any).isInheritance || false);
+  setIsEVMContract((project as any).isEVMContract || false);
+  setIsSolana((project as any).isSolana || false);
+  setIsNFT((project as any).isNFT || false);
+  setIsToken((project as any).isToken || false);
+  setIsStaking((project as any).isStaking || false);
+  setIsOther((project as any).isOther || false);
+
   // Load CFG Findings
   setCfgFindings(project.cfg_findings || []);
+  setCfgFindingsLegacy((project as any).cfgFindingsLegacy || {});
     } catch (error) {
       console.error('Failed to load project:', error);
       router.push('/admin/dashboard');
@@ -487,6 +608,44 @@ export default function ProjectFormPage() {
       auditToolVersion: AUDIT_TOOL_VERSION,
       auditEdition,
       paymentHash,
+      ownerScore,
+      socialScore,
+      securityScore,
+      auditorScore,
+      auditStatus,
+      isKYC,
+      kycUrl,
+      kycScore,
+      kycScoreNotes,
+      tokenDistributionEnabled,
+      distributionName1,
+      distributionAmount1,
+      distributionDescription1,
+      distributionName2,
+      distributionAmount2,
+      distributionDescription2,
+      distributionName3,
+      distributionAmount3,
+      distributionDescription3,
+      distributionName4,
+      distributionAmount4,
+      distributionDescription4,
+      distributionName5,
+      distributionAmount5,
+      distributionDescription5,
+      distributionName6,
+      distributionAmount6,
+      distributionDescription6,
+      swcResults,
+      isGraph,
+      isInheritance,
+      isEVMContract,
+      isSolana,
+      isNFT,
+      isToken,
+      isStaking,
+      isOther,
+      cfgFindingsLegacy,
     };
 
     try {
@@ -1065,34 +1224,34 @@ export default function ProjectFormPage() {
               return (
                 <React.Fragment key={`cfg${cfgNum}`}>
                   <Field label={`CFG${cfgNum} Result`}>
-                    <Input value={cfgFindings[cfgNum]?.result || ''} onChange={(e) => setCfgFinding(cfgNum, 'result', e.target.value)} />
+                    <Input value={cfgFindingsLegacy[cfgNum]?.result || ''} onChange={(e) => setCfgFinding(cfgNum, 'result', e.target.value)} />
                   </Field>
                   <Field label={`CFG${cfgNum} Title`}>
-                    <Input value={cfgFindings[cfgNum]?.title || ''} onChange={(e) => setCfgFinding(cfgNum, 'title', e.target.value)} />
+                    <Input value={cfgFindingsLegacy[cfgNum]?.title || ''} onChange={(e) => setCfgFinding(cfgNum, 'title', e.target.value)} />
                   </Field>
                   <Field label={`CFG${cfgNum} Description`}>
-                    <Textarea value={cfgFindings[cfgNum]?.description || ''} onChange={(e) => setCfgFinding(cfgNum, 'description', e.target.value)} rows={2} />
+                    <Textarea value={cfgFindingsLegacy[cfgNum]?.description || ''} onChange={(e) => setCfgFinding(cfgNum, 'description', e.target.value)} rows={2} />
                   </Field>
                   <Field label={`CFG${cfgNum} Severity`}>
-                    <Input value={cfgFindings[cfgNum]?.severity || ''} onChange={(e) => setCfgFinding(cfgNum, 'severity', e.target.value)} />
+                    <Input value={cfgFindingsLegacy[cfgNum]?.severity || ''} onChange={(e) => setCfgFinding(cfgNum, 'severity', e.target.value)} />
                   </Field>
                   <Field label={`CFG${cfgNum} Status`}>
-                    <Input value={cfgFindings[cfgNum]?.status || ''} onChange={(e) => setCfgFinding(cfgNum, 'status', e.target.value)} />
+                    <Input value={cfgFindingsLegacy[cfgNum]?.status || ''} onChange={(e) => setCfgFinding(cfgNum, 'status', e.target.value)} />
                   </Field>
                   <Field label={`CFG${cfgNum} Location`}>
-                    <Input value={cfgFindings[cfgNum]?.location || ''} onChange={(e) => setCfgFinding(cfgNum, 'location', e.target.value)} />
+                    <Input value={cfgFindingsLegacy[cfgNum]?.location || ''} onChange={(e) => setCfgFinding(cfgNum, 'location', e.target.value)} />
                   </Field>
                   <Field label={`CFG${cfgNum} Recommendation`}>
-                    <Textarea value={cfgFindings[cfgNum]?.recommendation || ''} onChange={(e) => setCfgFinding(cfgNum, 'recommendation', e.target.value)} rows={2} />
+                    <Textarea value={cfgFindingsLegacy[cfgNum]?.recommendation || ''} onChange={(e) => setCfgFinding(cfgNum, 'recommendation', e.target.value)} rows={2} />
                   </Field>
                   <Field label={`CFG${cfgNum} Alleviation`}>
-                    <Textarea value={cfgFindings[cfgNum]?.alleviation || ''} onChange={(e) => setCfgFinding(cfgNum, 'alleviation', e.target.value)} rows={2} />
+                    <Textarea value={cfgFindingsLegacy[cfgNum]?.alleviation || ''} onChange={(e) => setCfgFinding(cfgNum, 'alleviation', e.target.value)} rows={2} />
                   </Field>
                   <Field label={`CFG${cfgNum} Category`}>
-                    <Input value={cfgFindings[cfgNum]?.category || ''} onChange={(e) => setCfgFinding(cfgNum, 'category', e.target.value)} />
+                    <Input value={cfgFindingsLegacy[cfgNum]?.category || ''} onChange={(e) => setCfgFinding(cfgNum, 'category', e.target.value)} />
                   </Field>
                   <Field label={`CFG${cfgNum} Score`}>
-                    <Input type="number" value={cfgFindings[cfgNum]?.score?.toString() || ''} onChange={(e) => setCfgFinding(cfgNum, 'score', parseInt(e.target.value) || 0)} />
+                    <Input type="number" value={cfgFindingsLegacy[cfgNum]?.score?.toString() || ''} onChange={(e) => setCfgFinding(cfgNum, 'score', parseInt(e.target.value) || 0)} />
                   </Field>
                 </React.Fragment>
               );
