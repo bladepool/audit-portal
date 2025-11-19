@@ -652,6 +652,7 @@
 .paginationButtons {
   display: flex;
   gap: 0.5rem;
+  align-items: center;
 }
 
 .paginationButton {
@@ -661,11 +662,24 @@
   padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  font-weight: 500;
 }
 
-.paginationButton:hover {
-  background: #2a2a2a;
+.paginationButton:hover:not(:disabled) {
+  background: #ef4444;
+  border-color: #ef4444;
+}
+
+.paginationButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.pageNumber {
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 0 0.5rem;
 }
 
 .loading {

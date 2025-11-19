@@ -42,6 +42,8 @@ export default function Home() {
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
   const [stats, setStats] = useState<Stats>({
     totalProjects: 0,
     totalPass: 0,
@@ -385,15 +387,6 @@ export default function Home() {
             </div>
             <div className={styles.statValue2}>$2.5B</div>
           </div>
-          
-          {/* Found Vulnerabilities Card */}
-          <div className={styles.statCard2}>
-            <div className={styles.statHeader}>
-              <span className={styles.statLabel2}>Found Vulnerabilities</span>
-              <span className={styles.infoIcon}>ⓘ</span>
-            </div>
-            <div className={styles.statValue2}>{stats.totalIssuesFound}</div>
-          </div>
         </div>
       </section>
 
@@ -479,48 +472,68 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                {projects.map((project, index) => (
-                  <tr 
-                    key={project._id} 
-                    onClick={() => router.push(`/${project.slug}`)}
-                    className={styles.tableRow}
-                  >
-                    <td>{index + 1}</td>
-                    <td>
-                      <div className={styles.projectName}>
-                        {project.logo && (
-                          <img src={project.logo} alt={project.name} className={styles.projectLogo} />
-                        )}
-                        <span>{project.name}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <span className={styles.scoreBadge}>
-                        {getScoreBadge(project.audit_score)}
-                      </span>
-                    </td>
-                    <td>
-                      <span className={styles.ecosystem}>{project.ecosystem || 'BINANCE SMART CHAIN'}</span>
-                    </td>
-                    <td>{project.symbol}</td>
-                    <td>{project.total_votes || 0}</td>
-                    <td>
-                      <div className={styles.confidence}>
-                        {renderStars(project.audit_confidence || project.audit_score)}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {projects
+                  .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                  .map((project, index) => {
+                    const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
+                    return (
+                      <tr 
+                        key={project._id} 
+                        onClick={() => router.push(`/${project.slug}`)}
+                        className={styles.tableRow}
+                      >
+                        <td>{globalIndex}</td>
+                        <td>
+                          <div className={styles.projectName}>
+                            {project.logo && (
+                              <img src={project.logo} alt={project.name} className={styles.projectLogo} />
+                            )}
+                            <span>{project.name}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span className={styles.scoreBadge}>
+                            {getScoreBadge(project.audit_score)}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={styles.ecosystem}>{project.platform || 'BINANCE SMART CHAIN'}</span>
+                        </td>
+                        <td>{project.symbol}</td>
+                        <td>{project.total_votes || 0}</td>
+                        <td>
+                          <div className={styles.confidence}>
+                            {renderStars(project.audit_confidence || project.audit_score)}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>
         )}
         
         <div className={styles.pagination}>
-          <span className={styles.paginationText}>Showing 1-10 out of {projects.length}</span>
+          <span className={styles.paginationText}>
+            Showing {(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, projects.length)} out of {projects.length}
+          </span>
           <div className={styles.paginationButtons}>
-            <button className={styles.paginationButton}>Prev</button>
-            <button className={styles.paginationButton}>Next</button>
+            <button 
+              className={styles.paginationButton}
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+            >
+              Prev
+            </button>
+            <span className={styles.pageNumber}>Page {currentPage} of {Math.ceil(projects.length / itemsPerPage)}</span>
+            <button 
+              className={styles.paginationButton}
+              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(projects.length / itemsPerPage), prev + 1))}
+              disabled={currentPage === Math.ceil(projects.length / itemsPerPage)}
+            >
+              Next
+            </button>
           </div>
         </div>
       </section>
