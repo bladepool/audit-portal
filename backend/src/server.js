@@ -9,24 +9,17 @@ const blockchainRoutes = require('./routes/blockchains');
 const advertisementRoutes = require('./routes/advertisements');
 const trustBlockRoutes = require('./routes/trustblock');
 
-// Try to load optional routes (may fail in some environments)
+// Admin PDF routes - only available in local development
 let adminPdfRoutes = null;
-try {
-  // In production, use simplified version
-  const routeFile = process.env.NODE_ENV === 'production' 
-    ? './routes/adminPdfRoutes.production' 
-    : './routes/adminPdfRoutes';
-  adminPdfRoutes = require(routeFile);
-  console.log('✅ Admin PDF routes loaded successfully');
-} catch (error) {
-  console.warn('⚠️ Admin PDF routes not available:', error.message);
-  // Fallback to production version if main fails
+if (process.env.NODE_ENV !== 'production') {
   try {
-    adminPdfRoutes = require('./routes/adminPdfRoutes.production');
-    console.log('✅ Using production fallback for admin PDF routes');
-  } catch (fallbackError) {
-    console.warn('⚠️ Production fallback also failed:', fallbackError.message);
+    adminPdfRoutes = require('./routes/adminPdfRoutes');
+    console.log('✅ Admin PDF routes loaded successfully');
+  } catch (error) {
+    console.warn('⚠️ Admin PDF routes not available:', error.message);
   }
+} else {
+  console.log('ℹ️  Admin PDF routes disabled in production (use local environment for PDF generation)');
 }
 
 let marketCapRoutes = null;
