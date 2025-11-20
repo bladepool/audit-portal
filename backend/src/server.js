@@ -8,9 +8,16 @@ const projectRoutes = require('./routes/projects');
 const blockchainRoutes = require('./routes/blockchains');
 const advertisementRoutes = require('./routes/advertisements');
 const trustBlockRoutes = require('./routes/trustblock');
-const adminPdfRoutes = require('./routes/adminPdfRoutes');
 
-// Try to load marketcap routes (optional - may fail in some environments)
+// Try to load optional routes (may fail in some environments)
+let adminPdfRoutes = null;
+try {
+  adminPdfRoutes = require('./routes/adminPdfRoutes');
+  console.log('✅ Admin PDF routes loaded successfully');
+} catch (error) {
+  console.warn('⚠️ Admin PDF routes not available:', error.message);
+}
+
 let marketCapRoutes = null;
 try {
   marketCapRoutes = require('./routes/marketcap');
@@ -40,7 +47,20 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/blockchains', blockchainRoutes);
 app.use('/api/advertisements', advertisementRoutes);
 app.use('/api/admin/trustblock', trustBlockRoutes);
-app.use('/api/admin', adminPdfRoutes);
+
+// Only register admin PDF routes if available
+if (adminPdfRoutes) {
+  app.use('/api/admin', adminPdfRoutes);
+} else {
+  // Provide fallback endpoint
+  app.post('/api/admin/generate-pdf', (req, res) => {
+    res.status(503).json({
+      success: false,
+      error: 'PDF generation service not available',
+      message: 'PDF generation requires local environment setup'
+    });
+  });
+}
 
 // Only register marketcap routes if available
 if (marketCapRoutes) {
