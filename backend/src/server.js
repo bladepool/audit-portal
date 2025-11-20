@@ -7,6 +7,8 @@ const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
 const blockchainRoutes = require('./routes/blockchains');
 const advertisementRoutes = require('./routes/advertisements');
+const trustBlockRoutes = require('./routes/trustblock');
+const adminPdfRoutes = require('./routes/adminPdfRoutes');
 
 // Try to load marketcap routes (optional - may fail in some environments)
 let marketCapRoutes = null;
@@ -37,6 +39,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/blockchains', blockchainRoutes);
 app.use('/api/advertisements', advertisementRoutes);
+app.use('/api/admin/trustblock', trustBlockRoutes);
+app.use('/api/admin', adminPdfRoutes);
 
 // Only register marketcap routes if available
 if (marketCapRoutes) {

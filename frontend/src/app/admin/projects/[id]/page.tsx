@@ -15,6 +15,7 @@ import {
   Divider,
   Label,
   Field,
+  Checkbox,
 } from '@fluentui/react-components';
 import { DocumentPdfRegular, CalculatorRegular } from '@fluentui/react-icons';
 import { projectsAPI, blockchainsAPI } from '@/lib/api';
@@ -175,6 +176,11 @@ export default function ProjectFormPage() {
   const [published, setPublished] = useState(false);
   const [auditEdition, setAuditEdition] = useState('');
   const [paymentHash, setPaymentHash] = useState('');
+  
+  // PDF Generation
+  const [uploadToGitHub, setUploadToGitHub] = useState(false);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [pdfGenerationMessage, setPdfGenerationMessage] = useState('');
   
   // Scores
   const [ownerScore, setOwnerScore] = useState(0);
@@ -1084,53 +1090,84 @@ export default function ProjectFormPage() {
 
         {/* CFG Findings - Detailed Management */}
         <Card className={styles.section}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <Text className={styles.sectionTitle}>CFG Findings (Detailed)</Text>
-            <Button
-              appearance="primary"
-              icon={<DocumentPdfRegular />}
-              onClick={async () => {
-                // Build current project data for PDF generation
-                const currentProjectData = {
-                  name,
-                  symbol,
-                  decimals,
-                  supply,
-                  description,
-                  slug,
-                  logo,
-                  platform: platform || 'Binance Smart Chain',
-                  audit_score: auditScore,
-                  audit_confidence: auditConfidence,
-                  published,
-                  contract_info: { 
-                    contract_address: contractAddress,
-                    contract_compiler: contractCompiler,
-                    contract_license: contractLicense
-                  },
-                  overview: {
-                    honeypot,
-                    hidden_owner: hiddenOwner,
-                    mint,
-                    blacklist,
-                    whitelist,
-                    proxy_check: proxyCheck,
-                    buy_tax: buyTax,
-                    sell_tax: sellTax,
-                  },
-                  socials: { website, telegram, twitter, github },
-                  cfg_findings: cfgFindings,
-                  critical: { found: criticalFound, pending: criticalPending, resolved: criticalResolved },
-                  major: { found: majorFound, pending: majorPending, resolved: majorResolved },
-                  medium: { found: mediumFound, pending: mediumPending, resolved: mediumResolved },
-                  minor: { found: minorFound, pending: minorPending, resolved: minorResolved },
-                  informational: { found: infoFound, pending: infoPending, resolved: infoResolved },
-                } as Project;
-                await generateEnhancedAuditPDF(currentProjectData);
-              }}
-            >
-              Generate PDF Report
-            </Button>
+          <div style={{ marginBottom: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <Text className={styles.sectionTitle}>CFG Findings (Detailed)</Text>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <Checkbox 
+                  label="Upload to GitHub"
+                  checked={uploadToGitHub}
+                  onChange={(e, data) => setUploadToGitHub(data.checked as boolean)}
+                />
+                <Button
+                  appearance="primary"
+                  icon={<DocumentPdfRegular />}
+                  disabled={isGeneratingPdf || isNew}
+                  onClick={async () => {
+                    if (!params.id || params.id === 'new') {
+                      setPdfGenerationMessage('Please save the project first before generating PDF');
+                      alert('Please save the project first before generating PDF');
+                      return;
+                    }
+                    
+                    setIsGeneratingPdf(true);
+                    setPdfGenerationMessage('Generating PDF...');
+                    
+                    try {
+                      const response = await fetch('/api/admin/generate-pdf', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                          projectId: params.id,
+                          uploadToGitHub: uploadToGitHub,
+                        }),
+                      });
+                      
+                      const data = await response.json();
+                      
+                      if (data.success) {
+                        const sizeInMB = (data.size / 1024 / 1024).toFixed(2);
+                        let message = `✅ PDF generated successfully (${sizeInMB} MB)`;
+                        
+                        if (data.uploadedToGitHub && data.githubUrl) {
+                          message += `\n\n📤 Uploaded to GitHub:\n${data.githubUrl}`;
+                        }
+                        
+                        setPdfGenerationMessage(message);
+                        alert(message);
+                      } else {
+                        const errorMsg = `❌ Error: ${data.message || 'Failed to generate PDF'}`;
+                        setPdfGenerationMessage(errorMsg);
+                        alert(errorMsg);
+                      }
+                    } catch (error) {
+                      console.error('PDF generation error:', error);
+                      const errorMsg = '❌ Error: Failed to generate PDF. Check console for details.';
+                      setPdfGenerationMessage(errorMsg);
+                      alert(errorMsg);
+                    } finally {
+                      setIsGeneratingPdf(false);
+                    }
+                  }}
+                >
+                  {isGeneratingPdf ? 'Generating...' : 'Generate PDF Report'}
+                </Button>
+              </div>
+            </div>
+            {pdfGenerationMessage && (
+              <div style={{ 
+                padding: '12px', 
+                background: tokens.colorNeutralBackground3, 
+                borderRadius: '8px',
+                marginBottom: '12px'
+              }}>
+                <Text style={{ whiteSpace: 'pre-line', fontSize: '14px', fontFamily: 'monospace' }}>
+                  {pdfGenerationMessage}
+                </Text>
+              </div>
+            )}
           </div>
           <FindingsManager 
             findings={cfgFindings}
