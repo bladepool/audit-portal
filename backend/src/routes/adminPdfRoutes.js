@@ -12,13 +12,23 @@ const { exec } = require('child_process');
 const util = require('util');
 const execPromise = util.promisify(exec);
 
-const CUSTOM_CONTRACT_PATH = 'E:\\Desktop\\Old Desktop November 2023\\audits\\PDFscript\\CFGNinjaScripts\\Custom Contract';
+// Check if we're in production or local environment
+const isProd = process.env.NODE_ENV === 'production';
+const CUSTOM_CONTRACT_PATH = process.env.PDF_GENERATION_PATH || 'E:\\Desktop\\Old Desktop November 2023\\audits\\PDFscript\\CFGNinjaScripts\\Custom Contract';
 const OUTPUT_PATH = path.join(__dirname, '../../generated-pdfs');
-const GITHUB_REPO_PATH = 'g:\\auditportal\\backend\\github-pdfs-repo';
+const GITHUB_REPO_PATH = process.env.GITHUB_REPO_PATH || 'g:\\auditportal\\backend\\github-pdfs-repo';
 const TEMPLATE_DATA_JSON_PATH = path.join(CUSTOM_CONTRACT_PATH, 'data.json');
 
 const GITHUB_REPO_URL = 'https://github.com/CFG-NINJA/audits.git';
 const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/CFG-NINJA/audits/main';
+
+// Check if PDF generation is available
+const PDF_GENERATION_AVAILABLE = fs.existsSync(CUSTOM_CONTRACT_PATH) && fs.existsSync(TEMPLATE_DATA_JSON_PATH);
+
+if (isProd && !PDF_GENERATION_AVAILABLE) {
+  console.warn('⚠️  PDF generation not available in production environment');
+  console.warn('   Set PDF_GENERATION_PATH environment variable to enable');
+}
 
 let cachedDb = null;
 
@@ -125,6 +135,15 @@ async function uploadToGitHub(slug, pdfPath) {
  */
 router.post('/generate-pdf', async (req, res) => {
   try {
+    // Check if PDF generation is available
+    if (!PDF_GENERATION_AVAILABLE) {
+      return res.status(503).json({ 
+        success: false,
+        error: 'PDF generation service not available in this environment',
+        message: 'PDF generation requires local setup with pdf.js'
+      });
+    }
+    
     const { projectId, uploadToGitHub = false } = req.body;
     
     if (!projectId) {
