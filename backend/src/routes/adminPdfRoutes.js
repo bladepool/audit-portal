@@ -22,8 +22,13 @@ const TEMPLATE_DATA_JSON_PATH = path.join(CUSTOM_CONTRACT_PATH, 'data.json');
 const GITHUB_REPO_URL = 'https://github.com/CFG-NINJA/audits.git';
 const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/CFG-NINJA/audits/main';
 
-// Check if PDF generation is available
-const PDF_GENERATION_AVAILABLE = fs.existsSync(CUSTOM_CONTRACT_PATH) && fs.existsSync(TEMPLATE_DATA_JSON_PATH);
+// Check if PDF generation is available (safely)
+let PDF_GENERATION_AVAILABLE = false;
+try {
+  PDF_GENERATION_AVAILABLE = fs.existsSync(CUSTOM_CONTRACT_PATH) && fs.existsSync(TEMPLATE_DATA_JSON_PATH);
+} catch (error) {
+  console.warn('⚠️  Error checking PDF generation availability:', error.message);
+}
 
 if (isProd && !PDF_GENERATION_AVAILABLE) {
   console.warn('⚠️  PDF generation not available in production environment');

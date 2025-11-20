@@ -12,10 +12,21 @@ const trustBlockRoutes = require('./routes/trustblock');
 // Try to load optional routes (may fail in some environments)
 let adminPdfRoutes = null;
 try {
-  adminPdfRoutes = require('./routes/adminPdfRoutes');
+  // In production, use simplified version
+  const routeFile = process.env.NODE_ENV === 'production' 
+    ? './routes/adminPdfRoutes.production' 
+    : './routes/adminPdfRoutes';
+  adminPdfRoutes = require(routeFile);
   console.log('✅ Admin PDF routes loaded successfully');
 } catch (error) {
   console.warn('⚠️ Admin PDF routes not available:', error.message);
+  // Fallback to production version if main fails
+  try {
+    adminPdfRoutes = require('./routes/adminPdfRoutes.production');
+    console.log('✅ Using production fallback for admin PDF routes');
+  } catch (fallbackError) {
+    console.warn('⚠️ Production fallback also failed:', fallbackError.message);
+  }
 }
 
 let marketCapRoutes = null;
