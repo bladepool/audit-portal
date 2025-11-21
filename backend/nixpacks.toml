@@ -1,0 +1,11 @@
+[start]
+cmd = "npm start"
+
+[phases.setup]
+nixPkgs = ["nodejs-22_x"]
+
+[phases.install]
+cmds = ["npm ci --prefer-offline --no-audit"]
+
+[phases.build]
+cmds = ["echo 'No build step required'"]
