@@ -27,13 +27,9 @@ if (fs.existsSync(PDF_PATH)) {
   console.log('ℹ️  Admin PDF routes disabled (PDF generation path not found - this is normal for Railway deployment)');
 }
 
+// Market cap routes disabled - using manual field in admin portal instead
 let marketCapRoutes = null;
-try {
-  marketCapRoutes = require('./routes/marketcap');
-  console.log('✅ Market cap routes loaded successfully');
-} catch (error) {
-  console.warn('⚠️ Market cap routes not available:', error.message);
-}
+console.log('ℹ️  Market cap routes disabled (use manual field in admin portal)');
 
 const app = express();
 
@@ -80,20 +76,15 @@ if (adminPdfRoutes) {
   });
 }
 
-// Only register marketcap routes if available
-if (marketCapRoutes) {
-  app.use('/api/marketcap', marketCapRoutes);
-} else {
-  // Provide fallback endpoint
-  app.get('/api/marketcap/secured', (req, res) => {
-    res.json({
-      totalSecured: 2500000000,
-      formatted: '$2.5B',
-      fallback: true,
-      message: 'Market cap service temporarily unavailable'
-    });
+// Market cap endpoint - static fallback (update via admin portal)
+app.get('/api/marketcap/secured', (req, res) => {
+  res.json({
+    totalSecured: 2500000000,
+    formatted: '$2.5B',
+    fallback: true,
+    message: 'Market cap manually updated via admin portal'
   });
-}
+});
 
 // Health check
 app.get('/api/health', (req, res) => {
