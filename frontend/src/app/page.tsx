@@ -201,14 +201,14 @@ export default function Home() {
 
   // Filter projects based on search query
   const filteredProjects = projects.filter(project => {
-    if (!searchQuery.trim()) return true;
-    const query = searchQuery.toLowerCase();
+    if (!searchQuery || !searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase().trim();
     return (
-      project.name?.toLowerCase().includes(query) ||
-      project.symbol?.toLowerCase().includes(query) ||
-      project.slug?.toLowerCase().includes(query) ||
-      project.ecosystem?.toLowerCase().includes(query) ||
-      project.platform?.toLowerCase().includes(query)
+      (project.name || '').toLowerCase().includes(query) ||
+      (project.symbol || '').toLowerCase().includes(query) ||
+      (project.slug || '').toLowerCase().includes(query) ||
+      (project.ecosystem || '').toLowerCase().includes(query) ||
+      (project.platform || '').toLowerCase().includes(query)
     );
   });
 
@@ -465,11 +465,11 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Secured Market Cap Card */}
+          {/* Total Value Secured (TVS) Card */}
           <div className={styles.statCard2}>
             <div className={styles.statHeader}>
-              <span className={styles.statLabel2}>Secured Market Cap</span>
-              <span className={styles.infoIcon} title="Total market capitalization of audited projects">ⓘ</span>
+              <span className={styles.statLabel2}>Total Value Secured (TVS)</span>
+              <span className={styles.infoIcon} title="Total value secured across all audited projects on TrustBlock">ⓘ</span>
             </div>
             <div className={styles.statValue2}>{stats.securedMarketCap}</div>
           </div>

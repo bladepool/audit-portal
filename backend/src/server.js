@@ -135,14 +135,97 @@ if (adminPdfRoutes) {
   });
 }
 
-// Market cap endpoint - static fallback (update via admin portal)
-app.get('/api/marketcap/secured', (req, res) => {
-  res.json({
-    totalSecured: 2500000000,
-    formatted: '$2.5B',
-    fallback: true,
-    message: 'Market cap manually updated via admin portal'
-  });
+// TVS (Total Value Secured) endpoint - fetch from TrustBlock
+app.get('/api/marketcap/secured', async (req, res) => {
+  try {
+    const https = require('https');
+    
+    // Fetch TVS from TrustBlock auditor page
+    const options = {
+      hostname: 'app.trustblock.run',
+      path: '/auditor/cfg-ninja',
+      method: 'GET',
+      headers: {
+        'User-Agent': 'Mozilla/5.0'
+      }
+    };
+    
+    https.get(options, (response) => {
+      let data = '';
+      
+      response.on('data', chunk => data += chunk);
+      response.on('end', () => {
+        try {
+          // Extract TVS value from HTML (format: "63.9m Total value secured (TVS)")
+          const tvsMatch = data.match(/(\d+\.?\d*[kmb]?)\s+Total value secured \(TVS\)/i);
+          
+          if (tvsMatch) {
+            const tvsText = tvsMatch[1];
+            let tvsValue = parseFloat(tvsText);
+            
+            // Convert to actual number
+            if (tvsText.toLowerCase().includes('k')) {
+              tvsValue *= 1000;
+            } else if (tvsText.toLowerCase().includes('m')) {
+              tvsValue *= 1000000;
+            } else if (tvsText.toLowerCase().includes('b')) {
+              tvsValue *= 1000000000;
+            }
+            
+            // Format for display
+            let formatted;
+            if (tvsValue >= 1000000000) {
+              formatted = `$${(tvsValue / 1000000000).toFixed(1)}B`;
+            } else if (tvsValue >= 1000000) {
+              formatted = `$${(tvsValue / 1000000).toFixed(1)}M`;
+            } else {
+              formatted = `$${(tvsValue / 1000).toFixed(1)}K`;
+            }
+            
+            res.json({
+              totalSecured: tvsValue,
+              formatted: formatted,
+              source: 'trustblock',
+              message: 'Live data from TrustBlock'
+            });
+          } else {
+            // Fallback if parsing fails
+            res.json({
+              totalSecured: 63900000,
+              formatted: '$63.9M',
+              fallback: true,
+              message: 'Using cached TrustBlock value'
+            });
+          }
+        } catch (parseError) {
+          console.error('Error parsing TrustBlock TVS:', parseError.message);
+          res.json({
+            totalSecured: 63900000,
+            formatted: '$63.9M',
+            fallback: true,
+            message: 'Using cached TrustBlock value'
+          });
+        }
+      });
+    }).on('error', (err) => {
+      console.error('Error fetching TrustBlock TVS:', err.message);
+      res.json({
+        totalSecured: 63900000,
+        formatted: '$63.9M',
+        fallback: true,
+        message: 'Using cached TrustBlock value'
+      });
+    });
+    
+  } catch (error) {
+    console.error('TVS endpoint error:', error.message);
+    res.json({
+      totalSecured: 63900000,
+      formatted: '$63.9M',
+      fallback: true,
+      message: 'Using cached TrustBlock value'
+    });
+  }
 });
 
 // Health check
