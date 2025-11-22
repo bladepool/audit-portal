@@ -2,13 +2,56 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
-require('dotenv').config();
 
-const authRoutes = require('./routes/auth');
-const projectRoutes = require('./routes/projects');
-const blockchainRoutes = require('./routes/blockchains');
-const advertisementRoutes = require('./routes/advertisements');
-const trustBlockRoutes = require('./routes/trustblock');
+// Load environment variables
+try {
+  require('dotenv').config();
+} catch (e) {
+  console.log('ℹ️  dotenv not available (using Railway environment variables)');
+}
+
+// Load routes with error handling
+let authRoutes, projectRoutes, blockchainRoutes, advertisementRoutes, trustBlockRoutes;
+
+try {
+  authRoutes = require('./routes/auth');
+  console.log('✅ Auth routes loaded');
+} catch (error) {
+  console.error('❌ Failed to load auth routes:', error.message);
+  process.exit(1);
+}
+
+try {
+  projectRoutes = require('./routes/projects');
+  console.log('✅ Project routes loaded');
+} catch (error) {
+  console.error('❌ Failed to load project routes:', error.message);
+  process.exit(1);
+}
+
+try {
+  blockchainRoutes = require('./routes/blockchains');
+  console.log('✅ Blockchain routes loaded');
+} catch (error) {
+  console.error('❌ Failed to load blockchain routes:', error.message);
+  process.exit(1);
+}
+
+try {
+  advertisementRoutes = require('./routes/advertisements');
+  console.log('✅ Advertisement routes loaded');
+} catch (error) {
+  console.error('❌ Failed to load advertisement routes:', error.message);
+  process.exit(1);
+}
+
+try {
+  trustBlockRoutes = require('./routes/trustblock');
+  console.log('✅ TrustBlock routes loaded');
+} catch (error) {
+  console.error('❌ Failed to load trustblock routes:', error.message);
+  process.exit(1);
+}
 
 // Admin PDF routes - only available when PDF generation path exists
 let adminPdfRoutes = null;
