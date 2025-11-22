@@ -68,18 +68,30 @@ router.get('/stats/portfolio', async (req, res) => {
 // Get project by slug (public)
 router.get('/:slug', async (req, res) => {
   try {
-    const project = await Project.findOne({ 
-      slug: req.params.slug,
-      published: true 
-    });
+    const { slug } = req.params;
+    let project;
+    
+    // Check if it's a MongoDB ObjectId (24 hex characters)
+    if (/^[0-9a-fA-F]{24}$/.test(slug)) {
+      // Try to find by ID first
+      project = await Project.findById(slug);
+    } else {
+      // Find by slug
+      project = await Project.findOne({ 
+        slug: slug,
+        published: true 
+      });
+    }
     
     if (!project) {
       return res.status(404).json({ error: 'Project not found' });
     }
     
-    // Increment page view
-    project.page_view += 1;
-    await project.save();
+    // Increment page view only for slug-based lookups (public pages)
+    if (!/^[0-9a-fA-F]{24}$/.test(slug)) {
+      project.page_view += 1;
+      await project.save();
+    }
     
     res.json(project);
   } catch (error) {
