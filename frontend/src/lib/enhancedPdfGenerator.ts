@@ -1,6 +1,14 @@
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import 'jspdf-autotable';
 import { Project } from './types';
+
+// Extend jsPDF type to include autoTable
+declare module 'jspdf' {
+  interface jsPDF {
+    autoTable: (options: any) => jsPDF;
+    lastAutoTable: any;
+  }
+}
 
 /**
  * Enhanced PDF Generator with logos, custom fonts, and professional styling
@@ -98,8 +106,8 @@ export async function generateEnhancedAuditPDF(project: Project) {
     ['Compiler', project.contract_info?.contract_compiler || 'N/A'], ['License', project.contract_info?.contract_license || 'N/A'],
     ['Audit Tool Version', project.auditToolVersion || ''], ['Audit Edition', project.auditEdition || ''], ['Payment Hash', project.paymentHash || '']
   ];
-  autoTable(doc, { startY: currentY, head: [['Property', 'Value']], body: projectInfo, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 }, tableWidth: 'auto' });
-  currentY = (doc as any).lastAutoTable.finalY + 30;
+  doc.autoTable( { startY: currentY, head: [['Property', 'Value']], body: projectInfo, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 }, tableWidth: 'auto' });
+  currentY = doc.lastAutoTable.finalY + 30;
   if (project.description) {
     doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Description', 60, currentY); currentY += 15;
     doc.setFontSize(10); doc.setTextColor(60, 60, 60);
@@ -116,8 +124,8 @@ export async function generateEnhancedAuditPDF(project: Project) {
     ['Audit Preview', project.timeline?.audit_preview || ''],
     ['Audit Release', project.timeline?.audit_release || '']
   ];
-  autoTable(doc, { startY: currentY, head: [['Step', 'Date']], body: timeline, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
-  currentY = (doc as any).lastAutoTable.finalY + 30;
+  doc.autoTable( { startY: currentY, head: [['Step', 'Date']], body: timeline, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
+  currentY = doc.lastAutoTable.finalY + 30;
 
   // KYC Section
   if ((project as any).isKYC) {
@@ -128,8 +136,8 @@ export async function generateEnhancedAuditPDF(project: Project) {
       ['KYC URL', project.kycURL || ''],
       ['KYC Score', project.kycScore?.toString() || ''],
     ];
-    autoTable(doc, { startY: currentY, head: [['Field', 'Value']], body: kycInfo, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
-    currentY = (doc as any).lastAutoTable.finalY + 30;
+    doc.autoTable( { startY: currentY, head: [['Field', 'Value']], body: kycInfo, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
+    currentY = doc.lastAutoTable.finalY + 30;
   }
 
   // Token Distribution Section (Only show if tokenDistributionEnabled is true)
@@ -137,8 +145,8 @@ export async function generateEnhancedAuditPDF(project: Project) {
     if (currentY > pageHeight - 150) { doc.addPage(); currentY = 60; }
     doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Token Distribution', 60, currentY); currentY += 15;
     const distTable = project.tokenDistribution.distributions.map(d => [d.name, d.amount, d.description]);
-    autoTable(doc, { startY: currentY, head: [['Name', 'Amount', 'Description']], body: distTable, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
-    currentY = (doc as any).lastAutoTable.finalY + 30;
+    doc.autoTable( { startY: currentY, head: [['Name', 'Amount', 'Description']], body: distTable, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
+    currentY = doc.lastAutoTable.finalY + 30;
   }
 
   // SWC Checks Section - DEPRECATED: SWC checks are no longer used
@@ -150,8 +158,8 @@ export async function generateEnhancedAuditPDF(project: Project) {
     ['Graph', project.isGraph ? 'Yes' : 'No'], ['Inheritance', project.isInheritance ? 'Yes' : 'No'], ['EVM Contract', project.isEVMContract ? 'Yes' : 'No'],
     ['Solana', project.isSolana ? 'Yes' : 'No'], ['NFT', project.isNFT ? 'Yes' : 'No'], ['Token', project.isToken ? 'Yes' : 'No'], ['Staking', project.isStaking ? 'Yes' : 'No'], ['Other', project.isOther ? 'Yes' : 'No']
   ];
-  autoTable(doc, { startY: currentY, head: [['Field', 'Value']], body: advMeta, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
-  currentY = (doc as any).lastAutoTable.finalY + 30;
+  doc.autoTable( { startY: currentY, head: [['Field', 'Value']], body: advMeta, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
+  currentY = doc.lastAutoTable.finalY + 30;
 
   // Score History & Audit Confidence
   doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Score History & Audit Confidence', 60, currentY); currentY += 15;
@@ -183,8 +191,8 @@ export async function generateEnhancedAuditPDF(project: Project) {
     ['Low/Minor', project.minor?.found || 0, project.minor?.pending || 0, project.minor?.resolved || 0],
     ['Informational', project.informational?.found || 0, project.informational?.pending || 0, project.informational?.resolved || 0]
   ];
-  autoTable(doc, { startY: currentY, head: [['Severity', 'Found', 'Pending', 'Resolved']], body: findingsSummary, theme: 'grid', headStyles: { fillColor: [239, 68, 68], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
-  currentY = (doc as any).lastAutoTable.finalY + 30;
+  doc.autoTable( { startY: currentY, head: [['Severity', 'Found', 'Pending', 'Resolved']], body: findingsSummary, theme: 'grid', headStyles: { fillColor: [239, 68, 68], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
+  currentY = doc.lastAutoTable.finalY + 30;
 
   // Detailed CFG Findings - Only show findings that are NOT "Pass" or "Not Detected"
   const activeFindings = (project.cfg_findings || []).filter(f => 
@@ -278,8 +286,8 @@ export async function generateEnhancedAuditPDF(project: Project) {
     ['Whitelist', project.overview?.whitelist ? 'Yes' : 'No'], ['Proxy', project.overview?.proxy_check ? 'Yes ⚠️' : 'No ✓'],
     ['Buy Tax', `${project.overview?.buy_tax || 0}%`], ['Sell Tax', `${project.overview?.sell_tax || 0}%`]
   ];
-  autoTable(doc, { startY: currentY, head: [['Check', 'Result']], body: contractOverview, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
-  currentY = (doc as any).lastAutoTable.finalY + 30;
+  doc.autoTable( { startY: currentY, head: [['Check', 'Result']], body: contractOverview, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
+  currentY = doc.lastAutoTable.finalY + 30;
 
   // Social Links
   const socialLinks = [
@@ -288,8 +296,8 @@ export async function generateEnhancedAuditPDF(project: Project) {
   if (socialLinks.length > 0) {
     if (currentY > pageHeight - 150) { doc.addPage(); currentY = 60; }
     doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Social Links', 60, currentY); currentY += 15;
-    autoTable(doc, { startY: currentY, head: [['Platform', 'Link']], body: socialLinks, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 8 }, margin: { left: 60, right: 60 } });
-    currentY = (doc as any).lastAutoTable.finalY + 30;
+    doc.autoTable( { startY: currentY, head: [['Platform', 'Link']], body: socialLinks, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 8 }, margin: { left: 60, right: 60 } });
+    currentY = doc.lastAutoTable.finalY + 30;
   }
 
   // Footer on all pages
@@ -368,7 +376,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     ['Auditor', 'CFG Ninja'],
   ];
 
-  autoTable(doc, {
+  doc.autoTable( {
     startY: currentY,
     head: [['Property', 'Value']],
     body: auditInfo,
@@ -378,7 +386,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     margin: { left: 60, right: 60 },
   });
 
-  currentY = (doc as any).lastAutoTable.finalY + 30;
+  currentY = doc.lastAutoTable.finalY + 30;
 
   // Audit Scores
   if (currentY > pageHeight - 200) {
@@ -455,7 +463,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     ['Informational', project.informational?.found || 0, project.informational?.pending || 0, project.informational?.resolved || 0],
   ];
 
-  autoTable(doc, {
+  doc.autoTable( {
     startY: currentY,
     head: [['Severity', 'Found', 'Pending', 'Resolved']],
     body: findingsSummary,
@@ -465,7 +473,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     margin: { left: 60, right: 60 },
   });
 
-  currentY = (doc as any).lastAutoTable.finalY + 30;
+  currentY = doc.lastAutoTable.finalY + 30;
 
   // CFG Findings Details
   const cfgFindings = project.cfg_findings || [];
@@ -577,7 +585,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     ['Sell Tax', `${project.overview?.sell_tax || 0}%`],
   ];
 
-  autoTable(doc, {
+  doc.autoTable( {
     startY: currentY,
     head: [['Check', 'Result']],
     body: contractOverview,
@@ -587,7 +595,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     margin: { left: 60, right: 60 },
   });
 
-  currentY = (doc as any).lastAutoTable.finalY + 30;
+  currentY = doc.lastAutoTable.finalY + 30;
 
   // Social Links
   const socialLinks = [
@@ -608,7 +616,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     doc.text('Social Links', 60, currentY);
     currentY += 15;
 
-    autoTable(doc, {
+    doc.autoTable( {
       startY: currentY,
       head: [['Platform', 'Link']],
       body: socialLinks,
@@ -618,7 +626,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
       margin: { left: 60, right: 60 },
     });
 
-    currentY = (doc as any).lastAutoTable.finalY + 30;
+    currentY = doc.lastAutoTable.finalY + 30;
   }
 
   // Footer on all pages
@@ -635,3 +643,5 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   // Return as Blob instead of saving
   return doc.output('blob');
 }
+
+
