@@ -25,7 +25,7 @@ import { generateEnhancedAuditPDF, generateEnhancedAuditPDFBlob } from '@/lib/en
 import { uploadPDFToGitHub, getGitHubToken, saveGitHubToken } from '@/lib/githubUpload';
 
 // Global build version - update this with each new build
-const AUDIT_TOOL_VERSION = '3.4';
+const AUDIT_TOOL_VERSION = '3.5';
 
 const useStyles = makeStyles({
   container: {
