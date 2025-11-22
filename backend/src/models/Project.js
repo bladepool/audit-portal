@@ -261,7 +261,7 @@ const projectSchema = new mongoose.Schema({
 });
 
 // Index for faster queries
-projectSchema.index({ slug: 1 });
+// Note: slug already has unique index from schema definition
 projectSchema.index({ published: 1 });
 projectSchema.index({ createdAt: -1 });
 
