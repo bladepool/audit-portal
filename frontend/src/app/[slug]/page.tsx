@@ -780,7 +780,6 @@ export default function ProjectPage() {
               </div>
             )}
           </div>
-        </div>
 
         {/* Right Column */}
         <div className={styles.rightColumn}>
