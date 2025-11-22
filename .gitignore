@@ -1,7 +1,7 @@
 # Dependencies
 node_modules/
-package-lock.json
 yarn.lock
+# Keep package-lock.json for consistent Railway deployments
 
 # Environment files
 .env
