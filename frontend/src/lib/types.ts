@@ -181,6 +181,7 @@ export interface Project {
   
   codebase?: string;
   platform?: string;
+  ecosystem?: string;
   
   timeline: {
     audit_request?: string;

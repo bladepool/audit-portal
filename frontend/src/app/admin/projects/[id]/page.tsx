@@ -1114,44 +1114,28 @@ export default function ProjectFormPage() {
                     setPdfGenerationMessage('Generating PDF...');
                     
                     try {
-                      const response = await fetch('/api/admin/generate-pdf', {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                          projectId: params.id,
-                          uploadToGitHub: uploadToGitHub,
-                        }),
-                      });
+                      // Import PDF generator dynamically
+                      const { generateAuditPDF } = await import('@/lib/pdfGenerator');
                       
-                      if (!response.ok) {
-                        const data = await response.json().catch(() => ({ 
-                          message: 'PDF generation service unavailable' 
-                        }));
-                        const errorMsg = `❌ ${data.message || 'PDF generation failed'}`;
-                        setPdfGenerationMessage(errorMsg);
-                        alert(errorMsg);
-                        setIsGeneratingPdf(false);
-                        return;
+                      // Fetch full project data
+                      const projectResponse = await fetch(`/api/projects/${params.id}`);
+                      if (!projectResponse.ok) {
+                        throw new Error('Failed to fetch project data');
                       }
                       
-                      const data = await response.json();
+                      const projectData = await projectResponse.json();
                       
-                      if (data.success) {
-                        const sizeInMB = (data.size / 1024 / 1024).toFixed(2);
-                        let message = `✅ PDF generated successfully (${sizeInMB} MB)`;
-                        
-                        if (data.uploadedToGitHub && data.githubUrl) {
-                          message += `\n\n📤 Uploaded to GitHub:\n${data.githubUrl}`;
-                        }
-                        
-                        setPdfGenerationMessage(message);
-                        alert(message);
-                      } else {
-                        const errorMsg = `❌ Error: ${data.message || 'Failed to generate PDF'}`;
-                        setPdfGenerationMessage(errorMsg);
-                        alert(errorMsg);
+                      // Generate PDF client-side
+                      setPdfGenerationMessage('Generating PDF in browser...');
+                      await generateAuditPDF(projectData);
+                      
+                      setPdfGenerationMessage('✅ PDF generated and downloaded successfully!');
+                      alert('✅ PDF generated and downloaded successfully!\n\nThe PDF has been saved to your Downloads folder.');
+                      
+                      // TODO: Add GitHub upload functionality
+                      if (uploadToGitHub) {
+                        setPdfGenerationMessage('⚠️ GitHub upload not yet implemented for client-side generation');
+                        alert('⚠️ GitHub upload feature coming soon!\n\nFor now, please manually upload the PDF to the CFG-NINJA/audits repository.');
                       }
                     } catch (error) {
                       console.error('PDF generation error:', error);

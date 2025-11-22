@@ -69,6 +69,7 @@ export default function ProjectPage() {
   const [walletConnecting, setWalletConnecting] = useState(false);
   const [hasVotedToday, setHasVotedToday] = useState(false);
   const [showFindingsModal, setShowFindingsModal] = useState(false);
+  const [activeTab, setActiveTab] = useState<'info' | 'certificate'>('info');
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -326,13 +327,29 @@ export default function ProjectPage() {
       <div className={styles.container}>
         {/* Left Column */}
         <div className={styles.leftColumn}>
-          {/* Project Info Card */}
-          <div className={styles.card}>
-            <h2 className={styles.cardTitle}>Project Info</h2>
-            
-            {/* Timeline */}
-            <h3 className={styles.sectionTitle}>Timeline</h3>
-            <div className={styles.timelineFlow}>
+          {/* Tabs */}
+          <div className={styles.tabs}>
+            <button 
+              className={`${styles.tabButton} ${activeTab === 'info' ? styles.activeTab : ''}`}
+              onClick={() => setActiveTab('info')}
+            >
+              Project Info
+            </button>
+            <button 
+              className={`${styles.tabButton} ${activeTab === 'certificate' ? styles.activeTab : ''}`}
+              onClick={() => setActiveTab('certificate')}
+            >
+              Certificate
+            </button>
+          </div>
+
+          {activeTab === 'info' && (
+            <>
+              {/* Project Info Card */}
+              <div className={styles.card}>
+                {/* Timeline */}
+                <h3 className={styles.sectionTitle}>Timeline</h3>
+                <div className={styles.timelineFlow}>
               <div className={styles.timelineStep}>
                 <div className={styles.timelineIcon}>
                   <img src="https://audit.cfg.ninja/icons/request.png" alt="Audit Request" />
@@ -682,6 +699,87 @@ export default function ProjectPage() {
               <p style={{ color: '#ccc', lineHeight: '1.6' }}>{project.description}</p>
             </div>
           )}
+            </>
+          )}
+
+          {activeTab === 'certificate' && (
+            /* Certificate Tab Content */
+            <div className={styles.certificateContainer}>
+                <div className={styles.certificate}>
+                  <div className={styles.certificateHeader}>
+                    <div className={styles.certificateIcon}>
+                      {project.logo ? (
+                        <img src={project.logo} alt={project.name} style={{ width: '48px', height: '48px', borderRadius: '50%' }} />
+                      ) : (
+                        <span style={{ fontSize: '32px' }}>🛡️</span>
+                      )}
+                    </div>
+                    <h3 className={styles.certificateName}>{project.symbol || project.name}</h3>
+                    <div className={styles.certificateSymbol}>{project.symbol}</div>
+                  </div>
+
+                  <div className={styles.certificateDates}>
+                    <div className={styles.dateBlock}>
+                      <div className={styles.dateLabel}>Onboard At</div>
+                      <div className={styles.dateValue}>{formatDate(project.timeline?.onboarding_process || project.createdAt)}</div>
+                    </div>
+                    <div className={styles.certificateLogo}>
+                      <img src="/logo.svg" alt="CFG Ninja" style={{ width: '64px', height: '64px' }} />
+                    </div>
+                    <div className={styles.dateBlock}>
+                      <div className={styles.dateLabel}>Release At</div>
+                      <div className={styles.dateValue}>{formatDate(project.timeline?.audit_release || project.createdAt)}</div>
+                    </div>
+                  </div>
+
+                  <div className={styles.certificateDetails}>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Owner</span>
+                      <span className={styles.detailValue}>
+                        {project.contract_info?.contract_owner ? 
+                          `${project.contract_info.contract_owner.slice(0, 6)}...${project.contract_info.contract_owner.slice(-4)}` : 
+                          'N/A'}
+                      </span>
+                    </div>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Deployer</span>
+                      <span className={styles.detailValue}>
+                        {project.contract_info?.contract_deployer ? 
+                          `${project.contract_info.contract_deployer.slice(0, 6)}...${project.contract_info.contract_deployer.slice(-4)}` : 
+                          'N/A'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={styles.certificateInfo}>
+                    <div className={styles.infoItem}>
+                      <div className={styles.infoLabel}>Network</div>
+                      <div className={styles.infoValue}>{project.platform || 'BSC'}</div>
+                    </div>
+                    <div className={styles.infoItem}>
+                      <div className={styles.infoLabel}>Contract Language</div>
+                      <div className={styles.infoValue}>{project.contract_info?.contract_language || 'Solidity'}</div>
+                    </div>
+                    <div className={styles.infoItem}>
+                      <div className={styles.infoLabel}>Category</div>
+                      <div className={styles.infoValue}>{project.ecosystem || 'DeFi'}</div>
+                    </div>
+                  </div>
+
+                  <div className={styles.certificateFooter}>
+                    <div className={styles.auditLabel}>Already Audited on Blocksafu.com</div>
+                    <div className={styles.qrCode}>
+                      <img 
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(`https://audit.cfg.ninja/${project.slug}`)}`}
+                        alt="QR Code"
+                        style={{ width: '150px', height: '150px' }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Right Column */}
@@ -855,15 +953,15 @@ export default function ProjectPage() {
       </div>
 
       {/* Findings Modal */}
-      {showFindingsModal && project.cfg_findings && (
+      {showFindingsModal && project && project.cfg_findings && (
         <div className={styles.modalOverlay} onClick={() => setShowFindingsModal(false)}>
           <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>CFG Findings ({project.cfg_findings.length})</h2>
+              <h2 className={styles.modalTitle}>CFG Findings ({project.cfg_findings?.length || 0})</h2>
               <button className={styles.modalClose} onClick={() => setShowFindingsModal(false)}>✕</button>
             </div>
             <div className={styles.modalBody}>
-              {project.cfg_findings.map((finding, index) => (
+              {project.cfg_findings?.map((finding, index) => (
                 <div key={finding.id || index} className={styles.findingCard}>
                   <div className={styles.findingHeader}>
                     <span className={styles.findingNumber}>#{index + 1}</span>

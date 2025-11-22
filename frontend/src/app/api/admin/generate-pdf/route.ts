@@ -3,44 +3,63 @@ import { NextResponse } from 'next/server';
 /**
  * PDF Generation API Route
  * 
- * Note: PDF generation requires local environment with access to offline pdf.js
- * This feature is intentionally disabled in production deployments.
+ * This is now a client-side generation endpoint.
+ * The actual PDF generation happens in the browser using jsPDF.
+ * This endpoint is used for uploading to GitHub.
  */
 export async function POST(request: Request) {
-  // Check if we're in production
-  const isProd = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
-  
-  if (isProd) {
-    return NextResponse.json({
-      success: false,
-      error: 'PDF generation is only available in local development environment',
-      message: 'PDF generation requires local file system access and offline pdf.js. PDFs should be generated locally and uploaded to GitHub.',
-      available: false
-    }, { status: 503 });
-  }
-  
-  // In development, proxy to backend
   try {
     const body = await request.json();
-    const backendUrl = process.env.BACKEND_API_URL || 'http://localhost:5000';
+    const { projectId, pdfBlob, uploadToGitHub } = body;
     
-    const response = await fetch(`${backendUrl}/api/admin/generate-pdf`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
+    if (!projectId) {
+      return NextResponse.json({
+        success: false,
+        error: 'Project ID is required',
+      }, { status: 400 });
+    }
+    
+    // If uploading to GitHub, proxy to backend
+    if (uploadToGitHub && pdfBlob) {
+      const backendUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 
+                         process.env.BACKEND_API_URL || 
+                         'http://localhost:5000';
+      
+      try {
+        const response = await fetch(`${backendUrl}/api/admin/upload-pdf`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            projectId,
+            pdfBlob,
+          }),
+        });
+        
+        const data = await response.json();
+        return NextResponse.json(data, { status: response.status });
+      } catch (error) {
+        return NextResponse.json({
+          success: false,
+          error: 'Failed to upload to GitHub',
+          message: error instanceof Error ? error.message : 'Unknown error',
+        }, { status: 500 });
+      }
+    }
+    
+    // PDF generation happens client-side
+    return NextResponse.json({
+      success: true,
+      message: 'PDF generated successfully (client-side)',
+      clientSideGeneration: true,
     });
-    
-    const data = await response.json();
-    return NextResponse.json(data, { status: response.status });
     
   } catch (error) {
     return NextResponse.json({
       success: false,
-      error: 'Failed to connect to backend',
+      error: 'API error',
       message: error instanceof Error ? error.message : 'Unknown error',
-      available: false
     }, { status: 500 });
   }
 }

@@ -2078,3 +2078,201 @@
     padding: 1rem;
   }
 }
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #2a2a2a;
+  margin-bottom: 1.5rem;
+}
+
+.tabButton {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #888;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+}
+
+.tabButton:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.activeTab {
+  color: #007bff;
+  border-bottom-color: #007bff;
+}
+
+/* Certificate */
+.certificateContainer {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.certificate {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  border: 12px solid #1e3a8a;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.certificate::before,
+.certificate::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #1e3a8a;
+  border-radius: 50%;
+}
+
+.certificate::before {
+  top: 50%;
+  left: -16px;
+  transform: translateY(-50%);
+}
+
+.certificate::after {
+  top: 50%;
+  right: -16px;
+  transform: translateY(-50%);
+}
+
+.certificateHeader {
+  text-align: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.certificateIcon {
+  margin: 0 auto 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.certificateName {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+  color: #fff;
+}
+
+.certificateSymbol {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.certificateDates {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.dateBlock {
+  text-align: center;
+}
+
+.dateLabel {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.25rem;
+}
+
+.dateValue {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.certificateLogo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.certificateDetails {
+  padding: 1.5rem 0;
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+
+.detailLabel {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.detailValue {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  font-family: monospace;
+}
+
+.certificateInfo {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.5rem 0;
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.infoItem {
+  text-align: center;
+  flex: 1;
+}
+
+.infoLabel {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.infoValue {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.certificateFooter {
+  text-align: center;
+  padding-top: 1.5rem;
+}
+
+.auditLabel {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.qrCode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin: 0 auto;
+  width: fit-content;
+}
