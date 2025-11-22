@@ -88,18 +88,28 @@ export default function AdminDashboard() {
 
   const checkAuth = async () => {
     try {
+      const adminWallet = localStorage.getItem('adminWallet');
       const token = localStorage.getItem('token');
-      if (!token) {
+      const userStr = localStorage.getItem('user');
+      
+      if (!adminWallet || !token) {
         router.push('/admin');
         return;
       }
 
-      const response = await authAPI.getMe();
-      setUser(response.data);
+      // Verify admin wallet
+      const ADMIN_WALLET = '0x771d463e16aab8bafff9ff67eb822c7dae3b1ad3';
+      if (adminWallet.toLowerCase() !== ADMIN_WALLET.toLowerCase()) {
+        localStorage.clear();
+        router.push('/admin');
+        return;
+      }
+
+      setUser(userStr ? JSON.parse(userStr) : { name: 'Admin', wallet: adminWallet });
       loadProjects();
     } catch (error) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      console.error('Auth error:', error);
+      localStorage.clear();
       router.push('/admin');
     }
   };
@@ -117,8 +127,7 @@ export default function AdminDashboard() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.clear();
     router.push('/admin');
   };
 
