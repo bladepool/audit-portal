@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const { MongoClient } = require('mongodb');
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
@@ -40,10 +41,19 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Connect to MongoDB
+// Connect to MongoDB with Mongoose
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('✅ Connected to MongoDB'))
+  .then(() => console.log('✅ Connected to MongoDB (Mongoose)'))
   .catch((err) => console.error('❌ MongoDB connection error:', err));
+
+// Also connect native MongoDB driver for trustblock routes
+const mongoClient = new MongoClient(process.env.MONGODB_URI);
+mongoClient.connect()
+  .then(() => {
+    console.log('✅ Connected to MongoDB (Native Driver)');
+    app.locals.db = mongoClient.db();
+  })
+  .catch((err) => console.error('❌ Native MongoDB connection error:', err));
 
 // Routes
 app.use('/api/auth', authRoutes);
