@@ -6,23 +6,41 @@ const { TrustBlockAPI } = require('../services/trustBlockService');
 const trustBlockAPI = new TrustBlockAPI(process.env.TRUSTBLOCK_API_KEY || 'zM5ndrJoKeYs8donGFD6hc130l4fBANM4sLBxYDsl6WslH3M');
 
 /**
- * POST /api/admin/trustblock/publish/:slug
- * Publish a single project to TrustBlock
+ * POST /api/trustblock/publish/:identifier
+ * Publish a single project to TrustBlock (by slug or MongoDB ID)
  */
-router.post('/publish/:slug', async (req, res) => {
+router.post('/publish/:identifier', async (req, res) => {
   try {
-    const { slug } = req.params;
+    const { identifier } = req.params;
     const db = req.app.locals.db;
+    const { ObjectId } = require('mongodb');
     
-    // Find the project
-    const project = await db.collection('projects').findOne({ slug });
+    // Try to find by slug first, then by ObjectId
+    let project;
     
-    if (!project) {
-      return res.status(404).json({ error: 'Project not found' });
+    // Check if identifier looks like an ObjectId (24 hex chars)
+    if (/^[0-9a-fA-F]{24}$/.test(identifier)) {
+      project = await db.collection('projects').findOne({ _id: new ObjectId(identifier) });
     }
     
-    if (!project.published) {
-      return res.status(400).json({ error: 'Project is not published' });
+    // If not found, try slug
+    if (!project) {
+      project = await db.collection('projects').findOne({ slug: identifier });
+    }
+    
+    if (!project) {
+      return res.status(404).json({ 
+        success: false,
+        error: 'Project not found' 
+      });
+    }
+    
+    // Check if project has required data
+    if (!project.contract_info?.contract_address && !project.contract?.address) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Project must have a contract address to publish to TrustBlock' 
+      });
     }
     
     // Format and publish to TrustBlock
@@ -37,6 +55,7 @@ router.post('/publish/:slug', async (req, res) => {
         { _id: project._id },
         { 
           $set: { 
+            'socials.trustblock': result.report_url,
             trustblock_url: result.report_url,
             trustblock_published_at: new Date(),
             trustblock_id: result.id
@@ -48,12 +67,14 @@ router.post('/publish/:slug', async (req, res) => {
     res.json({ 
       success: true, 
       message: `Published ${project.name} to TrustBlock`,
+      trustblock_url: result.report_url,
       data: result 
     });
     
   } catch (error) {
     console.error('TrustBlock publish error:', error);
     res.status(500).json({ 
+      success: false,
       error: 'Failed to publish to TrustBlock', 
       details: error.message 
     });

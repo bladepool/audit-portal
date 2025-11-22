@@ -17,7 +17,7 @@ import {
   Field,
   Checkbox,
 } from '@fluentui/react-components';
-import { DocumentPdfRegular, CalculatorRegular } from '@fluentui/react-icons';
+import { DocumentPdfRegular, CalculatorRegular, CloudArrowUpRegular } from '@fluentui/react-icons';
 import { projectsAPI, blockchainsAPI } from '@/lib/api';
 import { Project, Finding } from '@/lib/types';
 import FindingsManager from '@/components/FindingsManager';
@@ -250,6 +250,10 @@ export default function ProjectFormPage() {
   const [uploadToGitHub, setUploadToGitHub] = useState(true);
   const [githubToken, setGithubToken] = useState('');
   const [showTokenInput, setShowTokenInput] = useState(false);
+  
+  // TrustBlock Publishing
+  const [isPublishingTrustBlock, setIsPublishingTrustBlock] = useState(false);
+  const [trustBlockMessage, setTrustBlockMessage] = useState('');
   const [isEVMContract, setIsEVMContract] = useState(true);
   const [isSolana, setIsSolana] = useState(false);
   const [isNFT, setIsNFT] = useState(false);
@@ -728,6 +732,60 @@ export default function ProjectFormPage() {
       alert(errorMsg);
     } finally {
       setIsGeneratingPdf(false);
+    }
+  };
+
+  const handlePublishToTrustBlock = async () => {
+    if (isNew) {
+      alert('Please save the project first before publishing to TrustBlock');
+      return;
+    }
+
+    if (!contractAddress) {
+      alert('Contract address is required to publish to TrustBlock');
+      return;
+    }
+
+    setIsPublishingTrustBlock(true);
+    setTrustBlockMessage('Publishing to TrustBlock...');
+
+    try {
+      const response = await fetch(`/api/admin/trustblock/publish/${params.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to publish to TrustBlock');
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        setTrustBlockMessage(`✅ Successfully published to TrustBlock!\n${result.trustblock_url || ''}`);
+        
+        // Update trustblock field if URL was returned
+        if (result.trustblock_url) {
+          setTrustblock(result.trustblock_url);
+        }
+
+        setTimeout(() => {
+          setTrustBlockMessage('');
+        }, 5000);
+      } else {
+        throw new Error(result.error || 'Unknown error');
+      }
+    } catch (error: any) {
+      console.error('TrustBlock publish error:', error);
+      const errorMsg = `❌ Error: ${error.message || 'Failed to publish to TrustBlock'}`;
+      setTrustBlockMessage(errorMsg);
+      alert(errorMsg);
+    } finally {
+      setIsPublishingTrustBlock(false);
     }
   };
 
@@ -1722,30 +1780,58 @@ export default function ProjectFormPage() {
                 </Field>
               )}
 
-              <div>
-                <Button 
-                  appearance="primary" 
-                  icon={<DocumentPdfRegular />}
-                  onClick={handleGeneratePDF}
-                  disabled={isGeneratingPdf}
-                >
-                  {isGeneratingPdf ? 'Generating...' : 'Generate Audit PDF'}
-                </Button>
-                {pdfGenerationMessage && (
-                  <Text 
-                    size={200} 
-                    style={{ 
-                      marginTop: '8px', 
-                      display: 'block',
-                      color: pdfGenerationMessage.includes('✅') ? 'green' : 
-                             pdfGenerationMessage.includes('⚠️') ? 'orange' : 
-                             pdfGenerationMessage.includes('❌') ? 'red' : 'black',
-                      whiteSpace: 'pre-wrap'
-                    }}
+              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                <div>
+                  <Button 
+                    appearance="primary" 
+                    icon={<DocumentPdfRegular />}
+                    onClick={handleGeneratePDF}
+                    disabled={isGeneratingPdf}
                   >
-                    {pdfGenerationMessage}
-                  </Text>
-                )}
+                    {isGeneratingPdf ? 'Generating...' : 'Generate Audit PDF'}
+                  </Button>
+                  {pdfGenerationMessage && (
+                    <Text 
+                      size={200} 
+                      style={{ 
+                        marginTop: '8px', 
+                        display: 'block',
+                        color: pdfGenerationMessage.includes('✅') ? 'green' : 
+                               pdfGenerationMessage.includes('⚠️') ? 'orange' : 
+                               pdfGenerationMessage.includes('❌') ? 'red' : 'black',
+                        whiteSpace: 'pre-wrap'
+                      }}
+                    >
+                      {pdfGenerationMessage}
+                    </Text>
+                  )}
+                </div>
+
+                <div>
+                  <Button 
+                    appearance="secondary" 
+                    icon={<CloudArrowUpRegular />}
+                    onClick={handlePublishToTrustBlock}
+                    disabled={isPublishingTrustBlock}
+                  >
+                    {isPublishingTrustBlock ? 'Publishing...' : 'Publish to TrustBlock'}
+                  </Button>
+                  {trustBlockMessage && (
+                    <Text 
+                      size={200} 
+                      style={{ 
+                        marginTop: '8px', 
+                        display: 'block',
+                        color: trustBlockMessage.includes('✅') ? 'green' : 
+                               trustBlockMessage.includes('⚠️') ? 'orange' : 
+                               trustBlockMessage.includes('❌') ? 'red' : 'black',
+                        whiteSpace: 'pre-wrap'
+                      }}
+                    >
+                      {trustBlockMessage}
+                    </Text>
+                  )}
+                </div>
               </div>
             </div>
           </Card>
