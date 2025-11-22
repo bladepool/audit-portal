@@ -33,9 +33,25 @@ console.log('ℹ️  Market cap routes disabled (use manual field in admin porta
 
 const app = express();
 
-// Middleware
+// Middleware - Allow multiple origins for CORS
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://audit-portal-gamma.vercel.app',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.warn('CORS blocked origin:', origin);
+      callback(null, false);
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
