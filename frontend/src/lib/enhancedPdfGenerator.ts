@@ -391,15 +391,16 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   doc.text('Audit Scores', 60, currentY);
   currentY += 20;
 
-  const securityScore = project.securityScore || project.scores?.security || 0;
-  const auditorScore = project.auditorScore || project.scores?.auditor || 0;
+  const securityScore = project.securityScore || (project as any).scores?.security || 0;
+  const auditorScore = project.auditorScore || (project as any).scores?.auditor || 0;
 
   // Security Score with visual bar
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.text('Security Score:', 60, currentY);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(securityScore >= 75 ? [34, 197, 94] : securityScore >= 50 ? [234, 179, 8] : [239, 68, 68]);
+  const secColor = securityScore >= 75 ? [34, 197, 94] : securityScore >= 50 ? [234, 179, 8] : [239, 68, 68];
+  doc.setTextColor(secColor[0], secColor[1], secColor[2]);
   doc.text(`${securityScore}/100`, 160, currentY);
 
   // Score bar
@@ -411,7 +412,8 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   doc.setLineWidth(1);
   doc.rect(barX, barY, barWidth, barHeight);
   const fillWidth = (securityScore / 100) * barWidth;
-  doc.setFillColor(securityScore >= 75 ? [34, 197, 94] : securityScore >= 50 ? [234, 179, 8] : [239, 68, 68]);
+  const fillColor = securityScore >= 75 ? [34, 197, 94] : securityScore >= 50 ? [234, 179, 8] : [239, 68, 68];
+  doc.setFillColor(fillColor[0], fillColor[1], fillColor[2]);
   doc.rect(barX, barY, fillWidth, barHeight, 'F');
 
   currentY += 30;
@@ -421,13 +423,15 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   doc.setFont('helvetica', 'bold');
   doc.text('Auditor Score:', 60, currentY);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(auditorScore >= 75 ? [34, 197, 94] : auditorScore >= 50 ? [234, 179, 8] : [239, 68, 68]);
+  const audColor = auditorScore >= 75 ? [34, 197, 94] : auditorScore >= 50 ? [234, 179, 8] : [239, 68, 68];
+  doc.setTextColor(audColor[0], audColor[1], audColor[2]);
   doc.text(`${auditorScore}/100`, 160, currentY);
 
   const auditorFillWidth = (auditorScore / 100) * barWidth;
   doc.setDrawColor(220, 220, 220);
   doc.rect(barX, currentY - 10, barWidth, barHeight);
-  doc.setFillColor(auditorScore >= 75 ? [34, 197, 94] : auditorScore >= 50 ? [234, 179, 8] : [239, 68, 68]);
+  const audFillColor = auditorScore >= 75 ? [34, 197, 94] : auditorScore >= 50 ? [234, 179, 8] : [239, 68, 68];
+  doc.setFillColor(audFillColor[0], audFillColor[1], audFillColor[2]);
   doc.rect(barX, currentY - 10, auditorFillWidth, barHeight, 'F');
 
   currentY += 40;
@@ -504,7 +508,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
       doc.setFont('helvetica', 'bold');
-      doc.text(finding.title || finding.name || 'Untitled Finding', 60, currentY);
+      doc.text(finding.title || (finding as any).name || 'Untitled Finding', 60, currentY);
       currentY += 15;
 
       // Description
@@ -518,14 +522,14 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
       }
 
       // Mitigation
-      if (finding.alleviation || finding.mitigation) {
+      if (finding.alleviation || (finding as any).mitigation) {
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(0, 0, 0);
         doc.text('Mitigation:', 60, currentY);
         currentY += 12;
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(60, 60, 60);
-        const splitMit = doc.splitTextToSize(finding.alleviation || finding.mitigation, pageWidth - 120);
+        const splitMit = doc.splitTextToSize(finding.alleviation || (finding as any).mitigation, pageWidth - 120);
         doc.text(splitMit, 60, currentY);
         currentY += splitMit.length * 11 + 10;
       }

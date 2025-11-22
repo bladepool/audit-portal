@@ -178,11 +178,6 @@ export default function ProjectFormPage() {
   const [auditEdition, setAuditEdition] = useState('');
   const [paymentHash, setPaymentHash] = useState('');
   
-  // PDF Generation
-  const [uploadToGitHub, setUploadToGitHub] = useState(false);
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const [pdfGenerationMessage, setPdfGenerationMessage] = useState('');
-  
   // Scores
   const [ownerScore, setOwnerScore] = useState(0);
   const [socialScore, setSocialScore] = useState(0);
