@@ -1,5 +1,5 @@
 [start]
-cmd = "npm start"
+cmd = "node verify-env.js && npm start"
 
 [phases.setup]
 nixPkgs = ["nodejs-22_x"]

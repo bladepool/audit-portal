@@ -111,10 +111,34 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
+// Verify MongoDB URI is set
+if (!process.env.MONGODB_URI) {
+  console.error('❌ FATAL: MONGODB_URI environment variable is not set!');
+  console.error('Please set MONGODB_URI in Railway dashboard or .env file');
+  process.exit(1);
+}
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📡 API available at http://localhost:${PORT}/api`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔗 MongoDB: ${process.env.MONGODB_URI.replace(/:[^@]+@/, ':****@')}`);
+}).on('error', (err) => {
+  console.error('❌ Server failed to start:', err.message);
+  process.exit(1);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('❌ Uncaught Exception:', err.message);
+  console.error(err.stack);
+  process.exit(1);
 });
 
 module.exports = app;
