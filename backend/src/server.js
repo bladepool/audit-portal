@@ -10,9 +10,13 @@ const blockchainRoutes = require('./routes/blockchains');
 const advertisementRoutes = require('./routes/advertisements');
 const trustBlockRoutes = require('./routes/trustblock');
 
-// Admin PDF routes - only available in local development
+// Admin PDF routes - only available when PDF generation path exists
 let adminPdfRoutes = null;
-if (process.env.NODE_ENV !== 'production') {
+const fs = require('fs');
+const PDF_PATH = process.env.PDF_GENERATION_PATH || 'E:\\Desktop\\Old Desktop November 2023\\audits\\PDFscript\\CFGNinjaScripts\\Custom Contract';
+
+// Only try to load if the PDF generation directory exists (local only)
+if (fs.existsSync(PDF_PATH)) {
   try {
     adminPdfRoutes = require('./routes/adminPdfRoutes');
     console.log('✅ Admin PDF routes loaded successfully');
@@ -20,7 +24,7 @@ if (process.env.NODE_ENV !== 'production') {
     console.warn('⚠️ Admin PDF routes not available:', error.message);
   }
 } else {
-  console.log('ℹ️  Admin PDF routes disabled in production (use local environment for PDF generation)');
+  console.log('ℹ️  Admin PDF routes disabled (PDF generation path not found - this is normal for Railway deployment)');
 }
 
 let marketCapRoutes = null;
