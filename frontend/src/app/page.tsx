@@ -362,7 +362,7 @@ export default function Home() {
           <div className={styles.statCard2}>
             <div className={styles.statHeader}>
               <span className={styles.statLabel2}>Total Audits</span>
-              <span className={styles.infoIcon}>ⓘ</span>
+              <span className={styles.infoIcon} title="Total number of all audits in database (published and unpublished)">ⓘ</span>
             </div>
             <div className={styles.statValue2}>{stats.totalProjects}</div>
           </div>
