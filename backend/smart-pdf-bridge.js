@@ -24,8 +24,8 @@ async function generatePDF(slug) {
     
     console.log(`\n=== Generating PDF for: ${slug} ===\n`);
     
-    // Get project from MongoDB
-    const project = await db.collection('projects').findOne({ slug, published: true });
+    // Get project from MongoDB (don't require published=true for generation)
+    const project = await db.collection('projects').findOne({ slug });
     if (!project) {
       console.log(`✗ Project not found: ${slug}`);
       return false;
@@ -39,15 +39,15 @@ async function generatePDF(slug) {
       ...template,
       name: project.name,
       symbol: project.symbol || template.symbol,
-      address: project.contract_info?.contract_address || template.address,
+      address: project.contract?.address || template.address,
       Platform: project.platform || template.Platform,
       description: project.description || template.description,
       Url: project.socials?.website || template.Url,
       Telegram: project.socials?.telegram || template.Telegram,
       Twitter: project.socials?.twitter || template.Twitter,
       GitHub: project.socials?.github || template.GitHub,
-      SecurityScore: String(project.security_score || template.SecurityScore),
-      AuditorScore: String(project.auditor_score || project.security_score || template.AuditorScore),
+      SecurityScore: String(project.scores?.security || template.SecurityScore),
+      AuditorScore: String(project.scores?.auditor || project.scores?.security || template.AuditorScore),
       
       // Update CFG findings if we have them
       ...(project.cfg_findings && Object.keys(project.cfg_findings).length > 0 ? 
