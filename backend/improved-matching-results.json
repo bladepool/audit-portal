@@ -1,0 +1,1276 @@
+[
+  {
+    "slug": "gary",
+    "name": "$GARY",
+    "matched": false
+  },
+  {
+    "slug": "sting",
+    "name": "$STING",
+    "matched": false
+  },
+  {
+    "slug": "7box",
+    "name": "7BOX",
+    "matched": false
+  },
+  {
+    "slug": "ai-freedom-token",
+    "name": "AI Freedom Token",
+    "matched": false
+  },
+  {
+    "slug": "ai-sora",
+    "name": "AI Sora",
+    "matched": false
+  },
+  {
+    "slug": "aidoge",
+    "name": "AIDOGE",
+    "matched": false
+  },
+  {
+    "slug": "aix-token",
+    "name": "AIX Token",
+    "matched": false
+  },
+  {
+    "slug": "anonymous-dao",
+    "name": "ANONYMOUS DAO",
+    "matched": true,
+    "matchType": "exact",
+    "pdfName": "ANONYMOUS DAO",
+    "filename": "20251120_CFGNINJA_ANONYMOUS DAO_ANONYM_Audit.pdf",
+    "sizeMB": "1.15"
+  },
+  {
+    "slug": "aperil",
+    "name": "APERIL",
+    "matched": false
+  },
+  {
+    "slug": "azure-wallet",
+    "name": "AZURE WALLET",
+    "matched": false
+  },
+  {
+    "slug": "albert-ii",
+    "name": "Albert II",
+    "matched": false
+  },
+  {
+    "slug": "alita-grok-v2",
+    "name": "Alita Grok v2",
+    "matched": false
+  },
+  {
+    "slug": "arabian-trump",
+    "name": "Arabian Trump",
+    "matched": false
+  },
+  {
+    "slug": "arcade-finance",
+    "name": "Arcade Finance",
+    "matched": false
+  },
+  {
+    "slug": "auto-defi",
+    "name": "Auto Defi",
+    "matched": false
+  },
+  {
+    "slug": "baby-giggle-learn",
+    "name": "BABY GIGGLE LEARN",
+    "matched": false
+  },
+  {
+    "slug": "baby-gummy",
+    "name": "BABY GUMMY",
+    "matched": false
+  },
+  {
+    "slug": "baby-irbis",
+    "name": "BABY IRBIS",
+    "matched": false
+  },
+  {
+    "slug": "baby-liger",
+    "name": "BABY LIGER",
+    "matched": false
+  },
+  {
+    "slug": "baby-shenlong",
+    "name": "BABY SHENLONG",
+    "matched": false
+  },
+  {
+    "slug": "babysamoyed",
+    "name": "BABYSAMOYED",
+    "matched": false
+  },
+  {
+    "slug": "bib",
+    "name": "BIB",
+    "matched": false
+  },
+  {
+    "slug": "bic-coin",
+    "name": "BIC Coin",
+    "matched": false
+  },
+  {
+    "slug": "blurp",
+    "name": "BLURP",
+    "matched": false
+  },
+  {
+    "slug": "bnb-gold",
+    "name": "BNB GOLD",
+    "matched": false
+  },
+  {
+    "slug": "bonk-ceo",
+    "name": "BONK CEO",
+    "matched": false
+  },
+  {
+    "slug": "bonkvsgrok",
+    "name": "BONKvsGROK",
+    "matched": false
+  },
+  {
+    "slug": "book-of-duck",
+    "name": "BOOK OF DUCK",
+    "matched": false
+  },
+  {
+    "slug": "book-of-npc",
+    "name": "BOOK OF NPC",
+    "matched": false
+  },
+  {
+    "slug": "bro",
+    "name": "BRO",
+    "matched": false
+  },
+  {
+    "slug": "baby-bnb",
+    "name": "Baby BNB",
+    "matched": false
+  },
+  {
+    "slug": "baby-don",
+    "name": "Baby DON",
+    "matched": false
+  },
+  {
+    "slug": "baby-illuminati",
+    "name": "Baby Illuminati",
+    "matched": false
+  },
+  {
+    "slug": "baby-mario",
+    "name": "Baby Mario",
+    "matched": false
+  },
+  {
+    "slug": "baby-neiro",
+    "name": "Baby Neiro",
+    "matched": false
+  },
+  {
+    "slug": "baby-pnut",
+    "name": "Baby Pnut",
+    "matched": false
+  },
+  {
+    "slug": "baby-trump",
+    "name": "Baby Trump",
+    "matched": false
+  },
+  {
+    "slug": "babycakepie",
+    "name": "BabyCakePie",
+    "matched": false
+  },
+  {
+    "slug": "babydoge-2-0",
+    "name": "BabyDoge 2.0",
+    "matched": false
+  },
+  {
+    "slug": "babyhmstr",
+    "name": "BabyHMSTR",
+    "matched": false
+  },
+  {
+    "slug": "babymew",
+    "name": "BabyMEW",
+    "matched": false
+  },
+  {
+    "slug": "babymickey",
+    "name": "BabyMickey",
+    "matched": false
+  },
+  {
+    "slug": "babykrypto",
+    "name": "Babykrypto",
+    "matched": false
+  },
+  {
+    "slug": "beefund",
+    "name": "Beefund",
+    "matched": false
+  },
+  {
+    "slug": "beevo",
+    "name": "Beevo",
+    "matched": false
+  },
+  {
+    "slug": "best-ever-apy",
+    "name": "Best Ever APY",
+    "matched": false
+  },
+  {
+    "slug": "bingo",
+    "name": "Bingo",
+    "matched": false
+  },
+  {
+    "slug": "biokript-pro",
+    "name": "Biokript PRO",
+    "matched": false
+  },
+  {
+    "slug": "bitconnect",
+    "name": "Bitconnect",
+    "matched": false
+  },
+  {
+    "slug": "blocksound",
+    "name": "BlockSound",
+    "matched": false
+  },
+  {
+    "slug": "bloodbath",
+    "name": "Bloodbath",
+    "matched": false
+  },
+  {
+    "slug": "bonk-ai",
+    "name": "Bonk AI",
+    "matched": false
+  },
+  {
+    "slug": "book-of-cats",
+    "name": "Book Of Cats",
+    "matched": false
+  },
+  {
+    "slug": "book-of-halving",
+    "name": "Book Of Halving",
+    "matched": false
+  },
+  {
+    "slug": "book-of-junkie-memes",
+    "name": "Book Of Junkie Memes",
+    "matched": false
+  },
+  {
+    "slug": "book-of-meme-ai",
+    "name": "Book Of Meme AI",
+    "matched": false
+  },
+  {
+    "slug": "book-of-bonk",
+    "name": "Book of Bonk",
+    "matched": false
+  },
+  {
+    "slug": "book-of-trump-club",
+    "name": "Book of Trump Club",
+    "matched": false
+  },
+  {
+    "slug": "bozos-soros-the-clown",
+    "name": "Bozos \"Soros\" The Clown",
+    "matched": false
+  },
+  {
+    "slug": "burn-x-compound",
+    "name": "Burn X Compound",
+    "matched": false
+  },
+  {
+    "slug": "card-of-meme",
+    "name": "CARD OF MEME",
+    "matched": false
+  },
+  {
+    "slug": "catdoge",
+    "name": "CATDOGE",
+    "matched": false
+  },
+  {
+    "slug": "catpaw",
+    "name": "CATPAW",
+    "matched": false
+  },
+  {
+    "slug": "cfgninjastd",
+    "name": "CFGNINJASTD",
+    "matched": false
+  },
+  {
+    "slug": "chi",
+    "name": "CHI",
+    "matched": false
+  },
+  {
+    "slug": "comic-of-meme",
+    "name": "COMIC OF MEME",
+    "matched": false
+  },
+  {
+    "slug": "czcat",
+    "name": "CZCat",
+    "matched": false
+  },
+  {
+    "slug": "cat-in-a-dogs-world",
+    "name": "Cat in a Dogs World",
+    "matched": false
+  },
+  {
+    "slug": "catewifhat",
+    "name": "CateWifHat",
+    "matched": false
+  },
+  {
+    "slug": "cats-of-sol",
+    "name": "Cats Of Sol",
+    "matched": false
+  },
+  {
+    "slug": "chadlink",
+    "name": "Chadlink",
+    "matched": false
+  },
+  {
+    "slug": "chainova",
+    "name": "Chainova",
+    "matched": false
+  },
+  {
+    "slug": "chapi-el-cato",
+    "name": "Chapi El Cato",
+    "matched": false
+  },
+  {
+    "slug": "cheesypad",
+    "name": "CheesyPad",
+    "matched": false
+  },
+  {
+    "slug": "chinese-new-year-2025",
+    "name": "Chinese New Year 2025",
+    "matched": false
+  },
+  {
+    "slug": "chronicles-of-meme",
+    "name": "Chronicles of Meme",
+    "matched": false
+  },
+  {
+    "slug": "coinpouch",
+    "name": "CoinPouch",
+    "matched": false
+  },
+  {
+    "slug": "computer-control-ai",
+    "name": "Computer Control AI",
+    "matched": false
+  },
+  {
+    "slug": "crypto-ira",
+    "name": "Crypto IRA",
+    "matched": false
+  },
+  {
+    "slug": "crypto-nft-galaxy",
+    "name": "Crypto NFT Galaxy",
+    "matched": false
+  },
+  {
+    "slug": "cryptoplanes-reborn",
+    "name": "CryptoPlanes Reborn",
+    "matched": false
+  },
+  {
+    "slug": "curvency",
+    "name": "Curvency",
+    "matched": false
+  },
+  {
+    "slug": "dbtcoin",
+    "name": "DBTCoin",
+    "matched": false
+  },
+  {
+    "slug": "do-something-ffs",
+    "name": "DO SOMETHING FFS",
+    "matched": false
+  },
+  {
+    "slug": "dogs",
+    "name": "DOGS",
+    "matched": false
+  },
+  {
+    "slug": "denarius",
+    "name": "Denarius",
+    "matched": false
+  },
+  {
+    "slug": "dog-maga",
+    "name": "Dog MAGA",
+    "matched": false
+  },
+  {
+    "slug": "dog-robin-hood",
+    "name": "Dog Robin Hood",
+    "matched": false
+  },
+  {
+    "slug": "donald-pump",
+    "name": "Donald Pump",
+    "matched": false
+  },
+  {
+    "slug": "dragonsol-token",
+    "name": "DragonSol Token",
+    "matched": false
+  },
+  {
+    "slug": "elongate",
+    "name": "ELONGATE",
+    "matched": true,
+    "matchType": "exact",
+    "pdfName": "ELONGATE",
+    "filename": "20251120_CFGNINJA_ELONGATE_ELONGA_Audit.pdf",
+    "sizeMB": "1.15"
+  },
+  {
+    "slug": "elonxalexandre",
+    "name": "ELONxALEXANDRE",
+    "matched": false
+  },
+  {
+    "slug": "eager-cat",
+    "name": "Eager Cat",
+    "matched": false
+  },
+  {
+    "slug": "elon-floki-ceo",
+    "name": "Elon Floki CEO",
+    "matched": false
+  },
+  {
+    "slug": "elon-wif-trump",
+    "name": "Elon Wif Trump",
+    "matched": false
+  },
+  {
+    "slug": "emoji-token",
+    "name": "Emoji Token",
+    "matched": true,
+    "matchType": "variant",
+    "pdfName": "EMOJI.",
+    "filename": "20230907_CFGNINJA_EMOJI._EMOJI_Audit.pdf",
+    "sizeMB": "11.37"
+  },
+  {
+    "slug": "end-of-meme",
+    "name": "End of Meme",
+    "matched": false
+  },
+  {
+    "slug": "evil-kermit",
+    "name": "Evil Kermit",
+    "matched": false
+  },
+  {
+    "slug": "flocat",
+    "name": "FLOCAT",
+    "matched": false
+  },
+  {
+    "slug": "flock",
+    "name": "FLOCK",
+    "matched": false
+  },
+  {
+    "slug": "falloutbase-sol",
+    "name": "FalloutBase-Sol",
+    "matched": false
+  },
+  {
+    "slug": "fantokenvalorant",
+    "name": "Fantokenvalorant",
+    "matched": false
+  },
+  {
+    "slug": "flo-coin-global",
+    "name": "Flo Coin Global",
+    "matched": false
+  },
+  {
+    "slug": "florkwifnohat",
+    "name": "FlorkWifNoHat",
+    "matched": false
+  },
+  {
+    "slug": "fortbanana",
+    "name": "FortBanana",
+    "matched": false
+  },
+  {
+    "slug": "fourcz",
+    "name": "FourCZ",
+    "matched": false
+  },
+  {
+    "slug": "foxfurry",
+    "name": "FoxFurry",
+    "matched": false
+  },
+  {
+    "slug": "frog-bsc",
+    "name": "Frog Bsc",
+    "matched": false
+  },
+  {
+    "slug": "fuck-around-to-find-out",
+    "name": "Fuck Around To Find Out",
+    "matched": false
+  },
+  {
+    "slug": "furfund",
+    "name": "FurFund",
+    "matched": false
+  },
+  {
+    "slug": "future",
+    "name": "Future",
+    "matched": false
+  },
+  {
+    "slug": "gafa",
+    "name": "GAFA",
+    "matched": false
+  },
+  {
+    "slug": "grok-404",
+    "name": "GROK 404",
+    "matched": false
+  },
+  {
+    "slug": "grokolaus",
+    "name": "GROKolaus",
+    "matched": false
+  },
+  {
+    "slug": "gege",
+    "name": "Gege",
+    "matched": false
+  },
+  {
+    "slug": "gerku",
+    "name": "Gerku",
+    "matched": false
+  },
+  {
+    "slug": "gorillawifhat",
+    "name": "Gorillawifhat",
+    "matched": false
+  },
+  {
+    "slug": "gronk",
+    "name": "Gronk",
+    "matched": false
+  },
+  {
+    "slug": "hanaai",
+    "name": "HANAAI",
+    "matched": false
+  },
+  {
+    "slug": "hero",
+    "name": "HERO",
+    "matched": false
+  },
+  {
+    "slug": "happy-exchange",
+    "name": "Happy Exchange",
+    "matched": false
+  },
+  {
+    "slug": "healthyocean",
+    "name": "HealthyOcean",
+    "matched": false
+  },
+  {
+    "slug": "hemule-wif-hat",
+    "name": "Hemule wif hat",
+    "matched": false
+  },
+  {
+    "slug": "house-of-meme",
+    "name": "House Of Meme",
+    "matched": false
+  },
+  {
+    "slug": "innit-for-the-tehc",
+    "name": "Innit For The Tehc",
+    "matched": false
+  },
+  {
+    "slug": "innovator",
+    "name": "Innovator",
+    "matched": false
+  },
+  {
+    "slug": "insurrection",
+    "name": "Insurrection",
+    "matched": false
+  },
+  {
+    "slug": "joe-rogan",
+    "name": "JOE ROGAN",
+    "matched": false
+  },
+  {
+    "slug": "jovcoin",
+    "name": "JOVCOIN",
+    "matched": false
+  },
+  {
+    "slug": "jeb-the-goat",
+    "name": "Jeb the Goat",
+    "matched": false
+  },
+  {
+    "slug": "julius-czer",
+    "name": "Julius Czer",
+    "matched": false
+  },
+  {
+    "slug": "junkie-cats",
+    "name": "Junkie Cats",
+    "matched": false
+  },
+  {
+    "slug": "kangu",
+    "name": "KANGU",
+    "matched": false
+  },
+  {
+    "slug": "king-baby-ceo",
+    "name": "KING BABY CEO",
+    "matched": false
+  },
+  {
+    "slug": "katy-perry-fans",
+    "name": "Katy Perry Fans",
+    "matched": false
+  },
+  {
+    "slug": "king-myro",
+    "name": "King Myro",
+    "matched": false
+  },
+  {
+    "slug": "kingtoken",
+    "name": "KingToken",
+    "matched": false
+  },
+  {
+    "slug": "kronickatznft",
+    "name": "KronicKatz.NFT",
+    "matched": false
+  },
+  {
+    "slug": "l0",
+    "name": "L0",
+    "matched": false
+  },
+  {
+    "slug": "lobotomy-dash",
+    "name": "LOBOTOMY DASH",
+    "matched": false
+  },
+  {
+    "slug": "ltradex-244",
+    "name": "LTRADEX",
+    "matched": false
+  },
+  {
+    "slug": "lazy-sniper",
+    "name": "Lazy Sniper",
+    "matched": false
+  },
+  {
+    "slug": "libra-finance",
+    "name": "Libra Finance",
+    "matched": false
+  },
+  {
+    "slug": "lil-myro",
+    "name": "Lil Myro",
+    "matched": false
+  },
+  {
+    "slug": "lottery-inu",
+    "name": "Lottery Inu",
+    "matched": false
+  },
+  {
+    "slug": "ltradex",
+    "name": "Ltradex",
+    "matched": false
+  },
+  {
+    "slug": "lubu",
+    "name": "LuBu",
+    "matched": false
+  },
+  {
+    "slug": "maga",
+    "name": "MAGA",
+    "matched": false
+  },
+  {
+    "slug": "me",
+    "name": "ME",
+    "matched": false
+  },
+  {
+    "slug": "meme101",
+    "name": "MEME101",
+    "matched": false
+  },
+  {
+    "slug": "merv-the-croc",
+    "name": "MERV THE CROC",
+    "matched": false
+  },
+  {
+    "slug": "miaocoin",
+    "name": "MIAOCoin",
+    "matched": false
+  },
+  {
+    "slug": "miaohcoin",
+    "name": "MIAOHCoin",
+    "matched": false
+  },
+  {
+    "slug": "moonai",
+    "name": "MOONAI",
+    "matched": false
+  },
+  {
+    "slug": "mandarin",
+    "name": "Mandarin",
+    "matched": false
+  },
+  {
+    "slug": "meme-crap-book",
+    "name": "Meme Crap Book",
+    "matched": false
+  },
+  {
+    "slug": "meme-stars",
+    "name": "Meme Stars",
+    "matched": false
+  },
+  {
+    "slug": "meme-wars",
+    "name": "Meme Wars",
+    "matched": false
+  },
+  {
+    "slug": "memecash",
+    "name": "MemeCash",
+    "matched": false
+  },
+  {
+    "slug": "memecoins-mania",
+    "name": "MemeCoins Mania",
+    "matched": false
+  },
+  {
+    "slug": "memex",
+    "name": "Memex",
+    "matched": false
+  },
+  {
+    "slug": "meowthwifhat",
+    "name": "MeowthWifHat",
+    "matched": false
+  },
+  {
+    "slug": "minerszone",
+    "name": "MinersZone",
+    "matched": false
+  },
+  {
+    "slug": "mini-myro-197",
+    "name": "Mini Myro",
+    "matched": false
+  },
+  {
+    "slug": "mini-myro",
+    "name": "Mini Myro",
+    "matched": false
+  },
+  {
+    "slug": "minipepe-coin",
+    "name": "MiniPepe Coin",
+    "matched": false
+  },
+  {
+    "slug": "moriarty",
+    "name": "Moriarty",
+    "matched": false
+  },
+  {
+    "slug": "most-wanted",
+    "name": "Most Wanted",
+    "matched": false
+  },
+  {
+    "slug": "mr-beast-goat",
+    "name": "Mr.Beast Goat",
+    "matched": false
+  },
+  {
+    "slug": "myro-floki-ceo",
+    "name": "Myro Floki CEO",
+    "matched": false
+  },
+  {
+    "slug": "myroceo",
+    "name": "MyroCeo",
+    "matched": false
+  },
+  {
+    "slug": "neko",
+    "name": "NEKO",
+    "matched": false
+  },
+  {
+    "slug": "nft-xchange-coin",
+    "name": "NFT Xchange Coin",
+    "matched": false
+  },
+  {
+    "slug": "nostradamus",
+    "name": "Nostradamus",
+    "matched": false
+  },
+  {
+    "slug": "optmusk",
+    "name": "OPTMUSK",
+    "matched": false
+  },
+  {
+    "slug": "one-piece-fan-token",
+    "name": "One Piece Fan Token",
+    "matched": false
+  },
+  {
+    "slug": "optimus-elon-ai",
+    "name": "Optimus Elon AI",
+    "matched": false
+  },
+  {
+    "slug": "optimus-elon-ai-178",
+    "name": "Optimus Elon AI",
+    "matched": false
+  },
+  {
+    "slug": "peachy-201",
+    "name": "PEACHY",
+    "matched": false
+  },
+  {
+    "slug": "peachy",
+    "name": "PEACHY",
+    "matched": false
+  },
+  {
+    "slug": "pecko",
+    "name": "PECKO",
+    "matched": false
+  },
+  {
+    "slug": "penaldo",
+    "name": "PENALDO",
+    "matched": false
+  },
+  {
+    "slug": "pepe-ai",
+    "name": "PEPE AI",
+    "matched": false
+  },
+  {
+    "slug": "potus-poll",
+    "name": "POTUS POLL",
+    "matched": false
+  },
+  {
+    "slug": "pep",
+    "name": "PeP",
+    "matched": false
+  },
+  {
+    "slug": "pepe-moon",
+    "name": "Pepe Moon",
+    "matched": false
+  },
+  {
+    "slug": "pepeq",
+    "name": "PepeQ",
+    "matched": false
+  },
+  {
+    "slug": "phoenix-chicken",
+    "name": "Phoenix Chicken",
+    "matched": false
+  },
+  {
+    "slug": "pudgy-puss",
+    "name": "Pudgy Puss",
+    "matched": false
+  },
+  {
+    "slug": "robin-hood",
+    "name": "ROBIN HOOD",
+    "matched": true,
+    "matchType": "exact",
+    "pdfName": "ROBIN HOOD",
+    "filename": "20251120_CFGNINJA_ROBIN HOOD_ROBIN_Audit.pdf",
+    "sizeMB": "1.15"
+  },
+  {
+    "slug": "robokoin",
+    "name": "ROBOkoin",
+    "matched": false
+  },
+  {
+    "slug": "rocky",
+    "name": "ROCKY",
+    "matched": false
+  },
+  {
+    "slug": "raveracoon",
+    "name": "RaveRacoon",
+    "matched": false
+  },
+  {
+    "slug": "rawdog",
+    "name": "RawDog",
+    "matched": false
+  },
+  {
+    "slug": "rivals-token",
+    "name": "Rivals Token",
+    "matched": false
+  },
+  {
+    "slug": "s2",
+    "name": "S2",
+    "matched": false
+  },
+  {
+    "slug": "sakuraai",
+    "name": "SAKURAAI",
+    "matched": false
+  },
+  {
+    "slug": "smic",
+    "name": "SMIC",
+    "matched": false
+  },
+  {
+    "slug": "sol-hamster",
+    "name": "SOL HAMSTER",
+    "matched": false
+  },
+  {
+    "slug": "solepe",
+    "name": "SOLEPE",
+    "matched": false
+  },
+  {
+    "slug": "santa-doge",
+    "name": "Santa Doge",
+    "matched": false
+  },
+  {
+    "slug": "shibawifhat",
+    "name": "ShibaWifHat",
+    "matched": false
+  },
+  {
+    "slug": "shiboki",
+    "name": "Shiboki",
+    "matched": false
+  },
+  {
+    "slug": "skillon",
+    "name": "Skillon",
+    "matched": false
+  },
+  {
+    "slug": "slerf-cat",
+    "name": "Slerf Cat",
+    "matched": false
+  },
+  {
+    "slug": "slurmium",
+    "name": "Slurmium",
+    "matched": false
+  },
+  {
+    "slug": "snailionaire",
+    "name": "Snailionaire",
+    "matched": false
+  },
+  {
+    "slug": "solsearcher",
+    "name": "SolSearcher",
+    "matched": false
+  },
+  {
+    "slug": "solnado-cash",
+    "name": "Solnado Cash",
+    "matched": false
+  },
+  {
+    "slug": "stepzilla",
+    "name": "StepZilla",
+    "matched": false
+  },
+  {
+    "slug": "sucre-finance",
+    "name": "Sucre Finance",
+    "matched": false
+  },
+  {
+    "slug": "sylvesterwifhat",
+    "name": "SylvesterWifHat",
+    "matched": false
+  },
+  {
+    "slug": "t-800",
+    "name": "T-800",
+    "matched": false
+  },
+  {
+    "slug": "test2024kb",
+    "name": "TEST2024KB",
+    "matched": false
+  },
+  {
+    "slug": "tom",
+    "name": "TOM",
+    "matched": false
+  },
+  {
+    "slug": "tomwifhat",
+    "name": "TOMWIFHAT",
+    "matched": false
+  },
+  {
+    "slug": "trog",
+    "name": "TROG",
+    "matched": false
+  },
+  {
+    "slug": "troy",
+    "name": "TROY",
+    "matched": false
+  },
+  {
+    "slug": "twust",
+    "name": "TWUST",
+    "matched": false
+  },
+  {
+    "slug": "tariff-token",
+    "name": "Tariff Token",
+    "matched": false
+  },
+  {
+    "slug": "tate-goat",
+    "name": "Tate Goat",
+    "matched": false
+  },
+  {
+    "slug": "the-ai-mascot",
+    "name": "The AI Mascot",
+    "matched": false
+  },
+  {
+    "slug": "the-pug",
+    "name": "The Pug",
+    "matched": false
+  },
+  {
+    "slug": "the-solana-of-zelda",
+    "name": "The Solana of Zelda",
+    "matched": false
+  },
+  {
+    "slug": "trending-tool",
+    "name": "Trending Tool",
+    "matched": false
+  },
+  {
+    "slug": "trump-frog",
+    "name": "Trump Frog",
+    "matched": false
+  },
+  {
+    "slug": "trump-pump",
+    "name": "Trump Pump",
+    "matched": false
+  },
+  {
+    "slug": "trumpbnb",
+    "name": "TrumpBNB",
+    "matched": false
+  },
+  {
+    "slug": "trumpwiflife",
+    "name": "TrumpWifLife",
+    "matched": false
+  },
+  {
+    "slug": "trumpwins",
+    "name": "TrumpWins",
+    "matched": false
+  },
+  {
+    "slug": "vancatwifhat",
+    "name": "VancatWifHat",
+    "matched": false
+  },
+  {
+    "slug": "vietnam-coin",
+    "name": "Vietnam Coin",
+    "matched": false
+  },
+  {
+    "slug": "vote-trump",
+    "name": "Vote Trump",
+    "matched": false
+  },
+  {
+    "slug": "wall-street-cats",
+    "name": "Wall Street Cats",
+    "matched": false
+  },
+  {
+    "slug": "wallstreet-union",
+    "name": "Wallstreet Union",
+    "matched": false
+  },
+  {
+    "slug": "wat",
+    "name": "Wat",
+    "matched": false
+  },
+  {
+    "slug": "winzoneswap",
+    "name": "WinzoneSwap",
+    "matched": false
+  },
+  {
+    "slug": "woof",
+    "name": "Woof",
+    "matched": false
+  },
+  {
+    "slug": "xfrog",
+    "name": "XFrog",
+    "matched": true,
+    "matchType": "exact",
+    "pdfName": "XFrog",
+    "filename": "20251120_CFGNINJA_XFrog_XFROG_Audit.pdf",
+    "sizeMB": "1.15"
+  },
+  {
+    "slug": "xl",
+    "name": "XL Token",
+    "matched": false
+  },
+  {
+    "slug": "xquok",
+    "name": "XQUOK",
+    "matched": false
+  },
+  {
+    "slug": "xelliott",
+    "name": "Xelliott",
+    "matched": true,
+    "matchType": "exact",
+    "pdfName": "Xelliott",
+    "filename": "20251120_CFGNINJA_Xelliott_XELLIO_Audit.pdf",
+    "sizeMB": "1.15"
+  },
+  {
+    "slug": "xiaomao",
+    "name": "Xiaomao",
+    "matched": false
+  },
+  {
+    "slug": "zx-token",
+    "name": "ZX Token",
+    "matched": false
+  },
+  {
+    "slug": "zydio-ai",
+    "name": "Zydio AI",
+    "matched": false
+  },
+  {
+    "slug": "circle-index",
+    "name": "circle index",
+    "matched": false
+  },
+  {
+    "slug": "dogwiftax",
+    "name": "dogwiftax",
+    "matched": false
+  },
+  {
+    "slug": "pepe-family",
+    "name": "pepe family",
+    "matched": false
+  },
+  {
+    "slug": "testb-176",
+    "name": "testB",
+    "matched": false
+  },
+  {
+    "slug": "testb",
+    "name": "testB",
+    "matched": false
+  }
+]

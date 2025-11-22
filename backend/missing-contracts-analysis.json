@@ -1,0 +1,1540 @@
+{
+  "timestamp": "2025-11-20T04:18:13.482Z",
+  "total_missing": 207,
+  "by_platform": {
+    "Binance Smart Chain": 127,
+    "Solana": 78,
+    "Ethereum": 2
+  },
+  "projects": [
+    {
+      "name": "XFrog",
+      "symbol": "XFROG",
+      "slug": "xfrog",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/xfrog",
+      "created": "2025-11-18T18:59:29.571Z"
+    },
+    {
+      "name": "JayPowell AI",
+      "symbol": "JAYPOW",
+      "slug": "jaypowell-ai",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/jaypowell-ai",
+      "created": "2025-11-18T18:59:29.995Z"
+    },
+    {
+      "name": "ManaCoin",
+      "symbol": "MANACO",
+      "slug": "manacoin",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/manacoin",
+      "created": "2025-11-18T18:59:30.129Z"
+    },
+    {
+      "name": "Emoji Token",
+      "symbol": "EMOJI",
+      "slug": "emoji-token",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/emoji-token",
+      "created": "2025-11-18T18:59:30.402Z"
+    },
+    {
+      "name": "Nexbox",
+      "symbol": "NEXBOX",
+      "slug": "nexbox",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/nexbox",
+      "created": "2025-11-18T18:59:30.999Z"
+    },
+    {
+      "name": "PHYGIVERSE NETWORK TOKEN",
+      "symbol": "PHYGIV",
+      "slug": "phygiverse-network-token",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/phygiverse-network-token",
+      "created": "2025-11-18T18:59:31.066Z"
+    },
+    {
+      "name": "XProBot",
+      "symbol": "XPROBO",
+      "slug": "xprobot",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/xprobot",
+      "created": "2025-11-18T18:59:31.400Z"
+    },
+    {
+      "name": "KENNY ERC20",
+      "symbol": "KENNY",
+      "slug": "kenny-erc20",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/kenny-erc20",
+      "created": "2025-11-18T18:59:32.150Z"
+    },
+    {
+      "name": "Mysterious Giant Dragon",
+      "symbol": "MYSTER",
+      "slug": "mysterious-giant-dragon",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/mysterious-giant-dragon",
+      "created": "2025-11-18T18:59:32.216Z"
+    },
+    {
+      "name": "ZX Token",
+      "symbol": "ZXTOK",
+      "slug": "zx-token",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/zx-token",
+      "created": "2025-11-18T18:59:32.423Z"
+    },
+    {
+      "name": "miniSAFEREUM",
+      "symbol": "MINISA",
+      "slug": "minisafereum",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/minisafereum",
+      "created": "2025-11-18T18:59:32.557Z"
+    },
+    {
+      "name": "GrowToken",
+      "symbol": "GROWTO",
+      "slug": "growtoken",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/growtoken",
+      "created": "2025-11-18T18:59:32.822Z"
+    },
+    {
+      "name": "PawStars",
+      "symbol": "PAWSTA",
+      "slug": "pawstars",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/pawstars",
+      "created": "2025-11-18T18:59:33.022Z"
+    },
+    {
+      "name": "DogeBoy",
+      "symbol": "DOGEBO",
+      "slug": "dogeboy",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/dogeboy",
+      "created": "2025-11-18T18:59:33.255Z"
+    },
+    {
+      "name": "MemeFi",
+      "symbol": "MEMEFI",
+      "slug": "memefi",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/memefi",
+      "created": "2025-11-18T18:59:33.321Z"
+    },
+    {
+      "name": "CYBERTRUCK",
+      "symbol": "CYBERT",
+      "slug": "cybertruck",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/cybertruck",
+      "created": "2025-11-18T18:59:33.386Z"
+    },
+    {
+      "name": "GROKI1",
+      "symbol": "GROKI",
+      "slug": "groki1",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/groki1",
+      "created": "2025-11-18T18:59:33.452Z"
+    },
+    {
+      "name": "DogeGrok",
+      "symbol": "DOGEGR",
+      "slug": "dogegrok",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/dogegrok",
+      "created": "2025-11-18T18:59:33.520Z"
+    },
+    {
+      "name": "Day of Defeat Mini 100X",
+      "symbol": "DAYOF",
+      "slug": "day-of-defeat-mini-100x",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/day-of-defeat-mini-100x",
+      "created": "2025-11-18T18:59:33.785Z"
+    },
+    {
+      "name": "RetroCraft",
+      "symbol": "RETROC",
+      "slug": "retrocraft",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/retrocraft",
+      "created": "2025-11-18T18:59:33.850Z"
+    },
+    {
+      "name": "MemeFarmer",
+      "symbol": "MEMEFA",
+      "slug": "memefarmer",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/memefarmer",
+      "created": "2025-11-18T18:59:33.916Z"
+    },
+    {
+      "name": "GROK",
+      "symbol": "GROK",
+      "slug": "grok",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/grok",
+      "created": "2025-11-18T18:59:34.380Z"
+    },
+    {
+      "name": "UwU",
+      "symbol": "UWU",
+      "slug": "uwu",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/uwu",
+      "created": "2025-11-18T18:59:34.511Z"
+    },
+    {
+      "name": "AmpereChain",
+      "symbol": "AMPERE",
+      "slug": "amperechain",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/amperechain",
+      "created": "2025-11-18T18:59:35.052Z"
+    },
+    {
+      "name": "GROKolaus",
+      "symbol": "GROKOL",
+      "slug": "grokolaus",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/grokolaus",
+      "created": "2025-11-18T18:59:35.217Z"
+    },
+    {
+      "name": "InBlock AI",
+      "symbol": "INBLOC",
+      "slug": "inblock-ai",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/inblock-ai",
+      "created": "2025-11-18T18:59:35.282Z"
+    },
+    {
+      "name": "BONKvsGROK",
+      "symbol": "BONKVS",
+      "slug": "bonkvsgrok",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/bonkvsgrok",
+      "created": "2025-11-18T18:59:35.892Z"
+    },
+    {
+      "name": "CheesyPad",
+      "symbol": "CHEESY",
+      "slug": "cheesypad",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/cheesypad",
+      "created": "2025-11-18T18:59:36.024Z"
+    },
+    {
+      "name": "BasedGrok",
+      "symbol": "BASEDG",
+      "slug": "basedgrok",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/basedgrok",
+      "created": "2025-11-18T18:59:36.157Z"
+    },
+    {
+      "name": "MiniBonk",
+      "symbol": "MINIBO",
+      "slug": "minibonk",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/minibonk",
+      "created": "2025-11-18T19:02:24.789Z"
+    },
+    {
+      "name": "Baby analoS BSC",
+      "symbol": "BABYA",
+      "slug": "baby-analos-bsc",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/baby-analos-bsc",
+      "created": "2025-11-18T19:02:24.945Z"
+    },
+    {
+      "name": "HALVING4",
+      "symbol": "HALVIN",
+      "slug": "halving4",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/halving4",
+      "created": "2025-11-18T19:02:25.100Z"
+    },
+    {
+      "name": "testB",
+      "symbol": "TESTB",
+      "slug": "testb",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/testb",
+      "created": "2025-11-18T19:02:25.617Z"
+    },
+    {
+      "name": "TEST2024KB",
+      "symbol": "TEST20",
+      "slug": "test2024kb",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/test2024kb",
+      "created": "2025-11-18T19:02:25.690Z"
+    },
+    {
+      "name": "testB",
+      "symbol": "TESTB",
+      "slug": "testb-176",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/testb-176",
+      "created": "2025-11-18T19:02:25.958Z"
+    },
+    {
+      "name": "Optimus Elon AI",
+      "symbol": "OPTIMU",
+      "slug": "optimus-elon-ai-178",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/optimus-elon-ai-178",
+      "created": "2025-11-18T19:02:26.136Z"
+    },
+    {
+      "name": "HALVING2024",
+      "symbol": "HALVIN",
+      "slug": "halving2024",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/halving2024",
+      "created": "2025-11-18T19:02:26.282Z"
+    },
+    {
+      "name": "HALVING2024",
+      "symbol": "HALVIN",
+      "slug": "halving2024-181",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/halving2024-181",
+      "created": "2025-11-18T19:02:26.391Z"
+    },
+    {
+      "name": "BabyCakePie",
+      "symbol": "BABYCA",
+      "slug": "babycakepie",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/babycakepie",
+      "created": "2025-11-18T19:02:26.606Z"
+    },
+    {
+      "name": "RoboBonk",
+      "symbol": "ROBOBO",
+      "slug": "robobonk",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/robobonk",
+      "created": "2025-11-18T19:02:26.832Z"
+    },
+    {
+      "name": "BabyMickey",
+      "symbol": "BABYMI",
+      "slug": "babymickey",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/babymickey",
+      "created": "2025-11-18T19:02:27.344Z"
+    },
+    {
+      "name": "Mini Myro",
+      "symbol": "MINIM",
+      "slug": "mini-myro-197",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/mini-myro-197",
+      "created": "2025-11-18T19:02:27.451Z"
+    },
+    {
+      "name": "PEACHY",
+      "symbol": "PEACHY",
+      "slug": "peachy-201",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/peachy-201",
+      "created": "2025-11-18T19:02:27.631Z"
+    },
+    {
+      "name": "Trending Tool",
+      "symbol": "TRENDI",
+      "slug": "trending-tool",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/trending-tool",
+      "created": "2025-11-18T19:02:27.778Z"
+    },
+    {
+      "name": "CryptoPlanes Reborn",
+      "symbol": "CRYPTO",
+      "slug": "cryptoplanes-reborn",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/cryptoplanes-reborn",
+      "created": "2025-11-18T19:02:27.849Z"
+    },
+    {
+      "name": "MyroCeo",
+      "symbol": "MYROCE",
+      "slug": "myroceo",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/myroceo",
+      "created": "2025-11-18T19:02:28.145Z"
+    },
+    {
+      "name": "BONKO",
+      "symbol": "BONKO",
+      "slug": "bonko",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/bonko",
+      "created": "2025-11-18T19:02:28.868Z"
+    },
+    {
+      "name": "BitcoinMemeHub",
+      "symbol": "BITCOI",
+      "slug": "bitcoinmemehub",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/bitcoinmemehub",
+      "created": "2025-11-18T19:02:28.941Z"
+    },
+    {
+      "name": "BABY JARED",
+      "symbol": "BABYJ",
+      "slug": "baby-jared",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/baby-jared",
+      "created": "2025-11-18T19:02:29.015Z"
+    },
+    {
+      "name": "SolanaFORK",
+      "symbol": "SOLANA",
+      "slug": "solanafork",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/solanafork",
+      "created": "2025-11-18T19:02:29.089Z"
+    },
+    {
+      "name": "HealthyOcean",
+      "symbol": "HEALTH",
+      "slug": "healthyocean",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/healthyocean",
+      "created": "2025-11-18T19:02:29.160Z"
+    },
+    {
+      "name": "WREKT",
+      "symbol": "WREKT",
+      "slug": "wrekt",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/wrekt",
+      "created": "2025-11-18T19:02:29.303Z"
+    },
+    {
+      "name": "Libra Finance",
+      "symbol": "LIBRA",
+      "slug": "libra-finance",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/libra-finance",
+      "created": "2025-11-18T19:02:29.375Z"
+    },
+    {
+      "name": "Ltradex",
+      "symbol": "LTRADE",
+      "slug": "ltradex",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/ltradex",
+      "created": "2025-11-18T19:02:29.591Z"
+    },
+    {
+      "name": "Solnado Cash",
+      "symbol": "SOLNAD",
+      "slug": "solnado-cash",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/solnado-cash",
+      "created": "2025-11-18T19:02:29.662Z"
+    },
+    {
+      "name": "Babykrypto",
+      "symbol": "BABYKR",
+      "slug": "babykrypto",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/babykrypto",
+      "created": "2025-11-18T19:02:29.878Z"
+    },
+    {
+      "name": "LTRADEX",
+      "symbol": "LTRADE",
+      "slug": "ltradex-244",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/ltradex-244",
+      "created": "2025-11-18T19:02:30.217Z"
+    },
+    {
+      "name": "TOM",
+      "symbol": "TOM",
+      "slug": "tom",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/tom",
+      "created": "2025-11-18T19:02:30.289Z"
+    },
+    {
+      "name": "NEKO",
+      "symbol": "NEKO",
+      "slug": "neko",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/neko",
+      "created": "2025-11-18T19:02:30.507Z"
+    },
+    {
+      "name": "MiniPepe Coin",
+      "symbol": "MINIPE",
+      "slug": "minipepe-coin",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/minipepe-coin",
+      "created": "2025-11-18T19:02:30.654Z"
+    },
+    {
+      "name": "SafemoonTon",
+      "symbol": "SAFEMO",
+      "slug": "safemoonton",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/safemoonton",
+      "created": "2025-11-18T19:02:30.726Z"
+    },
+    {
+      "name": "Hemule wif hat",
+      "symbol": "HEMULE",
+      "slug": "hemule-wif-hat",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/hemule-wif-hat",
+      "created": "2025-11-18T19:02:30.801Z"
+    },
+    {
+      "name": "MemeCash",
+      "symbol": "MEMECA",
+      "slug": "memecash",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/memecash",
+      "created": "2025-11-18T19:02:30.873Z"
+    },
+    {
+      "name": "ShibaWifHat",
+      "symbol": "SHIBAW",
+      "slug": "shibawifhat",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/shibawifhat",
+      "created": "2025-11-18T19:02:30.945Z"
+    },
+    {
+      "name": "BABY GIGGLE LEARN",
+      "symbol": "BABYG",
+      "slug": "baby-giggle-learn",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/baby-giggle-learn",
+      "created": "2025-11-18T19:02:31.016Z"
+    },
+    {
+      "name": "BOOK OF NPC",
+      "symbol": "BOOKO",
+      "slug": "book-of-npc",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/book-of-npc",
+      "created": "2025-11-18T19:02:31.088Z"
+    },
+    {
+      "name": "Donald Pump",
+      "symbol": "DONALD",
+      "slug": "donald-pump",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/donald-pump",
+      "created": "2025-11-18T19:02:31.158Z"
+    },
+    {
+      "name": "MERV THE CROC",
+      "symbol": "MERVT",
+      "slug": "merv-the-croc",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/merv-the-croc",
+      "created": "2025-11-18T19:02:31.230Z"
+    },
+    {
+      "name": "Cats Of Sol",
+      "symbol": "CATSO",
+      "slug": "cats-of-sol",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/cats-of-sol",
+      "created": "2025-11-18T19:02:31.305Z"
+    },
+    {
+      "name": "House Of Meme",
+      "symbol": "HOUSE",
+      "slug": "house-of-meme",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/house-of-meme",
+      "created": "2025-11-18T19:02:31.377Z"
+    },
+    {
+      "name": "FuturesAI",
+      "symbol": "FUTURE",
+      "slug": "futuresai",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/futuresai",
+      "created": "2025-11-18T19:02:31.448Z"
+    },
+    {
+      "name": "BabyDoge 2.0",
+      "symbol": "BABYDO",
+      "slug": "babydoge-2-0",
+      "platform": "Binance Smart Chain",
+      "website": "https://audit.cfg.ninja/babydoge-2-0",
+      "created": "2025-11-18T19:02:31.519Z"
+    },
+    {
+      "name": "Baby DON",
+      "symbol": "BABYD",
+      "slug": "baby-don",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/baby-don",
+      "created": "2025-11-18T19:02:31.661Z"
+    },
+    {
+      "name": "Innit For The Tehc",
+      "symbol": "INNIT",
+      "slug": "innit-for-the-tehc",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/innit-for-the-tehc",
+      "created": "2025-11-18T19:02:31.732Z"
+    },
+    {
+      "name": "CATDOGE",
+      "symbol": "CATDOG",
+      "slug": "catdoge",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/catdoge",
+      "created": "2025-11-18T19:02:31.903Z"
+    },
+    {
+      "name": "LOBOTOMY DASH",
+      "symbol": "LOBOTO",
+      "slug": "lobotomy-dash",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/lobotomy-dash",
+      "created": "2025-11-18T19:02:31.973Z"
+    },
+    {
+      "name": "Meme Crap Book",
+      "symbol": "MEMEC",
+      "slug": "meme-crap-book",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/meme-crap-book",
+      "created": "2025-11-18T19:02:32.045Z"
+    },
+    {
+      "name": "SOLEPE",
+      "symbol": "SOLEPE",
+      "slug": "solepe",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/solepe",
+      "created": "2025-11-18T19:02:32.117Z"
+    },
+    {
+      "name": "KANGU",
+      "symbol": "KANGU",
+      "slug": "kangu",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/kangu",
+      "created": "2025-11-18T19:02:32.190Z"
+    },
+    {
+      "name": "Slerf Cat",
+      "symbol": "SLERF",
+      "slug": "slerf-cat",
+      "platform": "Solana",
+      "website": "https://audit.cfg.ninja/slerf-cat",
+      "created": "2025-11-18T19:02:32.263Z"
+    },
+    {
+      "name": "Fuck Around To Find Out",
+      "symbol": "FUCKAR",
+      "slug": "fuck-around-to-find-out",
+      "platform": "Solana",
+      "created": "2025-11-18T19:18:52.070Z"
+    },
+    {
+      "name": "APERIL",
+      "symbol": "APERIL",
+      "slug": "aperil",
+      "platform": "Solana",
+      "created": "2025-11-18T19:18:52.595Z"
+    },
+    {
+      "name": "PeP",
+      "symbol": "PEP",
+      "slug": "pep",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:18:53.077Z"
+    },
+    {
+      "name": "SolSearcher",
+      "symbol": "SOLSEA",
+      "slug": "solsearcher",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:18:53.524Z"
+    },
+    {
+      "name": "SOL HAMSTER",
+      "symbol": "SOLHAM",
+      "slug": "sol-hamster",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:18:54.469Z"
+    },
+    {
+      "name": "End of Meme",
+      "symbol": "ENDOFM",
+      "slug": "end-of-meme",
+      "platform": "Solana",
+      "created": "2025-11-18T19:18:54.940Z"
+    },
+    {
+      "name": "CARD OF MEME",
+      "symbol": "CARDOF",
+      "slug": "card-of-meme",
+      "platform": "Solana",
+      "created": "2025-11-18T19:18:55.334Z"
+    },
+    {
+      "name": "BabyMEW",
+      "symbol": "BABYME",
+      "slug": "babymew",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:18:55.718Z"
+    },
+    {
+      "name": "MeowthWifHat",
+      "symbol": "MEOWTH",
+      "slug": "meowthwifhat",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:18:56.115Z"
+    },
+    {
+      "name": "FLOCAT",
+      "symbol": "FLOCAT",
+      "slug": "flocat",
+      "platform": "Solana",
+      "created": "2025-11-18T19:18:56.591Z"
+    },
+    {
+      "name": "CATPAW",
+      "symbol": "CATPAW",
+      "slug": "catpaw",
+      "platform": "Solana",
+      "created": "2025-11-18T19:18:56.982Z"
+    },
+    {
+      "name": "Gorillawifhat",
+      "symbol": "GORILL",
+      "slug": "gorillawifhat",
+      "platform": "Solana",
+      "created": "2025-11-18T19:18:57.391Z"
+    },
+    {
+      "name": "TrumpBNB",
+      "symbol": "TRUMPB",
+      "slug": "trumpbnb",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:18:57.777Z"
+    },
+    {
+      "name": "Shiboki",
+      "symbol": "SHIBOK",
+      "slug": "shiboki",
+      "platform": "Solana",
+      "created": "2025-11-18T19:18:58.249Z"
+    },
+    {
+      "name": "Evil Kermit",
+      "symbol": "EVILKE",
+      "slug": "evil-kermit",
+      "platform": "Solana",
+      "created": "2025-11-18T19:18:59.058Z"
+    },
+    {
+      "name": "Book of Bonk",
+      "symbol": "BOOKOF",
+      "slug": "book-of-bonk",
+      "platform": "Solana",
+      "created": "2025-11-18T19:18:59.451Z"
+    },
+    {
+      "name": "ELONxALEXANDRE",
+      "symbol": "ELONXA",
+      "slug": "elonxalexandre",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:18:59.848Z"
+    },
+    {
+      "name": "RaveRacoon",
+      "symbol": "RAVERA",
+      "slug": "raveracoon",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:00.238Z"
+    },
+    {
+      "name": "MemeCoins Mania",
+      "symbol": "MEMECO",
+      "slug": "memecoins-mania",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:00.629Z"
+    },
+    {
+      "name": "DragonSol Token",
+      "symbol": "DRAGON",
+      "slug": "dragonsol-token",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:01.005Z"
+    },
+    {
+      "name": "TOMWIFHAT",
+      "symbol": "TOMWIF",
+      "slug": "tomwifhat",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:01.396Z"
+    },
+    {
+      "name": "Book Of Cats",
+      "symbol": "BOOKOF",
+      "slug": "book-of-cats",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:01.891Z"
+    },
+    {
+      "name": "Bitconnect",
+      "symbol": "BITCON",
+      "slug": "bitconnect",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:02.268Z"
+    },
+    {
+      "name": "pepe family",
+      "symbol": "PEPEFA",
+      "slug": "pepe-family",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:02.715Z"
+    },
+    {
+      "name": "Chapi El Cato",
+      "symbol": "CHAPIE",
+      "slug": "chapi-el-cato",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:03.094Z"
+    },
+    {
+      "name": "Katy Perry Fans",
+      "symbol": "KATYPE",
+      "slug": "katy-perry-fans",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:03.487Z"
+    },
+    {
+      "name": "Pudgy Puss",
+      "symbol": "PUDGYP",
+      "slug": "pudgy-puss",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:04.411Z"
+    },
+    {
+      "name": "DO SOMETHING FFS",
+      "symbol": "DOSOME",
+      "slug": "do-something-ffs",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:04.787Z"
+    },
+    {
+      "name": "Book Of Halving",
+      "symbol": "BOOKOF",
+      "slug": "book-of-halving",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:05.547Z"
+    },
+    {
+      "name": "CateWifHat",
+      "symbol": "CATEWI",
+      "slug": "catewifhat",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:06.720Z"
+    },
+    {
+      "name": "Myro Floki CEO",
+      "symbol": "MYROFL",
+      "slug": "myro-floki-ceo",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:07.527Z"
+    },
+    {
+      "name": "MEME101",
+      "symbol": "MEME10",
+      "slug": "meme101",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:08.792Z"
+    },
+    {
+      "name": "FalloutBase",
+      "symbol": "FALLOU",
+      "slug": "falloutbase",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:09.238Z"
+    },
+    {
+      "name": "Meme Wars",
+      "symbol": "MEMEWA",
+      "slug": "meme-wars",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:09.614Z"
+    },
+    {
+      "name": "VancatWifHat",
+      "symbol": "VANCAT",
+      "slug": "vancatwifhat",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:09.711Z"
+    },
+    {
+      "name": "Book Of Meme AI",
+      "symbol": "BOOKOF",
+      "slug": "book-of-meme-ai",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:10.207Z"
+    },
+    {
+      "name": "FoxFurry",
+      "symbol": "FOXFUR",
+      "slug": "foxfurry",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:10.629Z"
+    },
+    {
+      "name": "TWUST",
+      "symbol": "TWUST",
+      "slug": "twust",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:11.020Z"
+    },
+    {
+      "name": "PECKO",
+      "symbol": "PECKO",
+      "slug": "pecko",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:11.395Z"
+    },
+    {
+      "name": "BABY GUMMY",
+      "symbol": "BABYGU",
+      "slug": "baby-gummy",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:12.682Z"
+    },
+    {
+      "name": "Mr.Beast Goat",
+      "symbol": "MRBEAS",
+      "slug": "mr-beast-goat",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:13.129Z"
+    },
+    {
+      "name": "Gerku",
+      "symbol": "GERKU",
+      "slug": "gerku",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:13.518Z"
+    },
+    {
+      "name": "Dog Robin Hood",
+      "symbol": "DOGROB",
+      "slug": "dog-robin-hood",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:13.900Z"
+    },
+    {
+      "name": "Vietnam Coin",
+      "symbol": "VIETNA",
+      "slug": "vietnam-coin",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:14.298Z"
+    },
+    {
+      "name": "FalloutBase-Sol",
+      "symbol": "FALLOU",
+      "slug": "falloutbase-sol",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:15.264Z"
+    },
+    {
+      "name": "Albert II",
+      "symbol": "ALBERT",
+      "slug": "albert-ii",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:16.431Z"
+    },
+    {
+      "name": "BOOK OF DUCK",
+      "symbol": "BOOKOF",
+      "slug": "book-of-duck",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:16.819Z"
+    },
+    {
+      "name": "FlorkWifNoHat",
+      "symbol": "FLORKW",
+      "slug": "florkwifnohat",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:17.199Z"
+    },
+    {
+      "name": "Book Of Junkie Memes",
+      "symbol": "BOOKOF",
+      "slug": "book-of-junkie-memes",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:17.579Z"
+    },
+    {
+      "name": "FourCZ",
+      "symbol": "FOURCZ",
+      "slug": "fourcz",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:18.345Z"
+    },
+    {
+      "name": "Bonk AI",
+      "symbol": "BONKAI",
+      "slug": "bonk-ai",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:19.193Z"
+    },
+    {
+      "name": "Wall Street Cats",
+      "symbol": "WALLST",
+      "slug": "wall-street-cats",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:19.635Z"
+    },
+    {
+      "name": "dogwiftax",
+      "symbol": "DOGWIF",
+      "slug": "dogwiftax",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:20.483Z"
+    },
+    {
+      "name": "SylvesterWifHat",
+      "symbol": "SYLVES",
+      "slug": "sylvesterwifhat",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:20.861Z"
+    },
+    {
+      "name": "Jeb the Goat",
+      "symbol": "JEBTHE",
+      "slug": "jeb-the-goat",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:21.264Z"
+    },
+    {
+      "name": "PepeQ",
+      "symbol": "PEPEQ",
+      "slug": "pepeq",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:21.667Z"
+    },
+    {
+      "name": "Cobra King",
+      "symbol": "COBRAK",
+      "slug": "cobra-king",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:22.065Z"
+    },
+    {
+      "name": "Lazy Sniper",
+      "symbol": "LAZYSN",
+      "slug": "lazy-sniper",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:22.459Z"
+    },
+    {
+      "name": "Pepe",
+      "symbol": "PEPE",
+      "slug": "pepe",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:22.842Z"
+    },
+    {
+      "name": "JOE ROGAN",
+      "symbol": "JOEROG",
+      "slug": "joe-rogan",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:23.219Z"
+    },
+    {
+      "name": "Naruto Inu",
+      "symbol": "NARUTO",
+      "slug": "naruto-inu",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:24.423Z"
+    },
+    {
+      "name": "PENALDO",
+      "symbol": "PENALD",
+      "slug": "penaldo",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:25.289Z"
+    },
+    {
+      "name": "Elon Floki CEO",
+      "symbol": "ELONFL",
+      "slug": "elon-floki-ceo",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:26.040Z"
+    },
+    {
+      "name": "Dog MAGA",
+      "symbol": "DOGMAG",
+      "slug": "dog-maga",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:26.493Z"
+    },
+    {
+      "name": "Tate Goat",
+      "symbol": "TATEGO",
+      "slug": "tate-goat",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:26.878Z"
+    },
+    {
+      "name": "Vote Trump",
+      "symbol": "VOTETR",
+      "slug": "vote-trump",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:27.275Z"
+    },
+    {
+      "name": "Bozos \"Soros\" The Clown",
+      "symbol": "BOZOSS",
+      "slug": "bozos-soros-the-clown",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:27.661Z"
+    },
+    {
+      "name": "Trump Pump",
+      "symbol": "TRUMPP",
+      "slug": "trump-pump",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:28.050Z"
+    },
+    {
+      "name": "metaKingDom",
+      "symbol": "METAKI",
+      "slug": "metakingdom",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:28.430Z"
+    },
+    {
+      "name": "FurFund",
+      "symbol": "FURFUN",
+      "slug": "furfund",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:29.275Z"
+    },
+    {
+      "name": "ROBOkoin",
+      "symbol": "ROBOKO",
+      "slug": "robokoin",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:29.668Z"
+    },
+    {
+      "name": "BlockSound",
+      "symbol": "BLOCKS",
+      "slug": "blocksound",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:30.056Z"
+    },
+    {
+      "name": "Memex",
+      "symbol": "MEMEX",
+      "slug": "memex",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:47.143Z"
+    },
+    {
+      "name": "Rivals Token",
+      "symbol": "RIVALS",
+      "slug": "rivals-token",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:48.985Z"
+    },
+    {
+      "name": "$STING",
+      "symbol": "STING",
+      "slug": "sting",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:49.485Z"
+    },
+    {
+      "name": "POTUS POLL",
+      "symbol": "POTUSP",
+      "slug": "potus-poll",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:49.895Z"
+    },
+    {
+      "name": "7BOX",
+      "symbol": "7BOX",
+      "slug": "7box",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:50.048Z"
+    },
+    {
+      "name": "TrumpWifLife",
+      "symbol": "TRUMPW",
+      "slug": "trumpwiflife",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:50.855Z"
+    },
+    {
+      "name": "KingToken",
+      "symbol": "KINGTO",
+      "slug": "kingtoken",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:51.362Z"
+    },
+    {
+      "name": "DOGS",
+      "symbol": "DOGS",
+      "slug": "dogs",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:52.645Z"
+    },
+    {
+      "name": "BabyHMSTR",
+      "symbol": "BABYHM",
+      "slug": "babyhmstr",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:54.920Z"
+    },
+    {
+      "name": "DBTCoin",
+      "symbol": "DBTCOI",
+      "slug": "dbtcoin",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:55.395Z"
+    },
+    {
+      "name": "CZCat",
+      "symbol": "CZCAT",
+      "slug": "czcat",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:56.185Z"
+    },
+    {
+      "name": "Chronicles of Meme",
+      "symbol": "CHRONI",
+      "slug": "chronicles-of-meme",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:56.957Z"
+    },
+    {
+      "name": "WinzoneSwap",
+      "symbol": "WINZON",
+      "slug": "winzoneswap",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:57.408Z"
+    },
+    {
+      "name": "TrumpWins",
+      "symbol": "TRUMPW",
+      "slug": "trumpwins",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:19:59.138Z"
+    },
+    {
+      "name": "Book of Trump Club",
+      "symbol": "BOOKOF",
+      "slug": "book-of-trump-club",
+      "platform": "Solana",
+      "created": "2025-11-18T19:19:59.930Z"
+    },
+    {
+      "name": "The Solana of Zelda",
+      "symbol": "THESOL",
+      "slug": "the-solana-of-zelda",
+      "platform": "Solana",
+      "created": "2025-11-18T19:20:00.327Z"
+    },
+    {
+      "name": "Computer Control AI",
+      "symbol": "COMPUT",
+      "slug": "computer-control-ai",
+      "platform": "Solana",
+      "created": "2025-11-18T19:20:02.003Z"
+    },
+    {
+      "name": "MIAOCoin",
+      "symbol": "MIAOCO",
+      "slug": "miaocoin",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:02.870Z"
+    },
+    {
+      "name": "RawDog",
+      "symbol": "RAWDOG",
+      "slug": "rawdog",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:03.258Z"
+    },
+    {
+      "name": "MIAOHCoin",
+      "symbol": "MIAOHC",
+      "slug": "miaohcoin",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:03.651Z"
+    },
+    {
+      "name": "The AI Mascot",
+      "symbol": "THEAIM",
+      "slug": "the-ai-mascot",
+      "platform": "Solana",
+      "created": "2025-11-18T19:20:04.463Z"
+    },
+    {
+      "name": "Arabian Trump",
+      "symbol": "ARABIA",
+      "slug": "arabian-trump",
+      "platform": "Solana",
+      "created": "2025-11-18T19:20:04.917Z"
+    },
+    {
+      "name": "LuBu",
+      "symbol": "LUBU",
+      "slug": "lubu",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:05.691Z"
+    },
+    {
+      "name": "ME",
+      "symbol": "ME",
+      "slug": "me",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:05.796Z"
+    },
+    {
+      "name": "Mars Coin",
+      "symbol": "MARSCO",
+      "slug": "mars-coin",
+      "platform": "Solana",
+      "created": "2025-11-18T19:20:06.231Z"
+    },
+    {
+      "name": "CHI",
+      "symbol": "CHI",
+      "slug": "chi",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:07.064Z"
+    },
+    {
+      "name": "Beevo",
+      "symbol": "BEEVO",
+      "slug": "beevo",
+      "platform": "Solana",
+      "created": "2025-11-18T19:20:08.636Z"
+    },
+    {
+      "name": "Cluster Yield",
+      "symbol": "CLUSTE",
+      "slug": "cluster-yield",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:09.422Z"
+    },
+    {
+      "name": "DeepShark",
+      "symbol": "DEEPSH",
+      "slug": "deepshark",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:09.817Z"
+    },
+    {
+      "name": "Flo Coin Global",
+      "symbol": "FLOCOI",
+      "slug": "flo-coin-global",
+      "platform": "Solana",
+      "created": "2025-11-18T19:20:10.293Z"
+    },
+    {
+      "name": "Nostradamus",
+      "symbol": "NOSTRA",
+      "slug": "nostradamus",
+      "platform": "Solana",
+      "created": "2025-11-18T19:20:11.056Z"
+    },
+    {
+      "name": "FortBanana",
+      "symbol": "FORTBA",
+      "slug": "fortbanana",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:11.455Z"
+    },
+    {
+      "name": "StepZilla",
+      "symbol": "STEPZI",
+      "slug": "stepzilla",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:12.254Z"
+    },
+    {
+      "name": "JOVCOIN",
+      "symbol": "JOVCOI",
+      "slug": "jovcoin",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:13.133Z"
+    },
+    {
+      "name": "CoinPouch",
+      "symbol": "COINPO",
+      "slug": "coinpouch",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:13.623Z"
+    },
+    {
+      "name": "Curvency",
+      "symbol": "CURVEN",
+      "slug": "curvency",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:14.025Z"
+    },
+    {
+      "name": "HANAAI",
+      "symbol": "HANAAI",
+      "slug": "hanaai",
+      "platform": "Solana",
+      "created": "2025-11-18T19:20:14.429Z"
+    },
+    {
+      "name": "Biokript PRO",
+      "symbol": "BIOKRI",
+      "slug": "biokript-pro",
+      "platform": "Solana",
+      "created": "2025-11-18T19:20:14.887Z"
+    },
+    {
+      "name": "MOONAI",
+      "symbol": "MOONAI",
+      "slug": "moonai",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:15.286Z"
+    },
+    {
+      "name": "Tariff Token",
+      "symbol": "TARIFF",
+      "slug": "tariff-token",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:16.096Z"
+    },
+    {
+      "name": "NFT Xchange Coin",
+      "symbol": "NFTXCH",
+      "slug": "nft-xchange-coin",
+      "platform": "Ethereum",
+      "created": "2025-11-18T19:20:16.486Z"
+    },
+    {
+      "name": "Phoenix Chicken",
+      "symbol": "PHOENI",
+      "slug": "phoenix-chicken",
+      "platform": "Ethereum",
+      "created": "2025-11-18T19:20:16.997Z"
+    },
+    {
+      "name": "SAKURAAI",
+      "symbol": "SAKURA",
+      "slug": "sakuraai",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:20:17.386Z"
+    },
+    {
+      "name": "Crypto IRA",
+      "symbol": "CI",
+      "slug": "crypto-ira",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:51:06.995Z"
+    },
+    {
+      "name": "CFGNINJASTD",
+      "symbol": "C",
+      "slug": "cfgninjastd",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:51:07.040Z"
+    },
+    {
+      "name": "MinersZone",
+      "symbol": "M",
+      "slug": "minerszone",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:51:07.077Z"
+    },
+    {
+      "name": "L0",
+      "symbol": "L",
+      "slug": "l0",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:51:07.113Z"
+    },
+    {
+      "name": "S2",
+      "symbol": "S",
+      "slug": "s2",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:51:07.150Z"
+    },
+    {
+      "name": "GAFA",
+      "symbol": "G",
+      "slug": "gafa",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:51:07.188Z"
+    },
+    {
+      "name": "Future",
+      "symbol": "F",
+      "slug": "future",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:51:07.224Z"
+    },
+    {
+      "name": "Happy Exchange",
+      "symbol": "HE",
+      "slug": "happy-exchange",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:51:07.259Z"
+    },
+    {
+      "name": "Auto Defi",
+      "symbol": "AD",
+      "slug": "auto-defi",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:51:07.296Z"
+    },
+    {
+      "name": "Crypto NFT Galaxy",
+      "symbol": "CNG",
+      "slug": "crypto-nft-galaxy",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:51:07.333Z"
+    },
+    {
+      "name": "KronicKatz.NFT",
+      "symbol": "K",
+      "slug": "kronickatznft",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:51:07.368Z"
+    },
+    {
+      "name": "Best Ever APY",
+      "symbol": "BEA",
+      "slug": "best-ever-apy",
+      "platform": "Binance Smart Chain",
+      "created": "2025-11-18T19:51:07.438Z"
+    }
+  ]
+}

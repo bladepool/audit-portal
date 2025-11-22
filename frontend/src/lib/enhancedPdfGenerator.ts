@@ -300,3 +300,334 @@ export async function generateEnhancedAuditPDF(project: Project) {
   }
   doc.save(`${docTime}_CFGNINJA_${project.slug}_Audit.pdf`);
 }
+
+/**
+ * Generate PDF and return as Blob (for GitHub upload)
+ */
+export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Blob> {
+  const doc = new jsPDF('p', 'pt', 'a4');
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  // Reuse the same generation logic but return blob
+  const formattedDate = formatDate(new Date().toISOString());
+  const docTime = new Date().toISOString().slice(0, 8).replace(/-/g, '');
+
+  // Load logos
+  const cfgLogo = await urlToBase64('/img/cfg-ninja-logo.png');
+  const projectLogo = await getProjectLogo(project.slug);
+
+  // Header with gradient background and logos
+  let currentY = 80;
+  doc.setFillColor(26, 35, 126);
+  doc.rect(0, 0, pageWidth, 120, 'F');
+
+  // CFG Logo (left side)
+  if (cfgLogo) {
+    try {
+      doc.addImage(cfgLogo, 'PNG', 40, 30, 60, 60);
+    } catch (error) {
+      console.error('Failed to add CFG logo:', error);
+    }
+  }
+
+  // Title (center)
+  doc.setFontSize(28);
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.text('SMART CONTRACT AUDIT REPORT', pageWidth / 2, 60, { align: 'center' });
+
+  // Project Logo (right side)
+  if (projectLogo) {
+    try {
+      doc.addImage(projectLogo, 'PNG', pageWidth - 100, 30, 60, 60);
+    } catch (error) {
+      console.error('Failed to add project logo:', error);
+    }
+  }
+
+  // Project Name
+  doc.setFontSize(18);
+  doc.text(project.name || 'N/A', pageWidth / 2, 95, { align: 'center' });
+
+  currentY = 140;
+
+  // Audit Information
+  doc.setFontSize(14);
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Audit Information', 60, currentY);
+  currentY += 20;
+
+  const auditInfo = [
+    ['Project', project.name || 'N/A'],
+    ['Symbol', project.symbol || 'N/A'],
+    ['Platform', project.platform || 'N/A'],
+    ['Contract Address', project.contract_info?.contract_address || 'N/A'],
+    ['Audit Date', formatDate(project.timeline?.audit_release)],
+    ['Auditor', 'CFG Ninja'],
+  ];
+
+  autoTable(doc, {
+    startY: currentY,
+    head: [['Property', 'Value']],
+    body: auditInfo,
+    theme: 'grid',
+    headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
+    bodyStyles: { fontSize: 9 },
+    margin: { left: 60, right: 60 },
+  });
+
+  currentY = (doc as any).lastAutoTable.finalY + 30;
+
+  // Audit Scores
+  if (currentY > pageHeight - 200) {
+    doc.addPage();
+    currentY = 60;
+  }
+
+  doc.setFontSize(16);
+  doc.setTextColor(0, 0, 0);
+  doc.text('Audit Scores', 60, currentY);
+  currentY += 20;
+
+  const securityScore = project.securityScore || project.scores?.security || 0;
+  const auditorScore = project.auditorScore || project.scores?.auditor || 0;
+
+  // Security Score with visual bar
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Security Score:', 60, currentY);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(securityScore >= 75 ? [34, 197, 94] : securityScore >= 50 ? [234, 179, 8] : [239, 68, 68]);
+  doc.text(`${securityScore}/100`, 160, currentY);
+
+  // Score bar
+  const barWidth = 200;
+  const barHeight = 15;
+  const barX = 240;
+  const barY = currentY - 10;
+  doc.setDrawColor(220, 220, 220);
+  doc.setLineWidth(1);
+  doc.rect(barX, barY, barWidth, barHeight);
+  const fillWidth = (securityScore / 100) * barWidth;
+  doc.setFillColor(securityScore >= 75 ? [34, 197, 94] : securityScore >= 50 ? [234, 179, 8] : [239, 68, 68]);
+  doc.rect(barX, barY, fillWidth, barHeight, 'F');
+
+  currentY += 30;
+
+  // Auditor Score with visual bar
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Auditor Score:', 60, currentY);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(auditorScore >= 75 ? [34, 197, 94] : auditorScore >= 50 ? [234, 179, 8] : [239, 68, 68]);
+  doc.text(`${auditorScore}/100`, 160, currentY);
+
+  const auditorFillWidth = (auditorScore / 100) * barWidth;
+  doc.setDrawColor(220, 220, 220);
+  doc.rect(barX, currentY - 10, barWidth, barHeight);
+  doc.setFillColor(auditorScore >= 75 ? [34, 197, 94] : auditorScore >= 50 ? [234, 179, 8] : [239, 68, 68]);
+  doc.rect(barX, currentY - 10, auditorFillWidth, barHeight, 'F');
+
+  currentY += 40;
+
+  // Findings Summary
+  if (currentY > pageHeight - 250) {
+    doc.addPage();
+    currentY = 60;
+  }
+
+  doc.setFontSize(16);
+  doc.setTextColor(0, 0, 0);
+  doc.text('Findings Summary', 60, currentY);
+  currentY += 15;
+
+  const findingsSummary = [
+    ['Critical', project.critical?.found || 0, project.critical?.pending || 0, project.critical?.resolved || 0],
+    ['High', project.major?.found || 0, project.major?.pending || 0, project.major?.resolved || 0],
+    ['Medium', project.medium?.found || 0, project.medium?.pending || 0, project.medium?.resolved || 0],
+    ['Low', project.minor?.found || 0, project.minor?.pending || 0, project.minor?.resolved || 0],
+    ['Informational', project.informational?.found || 0, project.informational?.pending || 0, project.informational?.resolved || 0],
+  ];
+
+  autoTable(doc, {
+    startY: currentY,
+    head: [['Severity', 'Found', 'Pending', 'Resolved']],
+    body: findingsSummary,
+    theme: 'grid',
+    headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
+    bodyStyles: { fontSize: 9 },
+    margin: { left: 60, right: 60 },
+  });
+
+  currentY = (doc as any).lastAutoTable.finalY + 30;
+
+  // CFG Findings Details
+  const cfgFindings = project.cfg_findings || [];
+  const activeFindings = cfgFindings.filter((f: any) => f.status === 'Detected' || f.status === 'Fail');
+
+  if (activeFindings.length > 0) {
+    if (currentY > pageHeight - 100) {
+      doc.addPage();
+      currentY = 60;
+    }
+
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Detailed Findings', 60, currentY);
+    currentY += 20;
+
+    for (const finding of activeFindings) {
+      if (currentY > pageHeight - 200) {
+        doc.addPage();
+        currentY = 60;
+      }
+
+      // Severity badge
+      const severityColor =
+        finding.severity === 'Critical' ? [220, 38, 38] :
+        finding.severity === 'High' ? [234, 88, 12] :
+        finding.severity === 'Medium' ? [234, 179, 8] :
+        finding.severity === 'Low' ? [59, 130, 246] : [107, 114, 128];
+
+      doc.setFillColor(severityColor[0], severityColor[1], severityColor[2]);
+      doc.roundedRect(60, currentY - 10, 60, 18, 3, 3, 'F');
+      doc.setFontSize(10);
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.text(finding.severity, 90, currentY + 2, { align: 'center' });
+
+      currentY += 20;
+
+      // Finding title
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      doc.setFont('helvetica', 'bold');
+      doc.text(finding.title || finding.name || 'Untitled Finding', 60, currentY);
+      currentY += 15;
+
+      // Description
+      if (finding.description) {
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(60, 60, 60);
+        const splitDesc = doc.splitTextToSize(finding.description, pageWidth - 120);
+        doc.text(splitDesc, 60, currentY);
+        currentY += splitDesc.length * 11 + 10;
+      }
+
+      // Mitigation
+      if (finding.alleviation || finding.mitigation) {
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(0, 0, 0);
+        doc.text('Mitigation:', 60, currentY);
+        currentY += 12;
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(60, 60, 60);
+        const splitMit = doc.splitTextToSize(finding.alleviation || finding.mitigation, pageWidth - 120);
+        doc.text(splitMit, 60, currentY);
+        currentY += splitMit.length * 11 + 10;
+      }
+
+      // Divider
+      doc.setDrawColor(220, 220, 220);
+      doc.setLineWidth(0.5);
+      doc.line(60, currentY, pageWidth - 60, currentY);
+      currentY += 15;
+    }
+  } else {
+    if (currentY > pageHeight - 100) {
+      doc.addPage();
+      currentY = 60;
+    }
+    doc.setFontSize(16);
+    doc.setTextColor(34, 197, 94);
+    doc.text('✓ No Critical Findings Detected', 60, currentY);
+    doc.setFontSize(12);
+    doc.setTextColor(100, 100, 100);
+    currentY += 20;
+    doc.text('All CFG security checks passed successfully.', 60, currentY);
+    currentY += 30;
+  }
+
+  // Contract Overview
+  if (currentY > pageHeight - 200) {
+    doc.addPage();
+    currentY = 60;
+  }
+
+  doc.setFontSize(16);
+  doc.setTextColor(0, 0, 0);
+  doc.text('Contract Overview', 60, currentY);
+  currentY += 15;
+
+  const contractOverview = [
+    ['Honeypot', project.overview?.honeypot ? 'Yes ⚠️' : 'No ✓'],
+    ['Hidden Owner', project.overview?.hidden_owner ? 'Yes ⚠️' : 'No ✓'],
+    ['Mint Function', project.overview?.mint ? 'Yes ⚠️' : 'No ✓'],
+    ['Blacklist', project.overview?.blacklist ? 'Yes ⚠️' : 'No ✓'],
+    ['Whitelist', project.overview?.whitelist ? 'Yes' : 'No'],
+    ['Proxy', project.overview?.proxy_check ? 'Yes ⚠️' : 'No ✓'],
+    ['Buy Tax', `${project.overview?.buy_tax || 0}%`],
+    ['Sell Tax', `${project.overview?.sell_tax || 0}%`],
+  ];
+
+  autoTable(doc, {
+    startY: currentY,
+    head: [['Check', 'Result']],
+    body: contractOverview,
+    theme: 'grid',
+    headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
+    bodyStyles: { fontSize: 9 },
+    margin: { left: 60, right: 60 },
+  });
+
+  currentY = (doc as any).lastAutoTable.finalY + 30;
+
+  // Social Links
+  const socialLinks = [
+    ['Website', project.socials?.website || 'N/A'],
+    ['Telegram', project.socials?.telegram || 'N/A'],
+    ['Twitter', project.socials?.twitter || 'N/A'],
+    ['GitHub', project.socials?.github || 'N/A'],
+  ].filter(([_, value]) => value !== 'N/A');
+
+  if (socialLinks.length > 0) {
+    if (currentY > pageHeight - 150) {
+      doc.addPage();
+      currentY = 60;
+    }
+
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Social Links', 60, currentY);
+    currentY += 15;
+
+    autoTable(doc, {
+      startY: currentY,
+      head: [['Platform', 'Link']],
+      body: socialLinks,
+      theme: 'grid',
+      headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
+      bodyStyles: { fontSize: 8 },
+      margin: { left: 60, right: 60 },
+    });
+
+    currentY = (doc as any).lastAutoTable.finalY + 30;
+  }
+
+  // Footer on all pages
+  const pageCount = (doc as any).internal.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text(`Generated by CFG Ninja Audit Portal - ${formattedDate}`, pageWidth / 2, pageHeight - 20, {
+      align: 'center',
+    });
+  }
+
+  // Return as Blob instead of saving
+  return doc.output('blob');
+}

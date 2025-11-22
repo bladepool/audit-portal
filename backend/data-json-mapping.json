@@ -1,0 +1,301 @@
+{
+  "name": "Pecunity",
+  "symbol": "PEC",
+  "description": "Controlled ERC20 Token with Launch & Transfer Management",
+  "platform": "BNBCHAIN",
+  "audit_date": "2025-10-19",
+  "contract_info": {
+    "contract_address": "0x413c2834f02003752d6Cc0Bcd1cE85Af04D62fBE",
+    "compiler_version": "^0.8.28",
+    "optimization": "200",
+    "license": "UNLICENSED",
+    "contract_name": "Pecunity",
+    "language": "Solidity",
+    "codebase_url": "https://bscscan.com/address/0x413c2834f02003752d6Cc0Bcd1cE85Af04D62fBE#code",
+    "block_number": "65067908",
+    "date_created": "Oct-18-2025"
+  },
+  "token_info": {
+    "decimals": 18,
+    "total_supply": "25,000,000",
+    "base_token": "Solidity",
+    "owner_address": "0x353527391365b7589503eCfFcafDFBAFf0a24D1B",
+    "has_owner": true
+  },
+  "security_checks": {
+    "buy_tax": "0%",
+    "sell_tax": "0%",
+    "honeypot": "Not Detected",
+    "cooldown": "Not Detected",
+    "transfer_pausable": "Detected",
+    "can_edit_tax": "No",
+    "anti_whale": "Not Detected",
+    "blacklist": "Not Detected",
+    "whitelist": "Detected",
+    "mint_check": "Pass",
+    "proxy_check": "Not Detected",
+    "can_take_ownership": "Not Detected",
+    "hidden_owner": "Not Detected",
+    "self_destruct": "Not Detected",
+    "external_call": "Not Detected",
+    "enable_trade": "true",
+    "pause_trade": "Detected",
+    "max_tx_check": "Pass"
+  },
+  "security_score": 85,
+  "auditor_score": 85,
+  "audit_status": "Pass",
+  "confidence_level": "Very High",
+  "socials": {
+    "website": "https://pecunity.io",
+    "telegram": "t.me/pecunity",
+    "twitter": "https://x.com/pecunity_app",
+    "github": "https://github.com/Pecunity/pecunity-protocol",
+    "email": "",
+    "coingecko": "",
+    "coinmarketcap": "",
+    "reddit": "N/A",
+    "facebook": "",
+    "instagram": "N/A",
+    "other": "pecunity.io/branding"
+  },
+  "swc_findings": {
+    "SWC100": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC101": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC102": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC103": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC104": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC105": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC106": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC107": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC108": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC109": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC110": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC111": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC112": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC113": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC114": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC115": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC116": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC117": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC118": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC119": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC120": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC121": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC122": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC123": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC124": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC125": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC126": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC127": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC128": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC129": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC130": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC131": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC132": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC133": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC134": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC135": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    },
+    "SWC136": {
+      "status": "Pass",
+      "location": "L: 0 C: 0"
+    }
+  },
+  "cfg_findings": {
+    "CFG20": {
+      "status": "Detected",
+      "severity": "Critical",
+      "title": "Centralization Risk in Launch Mechanism",
+      "description": "The launch mechanism is controlled by a single owner address without any timelock or multisig protection. The owner has unilateral power to enable/disable transfers and control the launch state.",
+      "location": "launch(), enableTransfer(), disableTransfer() functions",
+      "recommendation": "Implement a timelock mechanism for launch-related functions and consider using a multisig wallet for ownership.",
+      "category": "Centralization"
+    },
+    "CFG21": {
+      "status": "Detected",
+      "severity": "High",
+      "title": "Missing Access Control Recovery",
+      "description": "No mechanism exists to recover from a compromised or lost owner account. This could permanently lock the contract in its pre-launch state if the owner key is lost.",
+      "location": "Ownable implementation",
+      "recommendation": "Implement a secure ownership transfer mechanism with timelock and recovery options.",
+      "category": "Access Control"
+    },
+    "CFG24": {
+      "status": "Detected",
+      "severity": "Low",
+      "title": "Missing Input Validation",
+      "description": "The enableTransfer and disableTransfer functions don't validate for zero address input. This could lead to unnecessary gas consumption and confusing state.",
+      "location": "enableTransfer(), disableTransfer() functions",
+      "recommendation": "Add zero address validation in transfer right management functions.",
+      "category": "Input Validation"
+    }
+  },
+  "distribution": {
+    "burn": {
+      "amount": "0",
+      "description": "Burned amount send to the deadWallet."
+    },
+    "liquidity": {
+      "amount": "18",
+      "description": "Liquidity tokens are split from sale into the pool."
+    },
+    "presale": {
+      "amount": "0",
+      "description": "Tokens allocated for the sale."
+    },
+    "staking": {
+      "amount": "0",
+      "description": "Ecosystem"
+    },
+    "team": {
+      "amount": "0",
+      "description": "Teams"
+    },
+    "reserves": {
+      "amount": "0",
+      "description": "Community"
+    }
+  },
+  "files": [
+    {
+      "name": "Pecunity.sol",
+      "sha1": "6E60322329F027E0E52A17A41542ED7724D11405"
+    },
+    {
+      "name": "ERC20.sol",
+      "sha1": "OpenZeppelin"
+    },
+    {
+      "name": "ERC20Burnable.sol",
+      "sha1": "OpenZeppelin"
+    },
+    {
+      "name": "ERC20Permit.sol",
+      "sha1": "OpenZeppelin"
+    },
+    {
+      "name": "Ownable.sol",
+      "sha1": "OpenZeppelin"
+    },
+    {
+      "name": "IPecunity.sol",
+      "sha1": "Interface"
+    }
+  ],
+  "kyc": {
+    "available": true,
+    "url": "https://pinksale.notion.site/Pecunity-KYC-Verification-292d7dc69b3e8087961ae410cdc4409d?source=copy_link",
+    "score": 3
+  },
+  "audit_edition": "Standard",
+  "audit_tool_version": "3.4",
+  "holders": 1
+}

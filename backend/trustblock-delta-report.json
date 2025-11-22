@@ -1,0 +1,1624 @@
+{
+  "generatedAt": "2025-11-20T02:38:47.020Z",
+  "summary": {
+    "totalProjects": 376,
+    "onTrustBlock": 151,
+    "notOnTrustBlock": 225,
+    "percentageOnTrustBlock": 40
+  },
+  "platformStats": {
+    "Binance Smart Chain": {
+      "total": 270,
+      "onTrustBlock": 121,
+      "notOnTrustBlock": 149,
+      "hasContract": 143
+    },
+    "Ethereum": {
+      "total": 25,
+      "onTrustBlock": 7,
+      "notOnTrustBlock": 18,
+      "hasContract": 23
+    },
+    "Solana": {
+      "total": 79,
+      "onTrustBlock": 21,
+      "notOnTrustBlock": 58,
+      "hasContract": 1
+    },
+    "Base": {
+      "total": 2,
+      "onTrustBlock": 2,
+      "notOnTrustBlock": 0,
+      "hasContract": 2
+    }
+  },
+  "solanaStats": {
+    "total": 79,
+    "onTrustBlock": 21,
+    "notOnTrustBlock": 58,
+    "readyToPublish": 1
+  },
+  "missingProjects": {
+    "Binance Smart Chain": [
+      {
+        "name": "XFrog",
+        "slug": "xfrog",
+        "symbol": "XFROG",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Xelliott",
+        "slug": "xelliott",
+        "symbol": "XELLIO",
+        "hasContract": true,
+        "contractAddress": "0x7dbfa930aa3d0553c75e9f993a6bf3d18c41a20e"
+      },
+      {
+        "name": "ELONGATE",
+        "slug": "elongate",
+        "symbol": "ELONGA",
+        "hasContract": true,
+        "contractAddress": "0x10898352722059a7f56ac72108927b08ae91E647"
+      },
+      {
+        "name": "One Chance",
+        "slug": "one-chance",
+        "symbol": "ONECH",
+        "hasContract": true,
+        "contractAddress": "0xc12bce81346b5dd83e6ce5233607fbd2b1e6d43a"
+      },
+      {
+        "name": "DORK LORD BNB",
+        "slug": "dork-lord-bnb",
+        "symbol": "DORKL",
+        "hasContract": true,
+        "contractAddress": "0x680A171f7997bE8c93978350246f427342a5389d"
+      },
+      {
+        "name": "REAL SMURF PEPE",
+        "slug": "real-smurf-pepe",
+        "symbol": "REALS",
+        "hasContract": true,
+        "contractAddress": "0xe4F396fe0c8fE26c206D1aD6Aad3D25d99F1522E"
+      },
+      {
+        "name": "PONZI",
+        "slug": "ponzi",
+        "symbol": "PONZI",
+        "hasContract": true,
+        "contractAddress": "0x08ac8b94eA29b678593f2c232e46Dde0afaEb183"
+      },
+      {
+        "name": "Community INU",
+        "slug": "community-inu",
+        "symbol": "COMMUN",
+        "hasContract": true,
+        "contractAddress": "0x6b4b961391fe2b1b2b5b7ae6da87bc95831448e0"
+      },
+      {
+        "name": "One Piece Fan Token",
+        "slug": "one-piece-fan-token",
+        "symbol": "ONEPI",
+        "hasContract": true,
+        "contractAddress": "0x29F06AdbcA83B5F68BB0a7e732229734a7b1f187"
+      },
+      {
+        "name": "Bitminer Financial",
+        "slug": "bitminer-financial",
+        "symbol": "BITMIN",
+        "hasContract": true,
+        "contractAddress": "0x2FeC3902B0d76Dd7D7e4322bD55e249d84b3676d"
+      },
+      {
+        "name": "POLFEX",
+        "slug": "polfex",
+        "symbol": "POLFEX",
+        "hasContract": true,
+        "contractAddress": "0x02d35B6698964d104E55bb21bEb157117F64B896"
+      },
+      {
+        "name": "X Chihuahua",
+        "slug": "x-chihuahua",
+        "symbol": "XCHIH",
+        "hasContract": true,
+        "contractAddress": "0x3bE3A5DC9b417107560feD7D4a3f299554Bea41a"
+      },
+      {
+        "name": "Tombili",
+        "slug": "tombili",
+        "symbol": "TOMBIL",
+        "hasContract": true,
+        "contractAddress": "0x65F7A222BaF435721Cb28613f5aA0C6174Efd9a0"
+      },
+      {
+        "name": "KERMIT COIN",
+        "slug": "kermit-coin",
+        "symbol": "KERMIT",
+        "hasContract": true,
+        "contractAddress": "0x4C9417dc87cae0ba9913c2C72CD1a7C14a50d733"
+      },
+      {
+        "name": "PANCAKEBOT",
+        "slug": "pancakebot",
+        "symbol": "PANCAK",
+        "hasContract": true,
+        "contractAddress": "0x94c84379C30e9118AE0F944f0C838983076f9B54"
+      },
+      {
+        "name": "Agronium",
+        "slug": "agronium",
+        "symbol": "AGRONI",
+        "hasContract": true,
+        "contractAddress": "0x4136fdbe1c41E1eAB87a6689b33D72e604A447a1"
+      },
+      {
+        "name": "Snoopy",
+        "slug": "snoopy",
+        "symbol": "SNOOPY",
+        "hasContract": true,
+        "contractAddress": "0x42451D82cF0cCd3D1d32b0D9F8F5021AB3c914E8"
+      },
+      {
+        "name": "T-800",
+        "slug": "t-800",
+        "symbol": "T",
+        "hasContract": true,
+        "contractAddress": "0xb790567Ca89ba9FD81488D1a7841581cFb8E9286"
+      },
+      {
+        "name": "Halloween",
+        "slug": "halloween",
+        "symbol": "HALLOW",
+        "hasContract": true,
+        "contractAddress": "0xe2b067FF210b4dA97AA2fA474142e0489F4269c8"
+      },
+      {
+        "name": "Saiyan Doge",
+        "slug": "saiyan-doge",
+        "symbol": "SAIYAN",
+        "hasContract": true,
+        "contractAddress": "0x036eF1b2c7c597AB246443Cfd566F6BaC85f1D0e"
+      },
+      {
+        "name": "SCARY PUMPKIN",
+        "slug": "scary-pumpkin",
+        "symbol": "SCARY",
+        "hasContract": true,
+        "contractAddress": "0x7c66683130b02C0Df54017B9531D49C5ef46023E"
+      },
+      {
+        "name": "Pepe Miner",
+        "slug": "pepe-miner",
+        "symbol": "PEPEM",
+        "hasContract": true,
+        "contractAddress": "0x8245E32D54a6fedA19DDCAFD816ceF3f27daF22e"
+      },
+      {
+        "name": "Data Privacy Token",
+        "slug": "data-privacy-token",
+        "symbol": "DATAP",
+        "hasContract": true,
+        "contractAddress": "0xe12f5C988164BB978A059bd2974C2f53e60dA02F"
+      },
+      {
+        "name": "Spoony",
+        "slug": "spoony",
+        "symbol": "SPOONY",
+        "hasContract": true,
+        "contractAddress": "0xc5B18dC5302f76c96A8f627E018a0e4D359C8eDC"
+      },
+      {
+        "name": "Kalium Network",
+        "slug": "kalium-network",
+        "symbol": "KALIUM",
+        "hasContract": true,
+        "contractAddress": "0x33f68242547c8499e98461bd53d0492aa538e257"
+      },
+      {
+        "name": "Meme Stars",
+        "slug": "meme-stars",
+        "symbol": "MEMES",
+        "hasContract": true,
+        "contractAddress": "0x5A3616581dd9f3C8C3cc42578a407A63Ce42F6b4"
+      },
+      {
+        "name": "BNB GOLD",
+        "slug": "bnb-gold",
+        "symbol": "BNBGO",
+        "hasContract": true,
+        "contractAddress": "0x8552Df3d44a94A1f757a6258a3258dA094114348"
+      },
+      {
+        "name": "PIPI",
+        "slug": "pipi",
+        "symbol": "PIPI",
+        "hasContract": true,
+        "contractAddress": "0x8bfe05115cb206bf070da3ff22f5a095a9fd920e"
+      },
+      {
+        "name": "Sports Future Exchange Token",
+        "slug": "sports-future-exchange-token",
+        "symbol": "SPORTS",
+        "hasContract": true,
+        "contractAddress": "0xd8C9091a2Bd78477bFeE618EAB5864715e405513"
+      },
+      {
+        "name": "Mini Grok",
+        "slug": "mini-grok",
+        "symbol": "MINIG",
+        "hasContract": true,
+        "contractAddress": "0x2DF0b6729A1C6ADaFa781479FDb4319b8F84A085"
+      },
+      {
+        "name": "Bingo",
+        "slug": "bingo",
+        "symbol": "BINGO",
+        "hasContract": true,
+        "contractAddress": "0xb62C5D0DA07B0Aef8feBCDa6F37b30fa21DA8CB7"
+      },
+      {
+        "name": "Happy Cat Token",
+        "slug": "happy-cat-token",
+        "symbol": "HAPPY",
+        "hasContract": true,
+        "contractAddress": "0x3a713C19131667F4e9A56c44f896844A9845764c"
+      },
+      {
+        "name": "Pumpy Penguin",
+        "slug": "pumpy-penguin",
+        "symbol": "PUMPY",
+        "hasContract": true,
+        "contractAddress": "0xEF91428F4C578e149A5572B25917f7472af6bFaB"
+      },
+      {
+        "name": "GOKU INU",
+        "slug": "goku-inu",
+        "symbol": "GOKUI",
+        "hasContract": true,
+        "contractAddress": "0x7de5ca7b0b5e590b6767869f854077d7b4dd7985"
+      },
+      {
+        "name": "DIGIVERSE",
+        "slug": "digiverse",
+        "symbol": "DIGIVE",
+        "hasContract": true,
+        "contractAddress": "0x4f35fdbcde54d01610cdcb5615187d252e66638c"
+      },
+      {
+        "name": "Grok Chain",
+        "slug": "grok-chain",
+        "symbol": "GROKC",
+        "hasContract": true,
+        "contractAddress": "0xc08f1A61614f5132975088bEd28c1BF9843533C3"
+      },
+      {
+        "name": "Baby Byte",
+        "slug": "baby-byte",
+        "symbol": "BABYB",
+        "hasContract": true,
+        "contractAddress": "0x63B8e2109fA2E5ec8D26A19632E50560DbF310bf"
+      },
+      {
+        "name": "Alita",
+        "slug": "alita",
+        "symbol": "ALITA",
+        "hasContract": true,
+        "contractAddress": "0x33679898CEb9DC930024dE84E7339d403191d8f6"
+      },
+      {
+        "name": "SFW",
+        "slug": "sfw",
+        "symbol": "SFW",
+        "hasContract": true,
+        "contractAddress": "0x63B8e2109fA2E5ec8D26A19632E50560DbF310bf"
+      },
+      {
+        "name": "GROK 2024",
+        "slug": "grok-2024",
+        "symbol": "GROK",
+        "hasContract": true,
+        "contractAddress": "0x8E95ABB1E2d2715aC1ae123511A1b4647F4ddE89"
+      },
+      {
+        "name": "Baby Optimus",
+        "slug": "baby-optimus",
+        "symbol": "BABYO",
+        "hasContract": true,
+        "contractAddress": "0x9b660f827019c73d8FE2668c5aD6426addc9a3d7"
+      },
+      {
+        "name": "Gronk",
+        "slug": "gronk",
+        "symbol": "GRONK",
+        "hasContract": true,
+        "contractAddress": "0x46cb8bb9cC5f17dBfE50bAc73a5c1b2bE4667e6b"
+      },
+      {
+        "name": "BONK CEO",
+        "slug": "bonk-ceo",
+        "symbol": "BONKC",
+        "hasContract": true,
+        "contractAddress": "0xb7287c3E5f205573c202426ebDF0E9d452E0e148"
+      },
+      {
+        "name": "Coq Inu",
+        "slug": "coq-inu",
+        "symbol": "COQIN",
+        "hasContract": true,
+        "contractAddress": "0x8d9efF57cbAbBb16D07C08Fd336A743C91bBf18F"
+      },
+      {
+        "name": "dogwifhat",
+        "slug": "dogwifhat",
+        "symbol": "DOGWIF",
+        "hasContract": true,
+        "contractAddress": "0x09Ab61BD94d05b8AC5FAc95743B59417df936F5C"
+      },
+      {
+        "name": "Wolf Invest",
+        "slug": "wolf-invest",
+        "symbol": "WOLFI",
+        "hasContract": true,
+        "contractAddress": "0x8c5F77C9E587584982534c28a74Eb5677af052D7"
+      },
+      {
+        "name": "Elon Grok Cat",
+        "slug": "elon-grok-cat",
+        "symbol": "ELONG",
+        "hasContract": true,
+        "contractAddress": "0x884bb07AC22F48ef3Eb32763563d6F4c18773C81"
+      },
+      {
+        "name": "DRAGON YEAR",
+        "slug": "dragon-year",
+        "symbol": "DRAGON",
+        "hasContract": true,
+        "contractAddress": "0xd066641BFD8Cb7da4523C32ca27c539A3150fb76"
+      },
+      {
+        "name": "Baby BNB",
+        "slug": "baby-bnb",
+        "symbol": "BABYB",
+        "hasContract": true,
+        "contractAddress": "0x7cc1E96ee6b2458b74822204aa0EBc278c41Bd5B"
+      },
+      {
+        "name": "Optimus Elon AI",
+        "slug": "optimus-elon-ai",
+        "symbol": "OPTIMU",
+        "hasContract": true,
+        "contractAddress": "0xecd042fe089473194dCe264A4686298003fC173e"
+      },
+      {
+        "name": "Bitcoin ETF",
+        "slug": "bitcoin-etf",
+        "symbol": "BITCOI",
+        "hasContract": true,
+        "contractAddress": "0x6747a1f8ba15485b2a9bf3828d818a6b4f949e81"
+      },
+      {
+        "name": "Perfect World AI",
+        "slug": "perfect-world-ai",
+        "symbol": "PERFEC",
+        "hasContract": true,
+        "contractAddress": "0xd3BED50a38334Cb1B5c4C2357fb6e81E5d8b704e"
+      },
+      {
+        "name": "Arcade Finance",
+        "slug": "arcade-finance",
+        "symbol": "ARCADE",
+        "hasContract": true,
+        "contractAddress": "0x8098e32db2813519568D65c8158952A03Dc9a5Ae"
+      },
+      {
+        "name": "TROY",
+        "slug": "troy",
+        "symbol": "TROY",
+        "hasContract": true,
+        "contractAddress": "0x9299e4Ca258A8C6623708828Ac3F87E515FD831A"
+      },
+      {
+        "name": "BABY WIF INU",
+        "slug": "baby-wif-inu",
+        "symbol": "BABYW",
+        "hasContract": true,
+        "contractAddress": "0xbDe31cabC17C512480c68dbB2577f691c01a50c6"
+      },
+      {
+        "name": "$GARY",
+        "slug": "gary",
+        "symbol": "GARY",
+        "hasContract": true,
+        "contractAddress": "0x1654eAACf14632428241171648C95c9E4f892672"
+      },
+      {
+        "name": "Innovator",
+        "slug": "innovator",
+        "symbol": "INNOVA",
+        "hasContract": true,
+        "contractAddress": "0x89ad3eEa300fe99a2151ABa2D0E437E2820163EF"
+      },
+      {
+        "name": "BURGER AI",
+        "slug": "burger-ai",
+        "symbol": "BURGER",
+        "hasContract": true,
+        "contractAddress": "0xA44D7c1Fd70a6Af492D8016bb9FC8c847a91aa04"
+      },
+      {
+        "name": "Mini Myro",
+        "slug": "mini-myro",
+        "symbol": "MINIM",
+        "hasContract": true,
+        "contractAddress": "0xbd380F0D61694053250c64A4edCb71bD2AA5f5fB"
+      },
+      {
+        "name": "BABYSAMOYED",
+        "slug": "babysamoyed",
+        "symbol": "BABYSA",
+        "hasContract": true,
+        "contractAddress": "0xAb6bCe858cbC176CCAb75c640Ff9aba66dfd6EE5"
+      },
+      {
+        "name": "BABY SHENLONG",
+        "slug": "baby-shenlong",
+        "symbol": "BABYS",
+        "hasContract": true,
+        "contractAddress": "0x11358784f71b9eFB136ee47f57E00bd99AF81894"
+      },
+      {
+        "name": "Baby USDT",
+        "slug": "baby-usdt",
+        "symbol": "BABYU",
+        "hasContract": true,
+        "contractAddress": "0x33629ca408B20Db391B37A200c141A35A6692aa5"
+      },
+      {
+        "name": "Lil Myro",
+        "slug": "lil-myro",
+        "symbol": "LILMY",
+        "hasContract": true,
+        "contractAddress": "0x706627d25f1f40C27f6D60e6E6272A9880420bf4"
+      },
+      {
+        "name": "King Myro",
+        "slug": "king-myro",
+        "symbol": "KINGM",
+        "hasContract": true,
+        "contractAddress": "0x70f8c9CE371D36B5852aD215b9F9C24D9933de03"
+      },
+      {
+        "name": "Baby Mario",
+        "slug": "baby-mario",
+        "symbol": "BABYM",
+        "hasContract": true,
+        "contractAddress": "0x3489f297e1113b775e4532494ab4f5f44815c98b"
+      },
+      {
+        "name": "Skillon",
+        "slug": "skillon",
+        "symbol": "SKILLO",
+        "hasContract": true,
+        "contractAddress": "0x46721c3bFC1aC425EA5aAEc3d37B02F45E917B55"
+      },
+      {
+        "name": "Meeow",
+        "slug": "meeow",
+        "symbol": "MEEOW",
+        "hasContract": true,
+        "contractAddress": "0xF44600737F9022b08F5df35cfab8967409a31d70"
+      },
+      {
+        "name": "XQUOK",
+        "slug": "xquok",
+        "symbol": "XQUOK",
+        "hasContract": true,
+        "contractAddress": "0x695adae22c14c3a166afeb46f15ab7262c5d5bc2"
+      },
+      {
+        "name": "KING BABY CEO",
+        "slug": "king-baby-ceo",
+        "symbol": "KINGB",
+        "hasContract": true,
+        "contractAddress": "0x3A1E06080968600D9a86C209F5a273E29Dd57b12"
+      },
+      {
+        "name": "GROK 404",
+        "slug": "grok-404",
+        "symbol": "GROK4",
+        "hasContract": true,
+        "contractAddress": "0x4ff81b058819ee1d0ef1589106e906f8eefd2a1c"
+      },
+      {
+        "name": "AI Sora",
+        "slug": "ai-sora",
+        "symbol": "AISOR",
+        "hasContract": true,
+        "contractAddress": "0x467171615241bdb8948c1452b1458ad6fa79f39a"
+      },
+      {
+        "name": "circle index",
+        "slug": "circle-index",
+        "symbol": "CIRCLE",
+        "hasContract": true,
+        "contractAddress": "0xA9279A1C36093185671676695EEDb22F3330fb84"
+      },
+      {
+        "name": "Gege",
+        "slug": "gege",
+        "symbol": "GEGE",
+        "hasContract": true,
+        "contractAddress": "0x3228d1624759deAf3D967B2c1214B4ace65A4F6a"
+      },
+      {
+        "name": "BABY IRBIS",
+        "slug": "baby-irbis",
+        "symbol": "BABYI",
+        "hasContract": true,
+        "contractAddress": "0x514e0E6806541a1F53Db0A07a75962FeF9E5EB15"
+      },
+      {
+        "name": "PEPE AI",
+        "slug": "pepe-ai",
+        "symbol": "PEPEA",
+        "hasContract": true,
+        "contractAddress": "0x87053aFEd327D6F77fF3e6dC4744AA9933ae9B2E"
+      },
+      {
+        "name": "XL",
+        "slug": "xl",
+        "symbol": "XL",
+        "hasContract": true,
+        "contractAddress": "0x1233b829a4181ac42724f287de076bd598908d45"
+      },
+      {
+        "name": "AI Freedom Token",
+        "slug": "ai-freedom-token",
+        "symbol": "AIFRE",
+        "hasContract": true,
+        "contractAddress": "0x1C8108dBB5a2746E12CDd2b79bFA5E5EEebBb0A1"
+      },
+      {
+        "name": "Solar - Artificial Intelligence",
+        "slug": "solar-artificial-intelligence",
+        "symbol": "SOLAR",
+        "hasContract": true,
+        "contractAddress": "0xc8a9f2d0b14c4d986e4c421e003b4eb4492c3937"
+      },
+      {
+        "name": "PeP",
+        "slug": "pep",
+        "symbol": "PEP",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "SolSearcher",
+        "slug": "solsearcher",
+        "symbol": "SOLSEA",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "SOL HAMSTER",
+        "slug": "sol-hamster",
+        "symbol": "SOLHAM",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "BabyMEW",
+        "slug": "babymew",
+        "symbol": "BABYME",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "MeowthWifHat",
+        "slug": "meowthwifhat",
+        "symbol": "MEOWTH",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "TrumpBNB",
+        "slug": "trumpbnb",
+        "symbol": "TRUMPB",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Junkie Cats",
+        "slug": "junkie-cats",
+        "symbol": "JUNKIE",
+        "hasContract": true,
+        "contractAddress": "0x353d21dabdb6dd97958a95df13e0753a24b561b1"
+      },
+      {
+        "name": "ELONxALEXANDRE",
+        "slug": "elonxalexandre",
+        "symbol": "ELONXA",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "RaveRacoon",
+        "slug": "raveracoon",
+        "symbol": "RAVERA",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "MemeCoins Mania",
+        "slug": "memecoins-mania",
+        "symbol": "MEMECO",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "DragonSol Token",
+        "slug": "dragonsol-token",
+        "symbol": "DRAGON",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Chi Yamada Cat",
+        "slug": "chi-yamada-cat",
+        "symbol": "CHIYAM",
+        "hasContract": true,
+        "contractAddress": "0x8f14c2fbb6a14f10ad92449c846015ed48a89739"
+      },
+      {
+        "name": "ELUUP Fan Token",
+        "slug": "eluup-fan-token",
+        "symbol": "ELUUPF",
+        "hasContract": true,
+        "contractAddress": "0xDe730154C096B18fBc2a62202FcEB263fF47D03d"
+      },
+      {
+        "name": "CateWifHat",
+        "slug": "catewifhat",
+        "symbol": "CATEWI",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "MEME101",
+        "slug": "meme101",
+        "symbol": "MEME10",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "FalloutBase",
+        "slug": "falloutbase",
+        "symbol": "FALLOU",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "VancatWifHat",
+        "slug": "vancatwifhat",
+        "symbol": "VANCAT",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "FoxFurry",
+        "slug": "foxfurry",
+        "symbol": "FOXFUR",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "FalloutBase-Sol",
+        "slug": "falloutbase-sol",
+        "symbol": "FALLOU",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "FlorkWifNoHat",
+        "slug": "florkwifnohat",
+        "symbol": "FLORKW",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "FourCZ",
+        "slug": "fourcz",
+        "symbol": "FOURCZ",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Wall Street Cats",
+        "slug": "wall-street-cats",
+        "symbol": "WALLST",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "SylvesterWifHat",
+        "slug": "sylvesterwifhat",
+        "symbol": "SYLVES",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Jeb the Goat",
+        "slug": "jeb-the-goat",
+        "symbol": "JEBTHE",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "PepeQ",
+        "slug": "pepeq",
+        "symbol": "PEPEQ",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Pepe",
+        "slug": "pepe",
+        "symbol": "PEPE",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Naruto Inu",
+        "slug": "naruto-inu",
+        "symbol": "NARUTO",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Dog MAGA",
+        "slug": "dog-maga",
+        "symbol": "DOGMAG",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Trump Pump",
+        "slug": "trump-pump",
+        "symbol": "TRUMPP",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "FurFund",
+        "slug": "furfund",
+        "symbol": "FURFUN",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "ROBOkoin",
+        "slug": "robokoin",
+        "symbol": "ROBOKO",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "BlockSound",
+        "slug": "blocksound",
+        "symbol": "BLOCKS",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Dinga DAO",
+        "slug": "dinga-dao",
+        "symbol": "DINGAD",
+        "hasContract": true,
+        "contractAddress": "0x73C70aE4B7E2eddbeEf94d96064aA33b6f44C943"
+      },
+      {
+        "name": "Rivals Token",
+        "slug": "rivals-token",
+        "symbol": "RIVALS",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "7BOX",
+        "slug": "7box",
+        "symbol": "7BOX",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "TrumpWifLife",
+        "slug": "trumpwiflife",
+        "symbol": "TRUMPW",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "KingToken",
+        "slug": "kingtoken",
+        "symbol": "KINGTO",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "DOGS",
+        "slug": "dogs",
+        "symbol": "DOGS",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "BabyHMSTR",
+        "slug": "babyhmstr",
+        "symbol": "BABYHM",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "DBTCoin",
+        "slug": "dbtcoin",
+        "symbol": "DBTCOI",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "CZCat",
+        "slug": "czcat",
+        "symbol": "CZCAT",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "WinzoneSwap",
+        "slug": "winzoneswap",
+        "symbol": "WINZON",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "TrumpWins",
+        "slug": "trumpwins",
+        "symbol": "TRUMPW",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "MIAOCoin",
+        "slug": "miaocoin",
+        "symbol": "MIAOCO",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "RawDog",
+        "slug": "rawdog",
+        "symbol": "RAWDOG",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "MIAOHCoin",
+        "slug": "miaohcoin",
+        "symbol": "MIAOHC",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "LuBu",
+        "slug": "lubu",
+        "symbol": "LUBU",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "ME",
+        "slug": "me",
+        "symbol": "ME",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "CHI",
+        "slug": "chi",
+        "symbol": "CHI",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Cluster Yield",
+        "slug": "cluster-yield",
+        "symbol": "CLUSTE",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "DeepShark",
+        "slug": "deepshark",
+        "symbol": "DEEPSH",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "FortBanana",
+        "slug": "fortbanana",
+        "symbol": "FORTBA",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "StepZilla",
+        "slug": "stepzilla",
+        "symbol": "STEPZI",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "JOVCOIN",
+        "slug": "jovcoin",
+        "symbol": "JOVCOI",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "CoinPouch",
+        "slug": "coinpouch",
+        "symbol": "COINPO",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Curvency",
+        "slug": "curvency",
+        "symbol": "CURVEN",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "MOONAI",
+        "slug": "moonai",
+        "symbol": "MOONAI",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Tariff Token",
+        "slug": "tariff-token",
+        "symbol": "TARIFF",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "SAKURAAI",
+        "slug": "sakuraai",
+        "symbol": "SAKURA",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Crypto IRA",
+        "slug": "crypto-ira",
+        "symbol": "CI",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "CFGNINJASTD",
+        "slug": "cfgninjastd",
+        "symbol": "C",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "MinersZone",
+        "slug": "minerszone",
+        "symbol": "M",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "L0",
+        "slug": "l0",
+        "symbol": "L",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "S2",
+        "slug": "s2",
+        "symbol": "S",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "GAFA",
+        "slug": "gafa",
+        "symbol": "G",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Future",
+        "slug": "future",
+        "symbol": "F",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Happy Exchange",
+        "slug": "happy-exchange",
+        "symbol": "HE",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Auto Defi",
+        "slug": "auto-defi",
+        "symbol": "AD",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Crypto NFT Galaxy",
+        "slug": "crypto-nft-galaxy",
+        "symbol": "CNG",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "KronicKatz.NFT",
+        "slug": "kronickatznft",
+        "symbol": "K",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Best Ever APY",
+        "slug": "best-ever-apy",
+        "symbol": "BEA",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      }
+    ],
+    "Ethereum": [
+      {
+        "name": "MEVDAO",
+        "slug": "mevdao",
+        "symbol": "MEVDAO",
+        "hasContract": true,
+        "contractAddress": "0x3B9C5bF4866EEE8AbeAec504D91d7D76440007c2"
+      },
+      {
+        "name": "Original Wassie",
+        "slug": "original-wassie",
+        "symbol": "ORIGIN",
+        "hasContract": true,
+        "contractAddress": "0x15d5d13fd59a62ef8847332203011e6628cf1cd5"
+      },
+      {
+        "name": "Bitago",
+        "slug": "bitago",
+        "symbol": "BITAGO",
+        "hasContract": true,
+        "contractAddress": "0x94280A2C7Ae819e6E1b25F21c80334159019a164"
+      },
+      {
+        "name": "Squid Girl",
+        "slug": "squid-girl",
+        "symbol": "SQUID",
+        "hasContract": true,
+        "contractAddress": "0xa60b8883a78CA068d30BEe270EE78428CaC8D7F5"
+      },
+      {
+        "name": "Omnisource DEX",
+        "slug": "omnisource-dex",
+        "symbol": "OMNISO",
+        "hasContract": true,
+        "contractAddress": "0x6d65951cb92999c1209842ae7f12c8e7e64da030"
+      },
+      {
+        "name": "Mintstargram",
+        "slug": "mintstargram",
+        "symbol": "MINTST",
+        "hasContract": true,
+        "contractAddress": "0xb82386Da1Fce533A56FB59BEBdB323AE3CFE4826"
+      },
+      {
+        "name": "CRYPTO GPT",
+        "slug": "crypto-gpt",
+        "symbol": "CRYPTO",
+        "hasContract": true,
+        "contractAddress": "0x50739bd5b6afF093ba2371365727C48a420a060D"
+      },
+      {
+        "name": "UNIRA",
+        "slug": "unira",
+        "symbol": "UNIRA",
+        "hasContract": true,
+        "contractAddress": "0x7Bf6622eaD9e728138c9CDE15a5FB17d6c84795e"
+      },
+      {
+        "name": "ERAX AI",
+        "slug": "erax-ai",
+        "symbol": "ERAXA",
+        "hasContract": true,
+        "contractAddress": "0xe18cff148b2761a2d1295a710cb06869a988870d"
+      },
+      {
+        "name": "Wojakpot",
+        "slug": "wojakpot",
+        "symbol": "WOJAKP",
+        "hasContract": true,
+        "contractAddress": "0x066D75d3c0fA22c3819b2Bb4c096480b1C557DCF"
+      },
+      {
+        "name": "UNODEX",
+        "slug": "unodex",
+        "symbol": "UNODEX",
+        "hasContract": true,
+        "contractAddress": "0x185ece9bc75164f9fc0fbe44738e8dd1863f8464"
+      },
+      {
+        "name": "Moustache Man MM",
+        "slug": "moustache-man-mm",
+        "symbol": "MOUSTA",
+        "hasContract": true,
+        "contractAddress": "0xFC7fc6b54DE8901D98827f411192B86C888DeDb8"
+      },
+      {
+        "name": "test2024",
+        "slug": "test2024",
+        "symbol": "TEST20",
+        "hasContract": true,
+        "contractAddress": "0xFC7fc6b54DE8901D98827f411192B86C888DeDb8"
+      },
+      {
+        "name": "BRO",
+        "slug": "bro",
+        "symbol": "BRO",
+        "hasContract": true,
+        "contractAddress": "0x432afdc4f83feedbae1b891111b1f9911afc6994"
+      },
+      {
+        "name": "OP_CAT",
+        "slug": "op-cat",
+        "symbol": "OPCAT",
+        "hasContract": true,
+        "contractAddress": "0xdaa7699352ac8709f3d2fd092226d3dd7da40474"
+      },
+      {
+        "name": "Andy Alter Ego",
+        "slug": "andy-alter-ego",
+        "symbol": "ANDYAL",
+        "hasContract": true,
+        "contractAddress": "0xe4042c7c1bf740b8ddb2ab43df6d9ed766b2513e"
+      },
+      {
+        "name": "NFT Xchange Coin",
+        "slug": "nft-xchange-coin",
+        "symbol": "NFTXCH",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Phoenix Chicken",
+        "slug": "phoenix-chicken",
+        "symbol": "PHOENI",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      }
+    ],
+    "Solana": [
+      {
+        "name": "Fuck Around To Find Out",
+        "slug": "fuck-around-to-find-out",
+        "symbol": "FUCKAR",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "APERIL",
+        "slug": "aperil",
+        "symbol": "APERIL",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "End of Meme",
+        "slug": "end-of-meme",
+        "symbol": "ENDOFM",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "CARD OF MEME",
+        "slug": "card-of-meme",
+        "symbol": "CARDOF",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "FLOCAT",
+        "slug": "flocat",
+        "symbol": "FLOCAT",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "CATPAW",
+        "slug": "catpaw",
+        "symbol": "CATPAW",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Gorillawifhat",
+        "slug": "gorillawifhat",
+        "symbol": "GORILL",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Shiboki",
+        "slug": "shiboki",
+        "symbol": "SHIBOK",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Evil Kermit",
+        "slug": "evil-kermit",
+        "symbol": "EVILKE",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Book of Bonk",
+        "slug": "book-of-bonk",
+        "symbol": "BOOKOF",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "TOMWIFHAT",
+        "slug": "tomwifhat",
+        "symbol": "TOMWIF",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Book Of Cats",
+        "slug": "book-of-cats",
+        "symbol": "BOOKOF",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Bitconnect",
+        "slug": "bitconnect",
+        "symbol": "BITCON",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "pepe family",
+        "slug": "pepe-family",
+        "symbol": "PEPEFA",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Chapi El Cato",
+        "slug": "chapi-el-cato",
+        "symbol": "CHAPIE",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Katy Perry Fans",
+        "slug": "katy-perry-fans",
+        "symbol": "KATYPE",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Pudgy Puss",
+        "slug": "pudgy-puss",
+        "symbol": "PUDGYP",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "DO SOMETHING FFS",
+        "slug": "do-something-ffs",
+        "symbol": "DOSOME",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Book Of Halving",
+        "slug": "book-of-halving",
+        "symbol": "BOOKOF",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Myro Floki CEO",
+        "slug": "myro-floki-ceo",
+        "symbol": "MYROFL",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Meme Wars",
+        "slug": "meme-wars",
+        "symbol": "MEMEWA",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Book Of Meme AI",
+        "slug": "book-of-meme-ai",
+        "symbol": "BOOKOF",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "TWUST",
+        "slug": "twust",
+        "symbol": "TWUST",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "PECKO",
+        "slug": "pecko",
+        "symbol": "PECKO",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "BABY GUMMY",
+        "slug": "baby-gummy",
+        "symbol": "BABYGU",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Mr.Beast Goat",
+        "slug": "mr-beast-goat",
+        "symbol": "MRBEAS",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Gerku",
+        "slug": "gerku",
+        "symbol": "GERKU",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Dog Robin Hood",
+        "slug": "dog-robin-hood",
+        "symbol": "DOGROB",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Vietnam Coin",
+        "slug": "vietnam-coin",
+        "symbol": "VIETNA",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Albert II",
+        "slug": "albert-ii",
+        "symbol": "ALBERT",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "BOOK OF DUCK",
+        "slug": "book-of-duck",
+        "symbol": "BOOKOF",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Book Of Junkie Memes",
+        "slug": "book-of-junkie-memes",
+        "symbol": "BOOKOF",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Bonk AI",
+        "slug": "bonk-ai",
+        "symbol": "BONKAI",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Elon Wif Trump",
+        "slug": "elon-wif-trump",
+        "symbol": "ELONWI",
+        "hasContract": true,
+        "contractAddress": "0x8b683c400457ef31f3c27c90acb6ab69304d1b77"
+      },
+      {
+        "name": "dogwiftax",
+        "slug": "dogwiftax",
+        "symbol": "DOGWIF",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Cobra King",
+        "slug": "cobra-king",
+        "symbol": "COBRAK",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Lazy Sniper",
+        "slug": "lazy-sniper",
+        "symbol": "LAZYSN",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "JOE ROGAN",
+        "slug": "joe-rogan",
+        "symbol": "JOEROG",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "PENALDO",
+        "slug": "penaldo",
+        "symbol": "PENALD",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Elon Floki CEO",
+        "slug": "elon-floki-ceo",
+        "symbol": "ELONFL",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Tate Goat",
+        "slug": "tate-goat",
+        "symbol": "TATEGO",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Vote Trump",
+        "slug": "vote-trump",
+        "symbol": "VOTETR",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Bozos \"Soros\" The Clown",
+        "slug": "bozos-soros-the-clown",
+        "symbol": "BOZOSS",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Memex",
+        "slug": "memex",
+        "symbol": "MEMEX",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "$STING",
+        "slug": "sting",
+        "symbol": "STING",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "POTUS POLL",
+        "slug": "potus-poll",
+        "symbol": "POTUSP",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Chronicles of Meme",
+        "slug": "chronicles-of-meme",
+        "symbol": "CHRONI",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Book of Trump Club",
+        "slug": "book-of-trump-club",
+        "symbol": "BOOKOF",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "The Solana of Zelda",
+        "slug": "the-solana-of-zelda",
+        "symbol": "THESOL",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Computer Control AI",
+        "slug": "computer-control-ai",
+        "symbol": "COMPUT",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "The AI Mascot",
+        "slug": "the-ai-mascot",
+        "symbol": "THEAIM",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Arabian Trump",
+        "slug": "arabian-trump",
+        "symbol": "ARABIA",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Mars Coin",
+        "slug": "mars-coin",
+        "symbol": "MARSCO",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Beevo",
+        "slug": "beevo",
+        "symbol": "BEEVO",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Flo Coin Global",
+        "slug": "flo-coin-global",
+        "symbol": "FLOCOI",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Nostradamus",
+        "slug": "nostradamus",
+        "symbol": "NOSTRA",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "HANAAI",
+        "slug": "hanaai",
+        "symbol": "HANAAI",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      },
+      {
+        "name": "Biokript PRO",
+        "slug": "biokript-pro",
+        "symbol": "BIOKRI",
+        "hasContract": false,
+        "contractAddress": "N/A"
+      }
+    ]
+  }
+}

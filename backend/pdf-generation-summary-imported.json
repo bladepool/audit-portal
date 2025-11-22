@@ -1,0 +1,14 @@
+{
+  "generation_date": "2025-11-21T00:58:26.501Z",
+  "projects_total": 59,
+  "pdfs_generated": 59,
+  "errors": 0,
+  "total_time_minutes": 5.8,
+  "avg_time_seconds": 5.9,
+  "next_steps": [
+    "Copy PDFs to github-pdfs-repo folder",
+    "Git add, commit, and push to GitHub",
+    "Run update-github-pdf-urls.js to update database",
+    "Review projects and set published=true"
+  ]
+}

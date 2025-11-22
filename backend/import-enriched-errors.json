@@ -1,0 +1,6 @@
+[
+  {
+    "batch": 50,
+    "error": "E11000 duplicate key error collection: auditportal.projects index: slug_1 dup key: { slug: \"snoopy\" }"
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "slug": "bozos-soros-the-clown",
+    "name": "Bozos \"Soros\" The Clown",
+    "error": "Command failed: node pdf.js\nnode:internal/fs/utils:347\r\n    throw err;\r\n    ^\r\n\r\nError: ENOENT: no such file or directory, open './Audits_Temporal/trust_20251120_CFGNINJA_Bozos \"Soros\" The Clown_BOZOSS_Audit.json'\r\n    at Object.openSync (node:fs:590:3)\r\n    at Object.writeFileSync (node:fs:2202:35)\r\n    at Object.<anonymous> (E:\\Desktop\\Old Desktop November 2023\\audits\\PDFscript\\CFGNinjaScripts\\Custom Contract\\pdf.js:736:6)\r\n    at Module._compile (node:internal/modules/cjs/loader:1198:14)\r\n    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1252:10)\r\n    at Module.load (node:internal/modules/cjs/loader:1076:32)\r\n    at Function.Module._load (node:internal/modules/cjs/loader:911:12)\r\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)\r\n    at node:internal/main/run_main_module:22:47 {\r\n  errno: -4058,\r\n  syscall: 'open',\r\n  code: 'ENOENT',\r\n  path: './Audits_Temporal/trust_20251120_CFGNINJA_Bozos \"Soros\" The Clown_BOZOSS_Audit.json'\r\n}\r\n"
+  }
+]

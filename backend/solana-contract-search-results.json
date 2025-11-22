@@ -1,0 +1,427 @@
+{
+  "timestamp": "2025-11-20T05:55:41.365Z",
+  "searched": 78,
+  "found": 4,
+  "notFound": 74,
+  "successRate": "5.1%",
+  "foundContracts": [
+    {
+      "name": "WREKT",
+      "symbol": "WREKT",
+      "slug": "wrekt",
+      "address": "G4YMiaKnkb3iaduV4Jfh3rrGdNH6heKHTDS39rE6UXAq",
+      "source": "Solana Token Registry"
+    },
+    {
+      "name": "House Of Meme",
+      "symbol": "HOUSE",
+      "slug": "house-of-meme",
+      "address": "55sgz1DPXFfzFVNd9irzGJ2Xgn5B7iiEM651Yz67e5jB",
+      "source": "Solana Token Registry"
+    },
+    {
+      "name": "SOLEPE",
+      "symbol": "SOLEPE",
+      "slug": "solepe",
+      "address": "6w6JEuFqkuCynQ4PnyE34BGBJCGC4diPTLgSy1grnjpJ",
+      "source": "Solana Token Registry"
+    },
+    {
+      "name": "Mars Coin",
+      "symbol": "MARSCO",
+      "slug": "mars-coin",
+      "address": "67jSkrp4SEhk4k5E6oXjprX9SXnRb1x2M3obke7BemL1",
+      "source": "Solana Token Registry"
+    }
+  ],
+  "notFoundProjects": [
+    {
+      "name": "BONKO",
+      "symbol": "BONKO",
+      "slug": "bonko",
+      "website": "https://audit.cfg.ninja/bonko"
+    },
+    {
+      "name": "BABY JARED",
+      "symbol": "BABYJ",
+      "slug": "baby-jared",
+      "website": "https://audit.cfg.ninja/baby-jared"
+    },
+    {
+      "name": "Libra Finance",
+      "symbol": "LIBRA",
+      "slug": "libra-finance",
+      "website": "https://audit.cfg.ninja/libra-finance"
+    },
+    {
+      "name": "Solnado Cash",
+      "symbol": "SOLNAD",
+      "slug": "solnado-cash",
+      "website": "https://audit.cfg.ninja/solnado-cash"
+    },
+    {
+      "name": "Babykrypto",
+      "symbol": "BABYKR",
+      "slug": "babykrypto",
+      "website": "https://audit.cfg.ninja/babykrypto"
+    },
+    {
+      "name": "Hemule wif hat",
+      "symbol": "HEMULE",
+      "slug": "hemule-wif-hat",
+      "website": "https://audit.cfg.ninja/hemule-wif-hat"
+    },
+    {
+      "name": "BABY GIGGLE LEARN",
+      "symbol": "BABYG",
+      "slug": "baby-giggle-learn",
+      "website": "https://audit.cfg.ninja/baby-giggle-learn"
+    },
+    {
+      "name": "BOOK OF NPC",
+      "symbol": "BOOKO",
+      "slug": "book-of-npc",
+      "website": "https://audit.cfg.ninja/book-of-npc"
+    },
+    {
+      "name": "Donald Pump",
+      "symbol": "DONALD",
+      "slug": "donald-pump",
+      "website": "https://audit.cfg.ninja/donald-pump"
+    },
+    {
+      "name": "MERV THE CROC",
+      "symbol": "MERVT",
+      "slug": "merv-the-croc",
+      "website": "https://audit.cfg.ninja/merv-the-croc"
+    },
+    {
+      "name": "Cats Of Sol",
+      "symbol": "CATSO",
+      "slug": "cats-of-sol",
+      "website": "https://audit.cfg.ninja/cats-of-sol"
+    },
+    {
+      "name": "Baby DON",
+      "symbol": "BABYD",
+      "slug": "baby-don",
+      "website": "https://audit.cfg.ninja/baby-don"
+    },
+    {
+      "name": "Innit For The Tehc",
+      "symbol": "INNIT",
+      "slug": "innit-for-the-tehc",
+      "website": "https://audit.cfg.ninja/innit-for-the-tehc"
+    },
+    {
+      "name": "CATDOGE",
+      "symbol": "CATDOG",
+      "slug": "catdoge",
+      "website": "https://audit.cfg.ninja/catdoge"
+    },
+    {
+      "name": "LOBOTOMY DASH",
+      "symbol": "LOBOTO",
+      "slug": "lobotomy-dash",
+      "website": "https://audit.cfg.ninja/lobotomy-dash"
+    },
+    {
+      "name": "Meme Crap Book",
+      "symbol": "MEMEC",
+      "slug": "meme-crap-book",
+      "website": "https://audit.cfg.ninja/meme-crap-book"
+    },
+    {
+      "name": "KANGU",
+      "symbol": "KANGU",
+      "slug": "kangu",
+      "website": "https://audit.cfg.ninja/kangu"
+    },
+    {
+      "name": "Slerf Cat",
+      "symbol": "SLERF",
+      "slug": "slerf-cat",
+      "website": "https://audit.cfg.ninja/slerf-cat"
+    },
+    {
+      "name": "Fuck Around To Find Out",
+      "symbol": "FUCKAR",
+      "slug": "fuck-around-to-find-out"
+    },
+    {
+      "name": "APERIL",
+      "symbol": "APERIL",
+      "slug": "aperil"
+    },
+    {
+      "name": "End of Meme",
+      "symbol": "ENDOFM",
+      "slug": "end-of-meme"
+    },
+    {
+      "name": "CARD OF MEME",
+      "symbol": "CARDOF",
+      "slug": "card-of-meme"
+    },
+    {
+      "name": "FLOCAT",
+      "symbol": "FLOCAT",
+      "slug": "flocat"
+    },
+    {
+      "name": "CATPAW",
+      "symbol": "CATPAW",
+      "slug": "catpaw"
+    },
+    {
+      "name": "Gorillawifhat",
+      "symbol": "GORILL",
+      "slug": "gorillawifhat"
+    },
+    {
+      "name": "Shiboki",
+      "symbol": "SHIBOK",
+      "slug": "shiboki"
+    },
+    {
+      "name": "Evil Kermit",
+      "symbol": "EVILKE",
+      "slug": "evil-kermit"
+    },
+    {
+      "name": "Book of Bonk",
+      "symbol": "BOOKOF",
+      "slug": "book-of-bonk"
+    },
+    {
+      "name": "TOMWIFHAT",
+      "symbol": "TOMWIF",
+      "slug": "tomwifhat"
+    },
+    {
+      "name": "Book Of Cats",
+      "symbol": "BOOKOF",
+      "slug": "book-of-cats"
+    },
+    {
+      "name": "Bitconnect",
+      "symbol": "BITCON",
+      "slug": "bitconnect"
+    },
+    {
+      "name": "pepe family",
+      "symbol": "PEPEFA",
+      "slug": "pepe-family"
+    },
+    {
+      "name": "Chapi El Cato",
+      "symbol": "CHAPIE",
+      "slug": "chapi-el-cato"
+    },
+    {
+      "name": "Katy Perry Fans",
+      "symbol": "KATYPE",
+      "slug": "katy-perry-fans"
+    },
+    {
+      "name": "Pudgy Puss",
+      "symbol": "PUDGYP",
+      "slug": "pudgy-puss"
+    },
+    {
+      "name": "DO SOMETHING FFS",
+      "symbol": "DOSOME",
+      "slug": "do-something-ffs"
+    },
+    {
+      "name": "Book Of Halving",
+      "symbol": "BOOKOF",
+      "slug": "book-of-halving"
+    },
+    {
+      "name": "Myro Floki CEO",
+      "symbol": "MYROFL",
+      "slug": "myro-floki-ceo"
+    },
+    {
+      "name": "Meme Wars",
+      "symbol": "MEMEWA",
+      "slug": "meme-wars"
+    },
+    {
+      "name": "Book Of Meme AI",
+      "symbol": "BOOKOF",
+      "slug": "book-of-meme-ai"
+    },
+    {
+      "name": "TWUST",
+      "symbol": "TWUST",
+      "slug": "twust"
+    },
+    {
+      "name": "PECKO",
+      "symbol": "PECKO",
+      "slug": "pecko"
+    },
+    {
+      "name": "BABY GUMMY",
+      "symbol": "BABYGU",
+      "slug": "baby-gummy"
+    },
+    {
+      "name": "Mr.Beast Goat",
+      "symbol": "MRBEAS",
+      "slug": "mr-beast-goat"
+    },
+    {
+      "name": "Gerku",
+      "symbol": "GERKU",
+      "slug": "gerku"
+    },
+    {
+      "name": "Dog Robin Hood",
+      "symbol": "DOGROB",
+      "slug": "dog-robin-hood"
+    },
+    {
+      "name": "Vietnam Coin",
+      "symbol": "VIETNA",
+      "slug": "vietnam-coin"
+    },
+    {
+      "name": "Albert II",
+      "symbol": "ALBERT",
+      "slug": "albert-ii"
+    },
+    {
+      "name": "BOOK OF DUCK",
+      "symbol": "BOOKOF",
+      "slug": "book-of-duck"
+    },
+    {
+      "name": "Book Of Junkie Memes",
+      "symbol": "BOOKOF",
+      "slug": "book-of-junkie-memes"
+    },
+    {
+      "name": "Bonk AI",
+      "symbol": "BONKAI",
+      "slug": "bonk-ai"
+    },
+    {
+      "name": "dogwiftax",
+      "symbol": "DOGWIF",
+      "slug": "dogwiftax"
+    },
+    {
+      "name": "Cobra King",
+      "symbol": "COBRAK",
+      "slug": "cobra-king"
+    },
+    {
+      "name": "Lazy Sniper",
+      "symbol": "LAZYSN",
+      "slug": "lazy-sniper"
+    },
+    {
+      "name": "JOE ROGAN",
+      "symbol": "JOEROG",
+      "slug": "joe-rogan"
+    },
+    {
+      "name": "PENALDO",
+      "symbol": "PENALD",
+      "slug": "penaldo"
+    },
+    {
+      "name": "Elon Floki CEO",
+      "symbol": "ELONFL",
+      "slug": "elon-floki-ceo"
+    },
+    {
+      "name": "Tate Goat",
+      "symbol": "TATEGO",
+      "slug": "tate-goat"
+    },
+    {
+      "name": "Vote Trump",
+      "symbol": "VOTETR",
+      "slug": "vote-trump"
+    },
+    {
+      "name": "Bozos \"Soros\" The Clown",
+      "symbol": "BOZOSS",
+      "slug": "bozos-soros-the-clown"
+    },
+    {
+      "name": "Memex",
+      "symbol": "MEMEX",
+      "slug": "memex"
+    },
+    {
+      "name": "$STING",
+      "symbol": "STING",
+      "slug": "sting"
+    },
+    {
+      "name": "POTUS POLL",
+      "symbol": "POTUSP",
+      "slug": "potus-poll"
+    },
+    {
+      "name": "Chronicles of Meme",
+      "symbol": "CHRONI",
+      "slug": "chronicles-of-meme"
+    },
+    {
+      "name": "Book of Trump Club",
+      "symbol": "BOOKOF",
+      "slug": "book-of-trump-club"
+    },
+    {
+      "name": "The Solana of Zelda",
+      "symbol": "THESOL",
+      "slug": "the-solana-of-zelda"
+    },
+    {
+      "name": "Computer Control AI",
+      "symbol": "COMPUT",
+      "slug": "computer-control-ai"
+    },
+    {
+      "name": "The AI Mascot",
+      "symbol": "THEAIM",
+      "slug": "the-ai-mascot"
+    },
+    {
+      "name": "Arabian Trump",
+      "symbol": "ARABIA",
+      "slug": "arabian-trump"
+    },
+    {
+      "name": "Beevo",
+      "symbol": "BEEVO",
+      "slug": "beevo"
+    },
+    {
+      "name": "Flo Coin Global",
+      "symbol": "FLOCOI",
+      "slug": "flo-coin-global"
+    },
+    {
+      "name": "Nostradamus",
+      "symbol": "NOSTRA",
+      "slug": "nostradamus"
+    },
+    {
+      "name": "HANAAI",
+      "symbol": "HANAAI",
+      "slug": "hanaai"
+    },
+    {
+      "name": "Biokript PRO",
+      "symbol": "BIOKRI",
+      "slug": "biokript-pro"
+    }
+  ]
+}

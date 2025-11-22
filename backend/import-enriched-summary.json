@@ -1,0 +1,18 @@
+{
+  "import_date": "2025-11-20T09:44:09.452Z",
+  "projects_imported": 50,
+  "projects_existed": 40,
+  "errors": 1,
+  "database_total": 1156,
+  "database_published": 376,
+  "database_with_addresses": 59,
+  "database_with_pdfs": 435,
+  "data_quality": {
+    "with_addresses": 60,
+    "with_websites": 58,
+    "with_telegram": 58,
+    "with_twitter": 59,
+    "with_findings": 3,
+    "avg_security_score": "84.1"
+  }
+}

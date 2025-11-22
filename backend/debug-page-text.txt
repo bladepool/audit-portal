@@ -1,0 +1,167 @@
+Request an Audit
+ANONYMOUS DAO
+PinkSale 
+Project Info
+Timeline
+Audit Request
+12/10/2023
+Onboarding Process
+12/10/2023
+Audit Preview
+12/10/2023
+Audit Release
+12/10/2023
+Token Analysis
+Token Name
+ANONYMOUS DAO
+Token Symbol
+ANON
+Token Address
+0x73...4575
+Token Decimals
+18
+Token Total Supply
+9,999,999
+Contract Verified
+Yes
+Platform
+Binance Smart Chain
+Compiler
+v0.8.4+commit.c7e474f2
+Sol License
+No License (None)
+Contract Name
+StandardToken
+Contract Created
+Invalid Date
+Contract Language
+Solidity
+Owner & Deployer Information
+Owner Address
+0x25...bF5
+Deployer Address
+0x25...bF5
+Manual Code Review Risk Results
+Can Mint?
+Pass
+Edit Taxes over 25%
+Pass
+Max Transaction
+Pass
+Max Wallet
+Pass
+Enable Trade
+Pass
+Modify Tax
+Fail
+Honeypot
+Fail
+Trading Cooldown
+Pass
+Transfer Pausable
+Pass
+Can Pause Trade?
+Fail
+Anti Bot
+Pass
+Antiwhale
+Pass
+Proxy Contract
+Pass
+Blacklisted
+Pass
+Hidden Ownership
+Pass
+Buy Tax
+0
+Sell Tax
+0
+Selfdestruct
+Pass
+Whitelisted
+Pass
+External Call
+Pass
+Code Security
+Score History
+Low
+20
+60
+High
+80
+100
+50
+0
+Code Audit History
+0
+All Findings
+0
+Partially Resolved
+0
+Acknowledged
+0
+Resolved
+0 Low
+
+0 Acknowledged, 0 Pending , 0 Resolved
+
+0 Medium
+
+0 Acknowledged, 0 Pending , 0 Resolved
+
+0 High
+
+0 Acknowledged, 0 Pending , 0 Resolved
+
+0 Critical
+
+0 Acknowledged, 0 Pending , 0 Resolved
+
+0 Informational
+
+0 Acknowledged, 0 Pending , 0 Resolved
+
+View Audit
+View Findings
+Community Confidence
+0 Votes
+Secure (0)
+Insecure (0)
+Connect Wallet
+Page Visits
+16
+Visits
+Overview
+Socials
+Audit Security Score
+80%
+Low
+PASS
+Safety Overview:
+0
+Low
+0
+Medium
+0
+High
+0
+Critical
+0
+Informational
+Mainnet
+Share
+Share
+Audit Confidence
+★
+★
+★
+★
+★
+
+2
+
+Audit Confidence
+Low
+File a Report
+If you find any discrepancies in the project that you would like to report, use the form below.
+File a Report

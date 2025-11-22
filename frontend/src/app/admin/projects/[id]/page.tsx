@@ -21,7 +21,8 @@ import { DocumentPdfRegular, CalculatorRegular } from '@fluentui/react-icons';
 import { projectsAPI, blockchainsAPI } from '@/lib/api';
 import { Project, Finding } from '@/lib/types';
 import FindingsManager from '@/components/FindingsManager';
-import { generateEnhancedAuditPDF } from '@/lib/enhancedPdfGenerator';
+import { generateEnhancedAuditPDF, generateEnhancedAuditPDFBlob } from '@/lib/enhancedPdfGenerator';
+import { uploadPDFToGitHub, getGitHubToken, saveGitHubToken } from '@/lib/githubUpload';
 
 // Global build version - update this with each new build
 const AUDIT_TOOL_VERSION = '3.4';
@@ -242,6 +243,13 @@ export default function ProjectFormPage() {
   // Advanced Metadata
   const [isGraph, setIsGraph] = useState(false);
   const [isInheritance, setIsInheritance] = useState(false);
+  
+  // PDF Generation
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [pdfGenerationMessage, setPdfGenerationMessage] = useState('');
+  const [uploadToGitHub, setUploadToGitHub] = useState(true);
+  const [githubToken, setGithubToken] = useState('');
+  const [showTokenInput, setShowTokenInput] = useState(false);
   const [isEVMContract, setIsEVMContract] = useState(true);
   const [isSolana, setIsSolana] = useState(false);
   const [isNFT, setIsNFT] = useState(false);
@@ -265,6 +273,12 @@ export default function ProjectFormPage() {
     if (!token) {
       router.push('/admin');
       return;
+    }
+    
+    // Load GitHub token if saved
+    const savedGithubToken = getGitHubToken();
+    if (savedGithubToken) {
+      setGithubToken(savedGithubToken);
     }
     
     // Load blockchains list
@@ -617,6 +631,103 @@ export default function ProjectFormPage() {
       setGoPlusMessage('✗ Error: ' + (error.response?.data?.error || error.message));
     } finally {
       setFetchingGoPlus(false);
+    }
+  };
+
+  const handleGeneratePDF = async () => {
+    if (isNew) {
+      alert('Please save the project first before generating PDF');
+      return;
+    }
+
+    setIsGeneratingPdf(true);
+    setPdfGenerationMessage('Generating PDF...');
+
+    try {
+      // Fetch the latest project data
+      const projectResponse = await fetch(`/api/projects/${params.id}`);
+      if (!projectResponse.ok) {
+        throw new Error('Failed to fetch project data');
+      }
+      const projectData = await projectResponse.json();
+
+      // Generate PDF blob
+      setPdfGenerationMessage('Generating PDF in browser...');
+      const pdfBlob = await generateEnhancedAuditPDFBlob(projectData);
+
+      // Download PDF locally
+      const url = window.URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${projectData.slug || 'audit'}_report.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      setPdfGenerationMessage('✅ PDF generated and downloaded successfully!');
+
+      // Upload to GitHub if requested
+      if (uploadToGitHub) {
+        const token = githubToken || getGitHubToken();
+        
+        if (!token) {
+          setShowTokenInput(true);
+          setPdfGenerationMessage('⚠️ GitHub token required for upload. Please enter your token below.');
+          return;
+        }
+
+        setPdfGenerationMessage('📤 Uploading to GitHub...');
+        
+        const filename = `${projectData.slug}.pdf`;
+        const uploadResult = await uploadPDFToGitHub(
+          pdfBlob,
+          filename,
+          token,
+          `Upload audit report for ${projectData.name}`
+        );
+
+        if (uploadResult.success) {
+          setPdfGenerationMessage(`✅ PDF uploaded to GitHub!\n${uploadResult.rawUrl}`);
+          
+          // Save token for future use
+          if (githubToken) {
+            saveGitHubToken(githubToken);
+          }
+
+          // Update project with PDF URL
+          try {
+            await fetch(`/api/admin/projects/${params.id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                ...projectData,
+                pdf: {
+                  url: uploadResult.rawUrl,
+                  github_hosted: true,
+                },
+              }),
+            });
+          } catch (updateError) {
+            console.error('Failed to update project with PDF URL:', updateError);
+          }
+        } else {
+          throw new Error(uploadResult.error || 'GitHub upload failed');
+        }
+      }
+
+      setTimeout(() => {
+        setPdfGenerationMessage('');
+      }, 5000);
+    } catch (error: any) {
+      console.error('PDF generation error:', error);
+      const errorMsg = `❌ Error: ${error.message || 'Failed to generate PDF'}`;
+      setPdfGenerationMessage(errorMsg);
+      alert(errorMsg);
+    } finally {
+      setIsGeneratingPdf(false);
     }
   };
 
@@ -1581,6 +1692,64 @@ export default function ProjectFormPage() {
             </Text>
           </Field>
         </Card>
+
+        {/* PDF Generation */}
+        {!isNew && (
+          <Card className={styles.section}>
+            <Text className={styles.sectionTitle}>PDF Generation</Text>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <Field label="Upload to GitHub">
+                <Switch 
+                  checked={uploadToGitHub} 
+                  onChange={(e) => setUploadToGitHub(e.currentTarget.checked)} 
+                />
+                <Text size={200} style={{ marginLeft: '8px' }}>
+                  {uploadToGitHub ? 'PDF will be uploaded to CFG-NINJA/audits repository' : 'PDF will only be downloaded locally'}
+                </Text>
+              </Field>
+
+              {showTokenInput && (
+                <Field label="GitHub Personal Access Token" required>
+                  <Input 
+                    type="password"
+                    value={githubToken} 
+                    onChange={(e) => setGithubToken(e.target.value)}
+                    placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                  />
+                  <Text size={200} style={{ marginTop: '4px', color: '#666' }}>
+                    Required for GitHub upload. Create a token at github.com/settings/tokens with 'repo' scope.
+                  </Text>
+                </Field>
+              )}
+
+              <div>
+                <Button 
+                  appearance="primary" 
+                  icon={<DocumentPdfRegular />}
+                  onClick={handleGeneratePDF}
+                  disabled={isGeneratingPdf}
+                >
+                  {isGeneratingPdf ? 'Generating...' : 'Generate Audit PDF'}
+                </Button>
+                {pdfGenerationMessage && (
+                  <Text 
+                    size={200} 
+                    style={{ 
+                      marginTop: '8px', 
+                      display: 'block',
+                      color: pdfGenerationMessage.includes('✅') ? 'green' : 
+                             pdfGenerationMessage.includes('⚠️') ? 'orange' : 
+                             pdfGenerationMessage.includes('❌') ? 'red' : 'black',
+                      whiteSpace: 'pre-wrap'
+                    }}
+                  >
+                    {pdfGenerationMessage}
+                  </Text>
+                )}
+              </div>
+            </div>
+          </Card>
+        )}
 
         <Card className={styles.actions}>
           <Button type="button" onClick={() => router.push('/admin/dashboard')}>

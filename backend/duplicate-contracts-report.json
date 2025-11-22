@@ -1,0 +1,65 @@
+{
+  "timestamp": "2025-11-20T02:46:34.587Z",
+  "total_projects_with_contracts": 169,
+  "unique_contracts": 166,
+  "duplicate_contracts": 3,
+  "duplicate_projects": 6,
+  "publishable_unique": 166,
+  "duplicates": [
+    {
+      "contract_address": "0x63B8e2109fA2E5ec8D26A19632E50560DbF310bf",
+      "count": 2,
+      "projects": [
+        {
+          "name": "Baby Byte",
+          "slug": "baby-byte",
+          "platform": "Binance Smart Chain",
+          "created": "2025-11-18T18:59:35.347Z"
+        },
+        {
+          "name": "SFW",
+          "slug": "sfw",
+          "platform": "Binance Smart Chain",
+          "created": "2025-11-18T18:59:35.479Z"
+        }
+      ]
+    },
+    {
+      "contract_address": "0xFC7fc6b54DE8901D98827f411192B86C888DeDb8",
+      "count": 2,
+      "projects": [
+        {
+          "name": "Moustache Man MM",
+          "slug": "moustache-man-mm",
+          "platform": "Ethereum",
+          "created": "2025-11-18T19:02:25.472Z"
+        },
+        {
+          "name": "test2024",
+          "slug": "test2024",
+          "platform": "Ethereum",
+          "created": "2025-11-18T19:02:25.544Z"
+        }
+      ]
+    },
+    {
+      "contract_address": "0x8b683c400457ef31f3c27c90acb6ab69304d1b77",
+      "count": 2,
+      "projects": [
+        {
+          "name": "Zydio AI",
+          "slug": "zydio-ai",
+          "platform": "Binance Smart Chain",
+          "created": "2025-11-18T19:19:17.968Z",
+          "trustblock_url": "https://app.trustblock.run/audit/33db412e-87be-4287-be87-aaa542094bbc"
+        },
+        {
+          "name": "Elon Wif Trump",
+          "slug": "elon-wif-trump",
+          "platform": "Solana",
+          "created": "2025-11-18T19:19:20.091Z"
+        }
+      ]
+    }
+  ]
+}

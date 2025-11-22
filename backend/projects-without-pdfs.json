@@ -1,0 +1,1227 @@
+[
+  {
+    "slug": "baby-illuminati",
+    "name": "Baby Illuminati",
+    "normalized": "babyilluminati"
+  },
+  {
+    "slug": "emoji-token",
+    "name": "Emoji Token",
+    "normalized": "emojitoken"
+  },
+  {
+    "slug": "one-piece-fan-token",
+    "name": "One Piece Fan Token",
+    "normalized": "onepiecefantoken"
+  },
+  {
+    "slug": "t-800",
+    "name": "T-800",
+    "normalized": "t800"
+  },
+  {
+    "slug": "zx-token",
+    "name": "ZX Token",
+    "normalized": "zxtoken"
+  },
+  {
+    "slug": "meme-stars",
+    "name": "Meme Stars",
+    "normalized": "memestars"
+  },
+  {
+    "slug": "bnb-gold",
+    "name": "BNB GOLD",
+    "normalized": "bnbgold"
+  },
+  {
+    "slug": "bingo",
+    "name": "Bingo",
+    "normalized": "bingo"
+  },
+  {
+    "slug": "grokolaus",
+    "name": "GROKolaus",
+    "normalized": "grokolaus"
+  },
+  {
+    "slug": "gronk",
+    "name": "Gronk",
+    "normalized": "gronk"
+  },
+  {
+    "slug": "bonk-ceo",
+    "name": "BONK CEO",
+    "normalized": "bonkceo"
+  },
+  {
+    "slug": "bonkvsgrok",
+    "name": "BONKvsGROK",
+    "normalized": "bonkvsgrok"
+  },
+  {
+    "slug": "cheesypad",
+    "name": "CheesyPad",
+    "normalized": "cheesypad"
+  },
+  {
+    "slug": "testb",
+    "name": "testB",
+    "normalized": "testb"
+  },
+  {
+    "slug": "test2024kb",
+    "name": "TEST2024KB",
+    "normalized": "test2024kb"
+  },
+  {
+    "slug": "baby-bnb",
+    "name": "Baby BNB",
+    "normalized": "babybnb"
+  },
+  {
+    "slug": "testb-176",
+    "name": "testB",
+    "normalized": "testb"
+  },
+  {
+    "slug": "optimus-elon-ai",
+    "name": "Optimus Elon AI",
+    "normalized": "optimuselonai"
+  },
+  {
+    "slug": "optimus-elon-ai-178",
+    "name": "Optimus Elon AI",
+    "normalized": "optimuselonai"
+  },
+  {
+    "slug": "alita-grok-v2",
+    "name": "Alita Grok v2",
+    "normalized": "alitagrokv2"
+  },
+  {
+    "slug": "babycakepie",
+    "name": "BabyCakePie",
+    "normalized": "babycakepie"
+  },
+  {
+    "slug": "arcade-finance",
+    "name": "Arcade Finance",
+    "normalized": "arcadefinance"
+  },
+  {
+    "slug": "troy",
+    "name": "TROY",
+    "normalized": "troy"
+  },
+  {
+    "slug": "gary",
+    "name": "$GARY",
+    "normalized": "gary"
+  },
+  {
+    "slug": "innovator",
+    "name": "Innovator",
+    "normalized": "innovator"
+  },
+  {
+    "slug": "mini-myro",
+    "name": "Mini Myro",
+    "normalized": "minimyro"
+  },
+  {
+    "slug": "peachy",
+    "name": "PEACHY",
+    "normalized": "peachy"
+  },
+  {
+    "slug": "babymickey",
+    "name": "BabyMickey",
+    "normalized": "babymickey"
+  },
+  {
+    "slug": "mini-myro-197",
+    "name": "Mini Myro",
+    "normalized": "minimyro"
+  },
+  {
+    "slug": "babysamoyed",
+    "name": "BABYSAMOYED",
+    "normalized": "babysamoyed"
+  },
+  {
+    "slug": "peachy-201",
+    "name": "PEACHY",
+    "normalized": "peachy"
+  },
+  {
+    "slug": "baby-shenlong",
+    "name": "BABY SHENLONG",
+    "normalized": "babyshenlong"
+  },
+  {
+    "slug": "trending-tool",
+    "name": "Trending Tool",
+    "normalized": "trendingtool"
+  },
+  {
+    "slug": "cryptoplanes-reborn",
+    "name": "CryptoPlanes Reborn",
+    "normalized": "cryptoplanesreborn"
+  },
+  {
+    "slug": "lil-myro",
+    "name": "Lil Myro",
+    "normalized": "lilmyro"
+  },
+  {
+    "slug": "king-myro",
+    "name": "King Myro",
+    "normalized": "kingmyro"
+  },
+  {
+    "slug": "myroceo",
+    "name": "MyroCeo",
+    "normalized": "myroceo"
+  },
+  {
+    "slug": "baby-mario",
+    "name": "Baby Mario",
+    "normalized": "babymario"
+  },
+  {
+    "slug": "skillon",
+    "name": "Skillon",
+    "normalized": "skillon"
+  },
+  {
+    "slug": "insurrection",
+    "name": "Insurrection",
+    "normalized": "insurrection"
+  },
+  {
+    "slug": "xquok",
+    "name": "XQUOK",
+    "normalized": "xquok"
+  },
+  {
+    "slug": "king-baby-ceo",
+    "name": "KING BABY CEO",
+    "normalized": "kingbabyceo"
+  },
+  {
+    "slug": "azure-wallet",
+    "name": "AZURE WALLET",
+    "normalized": "azurewallet"
+  },
+  {
+    "slug": "bro",
+    "name": "BRO",
+    "normalized": "bro"
+  },
+  {
+    "slug": "healthyocean",
+    "name": "HealthyOcean",
+    "normalized": "healthyocean"
+  },
+  {
+    "slug": "grok-404",
+    "name": "GROK 404",
+    "normalized": "grok404"
+  },
+  {
+    "slug": "libra-finance",
+    "name": "Libra Finance",
+    "normalized": "librafinance"
+  },
+  {
+    "slug": "frog-bsc",
+    "name": "Frog Bsc",
+    "normalized": "frogbsc"
+  },
+  {
+    "slug": "ai-sora",
+    "name": "AI Sora",
+    "normalized": "aisora"
+  },
+  {
+    "slug": "ltradex",
+    "name": "Ltradex",
+    "normalized": "ltradex"
+  },
+  {
+    "slug": "solnado-cash",
+    "name": "Solnado Cash",
+    "normalized": "solnadocash"
+  },
+  {
+    "slug": "circle-index",
+    "name": "circle index",
+    "normalized": "circleindex"
+  },
+  {
+    "slug": "aidoge",
+    "name": "AIDOGE",
+    "normalized": "aidoge"
+  },
+  {
+    "slug": "babykrypto",
+    "name": "Babykrypto",
+    "normalized": "babykrypto"
+  },
+  {
+    "slug": "chadlink",
+    "name": "Chadlink",
+    "normalized": "chadlink"
+  },
+  {
+    "slug": "gege",
+    "name": "Gege",
+    "normalized": "gege"
+  },
+  {
+    "slug": "baby-irbis",
+    "name": "BABY IRBIS",
+    "normalized": "babyirbis"
+  },
+  {
+    "slug": "ltradex-244",
+    "name": "LTRADEX",
+    "normalized": "ltradex"
+  },
+  {
+    "slug": "tom",
+    "name": "TOM",
+    "normalized": "tom"
+  },
+  {
+    "slug": "pepe-ai",
+    "name": "PEPE AI",
+    "normalized": "pepeai"
+  },
+  {
+    "slug": "xl",
+    "name": "XL Token",
+    "normalized": "xltoken"
+  },
+  {
+    "slug": "neko",
+    "name": "NEKO",
+    "normalized": "neko"
+  },
+  {
+    "slug": "minipepe-coin",
+    "name": "MiniPepe Coin",
+    "normalized": "minipepecoin"
+  },
+  {
+    "slug": "hemule-wif-hat",
+    "name": "Hemule wif hat",
+    "normalized": "hemulewifhat"
+  },
+  {
+    "slug": "memecash",
+    "name": "MemeCash",
+    "normalized": "memecash"
+  },
+  {
+    "slug": "shibawifhat",
+    "name": "ShibaWifHat",
+    "normalized": "shibawifhat"
+  },
+  {
+    "slug": "baby-giggle-learn",
+    "name": "BABY GIGGLE LEARN",
+    "normalized": "babygigglelearn"
+  },
+  {
+    "slug": "book-of-npc",
+    "name": "BOOK OF NPC",
+    "normalized": "bookofnpc"
+  },
+  {
+    "slug": "donald-pump",
+    "name": "Donald Pump",
+    "normalized": "donaldpump"
+  },
+  {
+    "slug": "merv-the-croc",
+    "name": "MERV THE CROC",
+    "normalized": "mervthecroc"
+  },
+  {
+    "slug": "cats-of-sol",
+    "name": "Cats Of Sol",
+    "normalized": "catsofsol"
+  },
+  {
+    "slug": "house-of-meme",
+    "name": "House Of Meme",
+    "normalized": "houseofmeme"
+  },
+  {
+    "slug": "babydoge-2-0",
+    "name": "BabyDoge 2.0",
+    "normalized": "babydoge20"
+  },
+  {
+    "slug": "ai-freedom-token",
+    "name": "AI Freedom Token",
+    "normalized": "aifreedomtoken"
+  },
+  {
+    "slug": "baby-don",
+    "name": "Baby DON",
+    "normalized": "babydon"
+  },
+  {
+    "slug": "innit-for-the-tehc",
+    "name": "Innit For The Tehc",
+    "normalized": "innitforthetehc"
+  },
+  {
+    "slug": "catdoge",
+    "name": "CATDOGE",
+    "normalized": "catdoge"
+  },
+  {
+    "slug": "lobotomy-dash",
+    "name": "LOBOTOMY DASH",
+    "normalized": "lobotomydash"
+  },
+  {
+    "slug": "meme-crap-book",
+    "name": "Meme Crap Book",
+    "normalized": "memecrapbook"
+  },
+  {
+    "slug": "solepe",
+    "name": "SOLEPE",
+    "normalized": "solepe"
+  },
+  {
+    "slug": "kangu",
+    "name": "KANGU",
+    "normalized": "kangu"
+  },
+  {
+    "slug": "slerf-cat",
+    "name": "Slerf Cat",
+    "normalized": "slerfcat"
+  },
+  {
+    "slug": "fuck-around-to-find-out",
+    "name": "Fuck Around To Find Out",
+    "normalized": "fuckaroundtofindout"
+  },
+  {
+    "slug": "aperil",
+    "name": "APERIL",
+    "normalized": "aperil"
+  },
+  {
+    "slug": "pep",
+    "name": "PeP",
+    "normalized": "pep"
+  },
+  {
+    "slug": "solsearcher",
+    "name": "SolSearcher",
+    "normalized": "solsearcher"
+  },
+  {
+    "slug": "cat-in-a-dogs-world",
+    "name": "Cat in a Dogs World",
+    "normalized": "catinadogsworld"
+  },
+  {
+    "slug": "sol-hamster",
+    "name": "SOL HAMSTER",
+    "normalized": "solhamster"
+  },
+  {
+    "slug": "end-of-meme",
+    "name": "End of Meme",
+    "normalized": "endofmeme"
+  },
+  {
+    "slug": "card-of-meme",
+    "name": "CARD OF MEME",
+    "normalized": "cardofmeme"
+  },
+  {
+    "slug": "babymew",
+    "name": "BabyMEW",
+    "normalized": "babymew"
+  },
+  {
+    "slug": "meowthwifhat",
+    "name": "MeowthWifHat",
+    "normalized": "meowthwifhat"
+  },
+  {
+    "slug": "flocat",
+    "name": "FLOCAT",
+    "normalized": "flocat"
+  },
+  {
+    "slug": "catpaw",
+    "name": "CATPAW",
+    "normalized": "catpaw"
+  },
+  {
+    "slug": "gorillawifhat",
+    "name": "Gorillawifhat",
+    "normalized": "gorillawifhat"
+  },
+  {
+    "slug": "trumpbnb",
+    "name": "TrumpBNB",
+    "normalized": "trumpbnb"
+  },
+  {
+    "slug": "shiboki",
+    "name": "Shiboki",
+    "normalized": "shiboki"
+  },
+  {
+    "slug": "junkie-cats",
+    "name": "Junkie Cats",
+    "normalized": "junkiecats"
+  },
+  {
+    "slug": "evil-kermit",
+    "name": "Evil Kermit",
+    "normalized": "evilkermit"
+  },
+  {
+    "slug": "book-of-bonk",
+    "name": "Book of Bonk",
+    "normalized": "bookofbonk"
+  },
+  {
+    "slug": "elonxalexandre",
+    "name": "ELONxALEXANDRE",
+    "normalized": "elonxalexandre"
+  },
+  {
+    "slug": "raveracoon",
+    "name": "RaveRacoon",
+    "normalized": "raveracoon"
+  },
+  {
+    "slug": "memecoins-mania",
+    "name": "MemeCoins Mania",
+    "normalized": "memecoinsmania"
+  },
+  {
+    "slug": "dragonsol-token",
+    "name": "DragonSol Token",
+    "normalized": "dragonsoltoken"
+  },
+  {
+    "slug": "tomwifhat",
+    "name": "TOMWIFHAT",
+    "normalized": "tomwifhat"
+  },
+  {
+    "slug": "book-of-cats",
+    "name": "Book Of Cats",
+    "normalized": "bookofcats"
+  },
+  {
+    "slug": "bitconnect",
+    "name": "Bitconnect",
+    "normalized": "bitconnect"
+  },
+  {
+    "slug": "pepe-family",
+    "name": "pepe family",
+    "normalized": "pepefamily"
+  },
+  {
+    "slug": "chapi-el-cato",
+    "name": "Chapi El Cato",
+    "normalized": "chapielcato"
+  },
+  {
+    "slug": "katy-perry-fans",
+    "name": "Katy Perry Fans",
+    "normalized": "katyperryfans"
+  },
+  {
+    "slug": "pudgy-puss",
+    "name": "Pudgy Puss",
+    "normalized": "pudgypuss"
+  },
+  {
+    "slug": "do-something-ffs",
+    "name": "DO SOMETHING FFS",
+    "normalized": "dosomethingffs"
+  },
+  {
+    "slug": "book-of-halving",
+    "name": "Book Of Halving",
+    "normalized": "bookofhalving"
+  },
+  {
+    "slug": "bloodbath",
+    "name": "Bloodbath",
+    "normalized": "bloodbath"
+  },
+  {
+    "slug": "catewifhat",
+    "name": "CateWifHat",
+    "normalized": "catewifhat"
+  },
+  {
+    "slug": "myro-floki-ceo",
+    "name": "Myro Floki CEO",
+    "normalized": "myroflokiceo"
+  },
+  {
+    "slug": "smic",
+    "name": "SMIC",
+    "normalized": "smic"
+  },
+  {
+    "slug": "xiaomao",
+    "name": "Xiaomao",
+    "normalized": "xiaomao"
+  },
+  {
+    "slug": "meme101",
+    "name": "MEME101",
+    "normalized": "meme101"
+  },
+  {
+    "slug": "meme-wars",
+    "name": "Meme Wars",
+    "normalized": "memewars"
+  },
+  {
+    "slug": "vancatwifhat",
+    "name": "VancatWifHat",
+    "normalized": "vancatwifhat"
+  },
+  {
+    "slug": "book-of-meme-ai",
+    "name": "Book Of Meme AI",
+    "normalized": "bookofmemeai"
+  },
+  {
+    "slug": "foxfurry",
+    "name": "FoxFurry",
+    "normalized": "foxfurry"
+  },
+  {
+    "slug": "twust",
+    "name": "TWUST",
+    "normalized": "twust"
+  },
+  {
+    "slug": "pecko",
+    "name": "PECKO",
+    "normalized": "pecko"
+  },
+  {
+    "slug": "denarius",
+    "name": "Denarius",
+    "normalized": "denarius"
+  },
+  {
+    "slug": "baby-gummy",
+    "name": "BABY GUMMY",
+    "normalized": "babygummy"
+  },
+  {
+    "slug": "mr-beast-goat",
+    "name": "Mr.Beast Goat",
+    "normalized": "mrbeastgoat"
+  },
+  {
+    "slug": "gerku",
+    "name": "Gerku",
+    "normalized": "gerku"
+  },
+  {
+    "slug": "dog-robin-hood",
+    "name": "Dog Robin Hood",
+    "normalized": "dogrobinhood"
+  },
+  {
+    "slug": "vietnam-coin",
+    "name": "Vietnam Coin",
+    "normalized": "vietnamcoin"
+  },
+  {
+    "slug": "falloutbase-sol",
+    "name": "FalloutBase-Sol",
+    "normalized": "falloutbasesol"
+  },
+  {
+    "slug": "eager-cat",
+    "name": "Eager Cat",
+    "normalized": "eagercat"
+  },
+  {
+    "slug": "albert-ii",
+    "name": "Albert II",
+    "normalized": "albertii"
+  },
+  {
+    "slug": "book-of-duck",
+    "name": "BOOK OF DUCK",
+    "normalized": "bookofduck"
+  },
+  {
+    "slug": "florkwifnohat",
+    "name": "FlorkWifNoHat",
+    "normalized": "florkwifnohat"
+  },
+  {
+    "slug": "book-of-junkie-memes",
+    "name": "Book Of Junkie Memes",
+    "normalized": "bookofjunkiememes"
+  },
+  {
+    "slug": "zydio-ai",
+    "name": "Zydio AI",
+    "normalized": "zydioai"
+  },
+  {
+    "slug": "fourcz",
+    "name": "FourCZ",
+    "normalized": "fourcz"
+  },
+  {
+    "slug": "comic-of-meme",
+    "name": "COMIC OF MEME",
+    "normalized": "comicofmeme"
+  },
+  {
+    "slug": "bonk-ai",
+    "name": "Bonk AI",
+    "normalized": "bonkai"
+  },
+  {
+    "slug": "wall-street-cats",
+    "name": "Wall Street Cats",
+    "normalized": "wallstreetcats"
+  },
+  {
+    "slug": "elon-wif-trump",
+    "name": "Elon Wif Trump",
+    "normalized": "elonwiftrump"
+  },
+  {
+    "slug": "dogwiftax",
+    "name": "dogwiftax",
+    "normalized": "dogwiftax"
+  },
+  {
+    "slug": "sylvesterwifhat",
+    "name": "SylvesterWifHat",
+    "normalized": "sylvesterwifhat"
+  },
+  {
+    "slug": "jeb-the-goat",
+    "name": "Jeb the Goat",
+    "normalized": "jebthegoat"
+  },
+  {
+    "slug": "pepeq",
+    "name": "PepeQ",
+    "normalized": "pepeq"
+  },
+  {
+    "slug": "lazy-sniper",
+    "name": "Lazy Sniper",
+    "normalized": "lazysniper"
+  },
+  {
+    "slug": "joe-rogan",
+    "name": "JOE ROGAN",
+    "normalized": "joerogan"
+  },
+  {
+    "slug": "maga",
+    "name": "MAGA",
+    "normalized": "maga"
+  },
+  {
+    "slug": "pepe-moon",
+    "name": "Pepe Moon",
+    "normalized": "pepemoon"
+  },
+  {
+    "slug": "trog",
+    "name": "TROG",
+    "normalized": "trog"
+  },
+  {
+    "slug": "penaldo",
+    "name": "PENALDO",
+    "normalized": "penaldo"
+  },
+  {
+    "slug": "trump-frog",
+    "name": "Trump Frog",
+    "normalized": "trumpfrog"
+  },
+  {
+    "slug": "elon-floki-ceo",
+    "name": "Elon Floki CEO",
+    "normalized": "elonflokiceo"
+  },
+  {
+    "slug": "dog-maga",
+    "name": "Dog MAGA",
+    "normalized": "dogmaga"
+  },
+  {
+    "slug": "tate-goat",
+    "name": "Tate Goat",
+    "normalized": "tategoat"
+  },
+  {
+    "slug": "vote-trump",
+    "name": "Vote Trump",
+    "normalized": "votetrump"
+  },
+  {
+    "slug": "bozos-soros-the-clown",
+    "name": "Bozos \"Soros\" The Clown",
+    "normalized": "bozossorostheclown"
+  },
+  {
+    "slug": "trump-pump",
+    "name": "Trump Pump",
+    "normalized": "trumppump"
+  },
+  {
+    "slug": "baby-liger",
+    "name": "BABY LIGER",
+    "normalized": "babyliger"
+  },
+  {
+    "slug": "furfund",
+    "name": "FurFund",
+    "normalized": "furfund"
+  },
+  {
+    "slug": "robokoin",
+    "name": "ROBOkoin",
+    "normalized": "robokoin"
+  },
+  {
+    "slug": "blocksound",
+    "name": "BlockSound",
+    "normalized": "blocksound"
+  },
+  {
+    "slug": "wat",
+    "name": "Wat",
+    "normalized": "wat"
+  },
+  {
+    "slug": "memex",
+    "name": "Memex",
+    "normalized": "memex"
+  },
+  {
+    "slug": "bib",
+    "name": "BIB",
+    "normalized": "bib"
+  },
+  {
+    "slug": "rocky",
+    "name": "ROCKY",
+    "normalized": "rocky"
+  },
+  {
+    "slug": "snailionaire",
+    "name": "Snailionaire",
+    "normalized": "snailionaire"
+  },
+  {
+    "slug": "rivals-token",
+    "name": "Rivals Token",
+    "normalized": "rivalstoken"
+  },
+  {
+    "slug": "sting",
+    "name": "$STING",
+    "normalized": "sting"
+  },
+  {
+    "slug": "potus-poll",
+    "name": "POTUS POLL",
+    "normalized": "potuspoll"
+  },
+  {
+    "slug": "7box",
+    "name": "7BOX",
+    "normalized": "7box"
+  },
+  {
+    "slug": "baby-neiro",
+    "name": "Baby Neiro",
+    "normalized": "babyneiro"
+  },
+  {
+    "slug": "trumpwiflife",
+    "name": "TrumpWifLife",
+    "normalized": "trumpwiflife"
+  },
+  {
+    "slug": "kingtoken",
+    "name": "KingToken",
+    "normalized": "kingtoken"
+  },
+  {
+    "slug": "moriarty",
+    "name": "Moriarty",
+    "normalized": "moriarty"
+  },
+  {
+    "slug": "mandarin",
+    "name": "Mandarin",
+    "normalized": "mandarin"
+  },
+  {
+    "slug": "dogs",
+    "name": "DOGS",
+    "normalized": "dogs"
+  },
+  {
+    "slug": "slurmium",
+    "name": "Slurmium",
+    "normalized": "slurmium"
+  },
+  {
+    "slug": "sucre-finance",
+    "name": "Sucre Finance",
+    "normalized": "sucrefinance"
+  },
+  {
+    "slug": "babyhmstr",
+    "name": "BabyHMSTR",
+    "normalized": "babyhmstr"
+  },
+  {
+    "slug": "dbtcoin",
+    "name": "DBTCoin",
+    "normalized": "dbtcoin"
+  },
+  {
+    "slug": "beefund",
+    "name": "Beefund",
+    "normalized": "beefund"
+  },
+  {
+    "slug": "czcat",
+    "name": "CZCat",
+    "normalized": "czcat"
+  },
+  {
+    "slug": "optmusk",
+    "name": "OPTMUSK",
+    "normalized": "optmusk"
+  },
+  {
+    "slug": "chronicles-of-meme",
+    "name": "Chronicles of Meme",
+    "normalized": "chroniclesofmeme"
+  },
+  {
+    "slug": "winzoneswap",
+    "name": "WinzoneSwap",
+    "normalized": "winzoneswap"
+  },
+  {
+    "slug": "bic-coin",
+    "name": "BIC Coin",
+    "normalized": "biccoin"
+  },
+  {
+    "slug": "woof",
+    "name": "Woof",
+    "normalized": "woof"
+  },
+  {
+    "slug": "baby-trump",
+    "name": "Baby Trump",
+    "normalized": "babytrump"
+  },
+  {
+    "slug": "trumpwins",
+    "name": "TrumpWins",
+    "normalized": "trumpwins"
+  },
+  {
+    "slug": "baby-pnut",
+    "name": "Baby Pnut",
+    "normalized": "babypnut"
+  },
+  {
+    "slug": "book-of-trump-club",
+    "name": "Book of Trump Club",
+    "normalized": "bookoftrumpclub"
+  },
+  {
+    "slug": "the-solana-of-zelda",
+    "name": "The Solana of Zelda",
+    "normalized": "thesolanaofzelda"
+  },
+  {
+    "slug": "santa-doge",
+    "name": "Santa Doge",
+    "normalized": "santadoge"
+  },
+  {
+    "slug": "the-pug",
+    "name": "The Pug",
+    "normalized": "thepug"
+  },
+  {
+    "slug": "lottery-inu",
+    "name": "Lottery Inu",
+    "normalized": "lotteryinu"
+  },
+  {
+    "slug": "computer-control-ai",
+    "name": "Computer Control AI",
+    "normalized": "computercontrolai"
+  },
+  {
+    "slug": "chinese-new-year-2025",
+    "name": "Chinese New Year 2025",
+    "normalized": "chinesenewyear2025"
+  },
+  {
+    "slug": "miaocoin",
+    "name": "MIAOCoin",
+    "normalized": "miaocoin"
+  },
+  {
+    "slug": "rawdog",
+    "name": "RawDog",
+    "normalized": "rawdog"
+  },
+  {
+    "slug": "miaohcoin",
+    "name": "MIAOHCoin",
+    "normalized": "miaohcoin"
+  },
+  {
+    "slug": "fantokenvalorant",
+    "name": "Fantokenvalorant",
+    "normalized": "fantokenvalorant"
+  },
+  {
+    "slug": "the-ai-mascot",
+    "name": "The AI Mascot",
+    "normalized": "theaimascot"
+  },
+  {
+    "slug": "arabian-trump",
+    "name": "Arabian Trump",
+    "normalized": "arabiantrump"
+  },
+  {
+    "slug": "julius-czer",
+    "name": "Julius Czer",
+    "normalized": "juliusczer"
+  },
+  {
+    "slug": "lubu",
+    "name": "LuBu",
+    "normalized": "lubu"
+  },
+  {
+    "slug": "me",
+    "name": "ME",
+    "normalized": "me"
+  },
+  {
+    "slug": "blurp",
+    "name": "BLURP",
+    "normalized": "blurp"
+  },
+  {
+    "slug": "chi",
+    "name": "CHI",
+    "normalized": "chi"
+  },
+  {
+    "slug": "aix-token",
+    "name": "AIX Token",
+    "normalized": "aixtoken"
+  },
+  {
+    "slug": "flock",
+    "name": "FLOCK",
+    "normalized": "flock"
+  },
+  {
+    "slug": "hero",
+    "name": "HERO",
+    "normalized": "hero"
+  },
+  {
+    "slug": "beevo",
+    "name": "Beevo",
+    "normalized": "beevo"
+  },
+  {
+    "slug": "wallstreet-union",
+    "name": "Wallstreet Union",
+    "normalized": "wallstreetunion"
+  },
+  {
+    "slug": "flo-coin-global",
+    "name": "Flo Coin Global",
+    "normalized": "flocoinglobal"
+  },
+  {
+    "slug": "most-wanted",
+    "name": "Most Wanted",
+    "normalized": "mostwanted"
+  },
+  {
+    "slug": "nostradamus",
+    "name": "Nostradamus",
+    "normalized": "nostradamus"
+  },
+  {
+    "slug": "fortbanana",
+    "name": "FortBanana",
+    "normalized": "fortbanana"
+  },
+  {
+    "slug": "chainova",
+    "name": "Chainova",
+    "normalized": "chainova"
+  },
+  {
+    "slug": "stepzilla",
+    "name": "StepZilla",
+    "normalized": "stepzilla"
+  },
+  {
+    "slug": "burn-x-compound",
+    "name": "Burn X Compound",
+    "normalized": "burnxcompound"
+  },
+  {
+    "slug": "jovcoin",
+    "name": "JOVCOIN",
+    "normalized": "jovcoin"
+  },
+  {
+    "slug": "coinpouch",
+    "name": "CoinPouch",
+    "normalized": "coinpouch"
+  },
+  {
+    "slug": "curvency",
+    "name": "Curvency",
+    "normalized": "curvency"
+  },
+  {
+    "slug": "hanaai",
+    "name": "HANAAI",
+    "normalized": "hanaai"
+  },
+  {
+    "slug": "biokript-pro",
+    "name": "Biokript PRO",
+    "normalized": "biokriptpro"
+  },
+  {
+    "slug": "moonai",
+    "name": "MOONAI",
+    "normalized": "moonai"
+  },
+  {
+    "slug": "tariff-token",
+    "name": "Tariff Token",
+    "normalized": "tarifftoken"
+  },
+  {
+    "slug": "nft-xchange-coin",
+    "name": "NFT Xchange Coin",
+    "normalized": "nftxchangecoin"
+  },
+  {
+    "slug": "phoenix-chicken",
+    "name": "Phoenix Chicken",
+    "normalized": "phoenixchicken"
+  },
+  {
+    "slug": "sakuraai",
+    "name": "SAKURAAI",
+    "normalized": "sakuraai"
+  },
+  {
+    "slug": "crypto-ira",
+    "name": "Crypto IRA",
+    "normalized": "cryptoira"
+  },
+  {
+    "slug": "cfgninjastd",
+    "name": "CFGNINJASTD",
+    "normalized": "cfgninjastd"
+  },
+  {
+    "slug": "minerszone",
+    "name": "MinersZone",
+    "normalized": "minerszone"
+  },
+  {
+    "slug": "l0",
+    "name": "L0",
+    "normalized": "l0"
+  },
+  {
+    "slug": "s2",
+    "name": "S2",
+    "normalized": "s2"
+  },
+  {
+    "slug": "gafa",
+    "name": "GAFA",
+    "normalized": "gafa"
+  },
+  {
+    "slug": "future",
+    "name": "Future",
+    "normalized": "future"
+  },
+  {
+    "slug": "happy-exchange",
+    "name": "Happy Exchange",
+    "normalized": "happyexchange"
+  },
+  {
+    "slug": "auto-defi",
+    "name": "Auto Defi",
+    "normalized": "autodefi"
+  },
+  {
+    "slug": "crypto-nft-galaxy",
+    "name": "Crypto NFT Galaxy",
+    "normalized": "cryptonftgalaxy"
+  },
+  {
+    "slug": "kronickatznft",
+    "name": "KronicKatz.NFT",
+    "normalized": "kronickatznft"
+  },
+  {
+    "slug": "best-ever-apy",
+    "name": "Best Ever APY",
+    "normalized": "besteverapy"
+  }
+]
