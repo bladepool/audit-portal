@@ -29,6 +29,7 @@ import {
 import { projectsAPI, authAPI } from '@/lib/api';
 import { Project } from '@/lib/types';
 import Link from 'next/link';
+import { getVersionInfo } from '@/config/version';
 
 const useStyles = makeStyles({
   container: {
@@ -66,6 +67,11 @@ const useStyles = makeStyles({
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '400px',
+  },
+  versionInfo: {
+    fontSize: '0.75rem',
+    color: tokens.colorNeutralForeground3,
+    marginTop: '4px',
   },
 });
 
@@ -245,6 +251,9 @@ export default function AdminDashboard() {
         <div>
           <Text className={styles.title}>Audit Portal Admin</Text>
           <Text>Welcome back, {user?.name}</Text>
+          <Text className={styles.versionInfo}>
+            {getVersionInfo().fullVersion} • {getVersionInfo().date}
+          </Text>
         </div>
         <div className={styles.actions}>
           <Button
