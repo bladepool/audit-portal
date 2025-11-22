@@ -1125,6 +1125,17 @@ export default function ProjectFormPage() {
                         }),
                       });
                       
+                      if (!response.ok) {
+                        const data = await response.json().catch(() => ({ 
+                          message: 'PDF generation service unavailable' 
+                        }));
+                        const errorMsg = `❌ ${data.message || 'PDF generation failed'}`;
+                        setPdfGenerationMessage(errorMsg);
+                        alert(errorMsg);
+                        setIsGeneratingPdf(false);
+                        return;
+                      }
+                      
                       const data = await response.json();
                       
                       if (data.success) {
