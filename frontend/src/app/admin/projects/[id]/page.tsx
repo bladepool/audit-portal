@@ -24,8 +24,8 @@ import FindingsManager from '@/components/FindingsManager';
 import { generateEnhancedAuditPDF, generateEnhancedAuditPDFBlob } from '@/lib/enhancedPdfGenerator';
 import { uploadPDFToGitHub, getGitHubToken, saveGitHubToken } from '@/lib/githubUpload';
 
-// Global build version - update this with each new build
-const AUDIT_TOOL_VERSION = '3.5';
+// Global build version - update this with each new build  
+const AUDIT_TOOL_VERSION = '3.5'; // Force rebuild
 
 const useStyles = makeStyles({
   container: {
