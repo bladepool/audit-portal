@@ -22,7 +22,17 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
-  }
+  },
+  securityQuestions: [{
+    question: {
+      type: String,
+      required: true
+    },
+    answer: {
+      type: String,
+      required: true
+    }
+  }]
 }, {
   timestamps: true
 });
@@ -43,6 +53,14 @@ userSchema.pre('save', async function(next) {
 // Compare password method
 userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
+};
+
+// Verify security answer method
+userSchema.methods.verifySecurityAnswer = function(questionIndex, answer) {
+  if (!this.securityQuestions || !this.securityQuestions[questionIndex]) {
+    return false;
+  }
+  return this.securityQuestions[questionIndex].answer.toLowerCase() === answer.toLowerCase();
 };
 
 module.exports = mongoose.model('User', userSchema);
