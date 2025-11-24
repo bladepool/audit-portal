@@ -202,14 +202,40 @@ export async function generateEnhancedAuditPDF(project: Project) {
   // Subtitle with project name
   doc.setFontSize(10); doc.setTextColor(158, 159, 163); doc.setFont('helvetica', 'normal');
   doc.text(`${project.name}.`, 60, currentY); currentY += 30;
-  doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Project Information', 60, currentY); currentY += 10;
+  
+  // Project Information with enhanced layout
+  doc.setFillColor(239, 246, 255);
+  doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+  doc.setFontSize(16); doc.setTextColor(29, 78, 216); doc.setFont('helvetica', 'bold');
+  doc.text('Project Information', 60, currentY + 10); currentY += 45;
+  
   const projectInfo = [
-    ['Name', project.name], ['Symbol', project.symbol], ['Decimals', project.decimals?.toString() || ''], ['Total Supply', project.supply],
-    ['Platform', project.platform || 'Binance Smart Chain'], ['Contract Address', project.contract_info?.contract_address || 'N/A'],
-    ['Compiler', project.contract_info?.contract_compiler || 'N/A'], ['License', project.contract_info?.contract_license || 'N/A'],
-    ['Audit Tool Version', project.auditToolVersion || ''], ['Audit Edition', project.auditEdition || ''], ['Payment Hash', project.paymentHash || '']
+    ['Project Name', project.name],
+    ['Token Symbol', project.symbol],
+    ['Decimals', project.decimals?.toString() || 'N/A'],
+    ['Total Supply', project.supply || 'N/A'],
+    ['Blockchain Platform', project.platform || 'Binance Smart Chain'],
+    ['Contract Address', project.contract_info?.contract_address || 'N/A'],
+    ['Owner Address', project.ownerAddress || 'N/A'],
+    ['Contract Verified', project.contract_info?.contract_verified ? 'Yes \u2713' : 'No'],
+    ['Compiler Version', project.contract_info?.contract_compiler || 'N/A'],
+    ['License', project.contract_info?.contract_license || 'N/A']
   ];
-  autoTable(doc, { startY: currentY, head: [['Property', 'Value']], body: projectInfo, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 }, tableWidth: 'auto' });
+  
+  autoTable(doc, {
+    startY: currentY,
+    head: [['Property', 'Value']],
+    body: projectInfo,
+    theme: 'striped',
+    headStyles: { fillColor: [29, 78, 216], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
+    bodyStyles: { fontSize: 9 },
+    alternateRowStyles: { fillColor: [248, 250, 252] },
+    margin: { left: 60, right: 60 },
+    columnStyles: {
+      0: { cellWidth: 180, fontStyle: 'bold', textColor: [55, 65, 81] },
+      1: { cellWidth: 310, textColor: [75, 85, 99] }
+    }
+  });
   currentY = (doc as any).lastAutoTable.finalY + 30;
   if (project.description) {
     doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Description', 60, currentY); currentY += 15;
@@ -217,29 +243,91 @@ export async function generateEnhancedAuditPDF(project: Project) {
     const splitDescription = doc.splitTextToSize(project.description, pageWidth - 120);
     doc.text(splitDescription, 60, currentY); currentY += (splitDescription.length * 12) + 20;
   }
-  if (currentY > pageHeight - 150) { doc.addPage(); currentY = 60; }
+  if (currentY > pageHeight - 200) { doc.addPage(); currentY = 60; }
 
-  // Timeline Section
-  doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Timeline', 60, currentY); currentY += 15;
+  // Timeline Section with enhanced formatting
+  doc.setFillColor(243, 244, 246);
+  doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+  doc.setFontSize(16); doc.setTextColor(55, 65, 81); doc.setFont('helvetica', 'bold');
+  doc.text('Audit Timeline', 60, currentY + 10); currentY += 45;
+  
+  const formatDate = (dateStr: string | undefined) => {
+    if (!dateStr || dateStr === '') return 'Pending';
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return dateStr;
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    } catch {
+      return dateStr;
+    }
+  };
+  
   const timeline = [
-    ['Audit Request', project.timeline?.audit_request || ''],
-    ['Onboarding Process', project.timeline?.onboarding_process || ''],
-    ['Audit Preview', project.timeline?.audit_preview || ''],
-    ['Audit Release', project.timeline?.audit_release || '']
+    ['Audit Request', formatDate(project.timeline?.audit_request)],
+    ['Onboarding Process', formatDate(project.timeline?.onboarding_process)],
+    ['Audit Preview', formatDate(project.timeline?.audit_preview)],
+    ['Audit Release', formatDate(project.timeline?.audit_release)]
   ];
-  autoTable(doc, { startY: currentY, head: [['Step', 'Date']], body: timeline, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
+  
+  autoTable(doc, {
+    startY: currentY,
+    head: [['Milestone', 'Date']],
+    body: timeline,
+    theme: 'striped',
+    headStyles: { fillColor: [75, 85, 99], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
+    bodyStyles: { fontSize: 9 },
+    alternateRowStyles: { fillColor: [249, 250, 251] },
+    margin: { left: 60, right: 60 },
+    columnStyles: {
+      0: { cellWidth: 200, fontStyle: 'bold' },
+      1: { cellWidth: 290 }
+    }
+  });
   currentY = (doc as any).lastAutoTable.finalY + 30;
 
-  // KYC Section
-  if ((project as any).isKYC) {
-    if (currentY > pageHeight - 150) { doc.addPage(); currentY = 60; }
-    doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('KYC Information', 60, currentY); currentY += 15;
+  // KYC Section with enhanced details
+  if ((project as any).isKYC || project.kycScore || project.kycURL) {
+    if (currentY > pageHeight - 200) { doc.addPage(); currentY = 60; }
+    
+    doc.setFillColor(236, 253, 245);
+    doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+    doc.setFontSize(16); doc.setTextColor(21, 128, 61); doc.setFont('helvetica', 'bold');
+    doc.text('✓ KYC Verification', 60, currentY + 10); currentY += 45;
+    
     const kycInfo = [
-      ['KYC Verified', 'Yes'],
-      ['KYC URL', project.kycURL || ''],
-      ['KYC Score', project.kycScore?.toString() || ''],
+      ['Status', (project as any).isKYC ? 'Verified' : 'Not Verified'],
+      ['KYC Vendor', project.kycVendor || 'N/A'],
+      ['KYC Score', project.kycScore ? `${project.kycScore}/100` : 'N/A'],
+      ['Verification URL', project.kycURL || project.kycUrl || 'N/A'],
     ];
-    autoTable(doc, { startY: currentY, head: [['Field', 'Value']], body: kycInfo, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
+    
+    if (project.kycScoreNotes) {
+      kycInfo.push(['Notes', project.kycScoreNotes]);
+    }
+    
+    // Load KYC status icon
+    const kycIcon = (project as any).isKYC 
+      ? await urlToBase64('/pdf-assets/symbols/pass4.png')
+      : await urlToBase64('/pdf-assets/symbols/fail4.png');
+    
+    autoTable(doc, {
+      startY: currentY,
+      head: [['Field', 'Details']],
+      body: kycInfo,
+      theme: 'grid',
+      headStyles: { fillColor: [21, 128, 61], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
+      bodyStyles: { fontSize: 9 },
+      margin: { left: 60, right: 60 },
+      columnStyles: {
+        0: { cellWidth: 150, fontStyle: 'bold' },
+        1: { cellWidth: 340 }
+      },
+      didDrawCell: (data: any) => {
+        if (data.section === 'body' && data.row.index === 0 && data.column.index === 1 && kycIcon) {
+          doc.addImage(kycIcon, 'PNG', data.cell.x + 4, data.cell.y + 8, 12, 12);
+        }
+      }
+    });
     currentY = (doc as any).lastAutoTable.finalY + 30;
   }
 
