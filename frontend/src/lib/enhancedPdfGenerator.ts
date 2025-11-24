@@ -380,16 +380,46 @@ export async function generateEnhancedAuditPDF(project: Project) {
     currentY += 30;
   }
 
-  // Contract Overview
+  // Contract Overview with icons
   if (currentY > pageHeight - 200) { doc.addPage(); currentY = 60; }
   doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Contract Overview', 60, currentY); currentY += 15;
+  
+  // Load pass/fail icons for contract overview
+  const passIconOverview = await urlToBase64('/pdf-assets/symbols/pass4.png');
+  const failIconOverview = await urlToBase64('/pdf-assets/symbols/fail4.png');
+  
   const contractOverview = [
-    ['Honeypot', project.overview?.honeypot ? 'Yes ⚠️' : 'No ✓'], ['Hidden Owner', project.overview?.hidden_owner ? 'Yes ⚠️' : 'No ✓'],
-    ['Mint Function', project.overview?.mint ? 'Yes ⚠️' : 'No ✓'], ['Blacklist', project.overview?.blacklist ? 'Yes ⚠️' : 'No ✓'],
-    ['Whitelist', project.overview?.whitelist ? 'Yes' : 'No'], ['Proxy', project.overview?.proxy_check ? 'Yes ⚠️' : 'No ✓'],
-    ['Buy Tax', `${project.overview?.buy_tax || 0}%`], ['Sell Tax', `${project.overview?.sell_tax || 0}%`]
+    ['Honeypot', project.overview?.honeypot ? 'FAIL' : 'PASS'],
+    ['Hidden Owner', project.overview?.hidden_owner ? 'FAIL' : 'PASS'],
+    ['Mint Function', project.overview?.mint ? 'FAIL' : 'PASS'],
+    ['Blacklist', project.overview?.blacklist ? 'WARN' : 'PASS'],
+    ['Whitelist', project.overview?.whitelist ? 'PRESENT' : 'NONE'],
+    ['Proxy', project.overview?.proxy_check ? 'WARN' : 'PASS'],
+    ['Buy Tax', `${project.overview?.buy_tax || 0}%`],
+    ['Sell Tax', `${project.overview?.sell_tax || 0}%`]
   ];
-  autoTable(doc, { startY: currentY, head: [['Check', 'Result']], body: contractOverview, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
+  
+  autoTable(doc, {
+    startY: currentY,
+    body: contractOverview,
+    theme: 'striped',
+    styles: { fontSize: 9 },
+    margin: { left: 60, right: 60 },
+    columnStyles: {
+      0: { cellWidth: 200, fontStyle: 'bold' },
+      1: { cellWidth: 290 }
+    },
+    didDrawCell: (data: any) => {
+      if (data.section === 'body' && data.column.index === 1) {
+        const status = data.cell.text[0];
+        if (status === 'PASS' && passIconOverview) {
+          doc.addImage(passIconOverview, 'PNG', data.cell.x + 4, data.cell.y + 8, 12, 12);
+        } else if ((status === 'FAIL' || status === 'WARN') && failIconOverview) {
+          doc.addImage(failIconOverview, 'PNG', data.cell.x + 4, data.cell.y + 8, 12, 12);
+        }
+      }
+    }
+  });
   currentY = (doc as any).lastAutoTable.finalY + 30;
 
   // Social Links
@@ -547,6 +577,63 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     }
   });
   currentY = (doc as any).lastAutoTable.finalY + 30;
+
+  // GoPlus Risk Assessment
+  if (project.overview) {
+    if (currentY > pageHeight - 200) { doc.addPage(); currentY = 60; }
+    
+    doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+    doc.text('GoPlus Security Assessment', 60, currentY); currentY += 20;
+
+    // Load pass/fail icons
+    const passIconBlob = await urlToBase64('/pdf-assets/symbols/pass4.png');
+    const failIconBlob = await urlToBase64('/pdf-assets/symbols/fail4.png');
+
+    const riskDataBlob = [
+      ['Honeypot', project.overview.honeypot ? 'FAIL' : 'PASS'],
+      ['Hidden Owner', project.overview.hidden_owner ? 'FAIL' : 'PASS'],
+      ['Trading Cooldown', project.overview.trading_cooldown ? 'FAIL' : 'PASS'],
+      ['Mint Function', project.overview.mint ? 'FAIL' : 'PASS'],
+      ['Proxy Contract', project.overview.proxy_check ? 'WARN' : 'PASS'],
+      ['Blacklist', project.overview.blacklist ? 'WARN' : 'PASS']
+    ];
+
+    autoTable(doc, {
+      startY: currentY,
+      head: [['Risk Check', 'Status']],
+      body: riskDataBlob,
+      theme: 'grid',
+      headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
+      bodyStyles: { fontSize: 9 },
+      margin: { left: 60, right: 60 },
+      columnStyles: {
+        0: { cellWidth: 350 },
+        1: { cellWidth: 140 }
+      },
+      didDrawCell: (data: any) => {
+        if (data.section === 'body' && data.column.index === 1) {
+          const status = data.cell.text[0];
+          if (status === 'PASS' && passIconBlob) {
+            doc.addImage(passIconBlob, 'PNG', data.cell.x + 4, data.cell.y + 8, 12, 12);
+          } else if ((status === 'FAIL' || status === 'WARN') && failIconBlob) {
+            doc.addImage(failIconBlob, 'PNG', data.cell.x + 4, data.cell.y + 8, 12, 12);
+          }
+        }
+      }
+    });
+    currentY = (doc as any).lastAutoTable.finalY + 20;
+
+    // Tax Information
+    if (project.overview.buy_tax !== undefined || project.overview.sell_tax !== undefined) {
+      doc.setFontSize(10); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+      doc.text('Tax Information', 60, currentY); currentY += 15;
+      
+      doc.setFontSize(9); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
+      doc.text(`Buy Tax: ${project.overview.buy_tax || 0}%`, 60, currentY);
+      doc.text(`Sell Tax: ${project.overview.sell_tax || 0}%`, 200, currentY);
+      currentY += 30;
+    }
+  }
 
   // Page 3: Audit Information with header
   doc.addPage();
@@ -789,7 +876,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     currentY += 30;
   }
 
-  // Contract Overview
+  // Contract Overview with icons
   if (currentY > pageHeight - 200) {
     doc.addPage();
     currentY = 60;
@@ -800,13 +887,17 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   doc.text('Contract Overview', 60, currentY);
   currentY += 15;
 
+  // Load pass/fail icons for contract overview
+  const passIconOverviewBlob = await urlToBase64('/pdf-assets/symbols/pass4.png');
+  const failIconOverviewBlob = await urlToBase64('/pdf-assets/symbols/fail4.png');
+
   const contractOverview = [
-    ['Honeypot', project.overview?.honeypot ? 'Yes ⚠️' : 'No ✓'],
-    ['Hidden Owner', project.overview?.hidden_owner ? 'Yes ⚠️' : 'No ✓'],
-    ['Mint Function', project.overview?.mint ? 'Yes ⚠️' : 'No ✓'],
-    ['Blacklist', project.overview?.blacklist ? 'Yes ⚠️' : 'No ✓'],
-    ['Whitelist', project.overview?.whitelist ? 'Yes' : 'No'],
-    ['Proxy', project.overview?.proxy_check ? 'Yes ⚠️' : 'No ✓'],
+    ['Honeypot', project.overview?.honeypot ? 'FAIL' : 'PASS'],
+    ['Hidden Owner', project.overview?.hidden_owner ? 'FAIL' : 'PASS'],
+    ['Mint Function', project.overview?.mint ? 'FAIL' : 'PASS'],
+    ['Blacklist', project.overview?.blacklist ? 'WARN' : 'PASS'],
+    ['Whitelist', project.overview?.whitelist ? 'PRESENT' : 'NONE'],
+    ['Proxy', project.overview?.proxy_check ? 'WARN' : 'PASS'],
     ['Buy Tax', `${project.overview?.buy_tax || 0}%`],
     ['Sell Tax', `${project.overview?.sell_tax || 0}%`],
   ];
@@ -818,6 +909,20 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     theme: 'grid',
     headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
     bodyStyles: { fontSize: 9 },
+    columnStyles: {
+      0: { cellWidth: 200, fontStyle: 'bold' },
+      1: { cellWidth: 290 }
+    },
+    didDrawCell: (data: any) => {
+      if (data.section === 'body' && data.column.index === 1) {
+        const status = data.cell.text[0];
+        if (status === 'PASS' && passIconOverviewBlob) {
+          doc.addImage(passIconOverviewBlob, 'PNG', data.cell.x + 4, data.cell.y + 8, 12, 12);
+        } else if ((status === 'FAIL' || status === 'WARN') && failIconOverviewBlob) {
+          doc.addImage(failIconOverviewBlob, 'PNG', data.cell.x + 4, data.cell.y + 8, 12, 12);
+        }
+      }
+    },
     margin: { left: 60, right: 60 },
   });
 
