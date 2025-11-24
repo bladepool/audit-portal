@@ -285,8 +285,11 @@ export async function generateEnhancedAuditPDF(project: Project) {
   // File a Report Section
   doc.setFontSize(14); doc.setTextColor(239, 68, 68); doc.text('Found an issue? File a report at https://audit.cfg.ninja/report', 60, currentY); currentY += 30;
 
-  // Findings Summary Table
-  doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Findings Summary', 60, currentY); currentY += 15;
+  // Findings Summary Table with visual header
+  doc.setFillColor(254, 242, 242);
+  doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+  doc.setFontSize(16); doc.setTextColor(220, 38, 38); doc.setFont('helvetica', 'bold');
+  doc.text('Findings Summary', 60, currentY + 10); currentY += 45;
   
   // Load severity icons for findings summary
   const criticalIconFS = await urlToBase64('/pdf-assets/symbols/critical.png');
@@ -423,9 +426,13 @@ export async function generateEnhancedAuditPDF(project: Project) {
     currentY += 30;
   }
 
-  // Contract Overview with icons
+  // Contract Overview with icons and visual header
   if (currentY > pageHeight - 200) { doc.addPage(); currentY = 60; }
-  doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Contract Overview', 60, currentY); currentY += 15;
+  
+  doc.setFillColor(240, 249, 255);
+  doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+  doc.setFontSize(16); doc.setTextColor(30, 58, 138); doc.setFont('helvetica', 'bold');
+  doc.text('Contract Overview', 60, currentY + 10); currentY += 45;
   
   // Load pass/fail icons for contract overview
   const passIconOverview = await urlToBase64('/pdf-assets/symbols/pass4.png');
@@ -465,11 +472,14 @@ export async function generateEnhancedAuditPDF(project: Project) {
   });
   currentY = (doc as any).lastAutoTable.finalY + 30;
 
-  // Token Distribution Section
+  // Token Distribution Section with visual header
   if (project.tokenDistribution?.distributions && project.tokenDistribution.distributions.length > 0) {
     if (currentY > pageHeight - 250) { doc.addPage(); currentY = 60; }
     
-    doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Token Distribution', 60, currentY); currentY += 15;
+    doc.setFillColor(236, 253, 245);
+    doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+    doc.setFontSize(16); doc.setTextColor(21, 128, 61); doc.setFont('helvetica', 'bold');
+    doc.text('Token Distribution', 60, currentY + 10); currentY += 45;
     
     const distributionData = project.tokenDistribution.distributions.map(dist => [
       dist.name,
@@ -857,10 +867,11 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     currentY = 60;
   }
 
-  doc.setFontSize(16);
-  doc.setTextColor(0, 0, 0);
-  doc.text('Findings Summary', 60, currentY);
-  currentY += 15;
+  // Findings Summary with visual header
+  doc.setFillColor(254, 242, 242);
+  doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+  doc.setFontSize(16); doc.setTextColor(220, 38, 38); doc.setFont('helvetica', 'bold');
+  doc.text('Findings Summary', 60, currentY + 10); currentY += 45;
 
   // Load severity icons for findings summary in blob
   const criticalIconFSBlob = await urlToBase64('/pdf-assets/symbols/critical.png');
@@ -1001,16 +1012,16 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     currentY += 30;
   }
 
-  // Contract Overview with icons
+  // Contract Overview with icons and visual header
   if (currentY > pageHeight - 200) {
     doc.addPage();
     currentY = 60;
   }
 
-  doc.setFontSize(16);
-  doc.setTextColor(0, 0, 0);
-  doc.text('Contract Overview', 60, currentY);
-  currentY += 15;
+  doc.setFillColor(240, 249, 255);
+  doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+  doc.setFontSize(16); doc.setTextColor(30, 58, 138); doc.setFont('helvetica', 'bold');
+  doc.text('Contract Overview', 60, currentY + 10); currentY += 45;
 
   // Load pass/fail icons for contract overview
   const passIconOverviewBlob = await urlToBase64('/pdf-assets/symbols/pass4.png');
@@ -1053,11 +1064,14 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
 
   currentY = (doc as any).lastAutoTable.finalY + 30;
 
-  // Token Distribution Section in blob
+  // Token Distribution Section in blob with visual header
   if (project.tokenDistribution?.distributions && project.tokenDistribution.distributions.length > 0) {
     if (currentY > pageHeight - 250) { doc.addPage(); currentY = 60; }
     
-    doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Token Distribution', 60, currentY); currentY += 15;
+    doc.setFillColor(236, 253, 245);
+    doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+    doc.setFontSize(16); doc.setTextColor(21, 128, 61); doc.setFont('helvetica', 'bold');
+    doc.text('Token Distribution', 60, currentY + 10); currentY += 45;
     
     const distributionDataBlob = project.tokenDistribution.distributions.map(dist => [
       dist.name,
