@@ -414,22 +414,73 @@ export async function generateEnhancedAuditPDF(project: Project) {
   });
   currentY = (doc as any).lastAutoTable.finalY + 30;
 
-  // Detailed CFG Findings - Only show findings that are NOT "Pass" or "Not Detected"
+  // Detailed CFG Findings - Group by category and severity
   const activeFindings = (project.cfg_findings || []).filter(f => 
     f.status && !['Pass', 'Not Detected'].includes(f.status)
   );
   
   if (activeFindings.length > 0) {
     if (currentY > pageHeight - 100) { doc.addPage(); currentY = 60; }
-    doc.setFontSize(18); doc.setTextColor(0, 0, 0); doc.text('Detailed Findings', 60, currentY); currentY += 10;
-    doc.setDrawColor(239, 68, 68); doc.setLineWidth(2); doc.line(60, currentY, 200, currentY); currentY += 25;
     
-    for (const finding of activeFindings) {
+    // Header with enhanced styling
+    doc.setFillColor(254, 242, 242);
+    doc.rect(0, currentY - 10, pageWidth, 50, 'F');
+    doc.setFontSize(18); doc.setTextColor(220, 38, 38); doc.setFont('helvetica', 'bold');
+    doc.text('Detailed Security Findings', 60, currentY + 15); currentY += 40;
+    
+    doc.setFontSize(10); doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'normal');
+    doc.text(`Total Active Issues: ${activeFindings.length}`, 60, currentY); currentY += 25;
+    
+    // Group findings by severity for better organization
+    const findingsBySeverity = {
+      'Critical': activeFindings.filter(f => f.severity === 'Critical'),
+      'High': activeFindings.filter(f => f.severity === 'High'),
+      'Medium': activeFindings.filter(f => f.severity === 'Medium'),
+      'Low': activeFindings.filter(f => f.severity === 'Low'),
+      'Informational': activeFindings.filter(f => f.severity === 'Informational')
+    };
+    
+    for (const [severity, findings] of Object.entries(findingsBySeverity)) {
+      if (findings.length === 0) continue;
+      
+      // Severity section header
+      if (currentY > pageHeight - 100) { doc.addPage(); currentY = 60; }
+      
+      const severityColors: Record<string, number[]> = {
+        'Critical': [220, 38, 38],
+        'High': [249, 115, 22],
+        'Medium': [234, 179, 8],
+        'Low': [34, 197, 94],
+        'Informational': [156, 163, 175]
+      };
+      const color = severityColors[severity] || [156, 163, 175];
+      
+      doc.setFillColor(color[0], color[1], color[2]);
+      doc.roundedRect(60, currentY, 150, 20, 3, 3, 'F');
+      doc.setFontSize(12); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold');
+      doc.text(`${severity} Issues (${findings.length})`, 70, currentY + 14);
+      currentY += 30;
+      
+      for (const finding of findings) {
       if (currentY > pageHeight - 150) { doc.addPage(); currentY = 60; }
+      
+      // Priority indicator for Critical/High findings
+      const isPriority = severity === 'Critical' || severity === 'High';
+      if (isPriority) {
+        const priorityColor = severity === 'Critical' ? [220, 38, 38] : [249, 115, 22];
+        // Left border highlight
+        doc.setFillColor(priorityColor[0], priorityColor[1], priorityColor[2]);
+        doc.rect(55, currentY - 5, 4, 90, 'F');
+        // Priority badge
+        doc.setFillColor(priorityColor[0], priorityColor[1], priorityColor[2]);
+        doc.roundedRect(pageWidth - 100, currentY - 3, 35, 14, 2, 2, 'F');
+        doc.setFontSize(8); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold');
+        doc.text('URGENT', pageWidth - 92, currentY + 6);
+      }
       
       // Finding header with ID and title
       doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); 
-      doc.text(`${finding.id}: ${finding.title}`, 60, currentY); currentY += 18;
+      doc.text(`${finding.id}: ${finding.title}`, 65, currentY); currentY += 18;
       
       // Severity badge
       const severityColors: Record<string, number[]> = { 
@@ -502,6 +553,10 @@ export async function generateEnhancedAuditPDF(project: Project) {
       // Divider
       doc.setDrawColor(220, 220, 220); doc.setLineWidth(0.5); 
       doc.line(60, currentY, pageWidth - 60, currentY); currentY += 15;
+    }
+      
+      // Space between severity sections
+      currentY += 10;
     }
   } else {
     // If no active findings, show a message
@@ -614,14 +669,58 @@ export async function generateEnhancedAuditPDF(project: Project) {
     currentY += 15;
   }
 
-  // Social Links
+  // Social Links - Enhanced with platform icons
   const socialLinks = [
-    ['Website', project.socials?.website || 'N/A'], ['Telegram', project.socials?.telegram || 'N/A'], ['Twitter', project.socials?.twitter || 'N/A'], ['GitHub', project.socials?.github || 'N/A']
+    ['Website', project.socials?.website || 'N/A'], 
+    ['Telegram', project.socials?.telegram || 'N/A'], 
+    ['Twitter', project.socials?.twitter || 'N/A'], 
+    ['GitHub', project.socials?.github || 'N/A']
   ].filter(([_, value]) => value !== 'N/A');
+  
   if (socialLinks.length > 0) {
     if (currentY > pageHeight - 150) { doc.addPage(); currentY = 60; }
-    doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Social Links', 60, currentY); currentY += 15;
-    autoTable(doc, { startY: currentY, head: [['Platform', 'Link']], body: socialLinks, theme: 'grid', headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 8 }, margin: { left: 60, right: 60 } });
+    
+    // Section header with visual styling
+    doc.setFillColor(245, 247, 250);
+    doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+    doc.setFontSize(16); doc.setTextColor(71, 85, 105); doc.setFont('helvetica', 'bold');
+    doc.text('Social & Community Links', 60, currentY + 10); 
+    currentY += 45;
+    
+    // Platform icons mapping
+    const platformIcons: Record<string, string> = {
+      'Website': '🌐',
+      'Telegram': '📱',
+      'Twitter': '🐦',
+      'GitHub': '⚙️'
+    };
+    
+    // Enhanced table with icons
+    autoTable(doc, { 
+      startY: currentY, 
+      head: [['Platform', 'Link']], 
+      body: socialLinks.map(([platform, link]) => [
+        `${platformIcons[platform] || '•'} ${platform}`, 
+        link
+      ]), 
+      theme: 'striped',
+      headStyles: { 
+        fillColor: [71, 85, 105], 
+        textColor: [255, 255, 255], 
+        fontStyle: 'bold', 
+        fontSize: 10,
+        halign: 'left'
+      }, 
+      bodyStyles: { 
+        fontSize: 8,
+        textColor: [60, 60, 60]
+      },
+      columnStyles: {
+        0: { cellWidth: 120, fontStyle: 'bold' },
+        1: { cellWidth: 'auto', textColor: [37, 99, 235] }
+      },
+      margin: { left: 60, right: 60 }
+    });
     currentY = (doc as any).lastAutoTable.finalY + 30;
   }
 
@@ -1028,93 +1127,153 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
 
   currentY = (doc as any).lastAutoTable.finalY + 30;
 
-  // CFG Findings Details
+  // Detailed CFG Findings - Group by severity (blob function)
   const cfgFindings = project.cfg_findings || [];
-  const activeFindings = cfgFindings.filter((f: any) => f.status === 'Detected' || f.status === 'Fail');
+  const activeFindingsBlob = cfgFindings.filter((f: any) => 
+    f.status && !['Pass', 'Not Detected'].includes(f.status)
+  );
 
-  if (activeFindings.length > 0) {
+  if (activeFindingsBlob.length > 0) {
     if (currentY > pageHeight - 100) {
       doc.addPage();
       currentY = 60;
     }
 
-    doc.setFontSize(16);
-    doc.setTextColor(0, 0, 0);
-    doc.text('Detailed Findings', 60, currentY);
-    currentY += 20;
-
-    for (const finding of activeFindings) {
-      if (currentY > pageHeight - 200) {
-        doc.addPage();
-        currentY = 60;
-      }
-
-      // Severity badge
-      const severityColor =
-        finding.severity === 'Critical' ? [220, 38, 38] :
-        finding.severity === 'High' ? [234, 88, 12] :
-        finding.severity === 'Medium' ? [234, 179, 8] :
-        finding.severity === 'Low' ? [59, 130, 246] : [107, 114, 128];
-
-      doc.setFillColor(severityColor[0], severityColor[1], severityColor[2]);
-      doc.roundedRect(60, currentY - 10, 60, 18, 3, 3, 'F');
-      doc.setFontSize(10);
-      doc.setTextColor(255, 255, 255);
-      doc.setFont('helvetica', 'bold');
-      doc.text(finding.severity, 90, currentY + 2, { align: 'center' });
-
-      currentY += 20;
-
-      // Finding title with status icon
-      doc.setFontSize(12);
-      doc.setTextColor(0, 0, 0);
-      doc.setFont('helvetica', 'bold');
-      doc.text(finding.title || (finding as any).name || 'Untitled Finding', 60, currentY);
+    // Header with enhanced styling
+    doc.setFillColor(254, 242, 242);
+    doc.rect(0, currentY - 10, pageWidth, 50, 'F');
+    doc.setFontSize(18); doc.setTextColor(220, 38, 38); doc.setFont('helvetica', 'bold');
+    doc.text('Detailed Security Findings', 60, currentY + 15); currentY += 40;
+    
+    doc.setFontSize(10); doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'normal');
+    doc.text(`Total Active Issues: ${activeFindingsBlob.length}`, 60, currentY); currentY += 25;
+    
+    // Group findings by severity for better organization
+    const findingsBySeverityBlob = {
+      'Critical': activeFindingsBlob.filter((f: any) => f.severity === 'Critical'),
+      'High': activeFindingsBlob.filter((f: any) => f.severity === 'High'),
+      'Medium': activeFindingsBlob.filter((f: any) => f.severity === 'Medium'),
+      'Low': activeFindingsBlob.filter((f: any) => f.severity === 'Low'),
+      'Informational': activeFindingsBlob.filter((f: any) => f.severity === 'Informational')
+    };
+    
+    for (const [severity, findings] of Object.entries(findingsBySeverityBlob)) {
+      if (findings.length === 0) continue;
       
-      // Status icon
-      let statusIconBlob: string | null = null;
-      if (finding.status === 'Detected' || finding.status === 'Fail') {
-        statusIconBlob = await urlToBase64('/pdf-assets/symbols/pending.png');
-      } else if (finding.status === 'Pass' || finding.status === 'Not Detected') {
-        statusIconBlob = await urlToBase64('/pdf-assets/symbols/resolved.png');
-      } else if (finding.status === 'Acknowledge') {
-        statusIconBlob = await urlToBase64('/pdf-assets/symbols/ack.png');
+      // Severity section header
+      if (currentY > pageHeight - 100) { doc.addPage(); currentY = 60; }
+      
+      const severityColorsBlob: Record<string, number[]> = {
+        'Critical': [220, 38, 38],
+        'High': [249, 115, 22],
+        'Medium': [234, 179, 8],
+        'Low': [34, 197, 94],
+        'Informational': [156, 163, 175]
+      };
+      const colorBlob = severityColorsBlob[severity] || [156, 163, 175];
+      
+      doc.setFillColor(colorBlob[0], colorBlob[1], colorBlob[2]);
+      doc.roundedRect(60, currentY, 150, 20, 3, 3, 'F');
+      doc.setFontSize(12); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold');
+      doc.text(`${severity} Issues (${findings.length})`, 70, currentY + 14);
+      currentY += 30;
+      
+      for (const finding of findings) {
+        if (currentY > pageHeight - 150) { doc.addPage(); currentY = 60; }
+        
+        // Priority indicator for Critical/High findings
+        const isPriorityBlob = severity === 'Critical' || severity === 'High';
+        if (isPriorityBlob) {
+          const priorityColorBlob = severity === 'Critical' ? [220, 38, 38] : [249, 115, 22];
+          // Left border highlight
+          doc.setFillColor(priorityColorBlob[0], priorityColorBlob[1], priorityColorBlob[2]);
+          doc.rect(55, currentY - 5, 4, 90, 'F');
+          // Priority badge
+          doc.setFillColor(priorityColorBlob[0], priorityColorBlob[1], priorityColorBlob[2]);
+          doc.roundedRect(pageWidth - 100, currentY - 3, 35, 14, 2, 2, 'F');
+          doc.setFontSize(8); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold');
+          doc.text('URGENT', pageWidth - 92, currentY + 6);
+        }
+        
+        // Finding header with ID and title
+        doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); 
+        doc.text(`${finding.id}: ${finding.title}`, 65, currentY); currentY += 18;
+        
+        // Severity badge
+        const severityColorsBlob2: Record<string, number[]> = { 
+          'Critical': [220, 38, 38], 
+          'High': [249, 115, 22], 
+          'Medium': [234, 179, 8], 
+          'Low': [34, 197, 94], 
+          'Informational': [156, 163, 175] 
+        };
+        const colorBlob2 = severityColorsBlob2[finding.severity] || [156, 163, 175];
+        doc.setFillColor(colorBlob2[0], colorBlob2[1], colorBlob2[2]); 
+        doc.roundedRect(60, currentY, 80, 16, 3, 3, 'F');
+        doc.setFontSize(9); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); 
+        doc.text(finding.severity, 70, currentY + 11); currentY += 22;
+        
+        // Status with icon and Location
+        doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'normal');
+        
+        // Load and display status icon
+        let statusIconBlob: string | null = null;
+        if (finding.status === 'Detected' || finding.status === 'Fail') {
+          statusIconBlob = await urlToBase64('/pdf-assets/symbols/pending.png');
+        } else if (finding.status === 'Pass' || finding.status === 'Not Detected') {
+          statusIconBlob = await urlToBase64('/pdf-assets/symbols/resolved.png');
+        } else if (finding.status === 'Acknowledge') {
+          statusIconBlob = await urlToBase64('/pdf-assets/symbols/ack.png');
+        }
+        
+        if (statusIconBlob) {
+          doc.addImage(statusIconBlob, 'PNG', 60, currentY - 3, 10, 10);
+          doc.text(`Status: ${finding.status}`, 75, currentY);
+        } else {
+          doc.text(`Status: ${finding.status}`, 60, currentY);
+        }
+        
+        if (finding.location) doc.text(`Location: ${finding.location}`, 200, currentY);
+        if (finding.category) doc.text(`Category: ${finding.category}`, 350, currentY);
+        currentY += 15;
+        
+        // Description
+        if (finding.description) { 
+          doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+          doc.text('Description:', 70, currentY); currentY += 12;
+          doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60); 
+          const splitDesc = doc.splitTextToSize(finding.description, pageWidth - 140); 
+          doc.text(splitDesc, 70, currentY); 
+          currentY += (splitDesc.length * 11) + 10; 
+        }
+        
+        // Recommendation
+        if (finding.recommendation) { 
+          doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); 
+          doc.text('Recommendation:', 70, currentY); currentY += 12; 
+          doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60); 
+          const splitRec = doc.splitTextToSize(finding.recommendation, pageWidth - 140); 
+          doc.text(splitRec, 70, currentY); 
+          currentY += (splitRec.length * 11) + 10; 
+        }
+        
+        // Mitigation
+        if (finding.alleviation) { 
+          doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); 
+          doc.text('Mitigation:', 70, currentY); currentY += 12; 
+          doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60); 
+          const splitMit = doc.splitTextToSize(finding.alleviation, pageWidth - 140); 
+          doc.text(splitMit, 70, currentY); 
+          currentY += (splitMit.length * 11) + 10; 
+        }
+        
+        // Divider
+        doc.setDrawColor(220, 220, 220); doc.setLineWidth(0.5); 
+        doc.line(60, currentY, pageWidth - 60, currentY); currentY += 15;
       }
       
-      if (statusIconBlob) {
-        doc.addImage(statusIconBlob, 'PNG', pageWidth - 90, currentY - 8, 12, 12);
-      }
-      
-      currentY += 15;
-
-      // Description
-      if (finding.description) {
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(60, 60, 60);
-        const splitDesc = doc.splitTextToSize(finding.description, pageWidth - 120);
-        doc.text(splitDesc, 60, currentY);
-        currentY += splitDesc.length * 11 + 10;
-      }
-
-      // Mitigation
-      if (finding.alleviation || (finding as any).mitigation) {
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(0, 0, 0);
-        doc.text('Mitigation:', 60, currentY);
-        currentY += 12;
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(60, 60, 60);
-        const splitMit = doc.splitTextToSize(finding.alleviation || (finding as any).mitigation, pageWidth - 120);
-        doc.text(splitMit, 60, currentY);
-        currentY += splitMit.length * 11 + 10;
-      }
-
-      // Divider
-      doc.setDrawColor(220, 220, 220);
-      doc.setLineWidth(0.5);
-      doc.line(60, currentY, pageWidth - 60, currentY);
-      currentY += 15;
+      // Space between severity sections
+      currentY += 10;
     }
   } else {
     if (currentY > pageHeight - 100) {
@@ -1237,35 +1396,58 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     currentY += 15;
   }
 
-  // Social Links
-  const socialLinks = [
-    ['Website', project.socials?.website || 'N/A'],
-    ['Telegram', project.socials?.telegram || 'N/A'],
-    ['Twitter', project.socials?.twitter || 'N/A'],
-    ['GitHub', project.socials?.github || 'N/A'],
+  // Social Links - Enhanced with platform icons (blob)
+  const socialLinksBlob = [
+    ['Website', project.socials?.website || 'N/A'], 
+    ['Telegram', project.socials?.telegram || 'N/A'], 
+    ['Twitter', project.socials?.twitter || 'N/A'], 
+    ['GitHub', project.socials?.github || 'N/A']
   ].filter(([_, value]) => value !== 'N/A');
-
-  if (socialLinks.length > 0) {
-    if (currentY > pageHeight - 150) {
-      doc.addPage();
-      currentY = 60;
-    }
-
-    doc.setFontSize(16);
-    doc.setTextColor(0, 0, 0);
-    doc.text('Social Links', 60, currentY);
-    currentY += 15;
-
-    autoTable(doc, {
-      startY: currentY,
-      head: [['Platform', 'Link']],
-      body: socialLinks,
-      theme: 'grid',
-      headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
-      bodyStyles: { fontSize: 8 },
-      margin: { left: 60, right: 60 },
+  
+  if (socialLinksBlob.length > 0) {
+    if (currentY > pageHeight - 150) { doc.addPage(); currentY = 60; }
+    
+    // Section header with visual styling
+    doc.setFillColor(245, 247, 250);
+    doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+    doc.setFontSize(16); doc.setTextColor(71, 85, 105); doc.setFont('helvetica', 'bold');
+    doc.text('Social & Community Links', 60, currentY + 10); 
+    currentY += 45;
+    
+    // Platform icons mapping
+    const platformIconsBlob: Record<string, string> = {
+      'Website': '🌐',
+      'Telegram': '📱',
+      'Twitter': '🐦',
+      'GitHub': '⚙️'
+    };
+    
+    // Enhanced table with icons
+    autoTable(doc, { 
+      startY: currentY, 
+      head: [['Platform', 'Link']], 
+      body: socialLinksBlob.map(([platform, link]) => [
+        `${platformIconsBlob[platform] || '•'} ${platform}`, 
+        link
+      ]), 
+      theme: 'striped',
+      headStyles: { 
+        fillColor: [71, 85, 105], 
+        textColor: [255, 255, 255], 
+        fontStyle: 'bold', 
+        fontSize: 10,
+        halign: 'left'
+      }, 
+      bodyStyles: { 
+        fontSize: 8,
+        textColor: [60, 60, 60]
+      },
+      columnStyles: {
+        0: { cellWidth: 120, fontStyle: 'bold' },
+        1: { cellWidth: 'auto', textColor: [37, 99, 235] }
+      },
+      margin: { left: 60, right: 60 }
     });
-
     currentY = (doc as any).lastAutoTable.finalY + 30;
   }
 
