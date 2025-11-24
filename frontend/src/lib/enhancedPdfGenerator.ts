@@ -287,6 +287,14 @@ export async function generateEnhancedAuditPDF(project: Project) {
 
   // Findings Summary Table
   doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Findings Summary', 60, currentY); currentY += 15;
+  
+  // Load severity icons for findings summary
+  const criticalIconFS = await urlToBase64('/pdf-assets/symbols/critical.png');
+  const highIconFS = await urlToBase64('/pdf-assets/symbols/high.png');
+  const mediumIconFS = await urlToBase64('/pdf-assets/symbols/medium.png');
+  const lowIconFS = await urlToBase64('/pdf-assets/symbols/low.png');
+  const infoIconFS = await urlToBase64('/pdf-assets/symbols/info.png');
+  
   const findingsSummary = [
     ['Critical', project.critical?.found || 0, project.critical?.pending || 0, project.critical?.resolved || 0],
     ['High/Major', project.major?.found || 0, project.major?.pending || 0, project.major?.resolved || 0],
@@ -294,7 +302,25 @@ export async function generateEnhancedAuditPDF(project: Project) {
     ['Low/Minor', project.minor?.found || 0, project.minor?.pending || 0, project.minor?.resolved || 0],
     ['Informational', project.informational?.found || 0, project.informational?.pending || 0, project.informational?.resolved || 0]
   ];
-  autoTable(doc, { startY: currentY, head: [['Severity', 'Found', 'Pending', 'Resolved']], body: findingsSummary, theme: 'grid', headStyles: { fillColor: [239, 68, 68], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 }, bodyStyles: { fontSize: 9 }, margin: { left: 60, right: 60 } });
+  
+  autoTable(doc, {
+    startY: currentY,
+    head: [['Severity', 'Found', 'Pending', 'Resolved']],
+    body: findingsSummary,
+    theme: 'grid',
+    headStyles: { fillColor: [239, 68, 68], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
+    bodyStyles: { fontSize: 9 },
+    margin: { left: 60, right: 60 },
+    didDrawCell: (data: any) => {
+      if (data.section === 'body' && data.column.index === 0) {
+        const icons = [criticalIconFS, highIconFS, mediumIconFS, lowIconFS, infoIconFS];
+        const icon = icons[data.row.index];
+        if (icon) {
+          doc.addImage(icon, 'PNG', data.cell.x + 4, data.cell.y + 8, 10, 10);
+        }
+      }
+    }
+  });
   currentY = (doc as any).lastAutoTable.finalY + 30;
 
   // Detailed CFG Findings - Only show findings that are NOT "Pass" or "Not Detected"
@@ -328,9 +354,26 @@ export async function generateEnhancedAuditPDF(project: Project) {
       doc.setFontSize(9); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); 
       doc.text(finding.severity, 70, currentY + 11); currentY += 22;
       
-      // Status and Location
-      doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'normal'); 
-      doc.text(`Status: ${finding.status}`, 60, currentY);
+      // Status with icon and Location
+      doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'normal');
+      
+      // Load and display status icon
+      let statusIcon: string | null = null;
+      if (finding.status === 'Detected' || finding.status === 'Fail') {
+        statusIcon = await urlToBase64('/pdf-assets/symbols/pending.png');
+      } else if (finding.status === 'Pass' || finding.status === 'Not Detected') {
+        statusIcon = await urlToBase64('/pdf-assets/symbols/resolved.png');
+      } else if (finding.status === 'Acknowledge') {
+        statusIcon = await urlToBase64('/pdf-assets/symbols/ack.png');
+      }
+      
+      if (statusIcon) {
+        doc.addImage(statusIcon, 'PNG', 60, currentY - 3, 10, 10);
+        doc.text(`Status: ${finding.status}`, 75, currentY);
+      } else {
+        doc.text(`Status: ${finding.status}`, 60, currentY);
+      }
+      
       if (finding.location) doc.text(`Location: ${finding.location}`, 200, currentY);
       if (finding.category) doc.text(`Category: ${finding.category}`, 350, currentY);
       currentY += 15;
@@ -421,6 +464,57 @@ export async function generateEnhancedAuditPDF(project: Project) {
     }
   });
   currentY = (doc as any).lastAutoTable.finalY + 30;
+
+  // Token Distribution Section
+  if (project.tokenDistribution?.distributions && project.tokenDistribution.distributions.length > 0) {
+    if (currentY > pageHeight - 250) { doc.addPage(); currentY = 60; }
+    
+    doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Token Distribution', 60, currentY); currentY += 15;
+    
+    const distributionData = project.tokenDistribution.distributions.map(dist => [
+      dist.name,
+      dist.amount,
+      dist.description || ''
+    ]);
+    
+    autoTable(doc, {
+      startY: currentY,
+      head: [['Category', 'Amount', 'Description']],
+      body: distributionData,
+      theme: 'grid',
+      headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
+      bodyStyles: { fontSize: 9 },
+      margin: { left: 60, right: 60 },
+      columnStyles: {
+        0: { cellWidth: 130, fontStyle: 'bold' },
+        1: { cellWidth: 100 },
+        2: { cellWidth: 260 }
+      }
+    });
+    currentY = (doc as any).lastAutoTable.finalY + 20;
+    
+    // Liquidity Lock Information
+    if (project.tokenDistribution.isLiquidityLock) {
+      doc.setFontSize(12); doc.setTextColor(34, 197, 94); doc.setFont('helvetica', 'bold');
+      doc.text('✓ Liquidity Locked', 60, currentY); currentY += 15;
+      
+      doc.setFontSize(9); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
+      if (project.tokenDistribution.lockLocation) {
+        doc.text(`Location: ${project.tokenDistribution.lockLocation}`, 60, currentY); currentY += 12;
+      }
+      if (project.tokenDistribution.lockAmount) {
+        doc.text(`Amount: ${project.tokenDistribution.lockAmount}`, 60, currentY); currentY += 12;
+      }
+      if (project.tokenDistribution.liquidityLockLink) {
+        doc.setTextColor(59, 130, 246);
+        doc.text(`View Lock: ${project.tokenDistribution.liquidityLockLink}`, 60, currentY); currentY += 15;
+      }
+    } else {
+      doc.setFontSize(12); doc.setTextColor(239, 68, 68); doc.setFont('helvetica', 'bold');
+      doc.text('⚠ Liquidity Not Locked', 60, currentY); currentY += 15;
+    }
+    currentY += 15;
+  }
 
   // Social Links
   const socialLinks = [
@@ -768,6 +862,13 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   doc.text('Findings Summary', 60, currentY);
   currentY += 15;
 
+  // Load severity icons for findings summary in blob
+  const criticalIconFSBlob = await urlToBase64('/pdf-assets/symbols/critical.png');
+  const highIconFSBlob = await urlToBase64('/pdf-assets/symbols/high.png');
+  const mediumIconFSBlob = await urlToBase64('/pdf-assets/symbols/medium.png');
+  const lowIconFSBlob = await urlToBase64('/pdf-assets/symbols/low.png');
+  const infoIconFSBlob = await urlToBase64('/pdf-assets/symbols/info.png');
+
   const findingsSummary = [
     ['Critical', project.critical?.found || 0, project.critical?.pending || 0, project.critical?.resolved || 0],
     ['High', project.major?.found || 0, project.major?.pending || 0, project.major?.resolved || 0],
@@ -784,6 +885,15 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
     bodyStyles: { fontSize: 9 },
     margin: { left: 60, right: 60 },
+    didDrawCell: (data: any) => {
+      if (data.section === 'body' && data.column.index === 0) {
+        const icons = [criticalIconFSBlob, highIconFSBlob, mediumIconFSBlob, lowIconFSBlob, infoIconFSBlob];
+        const icon = icons[data.row.index];
+        if (icon) {
+          doc.addImage(icon, 'PNG', data.cell.x + 4, data.cell.y + 8, 10, 10);
+        }
+      }
+    }
   });
 
   currentY = (doc as any).lastAutoTable.finalY + 30;
@@ -825,11 +935,26 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
 
       currentY += 20;
 
-      // Finding title
+      // Finding title with status icon
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
       doc.setFont('helvetica', 'bold');
       doc.text(finding.title || (finding as any).name || 'Untitled Finding', 60, currentY);
+      
+      // Status icon
+      let statusIconBlob: string | null = null;
+      if (finding.status === 'Detected' || finding.status === 'Fail') {
+        statusIconBlob = await urlToBase64('/pdf-assets/symbols/pending.png');
+      } else if (finding.status === 'Pass' || finding.status === 'Not Detected') {
+        statusIconBlob = await urlToBase64('/pdf-assets/symbols/resolved.png');
+      } else if (finding.status === 'Acknowledge') {
+        statusIconBlob = await urlToBase64('/pdf-assets/symbols/ack.png');
+      }
+      
+      if (statusIconBlob) {
+        doc.addImage(statusIconBlob, 'PNG', pageWidth - 90, currentY - 8, 12, 12);
+      }
+      
       currentY += 15;
 
       // Description
@@ -927,6 +1052,57 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   });
 
   currentY = (doc as any).lastAutoTable.finalY + 30;
+
+  // Token Distribution Section in blob
+  if (project.tokenDistribution?.distributions && project.tokenDistribution.distributions.length > 0) {
+    if (currentY > pageHeight - 250) { doc.addPage(); currentY = 60; }
+    
+    doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Token Distribution', 60, currentY); currentY += 15;
+    
+    const distributionDataBlob = project.tokenDistribution.distributions.map(dist => [
+      dist.name,
+      dist.amount,
+      dist.description || ''
+    ]);
+    
+    autoTable(doc, {
+      startY: currentY,
+      head: [['Category', 'Amount', 'Description']],
+      body: distributionDataBlob,
+      theme: 'grid',
+      headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
+      bodyStyles: { fontSize: 9 },
+      margin: { left: 60, right: 60 },
+      columnStyles: {
+        0: { cellWidth: 130, fontStyle: 'bold' },
+        1: { cellWidth: 100 },
+        2: { cellWidth: 260 }
+      }
+    });
+    currentY = (doc as any).lastAutoTable.finalY + 20;
+    
+    // Liquidity Lock Information
+    if (project.tokenDistribution.isLiquidityLock) {
+      doc.setFontSize(12); doc.setTextColor(34, 197, 94); doc.setFont('helvetica', 'bold');
+      doc.text('✓ Liquidity Locked', 60, currentY); currentY += 15;
+      
+      doc.setFontSize(9); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
+      if (project.tokenDistribution.lockLocation) {
+        doc.text(`Location: ${project.tokenDistribution.lockLocation}`, 60, currentY); currentY += 12;
+      }
+      if (project.tokenDistribution.lockAmount) {
+        doc.text(`Amount: ${project.tokenDistribution.lockAmount}`, 60, currentY); currentY += 12;
+      }
+      if (project.tokenDistribution.liquidityLockLink) {
+        doc.setTextColor(59, 130, 246);
+        doc.text(`View Lock: ${project.tokenDistribution.liquidityLockLink}`, 60, currentY); currentY += 15;
+      }
+    } else {
+      doc.setFontSize(12); doc.setTextColor(239, 68, 68); doc.setFont('helvetica', 'bold');
+      doc.text('⚠ Liquidity Not Locked', 60, currentY); currentY += 15;
+    }
+    currentY += 15;
+  }
 
   // Social Links
   const socialLinks = [
