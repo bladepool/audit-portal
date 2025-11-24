@@ -145,6 +145,49 @@ export async function generateEnhancedAuditPDF(project: Project) {
   doc.text('Audit Confidence', 60, currentY); currentY += 15;
   doc.setFontSize(10); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
   doc.text(project.audit_confidence || 'Medium', 60, currentY); currentY += 30;
+  
+  // Issues Classification Table
+  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.text('Issues Classification', 60, currentY); currentY += 20;
+  
+  // Load severity icons
+  const criticalIcon = await urlToBase64('/pdf-assets/symbols/critical.png');
+  const highIcon = await urlToBase64('/pdf-assets/symbols/high.png');
+  const mediumIcon = await urlToBase64('/pdf-assets/symbols/medium.png');
+  const lowIcon = await urlToBase64('/pdf-assets/symbols/low.png');
+  const infoIcon = await urlToBase64('/pdf-assets/symbols/info.png');
+  
+  const classificationData = [
+    ['Critical', 'Danger or Potential Problems.'],
+    ['High', 'Be Careful or Fail test.'],
+    ['Medium', 'Improve is needed.'],
+    ['Low', 'Pass, Not-Detected or Safe Item.'],
+    ['Informational', 'Function Detected']
+  ];
+  
+  autoTable(doc, {
+    startY: currentY,
+    head: [['Classification', 'Description']],
+    body: classificationData,
+    theme: 'grid',
+    headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
+    bodyStyles: { fontSize: 9 },
+    margin: { left: 60, right: 60 },
+    columnStyles: {
+      0: { cellWidth: 120 },
+      1: { cellWidth: 370 }
+    },
+    didDrawCell: (data: any) => {
+      if (data.section === 'body' && data.column.index === 0) {
+        const icons = [criticalIcon, highIcon, mediumIcon, lowIcon, infoIcon];
+        const icon = icons[data.row.index];
+        if (icon) {
+          doc.addImage(icon, 'PNG', data.cell.x + 4, data.cell.y + 12.5, 10, 10);
+        }
+      }
+    }
+  });
+  currentY = (doc as any).lastAutoTable.finalY + 30;
 
   // Page 3: Risk Analysis + Project Info
   doc.addPage(); currentY = 60;
@@ -461,6 +504,49 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   doc.text('Audit Confidence', 60, currentY); currentY += 15;
   doc.setFontSize(10); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
   doc.text(project.audit_confidence || 'Medium', 60, currentY); currentY += 30;
+
+  // Issues Classification Table
+  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.text('Issues Classification', 60, currentY); currentY += 20;
+
+  // Load severity icons
+  const criticalIcon = await urlToBase64('/pdf-assets/symbols/critical.png');
+  const highIcon = await urlToBase64('/pdf-assets/symbols/high.png');
+  const mediumIcon = await urlToBase64('/pdf-assets/symbols/medium.png');
+  const lowIcon = await urlToBase64('/pdf-assets/symbols/low.png');
+  const infoIcon = await urlToBase64('/pdf-assets/symbols/info.png');
+
+  const classificationData = [
+    ['Critical', 'Danger or Potential Problems.'],
+    ['High', 'Be Careful or Fail test.'],
+    ['Medium', 'Improve is needed.'],
+    ['Low', 'Pass, Not-Detected or Safe Item.'],
+    ['Informational', 'Function Detected']
+  ];
+
+  autoTable(doc, {
+    startY: currentY,
+    head: [['Classification', 'Description']],
+    body: classificationData,
+    theme: 'grid',
+    headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 10 },
+    bodyStyles: { fontSize: 9 },
+    margin: { left: 60, right: 60 },
+    columnStyles: {
+      0: { cellWidth: 120 },
+      1: { cellWidth: 370 }
+    },
+    didDrawCell: (data: any) => {
+      if (data.section === 'body' && data.column.index === 0) {
+        const icons = [criticalIcon, highIcon, mediumIcon, lowIcon, infoIcon];
+        const icon = icons[data.row.index];
+        if (icon) {
+          doc.addImage(icon, 'PNG', data.cell.x + 4, data.cell.y + 12.5, 10, 10);
+        }
+      }
+    }
+  });
+  currentY = (doc as any).lastAutoTable.finalY + 30;
 
   // Page 3: Audit Information with header
   doc.addPage();
