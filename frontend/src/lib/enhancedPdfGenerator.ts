@@ -91,14 +91,74 @@ export async function generateEnhancedAuditPDF(project: Project) {
     try { doc.addImage(projectLogo, 'PNG', 430, 185, 100, 100, undefined, 'FAST'); } catch {}
   }
 
-  // Page 2: Risk Analysis + Project Info
+  // Page 2: Executive Summary
+  doc.addPage(); currentY = 60;
+  try {
+    const badgeLogo = await urlToBase64('/pdf-assets/logos/verified-badge-CFG.png');
+    if (badgeLogo) doc.addImage(badgeLogo, 'PNG', 430, 70, 80, 80);
+  } catch {}
+  
+  // Red accent line on right
+  doc.setDrawColor(237, 36, 40);
+  doc.setLineWidth(6);
+  doc.line(pageWidth - 3, 60, pageWidth - 3, 160);
+  
+  doc.setFontSize(15); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.text('Executive Summary', 60, currentY); currentY += 25;
+  
+  // Type, Ecosystem, Language row
+  doc.setFontSize(10); doc.setTextColor(158, 159, 163); doc.setFont('helvetica', 'normal');
+  doc.text('TYPES', 62, currentY);
+  doc.text('ECOSYSTEM', 202, currentY);
+  doc.text('LANGUAGE', 352, currentY);
+  currentY += 15;
+  
+  doc.setFontSize(10); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.text((project as any).type || 'Token', 62, currentY);
+  doc.text(project.platform || 'Binance Smart Chain', 202, currentY);
+  doc.text(project.contract_info?.contract_language || 'Solidity', 352, currentY);
+  currentY += 30;
+  
+  // Audit scores section
+  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.text('Audit Scores', 60, currentY); currentY += 20;
+  
+  const scoreData = [
+    ['Owner Score', (project as any).ownerScore?.toString() || '0'],
+    ['Social Score', (project as any).socialScore?.toString() || '0'],
+    ['Security Score', (project as any).securityScore?.toString() || '0'],
+    ['Auditor Score', (project as any).auditorScore?.toString() || '0'],
+    ['Overall Score', project.audit_score?.toString() || '0']
+  ];
+  
+  autoTable(doc, {
+    startY: currentY,
+    body: scoreData,
+    theme: 'plain',
+    styles: { fontSize: 10, cellPadding: 5 },
+    margin: { left: 60, right: 60 }
+  });
+  currentY = (doc as any).lastAutoTable.finalY + 30;
+  
+  // Audit Confidence
+  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.text('Audit Confidence', 60, currentY); currentY += 15;
+  doc.setFontSize(10); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
+  doc.text(project.audit_confidence || 'Medium', 60, currentY); currentY += 30;
+
+  // Page 3: Risk Analysis + Project Info
   doc.addPage(); currentY = 60;
   try {
     const cfgLogo = await urlToBase64('/pdf-assets/logos/CFG-Logo-red-black-FULL.png');
     if (cfgLogo) doc.addImage(cfgLogo, 'PNG', pageWidth - 150, 20, 120, 30);
   } catch {}
-  doc.setFontSize(20); doc.setTextColor(30, 30, 30); doc.text('RISK ANALYSIS', 60, currentY); currentY += 10;
-  doc.setDrawColor(239, 68, 68); doc.setLineWidth(2); doc.line(60, currentY, 160, currentY); currentY += 30;
+  doc.setFontSize(20); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold'); 
+  doc.text('RISK ANALYSIS', 60, currentY); currentY += 10;
+  doc.setDrawColor(237, 36, 40); doc.setLineWidth(2); doc.line(60, currentY, 160, currentY); currentY += 20;
+  
+  // Subtitle with project name
+  doc.setFontSize(10); doc.setTextColor(158, 159, 163); doc.setFont('helvetica', 'normal');
+  doc.text(`${project.name}.`, 60, currentY); currentY += 30;
   doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('Project Information', 60, currentY); currentY += 10;
   const projectInfo = [
     ['Name', project.name], ['Symbol', project.symbol], ['Decimals', project.decimals?.toString() || ''], ['Total Supply', project.supply],
@@ -346,9 +406,65 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     }
   }
 
-  // Page 2: Header with gradient background and logos
+  // Page 2: Executive Summary
   doc.addPage();
-  let currentY = 80;
+  let currentY = 60;
+  try {
+    const badgeLogo = await urlToBase64('/pdf-assets/logos/verified-badge-CFG.png');
+    if (badgeLogo) doc.addImage(badgeLogo, 'PNG', 430, 70, 80, 80);
+  } catch {}
+  
+  // Red accent line on right
+  doc.setDrawColor(237, 36, 40);
+  doc.setLineWidth(6);
+  doc.line(pageWidth - 3, 60, pageWidth - 3, 160);
+  
+  doc.setFontSize(15); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.text('Executive Summary', 60, currentY); currentY += 25;
+  
+  // Type, Ecosystem, Language row
+  doc.setFontSize(10); doc.setTextColor(158, 159, 163); doc.setFont('helvetica', 'normal');
+  doc.text('TYPES', 62, currentY);
+  doc.text('ECOSYSTEM', 202, currentY);
+  doc.text('LANGUAGE', 352, currentY);
+  currentY += 15;
+  
+  doc.setFontSize(10); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.text((project as any).type || 'Token', 62, currentY);
+  doc.text(project.platform || 'Binance Smart Chain', 202, currentY);
+  doc.text(project.contract_info?.contract_language || 'Solidity', 352, currentY);
+  currentY += 30;
+  
+  // Audit scores section
+  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.text('Audit Scores', 60, currentY); currentY += 20;
+  
+  const scoreData = [
+    ['Owner Score', (project as any).ownerScore?.toString() || '0'],
+    ['Social Score', (project as any).socialScore?.toString() || '0'],
+    ['Security Score', (project as any).securityScore?.toString() || '0'],
+    ['Auditor Score', (project as any).auditorScore?.toString() || '0'],
+    ['Overall Score', project.audit_score?.toString() || '0']
+  ];
+  
+  autoTable(doc, {
+    startY: currentY,
+    body: scoreData,
+    theme: 'plain',
+    styles: { fontSize: 10, cellPadding: 5 },
+    margin: { left: 60, right: 60 }
+  });
+  currentY = (doc as any).lastAutoTable.finalY + 30;
+  
+  // Audit Confidence
+  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.text('Audit Confidence', 60, currentY); currentY += 15;
+  doc.setFontSize(10); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
+  doc.text(project.audit_confidence || 'Medium', 60, currentY); currentY += 30;
+
+  // Page 3: Audit Information with header
+  doc.addPage();
+  currentY = 80;
   doc.setFillColor(26, 35, 126);
   doc.rect(0, 0, pageWidth, 120, 'F');
 
