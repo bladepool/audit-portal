@@ -612,32 +612,63 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   doc.text(project.contract_info?.contract_language || 'Solidity', 352, currentY);
   currentY += 30;
   
-  // Audit scores section
+  // Audit scores section with visual bars
   doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
   doc.text('Audit Scores', 60, currentY); currentY += 20;
   
-  const scoreData = [
-    ['Owner Score', (project as any).ownerScore?.toString() || '0'],
-    ['Social Score', (project as any).socialScore?.toString() || '0'],
-    ['Security Score', (project as any).securityScore?.toString() || '0'],
-    ['Auditor Score', (project as any).auditorScore?.toString() || '0'],
-    ['Overall Score', project.audit_score?.toString() || '0']
+  const scores = [
+    { label: 'Owner Score', value: (project as any).ownerScore || 0 },
+    { label: 'Social Score', value: (project as any).socialScore || 0 },
+    { label: 'Security Score', value: (project as any).securityScore || 0 },
+    { label: 'Auditor Score', value: (project as any).auditorScore || 0 },
+    { label: 'Overall Score', value: project.audit_score || 0 }
   ];
   
-  autoTable(doc, {
-    startY: currentY,
-    body: scoreData,
-    theme: 'plain',
-    styles: { fontSize: 10, cellPadding: 5 },
-    margin: { left: 60, right: 60 }
-  });
-  currentY = (doc as any).lastAutoTable.finalY + 30;
+  const scoreBarWidth = 200;
+  const scoreBarHeight = 12;
+  
+  for (const score of scores) {
+    // Label
+    doc.setFontSize(10); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
+    doc.text(score.label, 60, currentY);
+    
+    // Score value
+    const scoreColor = score.value >= 75 ? [34, 197, 94] : score.value >= 50 ? [234, 179, 8] : [239, 68, 68];
+    doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]); doc.setFont('helvetica', 'bold');
+    doc.text(`${score.value}/100`, 180, currentY);
+    
+    // Background bar
+    doc.setDrawColor(220, 220, 220); doc.setLineWidth(1);
+    doc.rect(240, currentY - 8, scoreBarWidth, scoreBarHeight);
+    
+    // Fill bar
+    const fillWidth = (score.value / 100) * scoreBarWidth;
+    doc.setFillColor(scoreColor[0], scoreColor[1], scoreColor[2]);
+    doc.rect(240, currentY - 8, fillWidth, scoreBarHeight, 'F');
+    
+    currentY += 20;
+  }
+  
+  currentY += 10;
   
   // Audit Confidence
   doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
   doc.text('Audit Confidence', 60, currentY); currentY += 15;
   doc.setFontSize(10); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
-  doc.text(project.audit_confidence || 'Medium', 60, currentY); currentY += 30;
+  doc.text(project.audit_confidence || 'Medium', 60, currentY); currentY += 20;
+  
+  // Audit Metadata (if available)
+  if (project.auditToolVersion || project.auditEdition) {
+    doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'normal');
+    if (project.auditToolVersion) {
+      doc.text(`Tool Version: ${project.auditToolVersion}`, 60, currentY); currentY += 12;
+    }
+    if (project.auditEdition) {
+      doc.text(`Edition: ${project.auditEdition}`, 60, currentY); currentY += 12;
+    }
+  }
+  
+  currentY += 18;
 
   // Issues Classification Table
   doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
