@@ -316,21 +316,44 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   const doc = new jsPDF('p', 'pt', 'a4');
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-  // Reuse the same generation logic but return blob
-  const formattedDate = formatDate(new Date().toISOString());
-  const docTime = new Date().toISOString().slice(0, 8).replace(/-/g, '');
+  // Front page
+  try {
+    const frontPageBg = await urlToBase64('/pdf-assets/logos/front9.png');
+    if (frontPageBg) {
+      doc.addImage(frontPageBg, 'PNG', 0, 0, pageWidth, pageHeight);
+    }
+  } catch (error) {
+    console.error('Failed to load front page background:', error);
+  }
+  
+  doc.setFontSize(27);
+  doc.setTextColor(255, 255, 255);
+  doc.text(`${project.name} ${capitalize(project.platform || 'Token')}`, 75, 210, { maxWidth: 350 });
+  doc.setFontSize(12);
+  doc.setTextColor(214, 221, 224);
+  doc.text(formattedDate, 75, 300);
+  doc.text(`Audit Status: ${project.published ? 'Published' : 'Draft'}`, 75, 320);
+  
+  const projectLogoFront = await getProjectLogo(project.slug);
+  if (projectLogoFront && !projectLogoFront.includes('svg')) {
+    try {
+      doc.addImage(projectLogoFront, 'PNG', 430, 185, 100, 100, undefined, 'FAST');
+    } catch (error) {
+      console.error('Failed to add project logo on front page:', error);
+    }
+  }
 
-  // Load logos
-  const cfgLogo = await urlToBase64('/pdf-assets/logos/CFG-Logo-red-black-FULL.png');
-  const projectLogo = await getProjectLogo(project.slug);
-
-  // Header with gradient background and logos
+  // Page 2: Header with gradient background and logos
+  doc.addPage();
   let currentY = 80;
   doc.setFillColor(26, 35, 126);
   doc.rect(0, 0, pageWidth, 120, 'F');
 
   // CFG Logo (left side)
+  const cfgLogo = await urlToBase64('/pdf-assets/logos/CFG-Logo-red-black-FULL.png');
   if (cfgLogo) {
     try {
       doc.addImage(cfgLogo, 'PNG', 40, 30, 60, 60);
@@ -346,6 +369,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   doc.text('SMART CONTRACT AUDIT REPORT', pageWidth / 2, 60, { align: 'center' });
 
   // Project Logo (right side)
+  const projectLogo = await getProjectLogo(project.slug);
   if (projectLogo) {
     try {
       doc.addImage(projectLogo, 'PNG', pageWidth - 100, 30, 60, 60);
