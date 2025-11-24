@@ -322,7 +322,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   const docTime = new Date().toISOString().slice(0, 8).replace(/-/g, '');
 
   // Load logos
-  const cfgLogo = await urlToBase64('/img/cfg-ninja-logo.png');
+  const cfgLogo = await urlToBase64('/pdf-assets/logos/CFG-Logo-red-black-FULL.png');
   const projectLogo = await getProjectLogo(project.slug);
 
   // Header with gradient background and logos
