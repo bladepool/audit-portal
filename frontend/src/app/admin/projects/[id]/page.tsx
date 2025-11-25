@@ -22,7 +22,7 @@ import { projectsAPI, blockchainsAPI } from '@/lib/api';
 import { Project, Finding } from '@/lib/types';
 import FindingsManager from '@/components/FindingsManager';
 import { generateEnhancedAuditPDF, generateEnhancedAuditPDFBlob } from '@/lib/enhancedPdfGenerator';
-import { uploadPDFToGitHub, getGitHubToken, saveGitHubToken } from '@/lib/githubUpload';
+import { uploadPDFToGitHub } from '@/lib/githubUpload';
 
 // Global build version - update this with each new build  
 const AUDIT_TOOL_VERSION = '3.5'; // Force rebuild
@@ -192,8 +192,27 @@ export default function ProjectFormPage() {
   const [kycScoreNotes, setKycScoreNotes] = useState('');
   const [kycVendor, setKycVendor] = useState('');
   
-  // Token Distribution
+  // Token Distribution - Enhanced with Scanner
   const [tokenDistributionEnabled, setTokenDistributionEnabled] = useState(false);
+  const [distributions, setDistributions] = useState<Array<{
+    name: string;
+    address: string;
+    amount: string;
+    percentage: number;
+    description?: string;
+  }>>([]);
+  const [scanningDistribution, setScanningDistribution] = useState(false);
+  const [distributionScanMessage, setDistributionScanMessage] = useState('');
+  const [isLiquidityLock, setIsLiquidityLock] = useState(false);
+  const [liquidityLockLink, setLiquidityLockLink] = useState('');
+  const [lockAmount, setLockAmount] = useState('');
+  const [lockLocation, setLockLocation] = useState('Pinksale');
+  const [unlockAmount, setUnlockAmount] = useState('');
+  const [totalDistributed, setTotalDistributed] = useState('');
+  const [remainingSupply, setRemainingSupply] = useState('');
+  const [lastScanned, setLastScanned] = useState<Date | null>(null);
+  const [scanSource, setScanSource] = useState('');
+  // Legacy fields (kept for backward compatibility)
   const [distributionName1, setDistributionName1] = useState('');
   const [distributionAmount1, setDistributionAmount1] = useState(0);
   const [distributionDescription1, setDistributionDescription1] = useState('');
@@ -237,14 +256,14 @@ export default function ProjectFormPage() {
   
   // Advanced Metadata
   const [isGraph, setIsGraph] = useState(false);
+  const [graphUrl, setGraphUrl] = useState('');
   const [isInheritance, setIsInheritance] = useState(false);
+  const [inheritanceUrl, setInheritanceUrl] = useState('');
   
   // PDF Generation
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [pdfGenerationMessage, setPdfGenerationMessage] = useState('');
   const [uploadToGitHub, setUploadToGitHub] = useState(true);
-  const [githubToken, setGithubToken] = useState('');
-  const [showTokenInput, setShowTokenInput] = useState(false);
   
   // TrustBlock Publishing
   const [isPublishingTrustBlock, setIsPublishingTrustBlock] = useState(false);
@@ -266,18 +285,18 @@ export default function ProjectFormPage() {
   
   // CFG Findings (for FindingsManager - array format)
   const [cfgFindings, setCfgFindings] = useState<Finding[]>([]);
+  
+  // Notes Section
+  const [internalNotes, setInternalNotes] = useState('');
+  const [auditorNotes, setAuditorNotes] = useState('');
+  const [clientNotes, setClientNotes] = useState('');
+  const [timelineHistory, setTimelineHistory] = useState<Array<{date: Date; event: string; notes: string}>>([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
       router.push('/admin');
       return;
-    }
-    
-    // Load GitHub token if saved
-    const savedGithubToken = getGitHubToken();
-    if (savedGithubToken) {
-      setGithubToken(savedGithubToken);
     }
     
     // Load blockchains list
@@ -475,13 +494,31 @@ export default function ProjectFormPage() {
 
   // Advanced Metadata
   setIsGraph((project as any).isGraph || false);
+  setGraphUrl((project as any).graph_url || '');
   setIsInheritance((project as any).isInheritance || false);
+  setInheritanceUrl((project as any).inheritance_url || '');
   setIsEVMContract((project as any).isEVMContract !== undefined ? (project as any).isEVMContract : true);
   setIsSolana((project as any).isSolana || false);
   setIsNFT((project as any).isNFT || false);
   setIsToken((project as any).isToken !== undefined ? (project as any).isToken : true);
   setIsStaking((project as any).isStaking || false);
   setIsOther((project as any).isOther || false);
+  
+  // Token Distribution - Load enhanced scanner data
+  const tokenDist = (project as any).tokenDistribution;
+  if (tokenDist) {
+    setTokenDistributionEnabled(tokenDist.enabled || false);
+    setDistributions(tokenDist.distributions || []);
+    setIsLiquidityLock(tokenDist.isLiquidityLock || false);
+    setLiquidityLockLink(tokenDist.liquidityLockLink || '');
+    setLockAmount(tokenDist.lockAmount || '');
+    setLockLocation(tokenDist.lockLocation || 'Pinksale');
+    setUnlockAmount(tokenDist.unlockAmount || '');
+    setTotalDistributed(tokenDist.totalDistributed || '');
+    setRemainingSupply(tokenDist.remainingSupply || '');
+    setLastScanned(tokenDist.lastScanned ? new Date(tokenDist.lastScanned) : null);
+    setScanSource(tokenDist.scanSource || '');
+  }
   
   // PDF Generation Toggles
   setEnableSummary((project as any).enableSummary !== undefined ? (project as any).enableSummary : true);
@@ -493,6 +530,15 @@ export default function ProjectFormPage() {
 
   // Load CFG Findings - default to Pass if not set
   setCfgFindings(project.cfg_findings || []);
+  
+  // Load Notes
+  const notes = (project as any).notes;
+  if (notes) {
+    setInternalNotes(notes.internal || '');
+    setAuditorNotes(notes.auditor || '');
+    setClientNotes(notes.client || '');
+    setTimelineHistory(notes.timeline || []);
+  }
     } catch (error) {
       console.error('Failed to load project:', error);
       router.push('/admin/dashboard');
@@ -668,31 +714,18 @@ export default function ProjectFormPage() {
 
       // Upload to GitHub if requested
       if (uploadToGitHub) {
-        const token = githubToken || getGitHubToken();
-        
-        if (!token) {
-          setShowTokenInput(true);
-          setPdfGenerationMessage('⚠️ GitHub token required for upload. Please enter your token below.');
-          return;
-        }
-
         setPdfGenerationMessage('📤 Uploading to GitHub...');
         
         const filename = `${projectData.slug}.pdf`;
         const uploadResult = await uploadPDFToGitHub(
           pdfBlob,
           filename,
-          token,
+          undefined, // Use global settings
           `Upload audit report for ${projectData.name}`
         );
 
         if (uploadResult.success) {
           setPdfGenerationMessage(`✅ PDF uploaded to GitHub!\n${uploadResult.rawUrl}`);
-          
-          // Save token for future use
-          if (githubToken) {
-            saveGitHubToken(githubToken);
-          }
 
           // Update project with PDF URL
           try {
@@ -781,6 +814,140 @@ export default function ProjectFormPage() {
       alert(errorMsg);
     } finally {
       setIsPublishingTrustBlock(false);
+    }
+  };
+
+  const calculateCompletionPercentage = () => {
+    let completed = 0;
+    let total = 0;
+
+    // Basic Info (weight: 20%)
+    if (name) completed += 4;
+    if (symbol) completed += 4;
+    if (decimals) completed += 4;
+    if (supply) completed += 4;
+    if (description) completed += 4;
+    total += 20;
+
+    // Contract Info (weight: 15%)
+    if (contractAddress) completed += 5;
+    if (contractName) completed += 5;
+    if (platform) completed += 5;
+    total += 15;
+
+    // Socials (weight: 10%)
+    if (website) completed += 3;
+    if (telegram || twitter) completed += 3;
+    if (github || cmc || cg) completed += 4;
+    total += 10;
+
+    // Findings (weight: 30%)
+    if (cfgFindings && cfgFindings.length > 0) completed += 15;
+    if (minorFound > 0 || mediumFound > 0 || majorFound > 0 || criticalFound > 0) completed += 15;
+    total += 30;
+
+    // Audit Details (weight: 15%)
+    if (auditScore > 0) completed += 5;
+    if (auditConfidence) completed += 5;
+    if (codebase) completed += 5;
+    total += 15;
+
+    // Additional (weight: 10%)
+    if (logo) completed += 5;
+    if (published) completed += 5;
+    total += 10;
+
+    return Math.round((completed / total) * 100);
+  };
+
+  const updateTimelineAutomatically = () => {
+    const completion = calculateCompletionPercentage();
+    const today = new Date().toISOString().split('T')[0];
+
+    // Auto-fill audit request if not set (always filled on project creation)
+    if (!auditRequest) {
+      setAuditRequest(today);
+    }
+
+    // Auto-fill onboarding when 50%+ complete
+    if (completion >= 50 && !onboarding) {
+      setOnboarding(today);
+    }
+
+    // Auto-fill audit preview when 90%+ complete
+    if (completion >= 90 && !auditPreview) {
+      setAuditPreview(today);
+    }
+
+    // Auto-fill audit release when PDF is generated (100% complete)
+    if (completion === 100 && auditPdf && !auditRelease) {
+      setAuditRelease(today);
+    }
+
+    return completion;
+  };
+
+  const handleScanDistribution = async () => {
+    if (isNew) {
+      alert('Please save the project first before scanning distribution');
+      return;
+    }
+
+    if (!contractAddress) {
+      alert('Contract address is required to scan token distribution');
+      return;
+    }
+
+    if (!platform) {
+      alert('Platform is required to scan token distribution');
+      return;
+    }
+
+    setScanningDistribution(true);
+    setDistributionScanMessage('🔍 Scanning blockchain for top 5 token holders...');
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/projects/${params.id}/scan-distribution`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to scan distribution');
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        const distData = result.data;
+        
+        // Update state with scanned data
+        setDistributions(distData.distributions || []);
+        setTotalDistributed(distData.totalDistributed || '');
+        setRemainingSupply(distData.remainingSupply || '');
+        setLastScanned(distData.lastScanned ? new Date(distData.lastScanned) : new Date());
+        setScanSource(distData.scanSource || '');
+        setTokenDistributionEnabled(true);
+
+        setDistributionScanMessage(`✅ Successfully scanned ${distData.distributions?.length || 0} token holders from ${distData.scanSource}!`);
+
+        setTimeout(() => {
+          setDistributionScanMessage('');
+        }, 5000);
+      } else {
+        throw new Error(result.error || 'Unknown error');
+      }
+    } catch (error: any) {
+      console.error('Distribution scan error:', error);
+      const errorMsg = `❌ Error: ${error.message || 'Failed to scan distribution'}`;
+      setDistributionScanMessage(errorMsg);
+      alert(errorMsg);
+    } finally {
+      setScanningDistribution(false);
     }
   };
 
@@ -905,6 +1072,21 @@ export default function ProjectFormPage() {
       kycScoreNotes,
       kycVendor,
       tokenDistributionEnabled,
+      // Enhanced token distribution with scanner data
+      tokenDistribution: {
+        enabled: tokenDistributionEnabled,
+        distributions,
+        isLiquidityLock,
+        liquidityLockLink,
+        lockAmount,
+        lockLocation,
+        unlockAmount,
+        totalDistributed,
+        remainingSupply,
+        lastScanned,
+        scanSource,
+      },
+      // Legacy distribution fields (backward compatibility)
       distributionName1,
       distributionAmount1,
       distributionDescription1,
@@ -924,7 +1106,9 @@ export default function ProjectFormPage() {
       distributionAmount6,
       distributionDescription6,
       isGraph,
+      graph_url: graphUrl,
       isInheritance,
+      inheritance_url: inheritanceUrl,
       isEVMContract,
       isSolana,
       isNFT,
@@ -960,6 +1144,13 @@ export default function ProjectFormPage() {
       enableTradeCheck,
       isFlat,
       isReentrant,
+      // Notes Section
+      notes: {
+        internal: internalNotes,
+        auditor: auditorNotes,
+        client: clientNotes,
+        timeline: timelineHistory
+      },
     };
 
     try {
@@ -1430,68 +1621,143 @@ export default function ProjectFormPage() {
           </div>
         </Card>
 
-        {/* Token Distribution Section */}
+        {/* Token Distribution Section - Enhanced with Scanner */}
         <Card className={styles.section}>
-          <Text className={styles.sectionTitle}>Token Distribution</Text>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <Text className={styles.sectionTitle}>Token Distribution Scanner</Text>
+            <Button 
+              appearance="primary" 
+              onClick={handleScanDistribution}
+              disabled={scanningDistribution || isNew || !contractAddress || !platform}
+            >
+              {scanningDistribution ? <Spinner size="tiny" /> : '🔍'} Scan Distribution
+            </Button>
+          </div>
+          
+          {distributionScanMessage && (
+            <div style={{ 
+              padding: '12px', 
+              marginBottom: '16px', 
+              background: distributionScanMessage.includes('✅') ? '#d4edda' : distributionScanMessage.includes('❌') ? '#f8d7da' : '#fff3cd',
+              border: `1px solid ${distributionScanMessage.includes('✅') ? '#c3e6cb' : distributionScanMessage.includes('❌') ? '#f5c6cb' : '#ffeeba'}`,
+              borderRadius: '4px',
+              fontSize: '14px',
+              whiteSpace: 'pre-wrap'
+            }}>
+              {distributionScanMessage}
+            </div>
+          )}
+
           <div className={styles.grid}>
-            <Field label="Token Distribution Enabled">
+            <Field label="Enable Token Distribution">
               <Switch checked={tokenDistributionEnabled} onChange={(e) => setTokenDistributionEnabled(e.currentTarget.checked)} />
             </Field>
-            <Field label="Distribution Name 1">
-              <Input value={distributionName1 || ''} onChange={(e) => setDistributionName1(e.target.value)} />
-            </Field>
-            <Field label="Distribution Amount 1">
-              <Input type="number" value={distributionAmount1?.toString() || ''} onChange={(e) => setDistributionAmount1(parseInt(e.target.value) || 0)} />
-            </Field>
-            <Field label="Distribution Description 1">
-              <Input value={distributionDescription1 || ''} onChange={(e) => setDistributionDescription1(e.target.value)} />
-            </Field>
-            <Field label="Distribution Name 2">
-              <Input value={distributionName2 || ''} onChange={(e) => setDistributionName2(e.target.value)} />
-            </Field>
-            <Field label="Distribution Amount 2">
-              <Input type="number" value={distributionAmount2?.toString() || ''} onChange={(e) => setDistributionAmount2(parseInt(e.target.value) || 0)} />
-            </Field>
-            <Field label="Distribution Description 2">
-              <Input value={distributionDescription2 || ''} onChange={(e) => setDistributionDescription2(e.target.value)} />
-            </Field>
-            <Field label="Distribution Name 3">
-              <Input value={distributionName3 || ''} onChange={(e) => setDistributionName3(e.target.value)} />
-            </Field>
-            <Field label="Distribution Amount 3">
-              <Input type="number" value={distributionAmount3?.toString() || ''} onChange={(e) => setDistributionAmount3(parseInt(e.target.value) || 0)} />
-            </Field>
-            <Field label="Distribution Description 3">
-              <Input value={distributionDescription3 || ''} onChange={(e) => setDistributionDescription3(e.target.value)} />
-            </Field>
-            <Field label="Distribution Name 4">
-              <Input value={distributionName4 || ''} onChange={(e) => setDistributionName4(e.target.value)} />
-            </Field>
-            <Field label="Distribution Amount 4">
-              <Input type="number" value={distributionAmount4?.toString() || ''} onChange={(e) => setDistributionAmount4(parseInt(e.target.value) || 0)} />
-            </Field>
-            <Field label="Distribution Description 4">
-              <Input value={distributionDescription4 || ''} onChange={(e) => setDistributionDescription4(e.target.value)} />
-            </Field>
-            <Field label="Distribution Name 5">
-              <Input value={distributionName5 || ''} onChange={(e) => setDistributionName5(e.target.value)} />
-            </Field>
-            <Field label="Distribution Amount 5">
-              <Input type="number" value={distributionAmount5?.toString() || ''} onChange={(e) => setDistributionAmount5(parseInt(e.target.value) || 0)} />
-            </Field>
-            <Field label="Distribution Description 5">
-              <Input value={distributionDescription5 || ''} onChange={(e) => setDistributionDescription5(e.target.value)} />
-            </Field>
-            <Field label="Distribution Name 6">
-              <Input value={distributionName6 || ''} onChange={(e) => setDistributionName6(e.target.value)} />
-            </Field>
-            <Field label="Distribution Amount 6">
-              <Input type="number" value={distributionAmount6?.toString() || ''} onChange={(e) => setDistributionAmount6(parseInt(e.target.value) || 0)} />
-            </Field>
-            <Field label="Distribution Description 6">
-              <Input value={distributionDescription6 || ''} onChange={(e) => setDistributionDescription6(e.target.value)} />
+            <Field label="Last Scanned">
+              <Input 
+                value={lastScanned ? new Date(lastScanned).toLocaleString() : 'Never'} 
+                disabled 
+                style={{ background: '#f5f5f5' }}
+              />
             </Field>
           </div>
+
+          {tokenDistributionEnabled && distributions.length > 0 && (
+            <>
+              <Divider style={{ margin: '16px 0' }} />
+              <Text weight="semibold" style={{ marginBottom: '12px' }}>Top Token Holders (Scanned from {scanSource})</Text>
+              
+              <div style={{ 
+                overflowX: 'auto', 
+                marginBottom: '16px',
+                border: '1px solid #e0e0e0',
+                borderRadius: '4px'
+              }}>
+                <table style={{ 
+                  width: '100%', 
+                  borderCollapse: 'collapse',
+                  fontSize: '14px'
+                }}>
+                  <thead style={{ background: '#f5f5f5' }}>
+                    <tr>
+                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e0e0e0' }}>Holder</th>
+                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e0e0e0' }}>Address</th>
+                      <th style={{ padding: '12px', textAlign: 'right', borderBottom: '2px solid #e0e0e0' }}>Amount</th>
+                      <th style={{ padding: '12px', textAlign: 'right', borderBottom: '2px solid #e0e0e0' }}>Percentage</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {distributions.map((dist, index) => (
+                      <tr key={index} style={{ borderBottom: '1px solid #e0e0e0' }}>
+                        <td style={{ padding: '12px' }}>{dist.name}</td>
+                        <td style={{ padding: '12px', fontFamily: 'monospace', fontSize: '12px' }}>
+                          {dist.address.substring(0, 6)}...{dist.address.substring(dist.address.length - 4)}
+                        </td>
+                        <td style={{ padding: '12px', textAlign: 'right' }}>{dist.amount}</td>
+                        <td style={{ padding: '12px', textAlign: 'right', fontWeight: '600' }}>{dist.percentage.toFixed(2)}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className={styles.grid}>
+                <Field label="Total Distributed">
+                  <Input value={totalDistributed || ''} disabled style={{ background: '#f5f5f5' }} />
+                </Field>
+                <Field label="Remaining Supply">
+                  <Input value={remainingSupply || ''} disabled style={{ background: '#f5f5f5' }} />
+                </Field>
+              </div>
+
+              <Divider style={{ margin: '16px 0' }} />
+              <Text weight="semibold" style={{ marginBottom: '12px' }}>Liquidity Lock Information</Text>
+              
+              <div className={styles.grid}>
+                <Field label="Liquidity Locked" className={styles.gridFull}>
+                  <Switch checked={isLiquidityLock} onChange={(e) => setIsLiquidityLock(e.currentTarget.checked)} />
+                </Field>
+                
+                {isLiquidityLock && (
+                  <>
+                    <Field label="Lock Amount">
+                      <Input value={lockAmount} onChange={(e) => setLockAmount(e.target.value)} placeholder="e.g., 50 BNB" />
+                    </Field>
+                    <Field label="Lock Location">
+                      <select 
+                        value={lockLocation} 
+                        onChange={(e) => setLockLocation(e.target.value)}
+                        style={{ 
+                          padding: '8px', 
+                          borderRadius: '4px', 
+                          border: '1px solid #ccc', 
+                          width: '100%' 
+                        }}
+                      >
+                        <option value="Pinksale">Pinksale</option>
+                        <option value="Unicrypt">Unicrypt</option>
+                        <option value="DxSale">DxSale</option>
+                        <option value="Team Finance">Team Finance</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </Field>
+                    <Field label="Lock Link (URL)" className={styles.gridFull}>
+                      <Input value={liquidityLockLink} onChange={(e) => setLiquidityLockLink(e.target.value)} placeholder="https://..." />
+                    </Field>
+                    <Field label="Unlock Amount">
+                      <Input value={unlockAmount} onChange={(e) => setUnlockAmount(e.target.value)} placeholder="e.g., 25 BNB" />
+                    </Field>
+                  </>
+                )}
+              </div>
+            </>
+          )}
+
+          {!tokenDistributionEnabled && (
+            <Text size={200} style={{ color: '#666', marginTop: '8px', fontStyle: 'italic' }}>
+              Enable token distribution and click "Scan Distribution" to automatically fetch the top 5 token holders from the blockchain explorer.
+              Make sure contract address and platform are set before scanning.
+            </Text>
+          )}
         </Card>
 
         {/* Solana-Specific Metadata Section - Only shows when isSolana is true */}
@@ -1571,11 +1837,33 @@ export default function ProjectFormPage() {
         <Card className={styles.section}>
           <Text className={styles.sectionTitle}>Advanced Metadata</Text>
           <div className={styles.grid}>
-            <Field label="Is Graph">
+            <Field label="Include Call Graph" hint="From Solidity Metrics tool">
               <Switch checked={isGraph} onChange={(e) => setIsGraph(e.currentTarget.checked)} />
             </Field>
-            <Field label="Is Inheritance">
+            <Field label="Call Graph Image URL" hint="Path to graph PNG (e.g., /graph/pecunity-graph.png)" className={styles.gridFull}>
+              <Input 
+                value={graphUrl} 
+                onChange={(e) => setGraphUrl(e.target.value)} 
+                placeholder="/graph/project-name-graph.png"
+                disabled={!isGraph}
+              />
+              <Text size={200} style={{ marginTop: '4px', color: '#666' }}>
+                Upload PNG to <code>/frontend/public/graph/</code> folder, then enter path: <code>/graph/filename.png</code>
+              </Text>
+            </Field>
+            <Field label="Include Inheritance Diagram" hint="From Solidity Metrics tool">
               <Switch checked={isInheritance} onChange={(e) => setIsInheritance(e.currentTarget.checked)} />
+            </Field>
+            <Field label="Inheritance Diagram URL" hint="Path to inheritance PNG (e.g., /inheritance/pecunity-inheritance.png)" className={styles.gridFull}>
+              <Input 
+                value={inheritanceUrl} 
+                onChange={(e) => setInheritanceUrl(e.target.value)} 
+                placeholder="/inheritance/project-name-inheritance.png"
+                disabled={!isInheritance}
+              />
+              <Text size={200} style={{ marginTop: '4px', color: '#666' }}>
+                Upload PNG to <code>/frontend/public/inheritance/</code> folder, then enter path: <code>/inheritance/filename.png</code>
+              </Text>
             </Field>
             <Field label="Is EVM Contract">
               <Switch checked={isEVMContract} onChange={(e) => setIsEVMContract(e.currentTarget.checked)} />
@@ -1627,9 +1915,111 @@ export default function ProjectFormPage() {
           </Text>
         </Card>
 
+        {/* Notes Section */}
+        <Card className={styles.section}>
+          <Text className={styles.sectionTitle}>Notes & Documentation</Text>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <Field label="Internal Notes" hint="Admin-only notes, not included in PDF">
+              <Textarea 
+                value={internalNotes} 
+                onChange={(e) => setInternalNotes(e.target.value)}
+                rows={4}
+                placeholder="Private notes for internal tracking..."
+                style={{ width: '100%' }}
+              />
+              <Text size={200} style={{ color: '#666', marginTop: '4px' }}>
+                🔒 Private - Only visible to admins, never included in generated PDFs
+              </Text>
+            </Field>
+            
+            <Divider />
+            
+            <Field label="Auditor Notes" hint="Technical notes from auditors, included in PDF">
+              <Textarea 
+                value={auditorNotes} 
+                onChange={(e) => setAuditorNotes(e.target.value)}
+                rows={6}
+                placeholder="Technical findings, recommendations, and auditor observations..."
+                style={{ width: '100%' }}
+              />
+              <Text size={200} style={{ color: '#666', marginTop: '4px' }}>
+                📄 Included in PDF - Technical notes and recommendations for the audit report
+              </Text>
+            </Field>
+            
+            <Divider />
+            
+            <Field label="Client Communication Notes" hint="Notes for client communication">
+              <Textarea 
+                value={clientNotes} 
+                onChange={(e) => setClientNotes(e.target.value)}
+                rows={4}
+                placeholder="Client feedback, questions, revision requests..."
+                style={{ width: '100%' }}
+              />
+              <Text size={200} style={{ color: '#666', marginTop: '4px' }}>
+                💬 Client Tracking - Communication history and client feedback
+              </Text>
+            </Field>
+            
+            {timelineHistory && timelineHistory.length > 0 && (
+              <>
+                <Divider />
+                <div>
+                  <Text weight="semibold" style={{ marginBottom: '12px' }}>Timeline History</Text>
+                  <div style={{ 
+                    maxHeight: '200px', 
+                    overflowY: 'auto', 
+                    border: '1px solid #e0e0e0', 
+                    borderRadius: '4px',
+                    padding: '12px'
+                  }}>
+                    {timelineHistory.map((entry, index) => (
+                      <div key={index} style={{ 
+                        marginBottom: '12px', 
+                        paddingBottom: '12px', 
+                        borderBottom: index < timelineHistory.length - 1 ? '1px solid #f0f0f0' : 'none'
+                      }}>
+                        <Text weight="semibold" size={300}>
+                          {new Date(entry.date).toLocaleDateString()} - {entry.event}
+                        </Text>
+                        {entry.notes && (
+                          <Text size={200} style={{ color: '#666', marginTop: '4px' }}>
+                            {entry.notes}
+                          </Text>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </Card>
+
         {/* Timeline */}
         <Card className={styles.section}>
-          <Text className={styles.sectionTitle}>Timeline</Text>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <Text className={styles.sectionTitle}>Timeline</Text>
+            <Button 
+              appearance="secondary" 
+              onClick={() => {
+                const completion = updateTimelineAutomatically();
+                alert(`Project is ${completion}% complete. Timeline dates have been updated based on completion status.`);
+              }}
+            >
+              🔄 Auto-Update Timeline
+            </Button>
+          </div>
+          
+          <Text size={200} style={{ color: '#666', marginBottom: '16px', fontStyle: 'italic' }}>
+            Timeline dates can be automatically filled based on project completion:
+            • Audit Request: Always filled on creation
+            • Onboarding: Auto-filled at 50%+ completion
+            • Audit Preview: Auto-filled at 90%+ completion
+            • Audit Release: Auto-filled when PDF is generated
+          </Text>
+          
           <div className={styles.grid}>
             <Field label="Audit Request">
               <Input 
@@ -1688,18 +2078,10 @@ export default function ProjectFormPage() {
                 </Text>
               </Field>
 
-              {showTokenInput && (
-                <Field label="GitHub Personal Access Token" required>
-                  <Input 
-                    type="password"
-                    value={githubToken} 
-                    onChange={(e) => setGithubToken(e.target.value)}
-                    placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-                  />
-                  <Text size={200} style={{ marginTop: '4px', color: '#666' }}>
-                    Required for GitHub upload. Create a token at github.com/settings/tokens with 'repo' scope.
-                  </Text>
-                </Field>
+              {uploadToGitHub && (
+                <Text size={200} style={{ color: '#666', padding: '8px 0' }}>
+                  <strong>ℹ️ GitHub Upload:</strong> GitHub token and repository settings are configured globally in <a href="/admin/settings" style={{ color: '#0078d4', textDecoration: 'underline' }}>Admin Settings</a>.
+                </Text>
               )}
 
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>

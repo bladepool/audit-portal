@@ -4,23 +4,89 @@ const Project = require('../models/Project');
 const auth = require('../middleware/auth');
 const { fetchTokenSecurity, getChainId } = require('../services/goplusService');
 
-// Get all published projects (public)
+// Get all published projects (public) with search, filter, pagination
 router.get('/', async (req, res) => {
   try {
-    const { sort = 'recent' } = req.query;
-    let sortQuery = { createdAt: -1 };
+    const { 
+      sort = 'recent',
+      search = '',
+      platform = '',
+      status = '',
+      dateFrom = '',
+      dateTo = '',
+      page = 1,
+      limit = 20
+    } = req.query;
     
+    // Build sort query
+    let sortQuery = { createdAt: -1 };
     if (sort === 'votes') {
       sortQuery = { total_votes: -1 };
     } else if (sort === 'views') {
       sortQuery = { page_view: -1 };
+    } else if (sort === 'name') {
+      sortQuery = { name: 1 };
+    } else if (sort === 'score') {
+      sortQuery = { audit_score: -1 };
     }
     
-    const projects = await Project.find({ published: true })
-      .sort(sortQuery)
-      .select('-__v');
+    // Build filter query
+    let filterQuery = { published: true };
     
-    res.json(projects);
+    // Search across name, symbol, platform
+    if (search) {
+      filterQuery.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { symbol: { $regex: search, $options: 'i' } },
+        { platform: { $regex: search, $options: 'i' } }
+      ];
+    }
+    
+    // Filter by platform
+    if (platform) {
+      filterQuery.platform = platform;
+    }
+    
+    // Filter by status
+    if (status) {
+      filterQuery.status = status;
+    }
+    
+    // Filter by date range
+    if (dateFrom || dateTo) {
+      filterQuery.createdAt = {};
+      if (dateFrom) {
+        filterQuery.createdAt.$gte = new Date(dateFrom);
+      }
+      if (dateTo) {
+        filterQuery.createdAt.$lte = new Date(dateTo);
+      }
+    }
+    
+    // Pagination
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    const skip = (pageNum - 1) * limitNum;
+    
+    // Execute queries
+    const [projects, total] = await Promise.all([
+      Project.find(filterQuery)
+        .sort(sortQuery)
+        .skip(skip)
+        .limit(limitNum)
+        .select('-__v'),
+      Project.countDocuments(filterQuery)
+    ]);
+    
+    res.json({
+      projects,
+      pagination: {
+        total,
+        page: pageNum,
+        limit: limitNum,
+        pages: Math.ceil(total / limitNum)
+      }
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -369,6 +435,71 @@ router.post('/:id/fetch-goplus', auth, async (req, res) => {
   } catch (error) {
     console.error('Error fetching GoPlus data:', error);
     res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * POST /api/projects/:id/scan-distribution
+ * Scan token holder distribution using blockchain explorer API
+ */
+router.post('/:id/scan-distribution', auth, async (req, res) => {
+  try {
+    const tokenHolderService = require('../services/tokenHolderService');
+    const project = await Project.findById(req.params.id);
+    
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+    
+    const contractAddress = project.contract_info?.contract_address || project.address;
+    
+    if (!contractAddress) {
+      return res.status(400).json({ error: 'No contract address found for this project' });
+    }
+    
+    const platform = project.platform || 'BNBCHAIN';
+    const supply = project.supply || '0';
+    
+    console.log(`Scanning token distribution for ${project.name}`);
+    console.log(`Platform: ${platform}, Contract: ${contractAddress}`);
+    
+    // Scan token holders
+    const distributionData = await tokenHolderService.scanTokenHolders(
+      contractAddress,
+      platform,
+      supply
+    );
+    
+    // Update project with distribution data
+    project.tokenDistribution = {
+      enabled: true,
+      distributions: distributionData.distributions,
+      totalDistributed: distributionData.totalDistributed,
+      remainingSupply: distributionData.remainingSupply,
+      lastScanned: distributionData.lastScanned,
+      scanSource: distributionData.scanSource,
+      // Preserve existing liquidity lock data
+      isLiquidityLock: project.tokenDistribution?.isLiquidityLock || false,
+      liquidityLockLink: project.tokenDistribution?.liquidityLockLink || '',
+      lockAmount: project.tokenDistribution?.lockAmount || '',
+      lockLocation: project.tokenDistribution?.lockLocation || 'Pinksale',
+      unlockAmount: project.tokenDistribution?.unlockAmount || ''
+    };
+    
+    await project.save();
+    
+    res.json({
+      success: true,
+      message: 'Token distribution scanned successfully',
+      data: project.tokenDistribution
+    });
+    
+  } catch (error) {
+    console.error('Error scanning token distribution:', error);
+    res.status(500).json({ 
+      success: false,
+      error: error.message 
+    });
   }
 });
 

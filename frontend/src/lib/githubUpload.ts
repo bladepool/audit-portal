@@ -1,12 +1,41 @@
 /**
  * GitHub API Service for PDF Upload
- * Uploads generated PDFs to CFG-NINJA/audits repository
+ * Uploads generated PDFs to GitHub repository (settings configurable)
  */
 
+import { settingsAPI } from './api';
+
 const GITHUB_API = 'https://api.github.com';
-const GITHUB_OWNER = 'CFG-NINJA';
-const GITHUB_REPO = 'audits';
-const GITHUB_BRANCH = 'main';
+
+// Default values (can be overridden by settings)
+let GITHUB_OWNER = 'CFG-NINJA';
+let GITHUB_REPO = 'audits';
+let GITHUB_BRANCH = 'main';
+
+/**
+ * Load GitHub settings from backend
+ */
+async function loadGitHubSettings(): Promise<{owner: string; repo: string; branch: string; token: string | null}> {
+  try {
+    const response = await settingsAPI.getAll();
+    const settings = response.data;
+    
+    return {
+      owner: settings.github_repo_owner?.value || GITHUB_OWNER,
+      repo: settings.github_repo_name?.value || GITHUB_REPO,
+      branch: settings.github_repo_branch?.value || GITHUB_BRANCH,
+      token: settings.github_token?.value || null
+    };
+  } catch (error) {
+    console.error('Error loading GitHub settings:', error);
+    return {
+      owner: GITHUB_OWNER,
+      repo: GITHUB_REPO,
+      branch: GITHUB_BRANCH,
+      token: null
+    };
+  }
+}
 
 interface GitHubUploadResult {
   success: boolean;
@@ -38,11 +67,14 @@ async function blobToBase64(blob: Blob): Promise<string> {
  */
 async function getFileSHA(
   filename: string,
-  token: string
+  token: string,
+  owner: string,
+  repo: string,
+  branch: string
 ): Promise<string | null> {
   try {
     const response = await fetch(
-      `${GITHUB_API}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filename}?ref=${GITHUB_BRANCH}`,
+      `${GITHUB_API}/repos/${owner}/${repo}/contents/${filename}?ref=${branch}`,
       {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -65,14 +97,27 @@ async function getFileSHA(
 
 /**
  * Upload PDF to GitHub repository
+ * Token parameter is optional - if not provided, uses global settings
  */
 export async function uploadPDFToGitHub(
   pdfBlob: Blob,
   filename: string,
-  token: string,
+  tokenOverride?: string,
   commitMessage?: string
 ): Promise<GitHubUploadResult> {
   try {
+    // Load GitHub configuration from global settings
+    const config = await loadGitHubSettings();
+    const token = tokenOverride || config.token;
+    
+    if (!token) {
+      return {
+        success: false,
+        error: 'GitHub token not configured. Please configure it in Admin Settings.',
+        message: 'Missing GitHub token'
+      };
+    }
+
     // Ensure filename ends with .pdf
     if (!filename.endsWith('.pdf')) {
       filename += '.pdf';
@@ -82,13 +127,13 @@ export async function uploadPDFToGitHub(
     const base64Content = await blobToBase64(pdfBlob);
 
     // Check if file already exists and get its SHA
-    const existingSHA = await getFileSHA(filename, token);
+    const existingSHA = await getFileSHA(filename, token, config.owner, config.repo, config.branch);
 
     // Prepare the request
     const requestBody: any = {
       message: commitMessage || `Upload audit PDF: ${filename}`,
       content: base64Content,
-      branch: GITHUB_BRANCH,
+      branch: config.branch,
     };
 
     // If file exists, include SHA for update
@@ -98,7 +143,7 @@ export async function uploadPDFToGitHub(
 
     // Upload to GitHub
     const response = await fetch(
-      `${GITHUB_API}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filename}`,
+      `${GITHUB_API}/repos/${config.owner}/${config.repo}/contents/${filename}`,
       {
         method: 'PUT',
         headers: {
@@ -120,7 +165,7 @@ export async function uploadPDFToGitHub(
     return {
       success: true,
       url: data.content.html_url,
-      rawUrl: `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${filename}`,
+      rawUrl: `https://raw.githubusercontent.com/${config.owner}/${config.repo}/${config.branch}/${filename}`,
       message: existingSHA ? 'PDF updated successfully' : 'PDF uploaded successfully',
     };
   } catch (error) {
@@ -152,32 +197,10 @@ export async function validateGitHubToken(token: string): Promise<boolean> {
 }
 
 /**
- * Get GitHub token from environment or localStorage
+ * Get GitHub token from global settings
+ * @deprecated Use loadGitHubSettings() instead - token is managed globally in admin settings
  */
-export function getGitHubToken(): string | null {
-  // First check if running server-side with env variable
-  if (typeof window === 'undefined') {
-    return process.env.GITHUB_TOKEN || null;
-  }
-
-  // Client-side: check localStorage
-  return localStorage.getItem('github_token') || null;
-}
-
-/**
- * Save GitHub token to localStorage
- */
-export function saveGitHubToken(token: string): void {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('github_token', token);
-  }
-}
-
-/**
- * Remove GitHub token from localStorage
- */
-export function removeGitHubToken(): void {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem('github_token');
-  }
+export async function getGitHubToken(): Promise<string | null> {
+  const config = await loadGitHubSettings();
+  return config.token;
 }

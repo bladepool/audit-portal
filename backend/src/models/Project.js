@@ -132,7 +132,9 @@ const projectSchema = new mongoose.Schema({
   isFlat: { type: String, default: 'No' }, // Is contract flattened (Yes/No)
   isReentrant: { type: Boolean, default: false }, // Reentrancy vulnerability check
   isGraph: { type: Boolean, default: false }, // Include call graph
+  graph_url: { type: String }, // URL/path to call graph PNG from Solidity Metrics
   isInheritance: { type: Boolean, default: false }, // Include inheritance diagram
+  inheritance_url: { type: String }, // URL/path to inheritance PNG from Solidity Metrics
   isEVMContract: { type: Boolean, default: true }, // EVM contract
   isSolana: { type: Boolean, default: false }, // Solana program
   isNFT: { type: Boolean, default: false }, // NFT contract
@@ -167,7 +169,27 @@ const projectSchema = new mongoose.Schema({
   auditorScore: { type: Number, default: 0 },
   
   // Token Distribution
-  tokenDistribution: { type: String },
+  tokenDistribution: {
+    enabled: { type: Boolean, default: false },
+    distributions: [{
+      name: { type: String },           // Wallet name or address
+      address: { type: String },        // Full wallet address
+      amount: { type: String },         // Token amount
+      percentage: { type: Number },     // Percentage of total supply
+      description: { type: String }     // Additional notes
+    }],
+    isLiquidityLock: { type: Boolean, default: false },
+    liquidityLockLink: { type: String },
+    lockAmount: { type: String },
+    lockLocation: { type: String, default: 'Pinksale' },
+    unlockAmount: { type: String },
+    totalDistributed: { type: String },   // Sum of top 5 holders
+    remainingSupply: { type: String },    // Supply - totalDistributed
+    lastScanned: { type: Date },          // When distribution was last scanned
+    scanSource: { type: String }          // 'etherscan', 'bscscan', 'manual'
+  },
+  
+  // Legacy fields for backward compatibility
   isLiquidityLock: { type: String },
   liquidityLockLink: { type: String },
   lockAmount: { type: String },
@@ -252,6 +274,18 @@ const projectSchema = new mongoose.Schema({
   
   // Audit PDF URL
   auditPdfUrl: { type: String },
+  
+  // Notes Section
+  notes: {
+    internal: { type: String, default: '' }, // Admin-only notes, not in PDF
+    auditor: { type: String, default: '' },  // Auditor notes, included in PDF
+    client: { type: String, default: '' },   // Client communication notes
+    timeline: [{ // History of status changes
+      date: { type: Date },
+      event: { type: String },
+      notes: { type: String }
+    }]
+  },
   
   // Publishing
   published: { type: Boolean, default: false },

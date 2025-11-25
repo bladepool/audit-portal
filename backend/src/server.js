@@ -53,6 +53,15 @@ try {
   process.exit(1);
 }
 
+let settingsRoutes;
+try {
+  settingsRoutes = require('./routes/settingsRoutes');
+  console.log('✅ Settings routes loaded');
+} catch (error) {
+  console.error('❌ Failed to load settings routes:', error.message);
+  process.exit(1);
+}
+
 // Admin PDF routes - only available when PDF generation path exists
 let adminPdfRoutes = null;
 const fs = require('fs');
@@ -120,6 +129,7 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/blockchains', blockchainRoutes);
 app.use('/api/advertisements', advertisementRoutes);
 app.use('/api/admin/trustblock', trustBlockRoutes);
+app.use('/api/settings', settingsRoutes);
 
 // Only register admin PDF routes if available
 if (adminPdfRoutes) {

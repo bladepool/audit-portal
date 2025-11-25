@@ -10,6 +10,43 @@ declare module 'jspdf' {
   }
 }
 
+// Font cache to avoid reloading fonts on every PDF generation
+let fontsLoaded = false;
+
+// Load custom fonts into jsPDF
+async function loadCustomFonts(doc: jsPDF): Promise<void> {
+  if (fontsLoaded) return; // Only load once per session
+  
+  try {
+    // Load RedHatDisplay-Bold (primary font)
+    const redHatBoldResponse = await fetch('/pdf-assets/fonts/RedHatDisplay-Bold.ttf');
+    const redHatBoldBuffer = await redHatBoldResponse.arrayBuffer();
+    const redHatBoldBase64 = btoa(
+      new Uint8Array(redHatBoldBuffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+    );
+    
+    // Load Montserrat-SemiBold (secondary font)
+    const montserratSemiBoldResponse = await fetch('/pdf-assets/fonts/MONTSERRAT-SEMIBOLD.OTF');
+    const montserratSemiBoldBuffer = await montserratSemiBoldResponse.arrayBuffer();
+    const montserratSemiBoldBase64 = btoa(
+      new Uint8Array(montserratSemiBoldBuffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+    );
+    
+    // Register fonts with jsPDF
+    doc.addFileToVFS('RedHatDisplay-Bold.ttf', redHatBoldBase64);
+    doc.addFont('RedHatDisplay-Bold.ttf', 'RedHatDisplay', 'bold');
+    
+    doc.addFileToVFS('MONTSERRAT-SEMIBOLD.OTF', montserratSemiBoldBase64);
+    doc.addFont('MONTSERRAT-SEMIBOLD.OTF', 'Montserrat', 'semibold');
+    
+    fontsLoaded = true;
+    console.log('✓ Custom fonts loaded successfully');
+  } catch (error) {
+    console.warn('Failed to load custom fonts, falling back to default:', error);
+    // Continue with default fonts if custom fonts fail to load
+  }
+}
+
 /**
  * Enhanced PDF Generator with logos, custom fonts, and professional styling
  * Matches the production Node.js PDF generation script
@@ -123,6 +160,9 @@ export async function generateEnhancedAuditPDF(project: Project) {
   const formattedDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   const docTime = today.toISOString().split('T')[0].replace(/-/g, '');
 
+  // Load custom fonts (cached after first load)
+  await loadCustomFonts(doc);
+
   // Pre-load all icons for better performance
   const icons = await preloadIcons();
 
@@ -155,24 +195,24 @@ export async function generateEnhancedAuditPDF(project: Project) {
   doc.setLineWidth(6);
   doc.line(pageWidth - 3, 60, pageWidth - 3, 160);
   
-  doc.setFontSize(15); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(15); doc.setTextColor(30, 30, 30); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Executive Summary', 60, currentY); currentY += 25;
   
   // Type, Ecosystem, Language row
-  doc.setFontSize(10); doc.setTextColor(158, 159, 163); doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10); doc.setTextColor(158, 159, 163); doc.setFont('Montserrat', 'semibold');
   doc.text('TYPES', 62, currentY);
   doc.text('ECOSYSTEM', 202, currentY);
   doc.text('LANGUAGE', 352, currentY);
   currentY += 15;
   
-  doc.setFontSize(10); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10); doc.setTextColor(30, 30, 30); doc.setFont('RedHatDisplay', 'bold');
   doc.text((project as any).type || 'Token', 62, currentY);
   doc.text(project.platform || 'Binance Smart Chain', 202, currentY);
   doc.text(project.contract_info?.contract_language || 'Solidity', 352, currentY);
   currentY += 30;
   
   // Audit scores section
-  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Audit Scores', 60, currentY); currentY += 20;
   
   const scoreData = [
@@ -193,13 +233,13 @@ export async function generateEnhancedAuditPDF(project: Project) {
   currentY = (doc as any).lastAutoTable.finalY + 30;
   
   // Audit Confidence
-  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Audit Confidence', 60, currentY); currentY += 15;
-  doc.setFontSize(10); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10); doc.setTextColor(60, 60, 60); doc.setFont('Montserrat', 'semibold');
   doc.text(project.audit_confidence || 'Medium', 60, currentY); currentY += 30;
   
   // Issues Classification Table
-  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Issues Classification', 60, currentY); currentY += 20;
   
   // Load severity icons
@@ -247,18 +287,18 @@ export async function generateEnhancedAuditPDF(project: Project) {
     const cfgLogo = await urlToBase64('/pdf-assets/logos/CFG-Logo-red-black-FULL.png');
     if (cfgLogo) doc.addImage(cfgLogo, 'PNG', pageWidth - 150, 20, 120, 30);
   } catch {}
-  doc.setFontSize(20); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold'); 
+  doc.setFontSize(20); doc.setTextColor(30, 30, 30); doc.setFont('RedHatDisplay', 'bold'); 
   doc.text('RISK ANALYSIS', 60, currentY); currentY += 10;
   doc.setDrawColor(237, 36, 40); doc.setLineWidth(2); doc.line(60, currentY, 160, currentY); currentY += 20;
   
   // Subtitle with project name
-  doc.setFontSize(10); doc.setTextColor(158, 159, 163); doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10); doc.setTextColor(158, 159, 163); doc.setFont('Montserrat', 'semibold');
   doc.text(`${project.name}.`, 60, currentY); currentY += 30;
   
   // Project Information with enhanced layout
   doc.setFillColor(239, 246, 255);
   doc.rect(0, currentY - 10, pageWidth, 40, 'F');
-  doc.setFontSize(16); doc.setTextColor(29, 78, 216); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16); doc.setTextColor(29, 78, 216); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Project Information', 60, currentY + 10); currentY += 45;
   
   const projectInfo = [
@@ -300,7 +340,7 @@ export async function generateEnhancedAuditPDF(project: Project) {
   // Timeline Section with enhanced formatting
   doc.setFillColor(243, 244, 246);
   doc.rect(0, currentY - 10, pageWidth, 40, 'F');
-  doc.setFontSize(16); doc.setTextColor(55, 65, 81); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16); doc.setTextColor(55, 65, 81); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Audit Timeline', 60, currentY + 10); currentY += 45;
   
   const formatDate = (dateStr: string | undefined) => {
@@ -343,7 +383,7 @@ export async function generateEnhancedAuditPDF(project: Project) {
     
     doc.setFillColor(236, 253, 245);
     doc.rect(0, currentY - 10, pageWidth, 40, 'F');
-    doc.setFontSize(16); doc.setTextColor(21, 128, 61); doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16); doc.setTextColor(21, 128, 61); doc.setFont('RedHatDisplay', 'bold');
     doc.text('✓ KYC Verification', 60, currentY + 10); currentY += 45;
     
     const kycInfo = [
@@ -428,7 +468,7 @@ export async function generateEnhancedAuditPDF(project: Project) {
   // Findings Summary Table with visual header
   doc.setFillColor(254, 242, 242);
   doc.rect(0, currentY - 10, pageWidth, 40, 'F');
-  doc.setFontSize(16); doc.setTextColor(220, 38, 38); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16); doc.setTextColor(220, 38, 38); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Findings Summary', 60, currentY + 10); currentY += 45;
   
   // Use pre-loaded icons for findings summary
@@ -477,10 +517,10 @@ export async function generateEnhancedAuditPDF(project: Project) {
     // Header with enhanced styling
     doc.setFillColor(254, 242, 242);
     doc.rect(0, currentY - 10, pageWidth, 50, 'F');
-    doc.setFontSize(18); doc.setTextColor(220, 38, 38); doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18); doc.setTextColor(220, 38, 38); doc.setFont('RedHatDisplay', 'bold');
     doc.text('Detailed Security Findings', 60, currentY + 15); currentY += 40;
     
-    doc.setFontSize(10); doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10); doc.setTextColor(100, 100, 100); doc.setFont('Montserrat', 'semibold');
     doc.text(`Total Active Issues: ${activeFindings.length}`, 60, currentY); currentY += 25;
     
     // Group findings by severity for better organization
@@ -509,7 +549,7 @@ export async function generateEnhancedAuditPDF(project: Project) {
       
       doc.setFillColor(color[0], color[1], color[2]);
       doc.roundedRect(60, currentY, 150, 20, 3, 3, 'F');
-      doc.setFontSize(12); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12); doc.setTextColor(255, 255, 255); doc.setFont('RedHatDisplay', 'bold');
       doc.text(`${severity} Issues (${findings.length})`, 70, currentY + 14);
       currentY += 30;
       
@@ -526,12 +566,12 @@ export async function generateEnhancedAuditPDF(project: Project) {
         // Priority badge
         doc.setFillColor(priorityColor[0], priorityColor[1], priorityColor[2]);
         doc.roundedRect(pageWidth - 100, currentY - 3, 35, 14, 2, 2, 'F');
-        doc.setFontSize(8); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8); doc.setTextColor(255, 255, 255); doc.setFont('RedHatDisplay', 'bold');
         doc.text('URGENT', pageWidth - 92, currentY + 6);
       }
       
       // Finding header with ID and title
-      doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); 
+      doc.setFontSize(12); doc.setFont('RedHatDisplay', 'bold'); doc.setTextColor(0, 0, 0); 
       doc.text(`${finding.id}: ${finding.title}`, 65, currentY); currentY += 18;
       
       // Severity badge
@@ -545,11 +585,11 @@ export async function generateEnhancedAuditPDF(project: Project) {
       const color = severityColors[finding.severity] || [156, 163, 175];
       doc.setFillColor(color[0], color[1], color[2]); 
       doc.roundedRect(60, currentY, 80, 16, 3, 3, 'F');
-      doc.setFontSize(9); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); 
+      doc.setFontSize(9); doc.setTextColor(255, 255, 255); doc.setFont('RedHatDisplay', 'bold'); 
       doc.text(finding.severity, 70, currentY + 11); currentY += 22;
       
       // Status with icon and Location
-      doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.setFont('Montserrat', 'semibold');
       
       // Load and display status icon
       let statusIcon: string | null = null;
@@ -574,9 +614,9 @@ export async function generateEnhancedAuditPDF(project: Project) {
       
       // Description
       if (finding.description) { 
-        doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+        doc.setFontSize(9); doc.setFont('RedHatDisplay', 'bold'); doc.setTextColor(0, 0, 0);
         doc.text('Description:', 70, currentY); currentY += 12;
-        doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60); 
+        doc.setFont('Montserrat', 'semibold'); doc.setTextColor(60, 60, 60); 
         const splitDesc = doc.splitTextToSize(finding.description, pageWidth - 140); 
         doc.text(splitDesc, 70, currentY); 
         currentY += (splitDesc.length * 11) + 10; 
@@ -584,9 +624,9 @@ export async function generateEnhancedAuditPDF(project: Project) {
       
       // Recommendation
       if (finding.recommendation) { 
-        doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); 
+        doc.setFontSize(9); doc.setFont('RedHatDisplay', 'bold'); doc.setTextColor(0, 0, 0); 
         doc.text('Recommendation:', 70, currentY); currentY += 12; 
-        doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60); 
+        doc.setFont('Montserrat', 'semibold'); doc.setTextColor(60, 60, 60); 
         const splitRec = doc.splitTextToSize(finding.recommendation, pageWidth - 140); 
         doc.text(splitRec, 70, currentY); 
         currentY += (splitRec.length * 11) + 10; 
@@ -594,9 +634,9 @@ export async function generateEnhancedAuditPDF(project: Project) {
       
       // Alleviation/Mitigation
       if (finding.alleviation) { 
-        doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); 
+        doc.setFontSize(9); doc.setFont('RedHatDisplay', 'bold'); doc.setTextColor(0, 0, 0); 
         doc.text('Mitigation:', 70, currentY); currentY += 12; 
-        doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60); 
+        doc.setFont('Montserrat', 'semibold'); doc.setTextColor(60, 60, 60); 
         const splitMit = doc.splitTextToSize(finding.alleviation, pageWidth - 140); 
         doc.text(splitMit, 70, currentY); 
         currentY += (splitMit.length * 11) + 10; 
@@ -626,7 +666,7 @@ export async function generateEnhancedAuditPDF(project: Project) {
   
   doc.setFillColor(240, 249, 255);
   doc.rect(0, currentY - 10, pageWidth, 40, 'F');
-  doc.setFontSize(16); doc.setTextColor(30, 58, 138); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16); doc.setTextColor(30, 58, 138); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Contract Overview', 60, currentY + 10); currentY += 45;
   
   // Load pass/fail icons for contract overview
@@ -667,13 +707,97 @@ export async function generateEnhancedAuditPDF(project: Project) {
   });
   currentY = (doc as any).lastAutoTable.finalY + 30;
 
+  // Call Graph Section (from Solidity Metrics)
+  if (project.isGraph && project.graph_url) {
+    const graphImage = await urlToBase64(project.graph_url);
+    if (graphImage) {
+      // Check if we need a new page
+      if (currentY > pageHeight - 500) {
+        doc.addPage();
+        currentY = 60;
+      }
+      
+      // Section header with visual styling
+      doc.setFillColor(254, 249, 235);
+      doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+      doc.setFontSize(16);
+      doc.setTextColor(146, 64, 14);
+      doc.setFont('RedHatDisplay', 'bold');
+      doc.text('Call Graph Analysis', 60, currentY + 10);
+      currentY += 45;
+      
+      // Add explanatory text
+      doc.setFontSize(9);
+      doc.setTextColor(60, 60, 60);
+      doc.setFont('Montserrat', 'semibold');
+      doc.text('Generated using Solidity Metrics - Visual representation of function call relationships', 60, currentY);
+      currentY += 20;
+      
+      // Insert graph image
+      try {
+        const imgWidth = pageWidth - 120;
+        const imgHeight = 400;
+        doc.addImage(graphImage, 'PNG', 60, currentY, imgWidth, imgHeight);
+        currentY += imgHeight + 30;
+      } catch (error) {
+        console.error('Failed to add graph image:', error);
+        doc.setFontSize(10);
+        doc.setTextColor(239, 68, 68);
+        doc.text('⚠ Failed to load call graph image', 60, currentY);
+        currentY += 20;
+      }
+    }
+  }
+
+  // Inheritance Diagram Section (from Solidity Metrics)
+  if (project.isInheritance && project.inheritance_url) {
+    const inheritanceImage = await urlToBase64(project.inheritance_url);
+    if (inheritanceImage) {
+      // Check if we need a new page
+      if (currentY > pageHeight - 500) {
+        doc.addPage();
+        currentY = 60;
+      }
+      
+      // Section header with visual styling
+      doc.setFillColor(243, 232, 255);
+      doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+      doc.setFontSize(16);
+      doc.setTextColor(107, 33, 168);
+      doc.setFont('RedHatDisplay', 'bold');
+      doc.text('Contract Inheritance Diagram', 60, currentY + 10);
+      currentY += 45;
+      
+      // Add explanatory text
+      doc.setFontSize(9);
+      doc.setTextColor(60, 60, 60);
+      doc.setFont('Montserrat', 'semibold');
+      doc.text('Generated using Solidity Metrics - Visual representation of contract inheritance structure', 60, currentY);
+      currentY += 20;
+      
+      // Insert inheritance image
+      try {
+        const imgWidth = pageWidth - 120;
+        const imgHeight = 400;
+        doc.addImage(inheritanceImage, 'PNG', 60, currentY, imgWidth, imgHeight);
+        currentY += imgHeight + 30;
+      } catch (error) {
+        console.error('Failed to add inheritance image:', error);
+        doc.setFontSize(10);
+        doc.setTextColor(239, 68, 68);
+        doc.text('⚠ Failed to load inheritance diagram', 60, currentY);
+        currentY += 20;
+      }
+    }
+  }
+
   // Token Distribution Section with visual header
   if (project.tokenDistribution?.distributions && project.tokenDistribution.distributions.length > 0) {
     if (currentY > pageHeight - 250) { doc.addPage(); currentY = 60; }
     
     doc.setFillColor(236, 253, 245);
     doc.rect(0, currentY - 10, pageWidth, 40, 'F');
-    doc.setFontSize(16); doc.setTextColor(21, 128, 61); doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16); doc.setTextColor(21, 128, 61); doc.setFont('RedHatDisplay', 'bold');
     doc.text('Token Distribution', 60, currentY + 10); currentY += 45;
     
     const distributionData = project.tokenDistribution.distributions.map(dist => [
@@ -700,10 +824,10 @@ export async function generateEnhancedAuditPDF(project: Project) {
     
     // Liquidity Lock Information
     if (project.tokenDistribution.isLiquidityLock) {
-      doc.setFontSize(12); doc.setTextColor(34, 197, 94); doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12); doc.setTextColor(34, 197, 94); doc.setFont('RedHatDisplay', 'bold');
       doc.text('✓ Liquidity Locked', 60, currentY); currentY += 15;
       
-      doc.setFontSize(9); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9); doc.setTextColor(60, 60, 60); doc.setFont('Montserrat', 'semibold');
       if (project.tokenDistribution.lockLocation) {
         doc.text(`Location: ${project.tokenDistribution.lockLocation}`, 60, currentY); currentY += 12;
       }
@@ -715,7 +839,7 @@ export async function generateEnhancedAuditPDF(project: Project) {
         doc.text(`View Lock: ${project.tokenDistribution.liquidityLockLink}`, 60, currentY); currentY += 15;
       }
     } else {
-      doc.setFontSize(12); doc.setTextColor(239, 68, 68); doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12); doc.setTextColor(239, 68, 68); doc.setFont('RedHatDisplay', 'bold');
       doc.text('⚠ Liquidity Not Locked', 60, currentY); currentY += 15;
     }
     currentY += 15;
@@ -735,7 +859,7 @@ export async function generateEnhancedAuditPDF(project: Project) {
     // Section header with visual styling
     doc.setFillColor(245, 247, 250);
     doc.rect(0, currentY - 10, pageWidth, 40, 'F');
-    doc.setFontSize(16); doc.setTextColor(71, 85, 105); doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16); doc.setTextColor(71, 85, 105); doc.setFont('RedHatDisplay', 'bold');
     doc.text('Social & Community Links', 60, currentY + 10); 
     currentY += 45;
     
@@ -800,6 +924,9 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
+  // Load custom fonts (cached after first load)
+  await loadCustomFonts(doc);
+
   // Pre-load all icons for better performance
   const iconsBlob = await preloadIcons();
 
@@ -843,24 +970,24 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   doc.setLineWidth(6);
   doc.line(pageWidth - 3, 60, pageWidth - 3, 160);
   
-  doc.setFontSize(15); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(15); doc.setTextColor(30, 30, 30); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Executive Summary', 60, currentY); currentY += 25;
   
   // Type, Ecosystem, Language row
-  doc.setFontSize(10); doc.setTextColor(158, 159, 163); doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10); doc.setTextColor(158, 159, 163); doc.setFont('Montserrat', 'semibold');
   doc.text('TYPES', 62, currentY);
   doc.text('ECOSYSTEM', 202, currentY);
   doc.text('LANGUAGE', 352, currentY);
   currentY += 15;
   
-  doc.setFontSize(10); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10); doc.setTextColor(30, 30, 30); doc.setFont('RedHatDisplay', 'bold');
   doc.text((project as any).type || 'Token', 62, currentY);
   doc.text(project.platform || 'Binance Smart Chain', 202, currentY);
   doc.text(project.contract_info?.contract_language || 'Solidity', 352, currentY);
   currentY += 30;
   
   // Audit scores section with visual bars
-  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Audit Scores', 60, currentY); currentY += 20;
   
   const scores = [
@@ -876,12 +1003,12 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   
   for (const score of scores) {
     // Label
-    doc.setFontSize(10); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10); doc.setTextColor(60, 60, 60); doc.setFont('Montserrat', 'semibold');
     doc.text(score.label, 60, currentY);
     
     // Score value
     const scoreColor = score.value >= 75 ? [34, 197, 94] : score.value >= 50 ? [234, 179, 8] : [239, 68, 68];
-    doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]); doc.setFont('helvetica', 'bold');
+    doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]); doc.setFont('RedHatDisplay', 'bold');
     doc.text(`${score.value}/100`, 180, currentY);
     
     // Background bar
@@ -899,14 +1026,14 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   currentY += 10;
   
   // Audit Confidence
-  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Audit Confidence', 60, currentY); currentY += 15;
-  doc.setFontSize(10); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10); doc.setTextColor(60, 60, 60); doc.setFont('Montserrat', 'semibold');
   doc.text(project.audit_confidence || 'Medium', 60, currentY); currentY += 20;
   
   // Audit Metadata (if available)
   if (project.auditToolVersion || project.auditEdition) {
-    doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.setFont('Montserrat', 'semibold');
     if (project.auditToolVersion) {
       doc.text(`Tool Version: ${project.auditToolVersion}`, 60, currentY); currentY += 12;
     }
@@ -918,7 +1045,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   currentY += 18;
 
   // Issues Classification Table
-  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Issues Classification', 60, currentY); currentY += 20;
 
   // Load severity icons
@@ -964,7 +1091,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   if (project.overview) {
     if (currentY > pageHeight - 200) { doc.addPage(); currentY = 60; }
     
-    doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12); doc.setTextColor(30, 30, 30); doc.setFont('RedHatDisplay', 'bold');
     doc.text('GoPlus Security Assessment', 60, currentY); currentY += 20;
 
     // Load pass/fail icons
@@ -1007,10 +1134,10 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
 
     // Tax Information
     if (project.overview.buy_tax !== undefined || project.overview.sell_tax !== undefined) {
-      doc.setFontSize(10); doc.setTextColor(30, 30, 30); doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10); doc.setTextColor(30, 30, 30); doc.setFont('RedHatDisplay', 'bold');
       doc.text('Tax Information', 60, currentY); currentY += 15;
       
-      doc.setFontSize(9); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9); doc.setTextColor(60, 60, 60); doc.setFont('Montserrat', 'semibold');
       doc.text(`Buy Tax: ${project.overview.buy_tax || 0}%`, 60, currentY);
       doc.text(`Sell Tax: ${project.overview.sell_tax || 0}%`, 200, currentY);
       currentY += 30;
@@ -1036,7 +1163,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   // Title (center)
   doc.setFontSize(28);
   doc.setTextColor(255, 255, 255);
-  doc.setFont('helvetica', 'bold');
+  doc.setFont('RedHatDisplay', 'bold');
   doc.text('SMART CONTRACT AUDIT REPORT', pageWidth / 2, 60, { align: 'center' });
 
   // Project Logo (right side)
@@ -1058,7 +1185,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   // Audit Information
   doc.setFontSize(14);
   doc.setTextColor(0, 0, 0);
-  doc.setFont('helvetica', 'bold');
+  doc.setFont('RedHatDisplay', 'bold');
   doc.text('Audit Information', 60, currentY);
   currentY += 20;
 
@@ -1099,9 +1226,9 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
 
   // Security Score with visual bar
   doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
+  doc.setFont('RedHatDisplay', 'bold');
   doc.text('Security Score:', 60, currentY);
-  doc.setFont('helvetica', 'normal');
+  doc.setFont('Montserrat', 'semibold');
   const secColor = securityScore >= 75 ? [34, 197, 94] : securityScore >= 50 ? [234, 179, 8] : [239, 68, 68];
   doc.setTextColor(secColor[0], secColor[1], secColor[2]);
   doc.text(`${securityScore}/100`, 160, currentY);
@@ -1123,9 +1250,9 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
 
   // Auditor Score with visual bar
   doc.setTextColor(0, 0, 0);
-  doc.setFont('helvetica', 'bold');
+  doc.setFont('RedHatDisplay', 'bold');
   doc.text('Auditor Score:', 60, currentY);
-  doc.setFont('helvetica', 'normal');
+  doc.setFont('Montserrat', 'semibold');
   const audColor = auditorScore >= 75 ? [34, 197, 94] : auditorScore >= 50 ? [234, 179, 8] : [239, 68, 68];
   doc.setTextColor(audColor[0], audColor[1], audColor[2]);
   doc.text(`${auditorScore}/100`, 160, currentY);
@@ -1148,7 +1275,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
   // Findings Summary with visual header
   doc.setFillColor(254, 242, 242);
   doc.rect(0, currentY - 10, pageWidth, 40, 'F');
-  doc.setFontSize(16); doc.setTextColor(220, 38, 38); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16); doc.setTextColor(220, 38, 38); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Findings Summary', 60, currentY + 10); currentY += 45;
 
   // Use pre-loaded icons for findings summary in blob
@@ -1202,10 +1329,10 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     // Header with enhanced styling
     doc.setFillColor(254, 242, 242);
     doc.rect(0, currentY - 10, pageWidth, 50, 'F');
-    doc.setFontSize(18); doc.setTextColor(220, 38, 38); doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18); doc.setTextColor(220, 38, 38); doc.setFont('RedHatDisplay', 'bold');
     doc.text('Detailed Security Findings', 60, currentY + 15); currentY += 40;
     
-    doc.setFontSize(10); doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10); doc.setTextColor(100, 100, 100); doc.setFont('Montserrat', 'semibold');
     doc.text(`Total Active Issues: ${activeFindingsBlob.length}`, 60, currentY); currentY += 25;
     
     // Group findings by severity for better organization
@@ -1234,7 +1361,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
       
       doc.setFillColor(colorBlob[0], colorBlob[1], colorBlob[2]);
       doc.roundedRect(60, currentY, 150, 20, 3, 3, 'F');
-      doc.setFontSize(12); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12); doc.setTextColor(255, 255, 255); doc.setFont('RedHatDisplay', 'bold');
       doc.text(`${severity} Issues (${findings.length})`, 70, currentY + 14);
       currentY += 30;
       
@@ -1251,12 +1378,12 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
           // Priority badge
           doc.setFillColor(priorityColorBlob[0], priorityColorBlob[1], priorityColorBlob[2]);
           doc.roundedRect(pageWidth - 100, currentY - 3, 35, 14, 2, 2, 'F');
-          doc.setFontSize(8); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold');
+          doc.setFontSize(8); doc.setTextColor(255, 255, 255); doc.setFont('RedHatDisplay', 'bold');
           doc.text('URGENT', pageWidth - 92, currentY + 6);
         }
         
         // Finding header with ID and title
-        doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); 
+        doc.setFontSize(12); doc.setFont('RedHatDisplay', 'bold'); doc.setTextColor(0, 0, 0); 
         doc.text(`${finding.id}: ${finding.title}`, 65, currentY); currentY += 18;
         
         // Severity badge
@@ -1270,11 +1397,11 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
         const colorBlob2 = severityColorsBlob2[finding.severity] || [156, 163, 175];
         doc.setFillColor(colorBlob2[0], colorBlob2[1], colorBlob2[2]); 
         doc.roundedRect(60, currentY, 80, 16, 3, 3, 'F');
-        doc.setFontSize(9); doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); 
+        doc.setFontSize(9); doc.setTextColor(255, 255, 255); doc.setFont('RedHatDisplay', 'bold'); 
         doc.text(finding.severity, 70, currentY + 11); currentY += 22;
         
         // Status with icon and Location
-        doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.setFont('Montserrat', 'semibold');
         
         // Load and display status icon
         let statusIconBlob: string | null = null;
@@ -1299,9 +1426,9 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
         
         // Description
         if (finding.description) { 
-          doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+          doc.setFontSize(9); doc.setFont('RedHatDisplay', 'bold'); doc.setTextColor(0, 0, 0);
           doc.text('Description:', 70, currentY); currentY += 12;
-          doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60); 
+          doc.setFont('Montserrat', 'semibold'); doc.setTextColor(60, 60, 60); 
           const splitDesc = doc.splitTextToSize(finding.description, pageWidth - 140); 
           doc.text(splitDesc, 70, currentY); 
           currentY += (splitDesc.length * 11) + 10; 
@@ -1309,9 +1436,9 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
         
         // Recommendation
         if (finding.recommendation) { 
-          doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); 
+          doc.setFontSize(9); doc.setFont('RedHatDisplay', 'bold'); doc.setTextColor(0, 0, 0); 
           doc.text('Recommendation:', 70, currentY); currentY += 12; 
-          doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60); 
+          doc.setFont('Montserrat', 'semibold'); doc.setTextColor(60, 60, 60); 
           const splitRec = doc.splitTextToSize(finding.recommendation, pageWidth - 140); 
           doc.text(splitRec, 70, currentY); 
           currentY += (splitRec.length * 11) + 10; 
@@ -1319,9 +1446,9 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
         
         // Mitigation
         if (finding.alleviation) { 
-          doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0); 
+          doc.setFontSize(9); doc.setFont('RedHatDisplay', 'bold'); doc.setTextColor(0, 0, 0); 
           doc.text('Mitigation:', 70, currentY); currentY += 12; 
-          doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60); 
+          doc.setFont('Montserrat', 'semibold'); doc.setTextColor(60, 60, 60); 
           const splitMit = doc.splitTextToSize(finding.alleviation, pageWidth - 140); 
           doc.text(splitMit, 70, currentY); 
           currentY += (splitMit.length * 11) + 10; 
@@ -1358,7 +1485,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
 
   doc.setFillColor(240, 249, 255);
   doc.rect(0, currentY - 10, pageWidth, 40, 'F');
-  doc.setFontSize(16); doc.setTextColor(30, 58, 138); doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16); doc.setTextColor(30, 58, 138); doc.setFont('RedHatDisplay', 'bold');
   doc.text('Contract Overview', 60, currentY + 10); currentY += 45;
 
   // Load pass/fail icons for contract overview
@@ -1402,13 +1529,97 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
 
   currentY = (doc as any).lastAutoTable.finalY + 30;
 
+  // Call Graph Section (from Solidity Metrics) - Blob
+  if (project.isGraph && project.graph_url) {
+    const graphImageBlob = await urlToBase64(project.graph_url);
+    if (graphImageBlob) {
+      // Check if we need a new page
+      if (currentY > pageHeight - 500) {
+        doc.addPage();
+        currentY = 60;
+      }
+      
+      // Section header with visual styling
+      doc.setFillColor(254, 249, 235);
+      doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+      doc.setFontSize(16);
+      doc.setTextColor(146, 64, 14);
+      doc.setFont('RedHatDisplay', 'bold');
+      doc.text('Call Graph Analysis', 60, currentY + 10);
+      currentY += 45;
+      
+      // Add explanatory text
+      doc.setFontSize(9);
+      doc.setTextColor(60, 60, 60);
+      doc.setFont('Montserrat', 'semibold');
+      doc.text('Generated using Solidity Metrics - Visual representation of function call relationships', 60, currentY);
+      currentY += 20;
+      
+      // Insert graph image
+      try {
+        const imgWidth = pageWidth - 120;
+        const imgHeight = 400;
+        doc.addImage(graphImageBlob, 'PNG', 60, currentY, imgWidth, imgHeight);
+        currentY += imgHeight + 30;
+      } catch (error) {
+        console.error('Failed to add graph image:', error);
+        doc.setFontSize(10);
+        doc.setTextColor(239, 68, 68);
+        doc.text('\u26a0 Failed to load call graph image', 60, currentY);
+        currentY += 20;
+      }
+    }
+  }
+
+  // Inheritance Diagram Section (from Solidity Metrics) - Blob
+  if (project.isInheritance && project.inheritance_url) {
+    const inheritanceImageBlob = await urlToBase64(project.inheritance_url);
+    if (inheritanceImageBlob) {
+      // Check if we need a new page
+      if (currentY > pageHeight - 500) {
+        doc.addPage();
+        currentY = 60;
+      }
+      
+      // Section header with visual styling
+      doc.setFillColor(243, 232, 255);
+      doc.rect(0, currentY - 10, pageWidth, 40, 'F');
+      doc.setFontSize(16);
+      doc.setTextColor(107, 33, 168);
+      doc.setFont('RedHatDisplay', 'bold');
+      doc.text('Contract Inheritance Diagram', 60, currentY + 10);
+      currentY += 45;
+      
+      // Add explanatory text
+      doc.setFontSize(9);
+      doc.setTextColor(60, 60, 60);
+      doc.setFont('Montserrat', 'semibold');
+      doc.text('Generated using Solidity Metrics - Visual representation of contract inheritance structure', 60, currentY);
+      currentY += 20;
+      
+      // Insert inheritance image
+      try {
+        const imgWidth = pageWidth - 120;
+        const imgHeight = 400;
+        doc.addImage(inheritanceImageBlob, 'PNG', 60, currentY, imgWidth, imgHeight);
+        currentY += imgHeight + 30;
+      } catch (error) {
+        console.error('Failed to add inheritance image:', error);
+        doc.setFontSize(10);
+        doc.setTextColor(239, 68, 68);
+        doc.text('\u26a0 Failed to load inheritance diagram', 60, currentY);
+        currentY += 20;
+      }
+    }
+  }
+
   // Token Distribution Section in blob with visual header
   if (project.tokenDistribution?.distributions && project.tokenDistribution.distributions.length > 0) {
     if (currentY > pageHeight - 250) { doc.addPage(); currentY = 60; }
     
     doc.setFillColor(236, 253, 245);
     doc.rect(0, currentY - 10, pageWidth, 40, 'F');
-    doc.setFontSize(16); doc.setTextColor(21, 128, 61); doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16); doc.setTextColor(21, 128, 61); doc.setFont('RedHatDisplay', 'bold');
     doc.text('Token Distribution', 60, currentY + 10); currentY += 45;
     
     const distributionDataBlob = project.tokenDistribution.distributions.map(dist => [
@@ -1435,10 +1646,10 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     
     // Liquidity Lock Information
     if (project.tokenDistribution.isLiquidityLock) {
-      doc.setFontSize(12); doc.setTextColor(34, 197, 94); doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12); doc.setTextColor(34, 197, 94); doc.setFont('RedHatDisplay', 'bold');
       doc.text('✓ Liquidity Locked', 60, currentY); currentY += 15;
       
-      doc.setFontSize(9); doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9); doc.setTextColor(60, 60, 60); doc.setFont('Montserrat', 'semibold');
       if (project.tokenDistribution.lockLocation) {
         doc.text(`Location: ${project.tokenDistribution.lockLocation}`, 60, currentY); currentY += 12;
       }
@@ -1450,7 +1661,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
         doc.text(`View Lock: ${project.tokenDistribution.liquidityLockLink}`, 60, currentY); currentY += 15;
       }
     } else {
-      doc.setFontSize(12); doc.setTextColor(239, 68, 68); doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12); doc.setTextColor(239, 68, 68); doc.setFont('RedHatDisplay', 'bold');
       doc.text('⚠ Liquidity Not Locked', 60, currentY); currentY += 15;
     }
     currentY += 15;
@@ -1470,7 +1681,7 @@ export async function generateEnhancedAuditPDFBlob(project: Project): Promise<Bl
     // Section header with visual styling
     doc.setFillColor(245, 247, 250);
     doc.rect(0, currentY - 10, pageWidth, 40, 'F');
-    doc.setFontSize(16); doc.setTextColor(71, 85, 105); doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16); doc.setTextColor(71, 85, 105); doc.setFont('RedHatDisplay', 'bold');
     doc.text('Social & Community Links', 60, currentY + 10); 
     currentY += 45;
     

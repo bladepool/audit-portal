@@ -87,4 +87,18 @@ export const marketCapAPI = {
     api.post('/marketcap/refresh'),
 };
 
+// Settings API
+export const settingsAPI = {
+  getAll: () =>
+    api.get('/settings'),
+  get: (key: string) =>
+    api.get(`/settings/${key}`),
+  update: (key: string, value: any, description?: string) =>
+    api.put(`/settings/${key}`, { value, description }),
+  delete: (key: string) =>
+    api.delete(`/settings/${key}`),
+  bulkUpdate: (settings: Record<string, { value: any; description?: string }>) =>
+    api.post('/settings/bulk', { settings }),
+};
+
 export default api;

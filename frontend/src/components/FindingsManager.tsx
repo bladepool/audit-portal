@@ -286,8 +286,14 @@ export default function FindingsManager({ findings, onChange }: FindingsManagerP
   const styles = useStyles();
 
   const addFinding = () => {
+    // Find the highest custom CFG number (CFG27+)
+    const customFindings = findings.filter(f => f.id && f.id.match(/^CFG(\d+)$/) && parseInt(f.id.substring(3)) >= 27);
+    const maxCustomId = customFindings.length > 0
+      ? Math.max(...customFindings.map(f => parseInt(f.id.substring(3))))
+      : 26;
+    
     const newFinding: Finding = {
-      id: `CFG${String(findings.length + 1).padStart(2, '0')}`,
+      id: `CFG${String(maxCustomId + 1).padStart(2, '0')}`,
       title: '',
       severity: 'Low',
       status: 'Pass',
@@ -336,7 +342,7 @@ export default function FindingsManager({ findings, onChange }: FindingsManagerP
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <Text weight="semibold" size={500}>CFG Findings (CFG01-CFG26)</Text>
+        <Text weight="semibold" size={500}>CFG Findings (CFG01-CFG26 Standard, CFG27+ Custom)</Text>
         <div style={{ display: 'flex', gap: '8px' }}>
           <Dropdown
             placeholder="Add from template"

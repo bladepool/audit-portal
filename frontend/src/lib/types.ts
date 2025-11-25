@@ -51,7 +51,9 @@ export interface Project {
   
   // Advanced Metadata
   isGraph?: boolean;
+  graph_url?: string;
   isInheritance?: boolean;
+  inheritance_url?: string;
   isEVMContract?: boolean;
   isSolana?: boolean;
   isNFT?: boolean;
