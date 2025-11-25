@@ -1,0 +1,141 @@
+require('dotenv').config();
+const mongoose = require('mongoose');
+const fs = require('fs');
+const path = require('path');
+const Project = require('./src/models/Project');
+
+const AUDITS_TEMPORAL_PATH = 'E:\\Desktop\\Old Desktop November 2023\\audits\\PDFscript\\CFGNinjaScripts\\Custom Contract\\Audits_Temporal';
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/auditportal')
+  .then(() => console.log('✅ Connected to MongoDB'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
+
+function normalizeForComparison(str) {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '')
+    .trim();
+}
+
+async function extractMoreContractsFromJSON() {
+  try {
+    console.log('\n📊 Extracting Contract Addresses from JSON files...\n');
+    
+    const jsonFiles = fs.readdirSync(AUDITS_TEMPORAL_PATH)
+      .filter(f => f.endsWith('.json'));
+    
+    console.log(`Found ${jsonFiles.length} JSON files\n`);
+    
+    let stats = {
+      totalProcessed: 0,
+      contractsAdded: 0,
+      matched: 0,
+      notMatched: 0,
+      alreadyHave: 0
+    };
+    
+    for (const file of jsonFiles) {
+      const filePath = path.join(AUDITS_TEMPORAL_PATH, file);
+      
+      try {
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        stats.totalProcessed++;
+        
+        if (!data.project || !data.project.name) {
+          continue;
+        }
+        
+        const projectName = data.project.name;
+        const normalizedName = normalizeForComparison(projectName);
+        
+        // Try to find matching project
+        const projects = await Project.find({
+          $or: [
+            { name: { $regex: new RegExp(projectName, 'i') } },
+            { slug: { $regex: new RegExp(normalizedName, 'i') } }
+          ]
+        });
+        
+        let matchedProject = null;
+        
+        for (const proj of projects) {
+          if (normalizeForComparison(proj.name) === normalizedName) {
+            matchedProject = proj;
+            break;
+          }
+        }
+        
+        if (!matchedProject && projects.length > 0) {
+          matchedProject = projects[0];
+        }
+        
+        if (!matchedProject) {
+          stats.notMatched++;
+          continue;
+        }
+        
+        stats.matched++;
+        
+        // Skip if already has contract address
+        if (matchedProject.contract_info?.contract_address) {
+          stats.alreadyHave++;
+          continue;
+        }
+        
+        // Extract contract address from JSON
+        if (data.contracts && data.contracts.length > 0) {
+          const contract = data.contracts[0];
+          if (contract.evmAddress && contract.evmAddress.startsWith('0x')) {
+            await Project.findByIdAndUpdate(matchedProject._id, {
+              $set: { 'contract_info.contract_address': contract.evmAddress }
+            });
+            
+            console.log(`✅ ${matchedProject.name}: ${contract.evmAddress}`);
+            stats.contractsAdded++;
+          }
+        }
+        
+      } catch (err) {
+        console.error(`Error processing ${file}:`, err.message);
+      }
+    }
+    
+    console.log('\n' + '='.repeat(60));
+    console.log('📈 Extraction Summary:');
+    console.log('='.repeat(60));
+    console.log(`Total JSON files processed: ${stats.totalProcessed}`);
+    console.log(`Projects matched: ${stats.matched}`);
+    console.log(`Projects not matched: ${stats.notMatched}`);
+    console.log(`Already had contract: ${stats.alreadyHave}`);
+    console.log(`\n✅ New contract addresses added: ${stats.contractsAdded}`);
+    console.log('='.repeat(60));
+    
+    // Show updated coverage
+    const totalPublished = await Project.countDocuments({ published: true });
+    const withContracts = await Project.countDocuments({
+      published: true,
+      'contract_info.contract_address': { $exists: true, $ne: null, $ne: '' }
+    });
+    
+    const oldCoverage = 488;
+    const newCoverage = withContracts;
+    const improvement = newCoverage - oldCoverage;
+    
+    console.log(`\n📊 Contract Address Coverage:`);
+    console.log(`   Before: ${oldCoverage}/${totalPublished} (40.6%)`);
+    console.log(`   After: ${newCoverage}/${totalPublished} (${((newCoverage/totalPublished)*100).toFixed(1)}%)`);
+    if (improvement > 0) {
+      console.log(`   ✅ Improvement: +${improvement} addresses`);
+    }
+    
+  } catch (error) {
+    console.error('Error extracting contracts:', error);
+  } finally {
+    await mongoose.connection.close();
+    console.log('\n✅ Extraction complete');
+  }
+}
+
+extractMoreContractsFromJSON();
