@@ -24,26 +24,17 @@ async function analyzeDataGaps() {
     
     const withCompiler = await Project.countDocuments({ 
       published: true,
-      $or: [
-        { 'contract_info.compiler_version': { $exists: true, $ne: null, $ne: '' } },
-        { 'compiler_version': { $exists: true, $ne: null, $ne: '' } }
-      ]
+      'contract_info.contract_compiler': { $exists: true, $ne: null, $ne: '' }
     });
     
     const withOptimization = await Project.countDocuments({ 
       published: true,
-      $or: [
-        { 'contract_info.optimization': { $exists: true, $ne: null } },
-        { 'optimization': { $exists: true, $ne: null } }
-      ]
+      'contract_info.optimization': { $exists: true, $ne: null }
     });
     
     const withAuditDate = await Project.countDocuments({ 
       published: true,
-      $or: [
-        { 'contract_info.audit_date': { $exists: true, $ne: null, $ne: '' } },
-        { 'audit_date': { $exists: true, $ne: null, $ne: '' } }
-      ]
+      'timeline.audit_release': { $exists: true, $ne: null, $ne: '' }
     });
     
     console.log('📝 Contract Information:');
