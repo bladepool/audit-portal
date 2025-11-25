@@ -96,8 +96,8 @@ export default function ProjectPage() {
         <div className={styles.headerContent}>
           <div className={styles.logo} onClick={() => router.push('/')}>
             <img 
-              src="/pdf-assets/logos/CFG-Logo-red-black-FULL.png" 
-              alt="CFG Ninja" 
+              src="/verified-badge-CFG.png" 
+              alt="CFG Ninja Verified" 
               className={styles.logoImg}
             />
           </div>

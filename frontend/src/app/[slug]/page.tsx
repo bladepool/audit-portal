@@ -767,7 +767,6 @@ export default function ProjectPage() {
                   </div>
 
                   <div className={styles.certificateFooter}>
-                    <div className={styles.auditLabel}>Already Audited on Blocksafu.com</div>
                     <div className={styles.qrCode}>
                       <img 
                         src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(`https://audit.cfg.ninja/${project.slug}`)}`}

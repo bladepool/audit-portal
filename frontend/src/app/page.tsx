@@ -219,8 +219,8 @@ export default function Home() {
         <div className={styles.headerContent}>
           <div className={styles.logo}>
             <img 
-              src="/logo.svg" 
-              alt="CFG Ninja" 
+              src="/verified-badge-CFG.png" 
+              alt="CFG Ninja Verified" 
               className={styles.logoImage}
             />
           </div>
