@@ -80,7 +80,7 @@ export default function Home() {
   const fetchProjects = async () => {
     try {
       const response = await projectsAPI.getAll();
-      const projectsData = response.data; // All published projects from API
+      const projectsData = response.data.projects || response.data; // Handle both formats
       setProjects(projectsData);
       calculateStats(projectsData);
     } catch (error) {
