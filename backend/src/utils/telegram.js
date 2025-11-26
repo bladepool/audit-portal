@@ -1,22 +1,70 @@
 const axios = require('axios');
+const Settings = require('../models/Settings');
 
 /**
  * Telegram Bot Integration for Audit Requests
  * Uses Telegram Bot API to create audit request chats
  * Docs: https://core.telegram.org/bots/api
+ * 
+ * Settings can be configured via:
+ * 1. Admin Settings UI (preferred - stored in database)
+ * 2. Environment variables (.env file - fallback)
  */
 
 class TelegramBot {
   constructor() {
-    this.botToken = process.env.TELEGRAM_BOT_TOKEN;
-    this.adminUserId = process.env.TELEGRAM_ADMIN_USER_ID; // Your Telegram user ID
-    this.baseUrl = `https://api.telegram.org/bot${this.botToken}`;
-    
-    if (!this.botToken) {
-      console.warn('TELEGRAM_BOT_TOKEN not configured');
+    // Settings will be loaded from database or .env
+    this.botToken = null;
+    this.botUsername = null;
+    this.adminUserId = null;
+    this.baseUrl = null;
+    this.settingsLoaded = false;
+  }
+
+  /**
+   * Load Telegram settings from database (preferred) or environment variables (fallback)
+   */
+  async loadSettings() {
+    if (this.settingsLoaded) {
+      return; // Already loaded
     }
-    if (!this.adminUserId) {
-      console.warn('TELEGRAM_ADMIN_USER_ID not configured');
+
+    try {
+      // Try to load from database first
+      this.botToken = await Settings.get('telegram_bot_token') || process.env.TELEGRAM_BOT_TOKEN;
+      this.botUsername = await Settings.get('telegram_bot_username') || process.env.TELEGRAM_BOT_USERNAME || 'CFGNINJA_Bot';
+      this.adminUserId = await Settings.get('telegram_admin_user_id') || process.env.TELEGRAM_ADMIN_USER_ID;
+      
+      if (this.botToken) {
+        this.baseUrl = `https://api.telegram.org/bot${this.botToken}`;
+      }
+      
+      this.settingsLoaded = true;
+      
+      if (!this.botToken) {
+        console.warn('⚠️ TELEGRAM_BOT_TOKEN not configured - audit requests disabled');
+      }
+      if (!this.adminUserId) {
+        console.warn('⚠️ TELEGRAM_ADMIN_USER_ID not configured - cannot send admin notifications');
+      }
+      
+      console.log('Telegram Settings loaded:', {
+        botToken: this.botToken ? '✓ Configured' : '✗ Not configured',
+        botUsername: this.botUsername || 'Not set',
+        adminUserId: this.adminUserId ? '✓ Configured' : '✗ Not configured'
+      });
+    } catch (error) {
+      console.error('Error loading Telegram settings from database, using .env fallback:', error.message);
+      // Fallback to environment variables
+      this.botToken = process.env.TELEGRAM_BOT_TOKEN;
+      this.botUsername = process.env.TELEGRAM_BOT_USERNAME || 'CFGNINJA_Bot';
+      this.adminUserId = process.env.TELEGRAM_ADMIN_USER_ID;
+      
+      if (this.botToken) {
+        this.baseUrl = `https://api.telegram.org/bot${this.botToken}`;
+      }
+      
+      this.settingsLoaded = true;
     }
   }
 
@@ -24,6 +72,12 @@ class TelegramBot {
    * Send a message to a user or chat
    */
   async sendMessage(chatId, text, options = {}) {
+    await this.loadSettings();
+    
+    if (!this.botToken) {
+      throw new Error('Telegram bot token not configured');
+    }
+    
     try {
       const response = await axios.post(`${this.baseUrl}/sendMessage`, {
         chat_id: chatId,
@@ -45,16 +99,23 @@ class TelegramBot {
    * Create a deep link for starting a chat with the bot
    * User clicks this link -> Opens Telegram -> Starts chat with bot
    */
-  createStartLink(payload) {
+  async createStartLink(payload) {
+    await this.loadSettings();
+    
     const encodedPayload = Buffer.from(JSON.stringify(payload)).toString('base64url');
-    const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'your_bot_username';
-    return `https://t.me/${botUsername}?start=${encodedPayload}`;
+    return `https://t.me/${this.botUsername}?start=${encodedPayload}`;
   }
 
   /**
    * Create an audit request message
    */
   async createAuditRequest(requestData) {
+    await this.loadSettings();
+    
+    if (!this.adminUserId) {
+      throw new Error('Telegram admin user ID not configured');
+    }
+    
     const {
       projectName,
       symbol,

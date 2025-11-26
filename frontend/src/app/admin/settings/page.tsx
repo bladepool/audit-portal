@@ -114,6 +114,12 @@ export default function SettingsPage() {
   const [web3StorageToken, setWeb3StorageToken] = useState('');
   const [nftStorageToken, setNftStorageToken] = useState('');
 
+  // Settings state - Telegram Bot
+  const [telegramBotToken, setTelegramBotToken] = useState('');
+  const [telegramBotUsername, setTelegramBotUsername] = useState('');
+  const [telegramAdminUserId, setTelegramAdminUserId] = useState('');
+  const [telegramWebhookUrl, setTelegramWebhookUrl] = useState('');
+
   // Testing states
   const [testingKey, setTestingKey] = useState<string | null>(null);
   const [testResults, setTestResults] = useState<{ [key: string]: { success: boolean; message: string } }>({});
@@ -191,6 +197,20 @@ export default function SettingsPage() {
       }
       if (settings.nft_storage_token) {
         setNftStorageToken(settings.nft_storage_token.value || '');
+      }
+
+      // Load Telegram bot settings
+      if (settings.telegram_bot_token) {
+        setTelegramBotToken(settings.telegram_bot_token.value || '');
+      }
+      if (settings.telegram_bot_username) {
+        setTelegramBotUsername(settings.telegram_bot_username.value || '');
+      }
+      if (settings.telegram_admin_user_id) {
+        setTelegramAdminUserId(settings.telegram_admin_user_id.value || '');
+      }
+      if (settings.telegram_webhook_url) {
+        setTelegramWebhookUrl(settings.telegram_webhook_url.value || '');
       }
     } catch (error: any) {
       console.error('Error loading settings:', error);
@@ -322,6 +342,23 @@ export default function SettingsPage() {
         nft_storage_token: {
           value: nftStorageToken,
           description: 'NFT.Storage token for IPFS (unlimited free)'
+        },
+        // Telegram Bot Settings
+        telegram_bot_token: {
+          value: telegramBotToken,
+          description: 'Telegram bot token from @BotFather for audit request notifications'
+        },
+        telegram_bot_username: {
+          value: telegramBotUsername,
+          description: 'Telegram bot username (without @) for deep links'
+        },
+        telegram_admin_user_id: {
+          value: telegramAdminUserId,
+          description: 'Telegram username or numeric user ID to receive audit notifications'
+        },
+        telegram_webhook_url: {
+          value: telegramWebhookUrl,
+          description: 'Webhook URL for Telegram bot updates (optional, for production)'
         }
       };
 
@@ -658,6 +695,74 @@ export default function SettingsPage() {
             </ul>
             <Text style={{ display: 'block', marginTop: '8px', color: tokens.colorNeutralForeground2 }}>
               Used for uploading project logos and advertisement images to IPFS.
+            </Text>
+          </div>
+        </div>
+      </Card>
+
+      {/* Telegram Bot Settings */}
+      <Card className={styles.section}>
+        <Text className={styles.sectionTitle}>
+          <Key24Regular />
+          Telegram Bot (Audit Requests)
+        </Text>
+        <Text style={{ marginBottom: '16px', color: tokens.colorNeutralForeground2 }}>
+          Configure Telegram bot to receive audit request notifications. Users can click "Request Audit" to start a chat with you.
+        </Text>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <Field label="Bot Token" hint="Get from @BotFather on Telegram">
+            <Input
+              type="password"
+              value={telegramBotToken}
+              onChange={(e) => setTelegramBotToken(e.target.value)}
+              placeholder="1234567890:ABCdefGHIjklMNOpqrsTUVwxyz"
+            />
+          </Field>
+
+          <Field label="Bot Username" hint="Without @ symbol (e.g., CFGNINJA_Bot)">
+            <Input
+              value={telegramBotUsername}
+              onChange={(e) => setTelegramBotUsername(e.target.value)}
+              placeholder="CFGNINJA_Bot"
+            />
+          </Field>
+
+          <Field label="Admin User ID" hint="Your Telegram username or numeric user ID">
+            <Input
+              value={telegramAdminUserId}
+              onChange={(e) => setTelegramAdminUserId(e.target.value)}
+              placeholder="bladepool or 123456789"
+            />
+          </Field>
+
+          <Field label="Webhook URL (Optional)" hint="For production deployments">
+            <Input
+              value={telegramWebhookUrl}
+              onChange={(e) => setTelegramWebhookUrl(e.target.value)}
+              placeholder="https://yourdomain.com/api/audit-request/webhook"
+            />
+          </Field>
+
+          <div style={{ 
+            padding: '12px', 
+            backgroundColor: tokens.colorNeutralBackground4, 
+            borderRadius: '8px',
+            fontSize: '0.875rem'
+          }}>
+            <Text weight="semibold" style={{ display: 'block', marginBottom: '8px' }}>
+              📱 Setup Instructions:
+            </Text>
+            <ol style={{ margin: 0, paddingLeft: '20px' }}>
+              <li>Open Telegram and search for <strong>@BotFather</strong></li>
+              <li>Send <code>/newbot</code> and follow instructions</li>
+              <li>Copy the bot token (looks like 1234567890:ABCdef...)</li>
+              <li>Paste token in "Bot Token" field above</li>
+              <li>Enter your bot username (without @)</li>
+              <li>Start a chat with your bot on Telegram</li>
+              <li>Send <code>/start</code> to activate it</li>
+            </ol>
+            <Text style={{ display: 'block', marginTop: '8px', color: tokens.colorNeutralForeground2 }}>
+              Bot Link: {telegramBotUsername ? `https://t.me/${telegramBotUsername}` : 'Enter username above'}
             </Text>
           </div>
         </div>
