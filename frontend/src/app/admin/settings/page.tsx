@@ -106,6 +106,13 @@ export default function SettingsPage() {
   const [coinMarketCapApiKey, setCoinMarketCapApiKey] = useState('');
   const [goPlusApiKey, setGoPlusApiKey] = useState('');
 
+  // Settings state - IPFS Storage Providers
+  const [tatumApiKey, setTatumApiKey] = useState('');
+  const [pinataApiKey, setPinataApiKey] = useState('');
+  const [pinataSecretKey, setPinataSecretKey] = useState('');
+  const [web3StorageToken, setWeb3StorageToken] = useState('');
+  const [nftStorageToken, setNftStorageToken] = useState('');
+
   // Testing states
   const [testingKey, setTestingKey] = useState<string | null>(null);
   const [testResults, setTestResults] = useState<{ [key: string]: { success: boolean; message: string } }>({});
@@ -163,6 +170,23 @@ export default function SettingsPage() {
       }
       if (settings.goplus_api_key) {
         setGoPlusApiKey(settings.goplus_api_key.value || '');
+      }
+
+      // Load IPFS Storage Provider API Keys
+      if (settings.tatum_api_key) {
+        setTatumApiKey(settings.tatum_api_key.value || '');
+      }
+      if (settings.pinata_api_key) {
+        setPinataApiKey(settings.pinata_api_key.value || '');
+      }
+      if (settings.pinata_secret_key) {
+        setPinataSecretKey(settings.pinata_secret_key.value || '');
+      }
+      if (settings.web3_storage_token) {
+        setWeb3StorageToken(settings.web3_storage_token.value || '');
+      }
+      if (settings.nft_storage_token) {
+        setNftStorageToken(settings.nft_storage_token.value || '');
       }
     } catch (error: any) {
       console.error('Error loading settings:', error);
@@ -269,6 +293,27 @@ export default function SettingsPage() {
         goplus_api_key: {
           value: goPlusApiKey,
           description: 'GoPlus Security API key for automated checks'
+        },
+        // IPFS Storage Provider API Keys
+        tatum_api_key: {
+          value: tatumApiKey,
+          description: 'Tatum API key for IPFS storage (50MB/month free)'
+        },
+        pinata_api_key: {
+          value: pinataApiKey,
+          description: 'Pinata API key for IPFS storage (1GB free)'
+        },
+        pinata_secret_key: {
+          value: pinataSecretKey,
+          description: 'Pinata Secret API key'
+        },
+        web3_storage_token: {
+          value: web3StorageToken,
+          description: 'Web3.Storage token for IPFS (unlimited free)'
+        },
+        nft_storage_token: {
+          value: nftStorageToken,
+          description: 'NFT.Storage token for IPFS (unlimited free)'
         }
       };
 
@@ -519,6 +564,83 @@ export default function SettingsPage() {
             </ol>
             <Text style={{ display: 'block', marginTop: '8px', color: tokens.colorNeutralForeground2 }}>
               Token will be used globally for all PDF uploads from the admin portal.
+            </Text>
+          </div>
+        </div>
+      </Card>
+
+      {/* IPFS Storage Providers */}
+      <Card className={styles.section}>
+        <Text className={styles.sectionTitle}>
+          <Key24Regular />
+          IPFS Storage Providers (Logo Uploads)
+        </Text>
+        <Text style={{ marginBottom: '16px', color: tokens.colorNeutralForeground2 }}>
+          Configure IPFS providers for decentralized logo storage. System tries providers in order: Tatum → Pinata → Web3.Storage → NFT.Storage
+        </Text>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <Field label="Tatum API Key (Primary - 50MB/month free)" hint="Get from dashboard.tatum.io">
+            <Input
+              type="password"
+              value={tatumApiKey}
+              onChange={(e) => setTatumApiKey(e.target.value)}
+              placeholder="t-xxxxx-xxxxx"
+            />
+          </Field>
+
+          <Field label="Pinata API Key (Fallback - 1GB free)" hint="Get from app.pinata.cloud">
+            <Input
+              type="password"
+              value={pinataApiKey}
+              onChange={(e) => setPinataApiKey(e.target.value)}
+              placeholder="Enter Pinata API key"
+            />
+          </Field>
+
+          <Field label="Pinata Secret Key" hint="Required if using Pinata">
+            <Input
+              type="password"
+              value={pinataSecretKey}
+              onChange={(e) => setPinataSecretKey(e.target.value)}
+              placeholder="Enter Pinata Secret key"
+            />
+          </Field>
+
+          <Field label="Web3.Storage Token (Alternative - Unlimited)" hint="Get from web3.storage">
+            <Input
+              type="password"
+              value={web3StorageToken}
+              onChange={(e) => setWeb3StorageToken(e.target.value)}
+              placeholder="Enter Web3.Storage token"
+            />
+          </Field>
+
+          <Field label="NFT.Storage Token (Alternative - Unlimited)" hint="Get from nft.storage">
+            <Input
+              type="password"
+              value={nftStorageToken}
+              onChange={(e) => setNftStorageToken(e.target.value)}
+              placeholder="Enter NFT.Storage token"
+            />
+          </Field>
+
+          <div style={{ 
+            padding: '12px', 
+            backgroundColor: tokens.colorNeutralBackground4, 
+            borderRadius: '8px',
+            fontSize: '0.875rem'
+          }}>
+            <Text weight="semibold" style={{ display: 'block', marginBottom: '8px' }}>
+              ℹ️ Setup at least ONE provider:
+            </Text>
+            <ul style={{ margin: 0, paddingLeft: '20px' }}>
+              <li><strong>Tatum</strong> (Recommended): dashboard.tatum.io → API Keys</li>
+              <li><strong>Pinata</strong> (Best storage): app.pinata.cloud → API Keys → New Key</li>
+              <li><strong>Web3.Storage</strong>: web3.storage → Account → Create API Token</li>
+              <li><strong>NFT.Storage</strong>: nft.storage → API Keys → New API Key</li>
+            </ul>
+            <Text style={{ display: 'block', marginTop: '8px', color: tokens.colorNeutralForeground2 }}>
+              Used for uploading project logos and advertisement images to IPFS.
             </Text>
           </div>
         </div>
