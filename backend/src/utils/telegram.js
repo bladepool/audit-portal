@@ -1,9 +1,4 @@
-  /**
-   * Force reload Telegram settings from database
-   */
-  reloadSettings() {
-    this.settingsLoaded = false;
-  }
+// ...existing code...
 const axios = require('axios');
 const Settings = require('../models/Settings');
 
