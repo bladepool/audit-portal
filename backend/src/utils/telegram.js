@@ -322,6 +322,35 @@ Or click the button below:
         },
       });
     }
+
+    // Handle /help command
+    if (text === '/help') {
+      await this.sendMessage(chatId, `
+ℹ️ <b>Help - CFG Ninja Audit Bot</b>
+
+This bot helps you request smart contract audits and get updates.
+
+<b>Commands:</b>
+• /request - Request a new audit
+• /status - Check audit status
+• /help - Show this help message
+
+For more details or to submit a request, visit our portal:
+${process.env.NEXT_PUBLIC_BASE_URL}/request-audit
+      `.trim(), { parseMode: 'HTML' });
+    }
+
+    // Handle /status command
+    if (text === '/status') {
+      await this.sendMessage(chatId, `
+🔎 <b>Audit Status</b>
+
+To check the status of your audit, please visit your dashboard on our portal:
+${process.env.NEXT_PUBLIC_BASE_URL}/dashboard
+
+If you have submitted an audit request, you will be contacted by our team soon.
+      `.trim(), { parseMode: 'HTML' });
+    }
   }
 
   /**
