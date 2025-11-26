@@ -262,6 +262,55 @@ Feel free to ask any questions!
   }
 
   /**
+   * Get webhook info from Telegram
+   */
+  async getWebhookInfo() {
+    await this.loadSettings();
+    try {
+      const response = await axios.get(`${this.baseUrl}/getWebhookInfo`);
+      return response.data.result;
+    } catch (error) {
+      console.error('Failed to get webhook info:', error?.response?.data || error.message || error);
+      throw error;
+    }
+  }
+
+  /**
+   * Enable webhook (set webhook URL)
+   */
+  async enableWebhook(url) {
+    await this.loadSettings();
+    if (!this.botToken) throw new Error('Telegram bot token not configured');
+    const target = url || process.env.TELEGRAM_WEBHOOK_URL;
+    if (!target) throw new Error('No webhook URL provided');
+    try {
+      const response = await axios.post(`${this.baseUrl}/setWebhook`, {
+        url: target,
+        allowed_updates: ['message', 'callback_query'],
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Failed to enable webhook:', error?.response?.data || error.message || error);
+      throw error;
+    }
+  }
+
+  /**
+   * Disable webhook (delete webhook)
+   */
+  async disableWebhook() {
+    await this.loadSettings();
+    if (!this.botToken) throw new Error('Telegram bot token not configured');
+    try {
+      const response = await axios.post(`${this.baseUrl}/deleteWebhook`);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to disable webhook:', error?.response?.data || error.message || error);
+      throw error;
+    }
+  }
+
+  /**
    * Handle incoming webhook updates
    */
   handleWebhook(update) {
