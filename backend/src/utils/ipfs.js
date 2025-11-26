@@ -1,5 +1,6 @@
 const axios = require('axios');
 const FormData = require('form-data');
+const Settings = require('../models/Settings');
 
 /**
  * IPFS Upload Utilities
@@ -7,26 +8,69 @@ const FormData = require('form-data');
  * 1. Tatum (Primary) - 50MB/month free
  * 2. Pinata (Fallback) - 1GB free
  * 3. Web3.Storage (Alternative) - Free unlimited
+ * 4. NFT.Storage (Alternative) - Free unlimited
+ * 
+ * API keys can be configured via:
+ * 1. Admin Settings UI (preferred - stored in database)
+ * 2. Environment variables (.env file - fallback)
  */
 
 class IPFSUploader {
   constructor() {
-    // Tatum API Configuration
-    this.tatumApiKey = process.env.TATUM_API_KEY;
+    // API keys will be loaded from database or .env
+    this.tatumApiKey = null;
+    this.pinataApiKey = null;
+    this.pinataSecretKey = null;
+    this.pinataJwt = null;
+    this.web3StorageToken = null;
+    this.nftStorageToken = null;
+    
+    // API endpoints
     this.tatumBaseUrl = 'https://api.tatum.io/v3/ipfs';
-    
-    // Pinata API Configuration (fallback)
-    this.pinataApiKey = process.env.PINATA_API_KEY;
-    this.pinataSecretKey = process.env.PINATA_SECRET_KEY;
     this.pinataBaseUrl = 'https://api.pinata.cloud';
-    
-    // Web3.Storage Configuration (alternative)
-    this.web3StorageToken = process.env.WEB3_STORAGE_TOKEN;
     this.web3StorageUrl = 'https://api.web3.storage';
-    
-    // NFT.Storage Configuration (alternative)
-    this.nftStorageToken = process.env.NFT_STORAGE_TOKEN;
     this.nftStorageUrl = 'https://api.nft.storage';
+    
+    // Load settings flag
+    this.settingsLoaded = false;
+  }
+
+  /**
+   * Load API keys from database settings (preferred) or environment variables (fallback)
+   */
+  async loadSettings() {
+    if (this.settingsLoaded) {
+      return; // Already loaded
+    }
+
+    try {
+      // Try to load from database first
+      this.tatumApiKey = await Settings.get('tatum_api_key') || process.env.TATUM_API_KEY;
+      this.pinataApiKey = await Settings.get('pinata_api_key') || process.env.PINATA_API_KEY;
+      this.pinataSecretKey = await Settings.get('pinata_secret_key') || process.env.PINATA_SECRET_KEY;
+      this.pinataJwt = await Settings.get('pinata_jwt') || process.env.PINATA_JWT;
+      this.web3StorageToken = await Settings.get('web3_storage_token') || process.env.WEB3_STORAGE_TOKEN;
+      this.nftStorageToken = await Settings.get('nft_storage_token') || process.env.NFT_STORAGE_TOKEN;
+      
+      this.settingsLoaded = true;
+      
+      console.log('IPFS Settings loaded:', {
+        tatum: this.tatumApiKey ? '✓ Configured' : '✗ Not configured',
+        pinata: this.pinataApiKey && (this.pinataSecretKey || this.pinataJwt) ? '✓ Configured' : '✗ Not configured',
+        web3Storage: this.web3StorageToken ? '✓ Configured' : '✗ Not configured',
+        nftStorage: this.nftStorageToken ? '✓ Configured' : '✗ Not configured'
+      });
+    } catch (error) {
+      console.error('Error loading IPFS settings from database, using .env fallback:', error.message);
+      // Fallback to environment variables
+      this.tatumApiKey = process.env.TATUM_API_KEY;
+      this.pinataApiKey = process.env.PINATA_API_KEY;
+      this.pinataSecretKey = process.env.PINATA_SECRET_KEY;
+      this.pinataJwt = process.env.PINATA_JWT;
+      this.web3StorageToken = process.env.WEB3_STORAGE_TOKEN;
+      this.nftStorageToken = process.env.NFT_STORAGE_TOKEN;
+      this.settingsLoaded = true;
+    }
   }
 
   /**
@@ -71,10 +115,15 @@ class IPFSUploader {
    * Upload file to IPFS using Pinata (Fallback)
    * Free tier: 1GB storage, unlimited bandwidth
    * Docs: https://docs.pinata.cloud/
+   * Supports both API Key/Secret and JWT authentication
    */
   async uploadToPinata(fileBuffer, filename) {
-    if (!this.pinataApiKey || !this.pinataSecretKey) {
-      throw new Error('PINATA_API_KEY and PINATA_SECRET_KEY not configured');
+    // Check for JWT first (preferred), then API Key/Secret
+    const hasJwt = !!this.pinataJwt;
+    const hasApiKey = !!(this.pinataApiKey && this.pinataSecretKey);
+    
+    if (!hasJwt && !hasApiKey) {
+      throw new Error('Pinata not configured. Need either JWT or API Key + Secret');
     }
 
     try {
@@ -90,16 +139,24 @@ class IPFSUploader {
       });
       formData.append('pinataMetadata', metadata);
 
+      // Build headers based on auth method
+      const headers = {
+        ...formData.getHeaders(),
+      };
+      
+      if (hasJwt) {
+        // JWT authentication (preferred)
+        headers['Authorization'] = `Bearer ${this.pinataJwt}`;
+      } else {
+        // API Key/Secret authentication (legacy)
+        headers['pinata_api_key'] = this.pinataApiKey;
+        headers['pinata_secret_api_key'] = this.pinataSecretKey;
+      }
+
       const response = await axios.post(
         `${this.pinataBaseUrl}/pinning/pinFileToIPFS`,
         formData,
-        {
-          headers: {
-            ...formData.getHeaders(),
-            'pinata_api_key': this.pinataApiKey,
-            'pinata_secret_api_key': this.pinataSecretKey,
-          },
-        }
+        { headers }
       );
 
       return {
@@ -109,6 +166,7 @@ class IPFSUploader {
         url: `https://ipfs.io/ipfs/${response.data.IpfsHash}`,
         gatewayUrl: `https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}`,
         pinSize: response.data.PinSize,
+        timestamp: response.data.Timestamp,
       };
     } catch (error) {
       console.error('Pinata upload failed:', error.response?.data || error.message);
@@ -201,6 +259,9 @@ class IPFSUploader {
    * Tries providers in order: Tatum -> Pinata -> Web3.Storage -> NFT.Storage
    */
   async upload(fileBuffer, filename) {
+    // Ensure settings are loaded from database/env
+    await this.loadSettings();
+    
     const providers = [
       { name: 'tatum', method: this.uploadToTatum.bind(this) },
       { name: 'pinata', method: this.uploadToPinata.bind(this) },

@@ -110,6 +110,7 @@ export default function SettingsPage() {
   const [tatumApiKey, setTatumApiKey] = useState('');
   const [pinataApiKey, setPinataApiKey] = useState('');
   const [pinataSecretKey, setPinataSecretKey] = useState('');
+  const [pinataJwt, setPinataJwt] = useState('');
   const [web3StorageToken, setWeb3StorageToken] = useState('');
   const [nftStorageToken, setNftStorageToken] = useState('');
 
@@ -172,7 +173,7 @@ export default function SettingsPage() {
         setGoPlusApiKey(settings.goplus_api_key.value || '');
       }
 
-      // Load IPFS Storage Provider API Keys
+      // Load IPFS provider settings
       if (settings.tatum_api_key) {
         setTatumApiKey(settings.tatum_api_key.value || '');
       }
@@ -181,6 +182,9 @@ export default function SettingsPage() {
       }
       if (settings.pinata_secret_key) {
         setPinataSecretKey(settings.pinata_secret_key.value || '');
+      }
+      if (settings.pinata_jwt) {
+        setPinataJwt(settings.pinata_jwt.value || '');
       }
       if (settings.web3_storage_token) {
         setWeb3StorageToken(settings.web3_storage_token.value || '');
@@ -306,6 +310,10 @@ export default function SettingsPage() {
         pinata_secret_key: {
           value: pinataSecretKey,
           description: 'Pinata Secret API key'
+        },
+        pinata_jwt: {
+          value: pinataJwt,
+          description: 'Pinata JWT token (preferred over API key/secret)'
         },
         web3_storage_token: {
           value: web3StorageToken,
@@ -597,12 +605,21 @@ export default function SettingsPage() {
             />
           </Field>
 
-          <Field label="Pinata Secret Key" hint="Required if using Pinata">
+          <Field label="Pinata Secret Key" hint="Required if using API Key method">
             <Input
               type="password"
               value={pinataSecretKey}
               onChange={(e) => setPinataSecretKey(e.target.value)}
               placeholder="Enter Pinata Secret key"
+            />
+          </Field>
+
+          <Field label="Pinata JWT (Recommended)" hint="Preferred over API Key/Secret - Get from app.pinata.cloud → API Keys">
+            <Textarea
+              value={pinataJwt}
+              onChange={(e) => setPinataJwt(e.target.value)}
+              placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              rows={3}
             />
           </Field>
 
