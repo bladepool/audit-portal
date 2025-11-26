@@ -14,6 +14,7 @@ import {
   Field,
 } from '@fluentui/react-components';
 import { advertisementsAPI } from '@/lib/api';
+import LogoUpload from '@/components/LogoUpload';
 
 const useStyles = makeStyles({
   container: {
@@ -159,9 +160,26 @@ export default function AdvertisementFormPage() {
                 required
               />
               <Text size={200} style={{ color: tokens.colorNeutralForeground3, marginTop: '4px' }}>
-                Enter the full URL to the advertisement image. Default: https://analytixaudit-bucket.s3.eu-north-1.amazonaws.com/Group_10_a8c5fddcad.png
+                Upload to IPFS below or manually enter URL
               </Text>
             </Field>
+
+            {!isNew && (
+              <Field label="Upload Image to IPFS">
+                <LogoUpload
+                  entityType="advertisement"
+                  entityId={params.id as string}
+                  currentLogoUrl={adImage}
+                  onUploadSuccess={(imageUrl, ipfsHash) => {
+                    setAdImage(imageUrl);
+                    console.log('Advertisement image uploaded to IPFS:', ipfsHash);
+                  }}
+                  onUploadError={(error) => {
+                    alert('Image upload failed: ' + error);
+                  }}
+                />
+              </Field>
+            )}
 
             {adImage && (
               <div>

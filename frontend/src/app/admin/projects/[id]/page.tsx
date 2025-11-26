@@ -21,6 +21,7 @@ import { DocumentPdfRegular, CalculatorRegular, CloudArrowUpRegular } from '@flu
 import { projectsAPI, blockchainsAPI } from '@/lib/api';
 import { Project, Finding } from '@/lib/types';
 import FindingsManager from '@/components/FindingsManager';
+import LogoUpload from '@/components/LogoUpload';
 import { generateEnhancedAuditPDF, generateEnhancedAuditPDFBlob } from '@/lib/enhancedPdfGenerator';
 import { uploadPDFToGitHub } from '@/lib/githubUpload';
 
@@ -1229,7 +1230,26 @@ export default function ProjectFormPage() {
             </Field>
             <Field label="Logo URL">
               <Input value={logo} onChange={(e) => setLogo(e.target.value)} />
+              <Text size={200} style={{ color: '#666', marginTop: '4px' }}>
+                Upload to IPFS below or manually enter URL
+              </Text>
             </Field>
+            {!isNew && (
+              <Field label="Upload Logo to IPFS" className={styles.gridFull}>
+                <LogoUpload
+                  entityType="project"
+                  entityId={params.id as string}
+                  currentLogoUrl={logo}
+                  onUploadSuccess={(logoUrl, ipfsHash) => {
+                    setLogo(logoUrl);
+                    console.log('Logo uploaded to IPFS:', ipfsHash);
+                  }}
+                  onUploadError={(error) => {
+                    alert('Logo upload failed: ' + error);
+                  }}
+                />
+              </Field>
+            )}
             <Field label="Launchpad">
               <Input value={launchpad} onChange={(e) => setLaunchpad(e.target.value)} />
             </Field>
