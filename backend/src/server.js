@@ -145,6 +145,7 @@ mongoClient.connect()
   .catch((err) => console.error('❌ Native MongoDB connection error:', err));
 
 // Routes
+
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/blockchains', blockchainRoutes);
@@ -153,6 +154,9 @@ app.use('/api/admin/trustblock', trustBlockRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/audit-request', auditRequestRoutes);
+if (telegramRoutes) {
+  app.use('/api/telegram', telegramRoutes);
+}
 
 // Only register admin PDF routes if available
 if (adminPdfRoutes) {
