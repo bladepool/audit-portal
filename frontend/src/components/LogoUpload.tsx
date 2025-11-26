@@ -123,9 +123,11 @@ export default function LogoUpload({
       const formData = new FormData();
       formData.append('logo', file);
 
+
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://audit-portal-production.up.railway.app/api';
       const endpoint = entityType === 'project'
-        ? `/api/upload/logo/project/${entityId}`
-        : `/api/upload/logo/advertisement/${entityId}`;
+        ? `${apiBase}/upload/logo/project/${entityId}`
+        : `${apiBase}/upload/logo/advertisement/${entityId}`;
 
       const response = await fetch(endpoint, {
         method: 'POST',
