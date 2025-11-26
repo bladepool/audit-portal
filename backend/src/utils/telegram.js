@@ -2,6 +2,9 @@
 const axios = require('axios');
 const Settings = require('../models/Settings');
 
+// Enable debug replies when TELEGRAM_DEBUG=true
+const TELEGRAM_DEBUG = process.env.TELEGRAM_DEBUG === 'true';
+
 /**
  * Telegram Bot Integration for Audit Requests
  * Uses Telegram Bot API to create audit request chats
@@ -371,10 +374,12 @@ If you have submitted an audit request, you will be contacted by our team soon.
     // Unknown command handling (only reply for messages that look like commands)
     if (text && text.startsWith('/')) {
       console.log('[Telegram] Unknown command received:', { command, text, chatId });
-      try {
-        await this.sendMessage(chatId, `I didn't recognize the command <code>${command}</code>. Try /help.`, { parseMode: 'HTML' });
-      } catch (e) {
-        console.error('Failed to send unknown-command reply:', e?.message || e);
+      if (TELEGRAM_DEBUG) {
+        try {
+          await this.sendMessage(chatId, `I didn't recognize the command <code>${command}</code>. Try /help.`, { parseMode: 'HTML' });
+        } catch (e) {
+          console.error('Failed to send unknown-command reply:', e?.message || e);
+        }
       }
       return;
     }
