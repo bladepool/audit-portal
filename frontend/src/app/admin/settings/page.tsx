@@ -18,7 +18,26 @@ import {
   ArrowLeft24Regular,
   Key24Regular,
 } from '@fluentui/react-icons';
-import { settingsAPI } from '@/lib/api';
+import { settingsAPI, telegramAPI } from '@/lib/api';
+  // Telegram bot status
+  const [telegramStatus, setTelegramStatus] = useState<'loading' | 'ok' | 'error'>('loading');
+  const [telegramStatusMsg, setTelegramStatusMsg] = useState('');
+
+  useEffect(() => {
+    // Fetch Telegram bot status
+    const fetchStatus = async () => {
+      try {
+        setTelegramStatus('loading');
+        const res = await telegramAPI.getStatus();
+        setTelegramStatus('ok');
+        setTelegramStatusMsg(`Connected as @${res.data.bot.username}`);
+      } catch (err: any) {
+        setTelegramStatus('error');
+        setTelegramStatusMsg(err.response?.data?.error || 'Bot not connected');
+      }
+    };
+    fetchStatus();
+  }, []);
 import Link from 'next/link';
 
 const useStyles = makeStyles({
@@ -400,6 +419,13 @@ export default function SettingsPage() {
 
       {/* Blockchain Scanners */}
       <Card className={styles.section}>
+        {/* Telegram Bot Status */}
+        <div style={{ marginBottom: 16 }}>
+          <Text weight="semibold">Bot Status: </Text>
+          {telegramStatus === 'loading' && <Spinner size="tiny" label="Checking..." />}
+          {telegramStatus === 'ok' && <Text style={{ color: tokens.colorPaletteGreenForeground1 }}>{telegramStatusMsg}</Text>}
+          {telegramStatus === 'error' && <Text style={{ color: tokens.colorPaletteRedForeground1 }}>{telegramStatusMsg}</Text>}
+        </div>
         <Text className={styles.sectionTitle}>
           <Key24Regular />
           Blockchain Scanner API Keys

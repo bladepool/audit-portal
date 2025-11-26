@@ -1,3 +1,7 @@
+// Telegram API
+export const telegramAPI = {
+  getStatus: () => api.get('/telegram/status'),
+};
 import axios from 'axios';
 
 // Smart backend URL detection
