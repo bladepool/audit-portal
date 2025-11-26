@@ -19,6 +19,17 @@ import {
   Key24Regular,
 } from '@fluentui/react-icons';
 import { settingsAPI, telegramAPI } from '@/lib/api';
+// ...existing code...
+
+export default function SettingsPage() {
+  const styles = useStyles();
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  import Link from 'next/link'; // Moved Link import to the top
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState<'success' | 'error'>('success');
+
   // Telegram bot status
   const [telegramStatus, setTelegramStatus] = useState<'loading' | 'ok' | 'error'>('loading');
   const [telegramStatusMsg, setTelegramStatusMsg] = useState('');
@@ -38,7 +49,6 @@ import { settingsAPI, telegramAPI } from '@/lib/api';
     };
     fetchStatus();
   }, []);
-import Link from 'next/link';
 
 const useStyles = makeStyles({
   container: {
