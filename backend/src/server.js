@@ -107,6 +107,8 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:3000',
   'https://audit-portal-gamma.vercel.app',
+  'https://audit-portal-git-main-adminbladepoolios-projects.vercel.app',
+  'https://audit-portal-cwet2t9nb-adminbladepoolios-projects.vercel.app',
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
@@ -115,7 +117,11 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    // Check if origin matches allowed origins or is a Vercel preview deployment
+    const isAllowed = allowedOrigins.indexOf(origin) !== -1 || 
+                     (origin && origin.includes('vercel.app'));
+    
+    if (isAllowed) {
       callback(null, true);
     } else {
       console.warn('CORS blocked origin:', origin);

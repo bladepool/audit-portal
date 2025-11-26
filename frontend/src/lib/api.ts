@@ -1,12 +1,29 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+// Smart backend URL detection
+const getApiUrl = () => {
+  // 1. Use explicit environment variable if set
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  
+  // 2. In production (Vercel), use Railway backend
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return 'https://audit-portal-production.up.railway.app/api';
+  }
+  
+  // 3. Local development fallback
+  return 'http://localhost:5000/api';
+};
+
+const API_URL = getApiUrl();
 
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: false,
 });
 
 // Add token to requests if available
