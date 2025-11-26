@@ -1,3 +1,13 @@
+let telegramRoutes;
+try {
+  telegramRoutes = require('./routes/telegram');
+  console.log('✅ Telegram routes loaded');
+} catch (error) {
+  console.error('❌ Failed to load telegram routes:', error.message);
+}
+if (telegramRoutes) {
+  app.use('/api/telegram', telegramRoutes);
+}
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
