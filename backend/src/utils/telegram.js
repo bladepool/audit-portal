@@ -277,9 +277,12 @@ Feel free to ask any questions!
     const chatId = message.chat.id;
     const text = message.text;
 
+    // Normalize command (handle commands with @botusername and payloads)
+    const command = text ? text.split(' ')[0].split('@')[0] : '';
+
     // Handle /start command with deep link payload
-    if (text && text.startsWith('/start')) {
-      const parts = text.split(' ');
+    if (command === '/start') {
+      const parts = text ? text.split(' ') : [];
       if (parts.length > 1) {
         try {
           const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
@@ -305,7 +308,7 @@ Start by sending /request to begin an audit request.
     }
 
     // Handle /request command
-    if (text === '/request') {
+    if (command === '/request') {
       await this.sendMessage(chatId, `
 📋 <b>Audit Request Form</b>
 
@@ -324,7 +327,7 @@ Or click the button below:
     }
 
     // Handle /help command
-    if (text === '/help') {
+    if (command === '/help') {
       await this.sendMessage(chatId, `
 ℹ️ <b>Help - CFG Ninja Audit Bot</b>
 
@@ -341,7 +344,7 @@ ${process.env.NEXT_PUBLIC_BASE_URL}/request-audit
     }
 
     // Handle /status command
-    if (text === '/status') {
+    if (command === '/status') {
       await this.sendMessage(chatId, `
 🔎 <b>Audit Status</b>
 
