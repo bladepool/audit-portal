@@ -280,6 +280,18 @@ Feel free to ask any questions!
     // Normalize command (handle commands with @botusername and payloads)
     const command = text ? text.split(' ')[0].split('@')[0] : '';
 
+    // Debug logging for incoming messages and parsed command
+    try {
+      console.log('[Telegram] Incoming message:', {
+        from: message.from?.username || message.from?.id,
+        chatId,
+        text,
+        parsedCommand: command,
+      });
+    } catch (e) {
+      // swallow logging errors
+    }
+
     // Handle /start command with deep link payload
     if (command === '/start') {
       const parts = text ? text.split(' ') : [];
@@ -353,6 +365,18 @@ ${process.env.NEXT_PUBLIC_BASE_URL}/dashboard
 
 If you have submitted an audit request, you will be contacted by our team soon.
       `.trim(), { parseMode: 'HTML' });
+      return;
+    }
+
+    // Unknown command handling (only reply for messages that look like commands)
+    if (text && text.startsWith('/')) {
+      console.log('[Telegram] Unknown command received:', { command, text, chatId });
+      try {
+        await this.sendMessage(chatId, `I didn't recognize the command <code>${command}</code>. Try /help.`, { parseMode: 'HTML' });
+      } catch (e) {
+        console.error('Failed to send unknown-command reply:', e?.message || e);
+      }
+      return;
     }
   }
 
