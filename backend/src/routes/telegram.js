@@ -2,6 +2,23 @@ const express = require('express');
 const router = express.Router();
 const { telegramBot } = require('../utils/telegram');
 
+// Admin-only middleware: require a bearer token matching TELEGRAM_ADMIN_TOKEN env var
+const ADMIN_TOKEN = process.env.TELEGRAM_ADMIN_TOKEN;
+function requireAdmin(req, res, next) {
+  if (!ADMIN_TOKEN) {
+    return res.status(500).json({ success: false, error: 'Server misconfigured: TELEGRAM_ADMIN_TOKEN not set' });
+  }
+  const auth = req.headers.authorization || req.headers.Authorization;
+  if (!auth || !auth.startsWith('Bearer ')) {
+    return res.status(401).json({ success: false, error: 'Unauthorized' });
+  }
+  const token = auth.split(' ')[1];
+  if (token !== ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, error: 'Forbidden' });
+  }
+  next();
+}
+
 // GET /api/telegram/status
 router.get('/status', async (req, res) => {
   try {
@@ -20,7 +37,7 @@ router.get('/status', async (req, res) => {
 });
 
 // POST /api/telegram/start - enable webhook (body: { url })
-router.post('/start', async (req, res) => {
+router.post('/start', requireAdmin, async (req, res) => {
   try {
     const url = req.body?.url || process.env.TELEGRAM_WEBHOOK_URL;
     if (!url) return res.status(400).json({ success: false, error: 'No webhook URL provided' });
@@ -33,7 +50,7 @@ router.post('/start', async (req, res) => {
 });
 
 // POST /api/telegram/stop - disable webhook
-router.post('/stop', async (req, res) => {
+router.post('/stop', requireAdmin, async (req, res) => {
   try {
     const result = await telegramBot.disableWebhook();
     res.json({ success: true, result });
