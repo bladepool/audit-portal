@@ -23,6 +23,7 @@
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
+    "form-data": "^4.0.1",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^4.17.1",
     "mongoose": "^8.1.1",
@@ -30,7 +31,8 @@
     "pdf-parse": "^2.4.5",
     "pdf2json": "^4.0.0",
     "pdfkit": "^0.17.2",
-    "pdfkit-table": "^0.1.99"
+    "pdfkit-table": "^0.1.99",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.12",
