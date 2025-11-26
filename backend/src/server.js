@@ -1,4 +1,3 @@
-let telegramRoutes;
 try {
   telegramRoutes = require('./routes/telegram');
   console.log('✅ Telegram routes loaded');
@@ -20,9 +19,11 @@ try {
   console.log('ℹ️  dotenv not available (using Railway environment variables)');
 }
 
-// Load routes with error handling
-let authRoutes, projectRoutes, blockchainRoutes, advertisementRoutes, trustBlockRoutes;
 
+// Load routes with error handling (after app is defined)
+const app = express();
+
+let authRoutes, projectRoutes, blockchainRoutes, advertisementRoutes, trustBlockRoutes;
 try {
   authRoutes = require('./routes/auth');
   console.log('✅ Auth routes loaded');
@@ -30,7 +31,6 @@ try {
   console.error('❌ Failed to load auth routes:', error.message);
   process.exit(1);
 }
-
 try {
   projectRoutes = require('./routes/projects');
   console.log('✅ Project routes loaded');
@@ -38,7 +38,6 @@ try {
   console.error('❌ Failed to load project routes:', error.message);
   process.exit(1);
 }
-
 try {
   blockchainRoutes = require('./routes/blockchains');
   console.log('✅ Blockchain routes loaded');
@@ -46,7 +45,6 @@ try {
   console.error('❌ Failed to load blockchain routes:', error.message);
   process.exit(1);
 }
-
 try {
   advertisementRoutes = require('./routes/advertisements');
   console.log('✅ Advertisement routes loaded');
@@ -54,7 +52,6 @@ try {
   console.error('❌ Failed to load advertisement routes:', error.message);
   process.exit(1);
 }
-
 try {
   trustBlockRoutes = require('./routes/trustblock');
   console.log('✅ TrustBlock routes loaded');
@@ -62,7 +59,6 @@ try {
   console.error('❌ Failed to load trustblock routes:', error.message);
   process.exit(1);
 }
-
 let settingsRoutes;
 try {
   settingsRoutes = require('./routes/settingsRoutes');
@@ -71,7 +67,6 @@ try {
   console.error('❌ Failed to load settings routes:', error.message);
   process.exit(1);
 }
-
 let uploadRoutes;
 try {
   uploadRoutes = require('./routes/upload');
@@ -80,7 +75,6 @@ try {
   console.error('❌ Failed to load upload routes:', error.message);
   process.exit(1);
 }
-
 let auditRequestRoutes;
 try {
   auditRequestRoutes = require('./routes/audit-request');
@@ -89,12 +83,17 @@ try {
   console.error('❌ Failed to load audit request routes:', error.message);
   process.exit(1);
 }
-
+let telegramRoutes;
+try {
+  telegramRoutes = require('./routes/telegram');
+  console.log('✅ Telegram routes loaded');
+} catch (error) {
+  console.error('❌ Failed to load telegram routes:', error.message);
+}
 // Admin PDF routes - only available when PDF generation path exists
 let adminPdfRoutes = null;
 const fs = require('fs');
 const PDF_PATH = process.env.PDF_GENERATION_PATH || 'E:\\Desktop\\Old Desktop November 2023\\audits\\PDFscript\\CFGNinjaScripts\\Custom Contract';
-
 // Only try to load if the PDF generation directory exists (local only)
 if (fs.existsSync(PDF_PATH)) {
   try {
@@ -106,12 +105,9 @@ if (fs.existsSync(PDF_PATH)) {
 } else {
   console.log('ℹ️  Admin PDF routes disabled (PDF generation path not found - this is normal for Railway deployment)');
 }
-
 // Market cap routes disabled - using manual field in admin portal instead
 let marketCapRoutes = null;
 console.log('ℹ️  Market cap routes disabled (use manual field in admin portal)');
-
-const app = express();
 
 // Middleware - Allow multiple origins for CORS
 const allowedOrigins = [
