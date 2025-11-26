@@ -66,6 +66,12 @@ router.put('/:key', async (req, res) => {
     
     const setting = await Settings.set(req.params.key, value, description);
     
+    // Reload Telegram settings if a Telegram key was updated
+    const telegramKeys = ['telegram_bot_token','telegram_bot_username','telegram_admin_user_id','telegram_bot_webhook_url'];
+    if (telegramKeys.includes(req.params.key)) {
+      require('../utils/telegram').reloadTelegramSettings();
+    }
+
     res.json({
       success: true,
       setting: {
@@ -117,6 +123,12 @@ router.post('/bulk', async (req, res) => {
       }
     }
     
+    // Reload Telegram settings if any Telegram key was updated
+    const telegramKeys = ['telegram_bot_token','telegram_bot_username','telegram_admin_user_id','telegram_bot_webhook_url'];
+    if (Object.keys(settings).some(key => telegramKeys.includes(key))) {
+      require('../utils/telegram').reloadTelegramSettings();
+    }
+
     res.json({
       success: errors.length === 0,
       updated: results.length,

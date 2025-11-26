@@ -1,3 +1,9 @@
+  /**
+   * Force reload Telegram settings from database
+   */
+  reloadSettings() {
+    this.settingsLoaded = false;
+  }
 const axios = require('axios');
 const Settings = require('../models/Settings');
 
@@ -373,4 +379,5 @@ module.exports = {
   telegramBot,
   createAuditRequest: (data) => telegramBot.createAuditRequest(data),
   createStartLink: (payload) => telegramBot.createStartLink(payload),
+  reloadTelegramSettings: () => telegramBot.reloadSettings(),
 };
