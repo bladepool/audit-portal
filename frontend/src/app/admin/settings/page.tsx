@@ -22,33 +22,6 @@ import { settingsAPI, telegramAPI } from '@/lib/api';
 import Link from 'next/link';
 // ...existing code...
 
-export default function SettingsPage() {
-  const styles = useStyles();
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState<'success' | 'error'>('success');
-
-  // Telegram bot status
-  const [telegramStatus, setTelegramStatus] = useState<'loading' | 'ok' | 'error'>('loading');
-  const [telegramStatusMsg, setTelegramStatusMsg] = useState('');
-
-  useEffect(() => {
-    // Fetch Telegram bot status
-    const fetchStatus = async () => {
-      try {
-        setTelegramStatus('loading');
-        const res = await telegramAPI.getStatus();
-        setTelegramStatus('ok');
-        setTelegramStatusMsg(`Connected as @${res.data.bot.username}`);
-      } catch (err: any) {
-        setTelegramStatus('error');
-        setTelegramStatusMsg(err.response?.data?.error || 'Bot not connected');
-      }
-    };
-    fetchStatus();
-  }, []);
 
 const useStyles = makeStyles({
   container: {
@@ -143,11 +116,32 @@ export default function SettingsPage() {
   const [web3StorageToken, setWeb3StorageToken] = useState('');
   const [nftStorageToken, setNftStorageToken] = useState('');
 
+
   // Settings state - Telegram Bot
   const [telegramBotToken, setTelegramBotToken] = useState('');
   const [telegramBotUsername, setTelegramBotUsername] = useState('');
   const [telegramAdminUserId, setTelegramAdminUserId] = useState('');
   const [telegramWebhookUrl, setTelegramWebhookUrl] = useState('');
+
+  // Telegram bot status
+  const [telegramStatus, setTelegramStatus] = useState<'loading' | 'ok' | 'error'>('loading');
+  const [telegramStatusMsg, setTelegramStatusMsg] = useState('');
+
+  useEffect(() => {
+    // Fetch Telegram bot status
+    const fetchStatus = async () => {
+      try {
+        setTelegramStatus('loading');
+        const res = await telegramAPI.getStatus();
+        setTelegramStatus('ok');
+        setTelegramStatusMsg(`Connected as @${res.data.bot.username}`);
+      } catch (err: any) {
+        setTelegramStatus('error');
+        setTelegramStatusMsg(err.response?.data?.error || 'Bot not connected');
+      }
+    };
+    fetchStatus();
+  }, []);
 
   // Testing states
   const [testingKey, setTestingKey] = useState<string | null>(null);
