@@ -47,7 +47,9 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies (including dev if needed for puppeteer)
-RUN npm ci --include=dev --no-audit --progress=false
+# Use `npm install` instead of `npm ci` to avoid CI failures when
+# package-lock.json and package.json are out of sync in some environments.
+RUN npm install --include=dev --no-audit --progress=false
 
 # Copy app source
 COPY . .
