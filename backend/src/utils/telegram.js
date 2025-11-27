@@ -501,7 +501,9 @@ If you have submitted an audit request, you will be contacted by our team soon.
         try {
           const aiPrompt = `Write a short, polite Telegram group introduction message for an auditor and the project owner. Include these details:\n${summary.replace(/\n/g, '\n')}`;
           const ai = await this.generateGeminiText(aiPrompt, { temperature: 0.2, maxTokens: 200 });
-          if (ai && ai.length > 10) introText = ai;
+          if (ai && ai.length > 10) {
+            introText = ai.trim() + "\n\nI'm CFG Ninja AI Bot, my name is Ninjalyze, an AI agent for CFG Ninja Audits.";
+          }
         } catch (e) {
           // ignore AI failures
         }
