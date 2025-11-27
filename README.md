@@ -12,6 +12,7 @@ A high-fidelity prototype of the CFG Ninja Audit Portal with Fluent UI design pr
 - 🚀 Dynamic project pages
 - 📝 Full CRUD operations for projects
 - ✅ Publish/Unpublish functionality
+ - 🤖 AI features: optional Gemini-powered message polishing and AI replies (controlled by `allow_ai_replies` setting)
 
 ## Project Structure
 
@@ -95,6 +96,18 @@ This will start:
 2. Login with credentials
 3. Create/Edit projects with all audit information
 4. Publish/Unpublish projects
+
+### AI Settings
+
+- `allow_ai_replies` (boolean): Enable AI-powered non-command replies from the Telegram bot. Default: `false`.
+- `gemini_api_key` (string): API key used to power Gemini-based message polishing and replies.
+
+To ensure the default `allow_ai_replies` setting exists in your database, run:
+
+```powershell
+node backend/scripts/init-settings.js
+```
+
 
 ### Public Portal
 1. Main page: http://localhost:3000

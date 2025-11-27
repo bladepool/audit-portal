@@ -495,6 +495,57 @@ export default function SettingsPage() {
         </Text>
       </Card>
 
+      {/* AI Settings */}
+      <Card className={styles.section}>
+        <Text className={styles.sectionTitle}>
+          <Key24Regular />
+          AI Settings
+        </Text>
+        <Text style={{ marginBottom: '12px', color: tokens.colorNeutralForeground2 }}>
+          Configure AI features for the Telegram bot. Gemini API key is used for polishing messages and generating replies.
+        </Text>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <Field label="Gemini API Key (Optional)" hint="Used to polish bot messages via Gemini">
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <Input
+                type="password"
+                value={geminiApiKey}
+                onChange={(e) => setGeminiApiKey(e.target.value)}
+                placeholder="Enter Gemini API key"
+                style={{ flex: 1 }}
+              />
+              <Button
+                appearance="secondary"
+                onClick={() => testApiKey('gemini', 'gemini', geminiApiKey)}
+                disabled={testingKey === 'gemini' || !geminiApiKey}
+              >
+                {testingKey === 'gemini' ? 'Testing...' : 'Test'}
+              </Button>
+            </div>
+            {testResults.gemini && (
+              <Text size={200} style={{ color: testResults.gemini.success ? tokens.colorPaletteGreenForeground1 : tokens.colorPaletteRedForeground1 }}>
+                {testResults.gemini.message}
+              </Text>
+            )}
+          </Field>
+
+          <Field label="Enable AI Replies" hint="If enabled and Gemini is configured, the bot will reply to non-command messages using AI">
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input type="checkbox" checked={allowAIReplies} onChange={(e) => setAllowAIReplies(e.target.checked)} />
+              <span style={{ color: tokens.colorNeutralForeground2 }}>Enable AI-powered conversational replies (requires Gemini API key)</span>
+            </label>
+          </Field>
+
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+            <Text weight="semibold">AI Status:</Text>
+            {aiStatus === 'loading' && <Spinner size="tiny" label="Checking..." />}
+            {aiStatus === 'ok' && <Text style={{ color: tokens.colorPaletteGreenForeground1 }}>{aiStatusMsg}</Text>}
+            {aiStatus === 'error' && <Text style={{ color: tokens.colorPaletteRedForeground1 }}>{aiStatusMsg}</Text>}
+          </div>
+        </div>
+      </Card>
+
       {/* Blockchain Scanners */}
       <Card className={styles.section}>
         {/* Telegram Bot Status */}
@@ -862,43 +913,13 @@ export default function SettingsPage() {
             />
           </Field>
 
-          <Field label="Gemini API Key (Optional)" hint="Used to polish bot messages via Gemini">
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <Input
-                type="password"
-                value={geminiApiKey}
-                onChange={(e) => setGeminiApiKey(e.target.value)}
-                placeholder="Enter Gemini API key"
-                style={{ flex: 1 }}
-              />
-              <Button
-                appearance="secondary"
-                onClick={() => testApiKey('gemini', 'gemini', geminiApiKey)}
-                disabled={testingKey === 'gemini' || !geminiApiKey}
-              >
-                {testingKey === 'gemini' ? 'Testing...' : 'Test'}
-              </Button>
-            </div>
-            {testResults.gemini && (
-              <Text size={200} style={{ color: testResults.gemini.success ? tokens.colorPaletteGreenForeground1 : tokens.colorPaletteRedForeground1 }}>
-                {testResults.gemini.message}
-              </Text>
-            )}
-          </Field>
-
           <Field label="Allow Bot To Create Groups" hint="If enabled, the bot will attempt programmatic group creation">
             <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <input type="checkbox" checked={allowBotCreateGroup} onChange={(e) => setAllowBotCreateGroup(e.target.checked)} />
               <span style={{ color: tokens.colorNeutralForeground2 }}>Allow bot to attempt creating Telegram groups (may fail depending on permissions)</span>
             </label>
           </Field>
-
-          <Field label="Enable AI Replies" hint="If enabled and Gemini is configured, the bot will reply to non-command messages using AI">
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <input type="checkbox" checked={allowAIReplies} onChange={(e) => setAllowAIReplies(e.target.checked)} />
-              <span style={{ color: tokens.colorNeutralForeground2 }}>Enable AI-powered conversational replies (requires Gemini API key)</span>
-            </label>
-          </Field>
+          
 
           <div style={{ 
             padding: '12px', 

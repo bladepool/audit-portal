@@ -58,12 +58,17 @@ router.get('/:key', async (req, res) => {
  */
 router.put('/:key', async (req, res) => {
   try {
-    const { value, description } = req.body;
-    
+    let { value, description } = req.body;
+
     if (value === undefined) {
       return res.status(400).json({ error: 'Value is required' });
     }
-    
+
+    // Coerce known boolean settings
+    if (req.params.key === 'allow_ai_replies') {
+      value = Boolean(value);
+    }
+
     const setting = await Settings.set(req.params.key, value, description);
     
     // Reload Telegram settings if a Telegram key or Gemini key was updated
@@ -102,12 +107,16 @@ router.post('/bulk', async (req, res) => {
     
     const results = [];
     const errors = [];
-    
+
     for (const [key, data] of Object.entries(settings)) {
       try {
+        let v = data.value;
+        if (key === 'allow_ai_replies') {
+          v = Boolean(v);
+        }
         const setting = await Settings.set(
-          key, 
-          data.value, 
+          key,
+          v,
           data.description || ''
         );
         results.push({
@@ -124,7 +133,7 @@ router.post('/bulk', async (req, res) => {
     }
     
     // Reload Telegram settings if any Telegram key or Gemini key was updated
-    const telegramKeys = ['telegram_bot_token','telegram_bot_username','telegram_admin_user_id','telegram_bot_webhook_url','gemini_api_key'];
+    const telegramKeys = ['telegram_bot_token','telegram_bot_username','telegram_admin_user_id','telegram_bot_webhook_url','gemini_api_key','allow_ai_replies'];
     if (Object.keys(settings).some(key => telegramKeys.includes(key))) {
       require('../utils/telegram').reloadTelegramSettings();
     }
