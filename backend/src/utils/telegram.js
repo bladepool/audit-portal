@@ -73,6 +73,58 @@ class TelegramBot {
   }
 
   /**
+   * Force reload settings from DB/env
+   */
+  async reloadSettings() {
+    this.settingsLoaded = false;
+    try {
+      await this.loadSettings();
+      console.log('Telegram settings reloaded');
+    } catch (err) {
+      console.error('Failed to reload Telegram settings:', err?.message || err);
+    }
+  }
+
+  /**
+   * Generate text using Gemini API (Google)
+   * - Reads API key from Settings('gemini_api_key') or env GEMINI_API_KEY
+   * - Falls back to returning the original prompt on failure
+   */
+  async generateGeminiText(prompt, opts = {}) {
+    await this.loadSettings();
+    try {
+      const apiKey = (await Settings.get('gemini_api_key')) || process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+      if (!apiKey) {
+        if (TELEGRAM_DEBUG) console.warn('Gemini API key not configured - skipping AI generation');
+        return prompt;
+      }
+
+      const model = opts.model || 'models/text-bison-001';
+      const url = `https://gemini.googleapis.com/v1/${model}:generateText?key=${apiKey}`;
+
+      const body = {
+        prompt: {
+          text: prompt,
+        },
+        temperature: typeof opts.temperature === 'number' ? opts.temperature : 0.2,
+        maxOutputTokens: opts.maxTokens || 512,
+      };
+
+      const res = await axios.post(url, body, { timeout: 15000 });
+
+      // Try a few common response shapes
+      const data = res.data || {};
+      const candidate = data?.candidates?.[0]?.content || data?.output_text || data?.output?.[0]?.content || data?.response || null;
+      if (candidate && typeof candidate === 'string') return candidate;
+      if (typeof data === 'string') return data;
+      return prompt;
+    } catch (err) {
+      console.error('Gemini API error:', err.response?.data || err.message || err);
+      return prompt;
+    }
+  }
+
+  /**
    * Send a message to a user or chat
    */
   async sendMessage(chatId, text, options = {}) {
@@ -432,38 +484,197 @@ If you have submitted an audit request, you will be contacted by our team soon.
 
     // Handle /contact command to create group and post info
     if (command === '/contact') {
-      if (!this.userStates || !this.userStates[chatId] || !this.userStates[chatId].info) {
-        await this.sendMessage(chatId, 'Please provide your contract, website, socials, and logo first.');
+      // If we already have collected info, proceed as before
+      if (this.userStates && this.userStates[chatId] && this.userStates[chatId].info) {
+        const info = this.userStates[chatId].info;
+        // Format info summary
+        let summary = '<b>Audit Request Details</b>\n';
+        if (info.contract) summary += `\n<b>Contract:</b> ${info.contract}`;
+        if (info.website) summary += `\n<b>Website:</b> ${info.website}`;
+        if (info.socials) summary += `\n<b>Socials:</b> ${info.socials}`;
+        if (info.logo) summary += `\n<b>Logo:</b> ${info.logo}`;
+        if (info.projectName) summary += `\n<b>Project:</b> ${info.projectName}`;
+        summary += '\n\nWelcome! The auditor will be with you shortly.';
+
+        // Try to let Gemini polish the summary message (non-fatal)
+        let introText = summary.replace(/\n/g, '\n');
+        try {
+          const aiPrompt = `Write a short, polite Telegram group introduction message for an auditor and the project owner. Include these details:\n${summary.replace(/\n/g, '\n')}`;
+          const ai = await this.generateGeminiText(aiPrompt, { temperature: 0.2, maxTokens: 200 });
+          if (ai && ai.length > 10) introText = ai;
+        } catch (e) {
+          // ignore AI failures
+        }
+
+        // Check setting whether bot is allowed to attempt programmatic group creation
+        const allowCreateFlag = (await Settings.get('allow_bot_create_group')) || (process.env.ALLOW_BOT_CREATE_GROUP === 'true');
+        if (allowCreateFlag) {
+          // Attempt to create the group programmatically. If Telegram account lacks permission
+          // or API does not support it for this setup, fall back to manual instructions.
+          try {
+            const created = await this.createAuditGroup(info.projectName || 'New Project', chatId);
+          // If createAuditGroup returns an invite link, send it to the user
+          if (created && created.chatId) {
+            await this.sendMessage(chatId, `✅ I've created a discussion group for your audit: ${created.inviteLink || ('tg://join?invite=' + (created.inviteLink || ''))}`);
+            // Also send the polished intro into the group
+            try {
+              await this.sendMessage(created.chatId, introText, { parseMode: 'HTML' });
+            } catch (e) {
+              console.error('Failed to send intro into created group:', e?.message || e);
+            }
+          } else {
+            // No chatId returned — fallback
+            await this.sendMessage(chatId, [
+              'Telegram could not create the group automatically.',
+              'Please create a new Telegram group and add both @bladepool and this bot (@' + this.botUsername + ') as members.',
+              'Then paste the following message into the group to introduce the audit:',
+              '',
+              introText,
+            ].join('\n'));
+          }
+          } catch (err) {
+            console.error('createAuditGroup attempt failed — falling back to manual instructions:', err?.message || err);
+            await this.sendMessage(chatId, [
+              'Telegram does not allow bots to create groups directly for this account.',
+              'Please create a new Telegram group and add both @bladepool and this bot (@' + this.botUsername + ') as members.',
+              'Then paste the following message into the group to introduce the audit:',
+              '',
+              introText,
+            ].join('\n'));
+          }
+        } else {
+          // Not allowed to create groups programmatically — provide manual instructions
+          await this.sendMessage(chatId, [
+            'Bot is not configured to create groups automatically.',
+            'Please create a new Telegram group and add both @bladepool and this bot (@' + this.botUsername + ') as members.',
+            'Then paste the following message into the group to introduce the audit:',
+            '',
+            introText,
+          ].join('\n'));
+        }
+
+        // Notify admin with whatever info we have (non-fatal)
+        try {
+          await this.createAuditRequest({
+            projectName: info.projectName || 'New Project',
+            contractAddress: info.contract,
+            website: info.website,
+            telegram: info.socials,
+            twitter: null,
+            email: null,
+            description: '',
+            userTelegramId: chatId,
+          });
+        } catch (err) {
+          console.error('Failed to notify admin for /contact flow:', err.message || err);
+        }
+
+        // Optionally clear state
+        delete this.userStates[chatId];
         return;
       }
-      const info = this.userStates[chatId].info;
-      // Format info summary
-      let summary = '<b>Audit Request Details</b>\n';
-      if (info.contract) summary += `\n<b>Contract:</b> ${info.contract}`;
-      if (info.website) summary += `\n<b>Website:</b> ${info.website}`;
-      if (info.socials) summary += `\n<b>Socials:</b> ${info.socials}`;
-      if (info.logo) summary += `\n<b>Logo:</b> ${info.logo}`;
-      summary += '\n\nWelcome! The auditor will be with you shortly.';
 
-      await this.sendMessage(chatId, [
-        'Telegram does not allow bots to create groups directly.',
-        'To start a group chat with the auditor:',
-        '1. Create a new Telegram group.',
-        '2. Add both @bladepool and this bot (@' + this.botUsername + ') as members.',
-        '3. Copy and paste the following message as your introduction:',
-        '',
-        summary.replace(/\\n/g, '\n'),
-        '',
-        'Once the group is created, the auditor will join you shortly!'
-      ].join('\n'));
-      // Optionally clear state
-      delete this.userStates[chatId];
+      // If no info collected yet, ask for a project name as minimal required data and record expectation
+      if (!this.userStates) this.userStates = {};
+      this.userStates[chatId] = this.userStates[chatId] || { step: 1, info: {}, started: Date.now() };
+      this.userStates[chatId].expectProjectName = true;
+      await this.sendMessage(chatId, `No problem — what's the <b>name of the project</b>? Reply with the project name and I'll prepare the group intro and next steps.`, { parseMode: 'HTML' });
       return;
     }
 
     // Info collection: if user is in info collection state and message is not a command
     if (this.userStates && this.userStates[chatId] && text && !text.startsWith('/')) {
       const state = this.userStates[chatId];
+      // If we previously asked for just a project name, capture it and proceed
+      if (state.expectProjectName) {
+        state.info.projectName = text.trim();
+
+        // Format info summary
+        let summary = '<b>Audit Request Details</b>\n';
+        if (state.info.projectName) summary += `\n<b>Project:</b> ${state.info.projectName}`;
+        if (state.info.contract) summary += `\n<b>Contract:</b> ${state.info.contract}`;
+        if (state.info.website) summary += `\n<b>Website:</b> ${state.info.website}`;
+        if (state.info.socials) summary += `\n<b>Socials:</b> ${state.info.socials}`;
+        if (state.info.logo) summary += `\n<b>Logo:</b> ${state.info.logo}`;
+        summary += '\n\nWelcome! The auditor will be with you shortly.';
+
+        // Try to let Gemini polish the summary message (non-fatal)
+        let introText = summary.replace(/\n/g, '\n');
+        try {
+          const aiPrompt = `Write a short, polite Telegram group introduction message for an auditor and the project owner. Include these details:\n${summary.replace(/\n/g, '\n')}`;
+          const ai = await this.generateGeminiText(aiPrompt, { temperature: 0.2, maxTokens: 200 });
+          if (ai && ai.length > 10) introText = ai;
+        } catch (e) {
+          // ignore AI failures
+        }
+
+        // Check setting whether bot is allowed to attempt programmatic group creation
+        const allowCreateFlag2 = (await Settings.get('allow_bot_create_group')) || (process.env.ALLOW_BOT_CREATE_GROUP === 'true');
+        if (allowCreateFlag2) {
+          // Attempt to create the group programmatically. If Telegram account lacks permission
+          // or API does not support it for this setup, fall back to manual instructions.
+          try {
+            const created = await this.createAuditGroup(state.info.projectName || 'New Project', chatId);
+          // If createAuditGroup returns an invite link, send it to the user
+          if (created && created.chatId) {
+            await this.sendMessage(chatId, `✅ I've created a discussion group for your audit: ${created.inviteLink || ('tg://join?invite=' + (created.inviteLink || ''))}`);
+            // Also send the polished intro into the group
+            try {
+              await this.sendMessage(created.chatId, introText, { parseMode: 'HTML' });
+            } catch (e) {
+              console.error('Failed to send intro into created group:', e?.message || e);
+            }
+          } else {
+            // No chatId returned — fallback
+            await this.sendMessage(chatId, [
+              'Telegram could not create the group automatically.',
+              'Please create a new Telegram group and add both @bladepool and this bot (@' + this.botUsername + ') as members.',
+              'Then paste the following message into the group to introduce the audit:',
+              '',
+              introText,
+            ].join('\n'));
+          }
+          } catch (err) {
+            console.error('createAuditGroup attempt failed — falling back to manual instructions:', err?.message || err);
+            await this.sendMessage(chatId, [
+              'Telegram does not allow bots to create groups directly for this account.',
+              'Please create a new Telegram group and add both @bladepool and this bot (@' + this.botUsername + ') as members.',
+              'Then paste the following message into the group to introduce the audit:',
+              '',
+              introText,
+            ].join('\n'));
+          }
+        } else {
+          // Not allowed to create groups programmatically — provide manual instructions
+          await this.sendMessage(chatId, [
+            'Bot is not configured to create groups automatically.',
+            'Please create a new Telegram group and add both @bladepool and this bot (@' + this.botUsername + ') as members.',
+            'Then paste the following message into the group to introduce the audit:',
+            '',
+            introText,
+          ].join('\n'));
+        }
+
+        // Notify admin with whatever info we have (non-fatal)
+        try {
+          await this.createAuditRequest({
+            projectName: state.info.projectName || 'New Project',
+            contractAddress: state.info.contract,
+            website: state.info.website,
+            telegram: state.info.socials,
+            twitter: null,
+            email: null,
+            description: '',
+            userTelegramId: chatId,
+          });
+        } catch (err) {
+          console.error('Failed to notify admin for project-name flow:', err.message || err);
+        }
+
+        // Clear the temporary state
+        delete this.userStates[chatId];
+        return;
+      }
       // Try to parse info from message
       // Heuristic: look for keywords or ask in order
       const lower = text.toLowerCase();

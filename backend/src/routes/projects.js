@@ -6,6 +6,7 @@ const { fetchTokenSecurity, getChainId } = require('../services/goplusService');
 const Nonce = require('../models/Nonce');
 const OwnerUpdate = require('../models/OwnerUpdate');
 const crypto = require('crypto');
+const validator = require('validator');
 
 // Get all published projects (public) with search, filter, pagination
 router.get('/', async (req, res) => {
@@ -388,6 +389,11 @@ router.post('/:slug/owner-update', async (req, res) => {
       return res.status(400).json({ error: 'Invalid signature' });
     }
 
+    // If nonce was bound to an address, ensure it matches the recovered signer
+    if (n.address && n.address.toLowerCase() !== signer) {
+      return res.status(403).json({ error: 'Nonce does not belong to signer address' });
+    }
+
     // Find project (allow published or id)
     let project;
     if (/^[0-9a-fA-F]{24}$/.test(slug)) {
@@ -405,13 +411,28 @@ router.post('/:slug/owner-update', async (req, res) => {
       return res.status(403).json({ error: 'Signature does not match project owner' });
     }
 
-    // Whitelist allowed fields
-    const allowed = ['description', 'logo', 'socials', 'launchpad'];
+    // Whitelist allowed fields and sanitize
+    const allowed = ['description', 'logo', 'socials', 'launchpad', 'showLaunchpadIcon'];
     const patched = {};
     for (const key of Object.keys(updates)) {
       if (!allowed.includes(key)) continue;
-      patched[key] = updates[key];
-      project[key] = updates[key];
+      let val = updates[key];
+      if (key === 'description') {
+        val = String(val || '').trim().slice(0, 2000);
+      }
+      if (key === 'logo' || key === 'launchpad') {
+        if (val && !validator.isURL(String(val))) continue; // skip invalid urls
+      }
+      if (key === 'socials' && typeof val === 'object') {
+        const socialObj = {};
+        if (val.website && validator.isURL(String(val.website))) socialObj.website = String(val.website);
+        if (val.twitter && validator.isURL(String(val.twitter))) socialObj.twitter = String(val.twitter);
+        if (val.telegram && validator.isURL(String(val.telegram))) socialObj.telegram = String(val.telegram);
+        if (val.github && validator.isURL(String(val.github))) socialObj.github = String(val.github);
+        val = socialObj;
+      }
+      patched[key] = val;
+      project[key] = val;
     }
 
     await project.save();
@@ -447,10 +468,42 @@ router.post('/:slug/owner-update', async (req, res) => {
 router.get('/:slug/owner-nonce', async (req, res) => {
   try {
     const slug = req.params.slug;
+    // Accept optional owner address to bind nonce to an address (prevents reuse across addresses)
+    const { address } = req.query;
+    const { ethers } = require('ethers');
+
+    // Rate-limiting: prevent nonce-flooding per address and per IP
+    const windowMs = 10 * 60 * 1000; // 10 minutes
+    const windowStart = new Date(Date.now() - windowMs);
+    const maxPerAddress = 3; // max nonces per address in window
+    const maxPerIP = 10; // max nonces per IP in window
+
+    const ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || '';
+    let addressLower;
+    if (address && typeof address === 'string' && ethers.utils.isAddress(address)) {
+      addressLower = address.toLowerCase();
+    }
+
+    if (addressLower) {
+      const recentForAddr = await Nonce.countDocuments({ address: addressLower, createdAt: { $gt: windowStart } });
+      if (recentForAddr >= maxPerAddress) {
+        return res.status(429).json({ error: 'Too many nonce requests for this address, please retry later' });
+      }
+    }
+
+    const recentForIp = await Nonce.countDocuments({ ip, createdAt: { $gt: windowStart } });
+    if (recentForIp >= maxPerIP) {
+      return res.status(429).json({ error: 'Too many nonce requests from this IP, please retry later' });
+    }
+
     // Create random nonce
     const value = crypto.randomBytes(16).toString('hex');
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
-    const n = new Nonce({ slug, value, expiresAt });
+    const nData = { slug, value, expiresAt, ip };
+    if (addressLower) {
+      nData.address = addressLower;
+    }
+    const n = new Nonce(nData);
     await n.save();
     res.json({ nonce: value, expiresAt });
   } catch (err) {

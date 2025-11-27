@@ -122,6 +122,9 @@ export default function SettingsPage() {
   const [telegramBotUsername, setTelegramBotUsername] = useState('');
   const [telegramAdminUserId, setTelegramAdminUserId] = useState('');
   const [telegramWebhookUrl, setTelegramWebhookUrl] = useState('');
+  const [geminiApiKey, setGeminiApiKey] = useState('');
+  const [geminiApiKeyDesc, setGeminiApiKeyDesc] = useState('Gemini API key for AI message generation');
+  const [allowBotCreateGroup, setAllowBotCreateGroup] = useState(false);
 
   // Telegram bot status
   const [telegramStatus, setTelegramStatus] = useState<'loading' | 'ok' | 'error'>('loading');
@@ -234,6 +237,13 @@ export default function SettingsPage() {
       }
       if (settings.telegram_webhook_url) {
         setTelegramWebhookUrl(settings.telegram_webhook_url.value || '');
+      }
+      if (settings.gemini_api_key) {
+        setGeminiApiKey(settings.gemini_api_key.value || '');
+        setGeminiApiKeyDesc(settings.gemini_api_key.description || geminiApiKeyDesc);
+      }
+      if (settings.allow_bot_create_group) {
+        setAllowBotCreateGroup(Boolean(settings.allow_bot_create_group.value));
       }
     } catch (error: any) {
       console.error('Error loading settings:', error);
@@ -382,6 +392,15 @@ export default function SettingsPage() {
         telegram_webhook_url: {
           value: telegramWebhookUrl,
           description: 'Webhook URL for Telegram bot updates (optional, for production)'
+        }
+        ,
+        gemini_api_key: {
+          value: geminiApiKey,
+          description: geminiApiKeyDesc
+        },
+        allow_bot_create_group: {
+          value: allowBotCreateGroup,
+          description: 'If enabled, the bot will attempt to create Telegram groups programmatically (may fail depending on bot permissions).'
         }
       };
 
@@ -773,6 +792,37 @@ export default function SettingsPage() {
             />
           </Field>
 
+          <Field label="Gemini API Key (Optional)" hint="Used to polish bot messages via Gemini">
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <Input
+                type="password"
+                value={geminiApiKey}
+                onChange={(e) => setGeminiApiKey(e.target.value)}
+                placeholder="Enter Gemini API key"
+                style={{ flex: 1 }}
+              />
+              <Button
+                appearance="secondary"
+                onClick={() => testApiKey('gemini', 'gemini', geminiApiKey)}
+                disabled={testingKey === 'gemini' || !geminiApiKey}
+              >
+                {testingKey === 'gemini' ? 'Testing...' : 'Test'}
+              </Button>
+            </div>
+            {testResults.gemini && (
+              <Text size={200} style={{ color: testResults.gemini.success ? tokens.colorPaletteGreenForeground1 : tokens.colorPaletteRedForeground1 }}>
+                {testResults.gemini.message}
+              </Text>
+            )}
+          </Field>
+
+          <Field label="Allow Bot To Create Groups" hint="If enabled, the bot will attempt programmatic group creation">
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input type="checkbox" checked={allowBotCreateGroup} onChange={(e) => setAllowBotCreateGroup(e.target.checked)} />
+              <span style={{ color: tokens.colorNeutralForeground2 }}>Allow bot to attempt creating Telegram groups (may fail depending on permissions)</span>
+            </label>
+          </Field>
+
           <div style={{ 
             padding: '12px', 
             backgroundColor: tokens.colorNeutralBackground4, 
@@ -795,6 +845,76 @@ export default function SettingsPage() {
               Bot Link: {telegramBotUsername ? `https://t.me/${telegramBotUsername}` : 'Enter username above'}
             </Text>
           </div>
+
+            {/* Webhook control buttons (start/stop) - secure proxy to backend */}
+            <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
+              <Button
+                appearance="secondary"
+                onClick={async () => {
+                  try {
+                    setSaving(true);
+                    const res = await fetch('/api/telegram/admin/start', {
+                      method: 'POST',
+                      headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json',
+                      },
+                    });
+                    const data = await res.json();
+                    if (!res.ok) {
+                      showMessage(data.error || 'Failed to start webhook', 'error');
+                    } else {
+                      showMessage(data.message || 'Webhook started', 'success');
+                      // Refresh status
+                      try {
+                        const sres = await telegramAPI.getStatus();
+                        setTelegramStatus('ok');
+                        setTelegramStatusMsg(`Connected as @${sres.data.bot.username}`);
+                      } catch (e: any) {
+                        setTelegramStatus('error');
+                        setTelegramStatusMsg('Webhook started, but status check failed');
+                      }
+                    }
+                  } catch (err: any) {
+                    showMessage(err.message || 'Start request failed', 'error');
+                  } finally {
+                    setSaving(false);
+                  }
+                }}
+              >
+                Start Webhook
+              </Button>
+
+              <Button
+                appearance="subtle"
+                onClick={async () => {
+                  try {
+                    setSaving(true);
+                    const res = await fetch('/api/telegram/admin/stop', {
+                      method: 'POST',
+                      headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json',
+                      },
+                    });
+                    const data = await res.json();
+                    if (!res.ok) {
+                      showMessage(data.error || 'Failed to stop webhook', 'error');
+                    } else {
+                      showMessage(data.message || 'Webhook stopped', 'success');
+                      setTelegramStatus('error');
+                      setTelegramStatusMsg('Webhook disabled');
+                    }
+                  } catch (err: any) {
+                    showMessage(err.message || 'Stop request failed', 'error');
+                  } finally {
+                    setSaving(false);
+                  }
+                }}
+              >
+                Stop Webhook
+              </Button>
+            </div>
         </div>
       </Card>
 

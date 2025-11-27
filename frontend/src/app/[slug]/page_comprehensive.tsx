@@ -100,7 +100,7 @@ export default function ProjectPage() {
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.logo} onClick={() => router.push('/')}>
-            <img src="/logo.svg" alt="CFG Ninja" className={styles.logoImage} />
+            <img src="https://audit.cfg.ninja/logo.svg" alt="CFG Ninja" className={styles.logoImage} />
           </div>
           <nav className={styles.nav}>
             <button className={styles.navButton} onClick={() => window.open('https://t.me/Bladepool', '_blank')}>
