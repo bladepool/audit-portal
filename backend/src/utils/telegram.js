@@ -384,6 +384,9 @@ Feel free to ask any questions!
     // Normalize command (handle commands with @botusername and payloads)
     const command = text ? text.split(' ')[0].split('@')[0] : '';
 
+    // Load feature flag for AI replies
+    const allowAIReplies = (await Settings.get('allow_ai_replies')) || (process.env.ALLOW_AI_REPLIES === 'true');
+
     // Debug logging for incoming messages and parsed command
     try {
       console.log('[Telegram] Incoming message:', {
@@ -398,10 +401,12 @@ Feel free to ask any questions!
 
     // Handle /start command with deep link payload
     if (command === '/start') {
+            if (allowAIReplies) {
       const parts = text ? text.split(' ') : [];
       let payload = {};
       if (parts.length > 1) {
         try {
+            }
           payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
         } catch (error) {
           console.error('Invalid start payload:', error);
@@ -430,10 +435,12 @@ You can reply with each item one by one, or send them all together. When ready, 
       `.trim(), { parseMode: 'HTML' });
 
       // Start info collection state
+            if (allowAIReplies) {
       if (!this.userStates) this.userStates = {};
       this.userStates[chatId] = { step: 1, info: {}, started: Date.now() };
       return;
     }
+            }
 
     // Handle /request command
     if (command === '/request') {
@@ -735,7 +742,10 @@ If you have submitted an audit request, you will be contacted by our team soon.
     if (text && !text.startsWith('/') && (!this.userStates || !this.userStates[chatId])) {
       try {
         const aiPrompt = `You are CFG Ninja's friendly assistant for audit requests. Reply concisely and helpfully to the user's message. If they want to request an audit, instruct them to use /request or /contact. Keep tone polite and actionable. User message:\n"${text}"`;
-        const ai = await this.generateGeminiText(aiPrompt, { temperature: 0.2, maxTokens: 200 });
+        let ai = null;
+        if (allowAIReplies) {
+          ai = await this.generateGeminiText(aiPrompt, { temperature: 0.2, maxTokens: 200 });
+        }
         if (ai && ai.length > 10 && ai.indexOf('Write a short') === -1) {
           const reply = ai.trim() + "\n\nI'm CFG Ninja AI Bot, my name is Ninjalyze, an AI agent for CFG Ninja Audits.";
           await this.sendMessage(chatId, reply, { parseMode: 'HTML' });

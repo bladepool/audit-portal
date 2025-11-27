@@ -154,6 +154,8 @@ export default function SettingsPage() {
   // AI (Gemini) status
   const [aiStatus, setAiStatus] = useState<'loading' | 'ok' | 'error'>('loading');
   const [aiStatusMsg, setAiStatusMsg] = useState('');
+  // AI settings
+  const [allowAIReplies, setAllowAIReplies] = useState(false);
 
   useEffect(() => {
     // Fetch Telegram bot status
@@ -289,6 +291,9 @@ export default function SettingsPage() {
       if (settings.allow_bot_create_group) {
         setAllowBotCreateGroup(Boolean(settings.allow_bot_create_group.value));
       }
+      if (settings.allow_ai_replies) {
+        setAllowAIReplies(Boolean(settings.allow_ai_replies.value));
+      }
     } catch (error: any) {
       console.error('Error loading settings:', error);
       showMessage('Failed to load settings', 'error');
@@ -349,24 +354,6 @@ export default function SettingsPage() {
       
       const settingsToUpdate = {
         admin_token: { value: adminToken, description: 'Server admin token for authenticating admin actions and webhook.' },
-              {/* Server Admin Token */}
-              <Card className={styles.section}>
-                <Text className={styles.sectionTitle}>
-                  <Key24Regular />
-                  Server Admin Token
-                </Text>
-                <Text style={{ marginBottom: '16px', color: tokens.colorNeutralForeground2 }}>
-                  This token is required for authenticating admin actions and starting the webhook. Store it securely.
-                </Text>
-                <Field label="Server Admin Token" hint="Set a strong random value. Required for webhook and admin API.">
-                  <Input
-                    type="password"
-                    value={adminToken}
-                    onChange={(e) => setAdminToken(e.target.value)}
-                    placeholder="Enter or generate admin token"
-                  />
-                </Field>
-              </Card>
         // GitHub settings
         github_token: {
           value: githubToken,
@@ -464,6 +451,11 @@ export default function SettingsPage() {
         allow_bot_create_group: {
           value: allowBotCreateGroup,
           description: 'If enabled, the bot will attempt to create Telegram groups programmatically (may fail depending on bot permissions).'
+        }
+        ,
+        allow_ai_replies: {
+          value: allowAIReplies,
+          description: 'Enable AI-powered non-command replies from the Telegram bot (requires Gemini API key).'
         }
       };
 
@@ -898,6 +890,13 @@ export default function SettingsPage() {
             <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <input type="checkbox" checked={allowBotCreateGroup} onChange={(e) => setAllowBotCreateGroup(e.target.checked)} />
               <span style={{ color: tokens.colorNeutralForeground2 }}>Allow bot to attempt creating Telegram groups (may fail depending on permissions)</span>
+            </label>
+          </Field>
+
+          <Field label="Enable AI Replies" hint="If enabled and Gemini is configured, the bot will reply to non-command messages using AI">
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input type="checkbox" checked={allowAIReplies} onChange={(e) => setAllowAIReplies(e.target.checked)} />
+              <span style={{ color: tokens.colorNeutralForeground2 }}>Enable AI-powered conversational replies (requires Gemini API key)</span>
             </label>
           </Field>
 
