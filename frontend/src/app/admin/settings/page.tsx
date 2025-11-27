@@ -151,6 +151,10 @@ export default function SettingsPage() {
   const [telegramStatus, setTelegramStatus] = useState<'loading' | 'ok' | 'error'>('loading');
   const [telegramStatusMsg, setTelegramStatusMsg] = useState('');
 
+  // AI (Gemini) status
+  const [aiStatus, setAiStatus] = useState<'loading' | 'ok' | 'error'>('loading');
+  const [aiStatusMsg, setAiStatusMsg] = useState('');
+
   useEffect(() => {
     // Fetch Telegram bot status
     const fetchStatus = async () => {
@@ -165,7 +169,26 @@ export default function SettingsPage() {
       }
     };
     fetchStatus();
-  }, []);
+
+    // Fetch Gemini AI status
+    const fetchAIStatus = async () => {
+      try {
+        setAiStatus('loading');
+        const res = await settingsAPI.test('gemini', geminiApiKey);
+        if (res.data.success) {
+          setAiStatus('ok');
+          setAiStatusMsg('AI enabled');
+        } else {
+          setAiStatus('error');
+          setAiStatusMsg(res.data.message || 'AI not available');
+        }
+      } catch (err: any) {
+        setAiStatus('error');
+        setAiStatusMsg(err.response?.data?.error || 'AI not available');
+      }
+    };
+    fetchAIStatus();
+  }, [geminiApiKey]);
 
   // Testing states
   const [testingKey, setTestingKey] = useState<string | null>(null);
@@ -483,12 +506,27 @@ export default function SettingsPage() {
       {/* Blockchain Scanners */}
       <Card className={styles.section}>
         {/* Telegram Bot Status */}
-        <div style={{ marginBottom: 16 }}>
-          <Text weight="semibold">Bot Status: </Text>
-          {telegramStatus === 'loading' && <Spinner size="tiny" label="Checking..." />}
-          {telegramStatus === 'ok' && <Text style={{ color: tokens.colorPaletteGreenForeground1 }}>{telegramStatusMsg}</Text>}
-          {telegramStatus === 'error' && <Text style={{ color: tokens.colorPaletteRedForeground1 }}>{telegramStatusMsg}</Text>}
+        <div style={{ marginBottom: 16, display: 'flex', gap: 24, alignItems: 'center' }}>
+          <div>
+            <Text weight="semibold">Bot Status: </Text>
+            {telegramStatus === 'loading' && <Spinner size="tiny" label="Checking..." />}
+            {telegramStatus === 'ok' && <Text style={{ color: tokens.colorPaletteGreenForeground1 }}>{telegramStatusMsg}</Text>}
+            {telegramStatus === 'error' && <Text style={{ color: tokens.colorPaletteRedForeground1 }}>{telegramStatusMsg}</Text>}
+          </div>
+          <div>
+            <Text weight="semibold">AI Enabled: </Text>
+            {aiStatus === 'loading' && <Spinner size="tiny" label="Checking..." />}
+            {aiStatus === 'ok' && <Text style={{ color: tokens.colorPaletteGreenForeground1 }}>{aiStatusMsg}</Text>}
+            {aiStatus === 'error' && <Text style={{ color: tokens.colorPaletteRedForeground1 }}>{aiStatusMsg}</Text>}
+          </div>
         </div>
+        // Add Gemini test API to settingsAPI
+        // (if not already present)
+        import api from '@/lib/api';
+        if (!settingsAPI.test) {
+          settingsAPI.test = (service: string, apiKey: string) =>
+            api.post(`/settings/test/${service}`, { apiKey });
+        }
         <Text className={styles.sectionTitle}>
           <Key24Regular />
           Blockchain Scanner API Keys
