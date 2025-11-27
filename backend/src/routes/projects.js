@@ -3,6 +3,9 @@ const router = express.Router();
 const Project = require('../models/Project');
 const auth = require('../middleware/auth');
 const { fetchTokenSecurity, getChainId } = require('../services/goplusService');
+const Nonce = require('../models/Nonce');
+const OwnerUpdate = require('../models/OwnerUpdate');
+const crypto = require('crypto');
 
 // Get all published projects (public) with search, filter, pagination
 router.get('/', async (req, res) => {
@@ -363,11 +366,17 @@ router.patch('/:id/publish', auth, async (req, res) => {
  */
 router.post('/:slug/owner-update', async (req, res) => {
   try {
-    const { updates, message, signature } = req.body;
+    const { updates, message, signature, nonce } = req.body;
     const slug = req.params.slug;
 
-    if (!updates || !message || !signature) {
-      return res.status(400).json({ error: 'Missing updates, message, or signature' });
+    if (!updates || !message || !signature || !nonce) {
+      return res.status(400).json({ error: 'Missing updates, message, signature, or nonce' });
+    }
+
+    // Verify nonce
+    const n = await Nonce.findOne({ value: nonce, slug, used: false, expiresAt: { $gt: new Date() } });
+    if (!n) {
+      return res.status(400).json({ error: 'Invalid or expired nonce' });
     }
 
     // Verify signature
@@ -407,10 +416,46 @@ router.post('/:slug/owner-update', async (req, res) => {
 
     await project.save();
 
+    // Mark nonce as used
+    n.used = true;
+    await n.save();
+
+    // Log owner update
+    try {
+      const ownerLog = new OwnerUpdate({
+        projectId: project._id,
+        slug: project.slug,
+        signer,
+        updates: patched,
+        message,
+        signature,
+        ip: req.ip
+      });
+      await ownerLog.save();
+    } catch (logErr) {
+      console.error('Failed to save owner update log:', logErr);
+    }
+
     res.json({ success: true, message: 'Project updated by owner', project });
   } catch (error) {
     console.error('Owner update error:', error);
     res.status(500).json({ error: error.message });
+  }
+});
+
+// Generate nonce for owner update (short-lived)
+router.get('/:slug/owner-nonce', async (req, res) => {
+  try {
+    const slug = req.params.slug;
+    // Create random nonce
+    const value = crypto.randomBytes(16).toString('hex');
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+    const n = new Nonce({ slug, value, expiresAt });
+    await n.save();
+    res.json({ nonce: value, expiresAt });
+  } catch (err) {
+    console.error('Nonce generation error:', err);
+    res.status(500).json({ error: 'Failed to generate nonce' });
   }
 });
 

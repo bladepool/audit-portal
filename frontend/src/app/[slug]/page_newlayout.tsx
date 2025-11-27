@@ -38,6 +38,20 @@ export default function ProjectPage() {
   const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+  const [connectedAddress, setConnectedAddress] = useState<string | null>(null);
+  const [isOwner, setIsOwner] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [ownerForm, setOwnerForm] = useState({
+    description: '',
+    logo: '',
+    website: '',
+    twitter: '',
+    telegram: '',
+    github: '',
+    launchpad: '',
+    showLaunchpadIcon: false
+  });
+  const [showLaunchpadModal, setShowLaunchpadModal] = useState(false);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -101,6 +115,105 @@ export default function ProjectPage() {
       </div>
     );
   }
+
+  // Wallet connect handler
+  const connectWallet = async () => {
+    try {
+      if (!(window as any).ethereum) {
+        alert('No Ethereum provider found. Install MetaMask or another wallet.');
+        return;
+      }
+      const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
+      const acc = accounts[0].toLowerCase();
+      setConnectedAddress(acc);
+      const owner = project?.contract_info?.contract_owner?.toLowerCase();
+      if (owner && acc === owner) setIsOwner(true);
+      else setIsOwner(false);
+    } catch (err) {
+      console.error('Wallet connect error', err);
+    }
+  };
+
+  // Start edit mode prefill
+  const startEdit = () => {
+    if (!project) return;
+    setOwnerForm({
+      description: project.description || '',
+      logo: project.logo || '',
+      website: project.socials?.website || '',
+      twitter: project.socials?.twitter || '',
+      telegram: project.socials?.telegram || '',
+      github: project.socials?.github || '',
+      launchpad: project.launchpad || ''
+    });
+    setEditMode(true);
+  };
+
+  const saveOwnerEdits = async () => {
+    try {
+      if (!connectedAddress) {
+        alert('Connect wallet first');
+        return;
+      }
+      // Validation
+      if (!ownerForm.description || ownerForm.description.length < 10) {
+        alert('Description must be at least 10 characters');
+        return;
+      }
+      const isUrl = (u:string) => /^(https?:\/\/)/i.test(u);
+      if (ownerForm.logo && !isUrl(ownerForm.logo)) {
+        alert('Logo must be a valid URL (http/https)');
+        return;
+      }
+      if (ownerForm.website && !isUrl(ownerForm.website)) {
+        alert('Website must be a valid URL (http/https)');
+        return;
+      }
+
+      const updates: any = {
+        description: ownerForm.description,
+        logo: ownerForm.logo,
+        socials: {
+          website: ownerForm.website,
+          twitter: ownerForm.twitter,
+          telegram: ownerForm.telegram,
+          github: ownerForm.github
+        },
+        launchpad: ownerForm.launchpad,
+        showLaunchpadIcon: ownerForm.showLaunchpadIcon
+      };
+
+      // Fetch nonce
+      const nres = await fetch(`/api/projects/${params.slug}/owner-nonce`);
+      const ndata = await nres.json();
+      if (!nres.ok) {
+        alert(ndata.error || 'Failed to get nonce');
+        return;
+      }
+      const nonce = ndata.nonce;
+
+      const message = JSON.stringify({ slug: params.slug, updates, nonce, timestamp: Date.now() });
+      const signature = await (window as any).ethereum.request({ method: 'personal_sign', params: [message, connectedAddress] });
+
+      const res = await fetch(`/api/projects/${params.slug}/owner-update`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ updates, message, signature, nonce })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || 'Update failed');
+        return;
+      }
+      // Refresh project
+      setProject(data.project);
+      setEditMode(false);
+      alert('Project updated successfully');
+    } catch (err) {
+      console.error('Save owner edits error', err);
+      alert('Failed to save changes');
+    }
+  };
 
   const scoreBadge = getScoreBadge(project.audit_score || 0);
   const confidenceStars = getConfidenceStars(project.audit_confidence);
@@ -469,7 +582,43 @@ export default function ProjectPage() {
                   <span className={styles.voteInsecure}>Insecure (0)</span>
                 </div>
               </div>
-              <button className={styles.connectWallet}>Connect Wallet</button>
+              <button className={styles.connectWallet} onClick={connectWallet}>{connectedAddress ? (isOwner ? 'Owner Connected' : 'Wallet Connected') : 'Connect Wallet'}</button>
+              {isOwner && !editMode && (
+                <button className={styles.connectWallet} style={{marginLeft: '8px'}} onClick={startEdit}>Edit Project (Owner)</button>
+              )}
+              {editMode && (
+                <div style={{marginTop:12}}>
+                  <div style={{display:'flex', flexDirection:'column', gap:8}}>
+                    <input value={ownerForm.description} onChange={(e)=>setOwnerForm({...ownerForm, description:e.target.value})} placeholder="Description" />
+                    <input value={ownerForm.logo} onChange={(e)=>setOwnerForm({...ownerForm, logo:e.target.value})} placeholder="Logo URL" />
+                    <input value={ownerForm.website} onChange={(e)=>setOwnerForm({...ownerForm, website:e.target.value})} placeholder="Website URL" />
+                    <input value={ownerForm.twitter} onChange={(e)=>setOwnerForm({...ownerForm, twitter:e.target.value})} placeholder="Twitter URL" />
+                    <input value={ownerForm.telegram} onChange={(e)=>setOwnerForm({...ownerForm, telegram:e.target.value})} placeholder="Telegram URL" />
+                    <input value={ownerForm.github} onChange={(e)=>setOwnerForm({...ownerForm, github:e.target.value})} placeholder="GitHub URL" />
+                    <input value={ownerForm.launchpad} onChange={(e)=>setOwnerForm({...ownerForm, launchpad:e.target.value})} placeholder="Launchpad Link (optional)" />
+                    <button onClick={()=>setShowLaunchpadModal(true)} style={{width:'220px'}}>Configure Launchpad Icon</button>
+                    <div style={{display:'flex', gap:8}}>
+                      <button onClick={saveOwnerEdits} className={styles.connectWallet}>Save</button>
+                      <button onClick={()=>setEditMode(false)} className={styles.connectWallet}>Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {showLaunchpadModal && (
+                <div style={{position:'fixed', left:0, top:0, right:0, bottom:0, background:'rgba(0,0,0,0.4)', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                  <div style={{background:'#fff', padding:20, borderRadius:8, width:400}}>
+                    <h3>Launchpad Icon</h3>
+                    <p>Choose whether to display the launchpad icon next to the project name.</p>
+                    <label style={{display:'flex', alignItems:'center', gap:8}}>
+                      <input type="checkbox" checked={ownerForm.showLaunchpadIcon} onChange={(e)=>setOwnerForm({...ownerForm, showLaunchpadIcon: e.target.checked})} />
+                      Display launchpad icon next to project name
+                    </label>
+                    <div style={{display:'flex', justifyContent:'flex-end', gap:8, marginTop:12}}>
+                      <button onClick={()=>setShowLaunchpadModal(false)} className={styles.connectWallet}>Close</button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
