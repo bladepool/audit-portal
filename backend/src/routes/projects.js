@@ -357,6 +357,63 @@ router.patch('/:id/publish', auth, async (req, res) => {
   }
 });
 
+/**
+ * Owner-signed update (public) - allows contract owner to update limited fields
+ * Expected body: { updates: { description, logo, socials, launchpad }, message: string, signature: string }
+ */
+router.post('/:slug/owner-update', async (req, res) => {
+  try {
+    const { updates, message, signature } = req.body;
+    const slug = req.params.slug;
+
+    if (!updates || !message || !signature) {
+      return res.status(400).json({ error: 'Missing updates, message, or signature' });
+    }
+
+    // Verify signature
+    const { ethers } = require('ethers');
+    let signer;
+    try {
+      signer = ethers.verifyMessage(message, signature).toLowerCase();
+    } catch (err) {
+      return res.status(400).json({ error: 'Invalid signature' });
+    }
+
+    // Find project (allow published or id)
+    let project;
+    if (/^[0-9a-fA-F]{24}$/.test(slug)) {
+      project = await Project.findById(slug);
+    } else {
+      project = await Project.findOne({ slug });
+    }
+
+    if (!project) return res.status(404).json({ error: 'Project not found' });
+
+    const ownerAddr = (project.contract_info?.contract_owner || project.contract_info?.contract_deployer || '').toLowerCase();
+    if (!ownerAddr) return res.status(400).json({ error: 'No owner configured for project' });
+
+    if (signer !== ownerAddr && signer !== (project.contract_info?.contract_deployer || '').toLowerCase()) {
+      return res.status(403).json({ error: 'Signature does not match project owner' });
+    }
+
+    // Whitelist allowed fields
+    const allowed = ['description', 'logo', 'socials', 'launchpad'];
+    const patched = {};
+    for (const key of Object.keys(updates)) {
+      if (!allowed.includes(key)) continue;
+      patched[key] = updates[key];
+      project[key] = updates[key];
+    }
+
+    await project.save();
+
+    res.json({ success: true, message: 'Project updated by owner', project });
+  } catch (error) {
+    console.error('Owner update error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Generate unique slug
 router.post('/generate-slug', auth, async (req, res) => {
   try {
