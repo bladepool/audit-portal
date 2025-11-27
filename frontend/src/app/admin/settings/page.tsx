@@ -1,3 +1,24 @@
+  // Settings state - Server Admin Token
+  const [adminToken, setAdminToken] = useState('');
+  // Load settings including admin token
+  const loadSettings = async () => {
+    setLoading(true);
+    try {
+      const settings = await settingsAPI.getAll();
+      setAdminToken(settings.admin_token || '');
+      // ...existing code...
+      setTelegramBotToken(settings.telegram_bot_token || '');
+      setTelegramBotUsername(settings.telegram_bot_username || '');
+      setTelegramAdminUserId(settings.telegram_admin_user_id || '');
+      setTelegramWebhookUrl(settings.telegram_bot_webhook_url || '');
+      setGeminiApiKey(settings.gemini_api_key || '');
+      setAllowBotCreateGroup(!!settings.allow_bot_create_group);
+    } catch (err) {
+      showMessage('Failed to load settings', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -304,6 +325,25 @@ export default function SettingsPage() {
       setSaving(true);
       
       const settingsToUpdate = {
+        admin_token: { value: adminToken, description: 'Server admin token for authenticating admin actions and webhook.' },
+              {/* Server Admin Token */}
+              <Card className={styles.section}>
+                <Text className={styles.sectionTitle}>
+                  <Key24Regular />
+                  Server Admin Token
+                </Text>
+                <Text style={{ marginBottom: '16px', color: tokens.colorNeutralForeground2 }}>
+                  This token is required for authenticating admin actions and starting the webhook. Store it securely.
+                </Text>
+                <Field label="Server Admin Token" hint="Set a strong random value. Required for webhook and admin API.">
+                  <Input
+                    type="password"
+                    value={adminToken}
+                    onChange={(e) => setAdminToken(e.target.value)}
+                    placeholder="Enter or generate admin token"
+                  />
+                </Field>
+              </Card>
         // GitHub settings
         github_token: {
           value: githubToken,
