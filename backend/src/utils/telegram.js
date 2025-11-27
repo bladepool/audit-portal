@@ -499,7 +499,7 @@ If you have submitted an audit request, you will be contacted by our team soon.
         // Try to let Gemini polish the summary message (non-fatal)
         let introText = summary.replace(/\n/g, '\n');
         try {
-          const aiPrompt = `Write a short, polite Telegram group introduction message for an auditor and the project owner. Include these details:\n${summary.replace(/\n/g, '\n')}`;
+          const aiPrompt = `You are a helpful assistant for CFG Ninja audits. Write a short, polite Telegram group introduction message for an auditor and the project owner. Include these details:\n${summary.replace(/\n/g, '\n')}`;
           const ai = await this.generateGeminiText(aiPrompt, { temperature: 0.2, maxTokens: 200 });
           if (ai && ai.length > 10) {
             introText = ai.trim() + "\n\nI'm CFG Ninja AI Bot, my name is Ninjalyze, an AI agent for CFG Ninja Audits.";
@@ -527,9 +527,11 @@ If you have submitted an audit request, you will be contacted by our team soon.
           } else {
             // No chatId returned — fallback
             await this.sendMessage(chatId, [
-              'Telegram could not create the group automatically.',
-              'Please create a new Telegram group and add both @bladepool and this bot (@' + this.botUsername + ') as members.',
-              'Then paste the following message into the group to introduce the audit:',
+              'I couldn\'t create the group automatically due to Telegram restrictions for this account.',
+              'No problem — please create the group manually by following these steps:',
+              '1) Create a new Telegram group.',
+              `2) Add @bladepool and this bot (@${this.botUsername}) as members.`,
+              '3) Paste the message below into the group to introduce the audit.',
               '',
               introText,
             ].join('\n'));
@@ -603,9 +605,11 @@ If you have submitted an audit request, you will be contacted by our team soon.
         // Try to let Gemini polish the summary message (non-fatal)
         let introText = summary.replace(/\n/g, '\n');
         try {
-          const aiPrompt = `Write a short, polite Telegram group introduction message for an auditor and the project owner. Include these details:\n${summary.replace(/\n/g, '\n')}`;
+          const aiPrompt = `You are a helpful assistant for CFG Ninja audits. Write a short, polite Telegram group introduction message for an auditor and the project owner. Include these details:\n${summary.replace(/\n/g, '\n')}`;
           const ai = await this.generateGeminiText(aiPrompt, { temperature: 0.2, maxTokens: 200 });
-          if (ai && ai.length > 10) introText = ai;
+          if (ai && ai.length > 10) {
+            introText = ai.trim() + "\n\nI'm CFG Ninja AI Bot, my name is Ninjalyze, an AI agent for CFG Ninja Audits.";
+          }
         } catch (e) {
           // ignore AI failures
         }
@@ -629,9 +633,11 @@ If you have submitted an audit request, you will be contacted by our team soon.
           } else {
             // No chatId returned — fallback
             await this.sendMessage(chatId, [
-              'Telegram could not create the group automatically.',
-              'Please create a new Telegram group and add both @bladepool and this bot (@' + this.botUsername + ') as members.',
-              'Then paste the following message into the group to introduce the audit:',
+              'I couldn\'t create the group automatically due to Telegram restrictions for this account.',
+              'No problem — please create the group manually by following these steps:',
+              '1) Create a new Telegram group.',
+              `2) Add @bladepool and this bot (@${this.botUsername}) as members.`,
+              '3) Paste the message below into the group to introduce the audit.',
               '',
               introText,
             ].join('\n'));
@@ -639,9 +645,11 @@ If you have submitted an audit request, you will be contacted by our team soon.
           } catch (err) {
             console.error('createAuditGroup attempt failed — falling back to manual instructions:', err?.message || err);
             await this.sendMessage(chatId, [
-              'Telegram does not allow bots to create groups directly for this account.',
-              'Please create a new Telegram group and add both @bladepool and this bot (@' + this.botUsername + ') as members.',
-              'Then paste the following message into the group to introduce the audit:',
+              'I couldn\'t create the group automatically due to Telegram restrictions for this account.',
+              'No problem — please create the group manually by following these steps:',
+              '1) Create a new Telegram group.',
+              `2) Add @bladepool and this bot (@${this.botUsername}) as members.`,
+              '3) Paste the message below into the group to introduce the audit.',
               '',
               introText,
             ].join('\n'));
@@ -649,7 +657,7 @@ If you have submitted an audit request, you will be contacted by our team soon.
         } else {
           // Not allowed to create groups programmatically — provide manual instructions
           await this.sendMessage(chatId, [
-            'Bot is not configured to create groups automatically.',
+            'I couldn\'t create the group automatically due to configuration settings.',
             'Please create a new Telegram group and add both @bladepool and this bot (@' + this.botUsername + ') as members.',
             'Then paste the following message into the group to introduce the audit:',
             '',
@@ -720,6 +728,23 @@ If you have submitted an audit request, you will be contacted by our team soon.
       }
       // If all info collected, remind user to type /contact
       await this.sendMessage(chatId, 'All info received! Type /contact to create a group with the auditor.');
+      return;
+    }
+
+    // Generic non-command messages: try AI-powered reply when not in an info collection state
+    if (text && !text.startsWith('/') && (!this.userStates || !this.userStates[chatId])) {
+      try {
+        const aiPrompt = `You are CFG Ninja's friendly assistant for audit requests. Reply concisely and helpfully to the user's message. If they want to request an audit, instruct them to use /request or /contact. Keep tone polite and actionable. User message:\n"${text}"`;
+        const ai = await this.generateGeminiText(aiPrompt, { temperature: 0.2, maxTokens: 200 });
+        if (ai && ai.length > 10 && ai.indexOf('Write a short') === -1) {
+          const reply = ai.trim() + "\n\nI'm CFG Ninja AI Bot, my name is Ninjalyze, an AI agent for CFG Ninja Audits.";
+          await this.sendMessage(chatId, reply, { parseMode: 'HTML' });
+        } else {
+          await this.sendMessage(chatId, 'Hi — I can help with audits. Type /request to start or /help for available commands.');
+        }
+      } catch (e) {
+        await this.sendMessage(chatId, 'Hi — I can help with audits. Type /request to start or /help for available commands.');
+      }
       return;
     }
 
