@@ -437,23 +437,27 @@ If you have submitted an audit request, you will be contacted by our team soon.
         return;
       }
       const info = this.userStates[chatId].info;
-      // Create group with admin and user
-      try {
-        const group = await this.createAuditGroup('Audit Request', message.from.id);
-        // Format info summary
-        let summary = '<b>Audit Request Details</b>\n';
-        if (info.contract) summary += `\n<b>Contract:</b> ${info.contract}`;
-        if (info.website) summary += `\n<b>Website:</b> ${info.website}`;
-        if (info.socials) summary += `\n<b>Socials:</b> ${info.socials}`;
-        if (info.logo) summary += `\n<b>Logo:</b> ${info.logo}`;
-        summary += '\n\nWelcome! The auditor will be with you shortly.';
-        await this.sendMessage(group.chatId, summary, { parseMode: 'HTML' });
-        await this.sendMessage(chatId, 'A group has been created for your audit. Please check your Telegram groups.');
-        // Optionally clear state
-        delete this.userStates[chatId];
-      } catch (err) {
-        await this.sendMessage(chatId, 'Failed to create group. Please try again later or contact support.');
-      }
+      // Format info summary
+      let summary = '<b>Audit Request Details</b>\n';
+      if (info.contract) summary += `\n<b>Contract:</b> ${info.contract}`;
+      if (info.website) summary += `\n<b>Website:</b> ${info.website}`;
+      if (info.socials) summary += `\n<b>Socials:</b> ${info.socials}`;
+      if (info.logo) summary += `\n<b>Logo:</b> ${info.logo}`;
+      summary += '\n\nWelcome! The auditor will be with you shortly.';
+
+      await this.sendMessage(chatId, [
+        'Telegram does not allow bots to create groups directly.',
+        'To start a group chat with the auditor:',
+        '1. Create a new Telegram group.',
+        '2. Add both @bladepool and this bot (@' + this.botUsername + ') as members.',
+        '3. Copy and paste the following message as your introduction:',
+        '',
+        summary.replace(/\\n/g, '\n'),
+        '',
+        'Once the group is created, the auditor will join you shortly!'
+      ].join('\n'));
+      // Optionally clear state
+      delete this.userStates[chatId];
       return;
     }
 
