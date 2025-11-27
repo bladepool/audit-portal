@@ -1,0 +1,64 @@
+name: Build and Smoke Test Backend Docker Image
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build backend Docker image
+        run: |
+          docker build -f backend/Dockerfile -t auditportal-backend:ci .
+
+      - name: Run container
+        run: |
+          docker run -d --name audit_ci -p 5000:5000 auditportal-backend:ci || true
+
+      - name: Wait for container to start
+        run: |
+          echo "Waiting for container to initialize..."
+          for i in {1..12}; do
+            sleep 5
+            STATUS=$(docker inspect -f '{{.State.Running}}' audit_ci 2>/dev/null || echo false)
+            echo "Running: $STATUS"
+            if [ "$STATUS" = "true" ]; then
+              break
+            fi
+          done
+          if [ "$STATUS" != "true" ]; then
+            echo "Container did not start" >&2
+            docker logs audit_ci || true
+            exit 1
+          fi
+
+      - name: Smoke test - attempt HTTP GET /
+        run: |
+          set -e
+          sleep 2
+          if command -v curl >/dev/null 2>&1; then
+            curl -v --fail http://localhost:5000/ || (echo "GET / failed" && docker logs audit_ci && exit 1)
+          else
+            echo "curl not available in runner"
+          fi
+
+      - name: Dump container logs
+        run: |
+          echo "Container logs:" && docker logs audit_ci || true
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker rm -f audit_ci || true

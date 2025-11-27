@@ -66,8 +66,8 @@ router.put('/:key', async (req, res) => {
     
     const setting = await Settings.set(req.params.key, value, description);
     
-    // Reload Telegram settings if a Telegram key was updated
-    const telegramKeys = ['telegram_bot_token','telegram_bot_username','telegram_admin_user_id','telegram_bot_webhook_url'];
+    // Reload Telegram settings if a Telegram key or Gemini key was updated
+    const telegramKeys = ['telegram_bot_token','telegram_bot_username','telegram_admin_user_id','telegram_bot_webhook_url','gemini_api_key'];
     if (telegramKeys.includes(req.params.key)) {
       require('../utils/telegram').reloadTelegramSettings();
     }
@@ -123,8 +123,8 @@ router.post('/bulk', async (req, res) => {
       }
     }
     
-    // Reload Telegram settings if any Telegram key was updated
-    const telegramKeys = ['telegram_bot_token','telegram_bot_username','telegram_admin_user_id','telegram_bot_webhook_url'];
+    // Reload Telegram settings if any Telegram key or Gemini key was updated
+    const telegramKeys = ['telegram_bot_token','telegram_bot_username','telegram_admin_user_id','telegram_bot_webhook_url','gemini_api_key'];
     if (Object.keys(settings).some(key => telegramKeys.includes(key))) {
       require('../utils/telegram').reloadTelegramSettings();
     }
@@ -189,6 +189,9 @@ router.post('/test/:service', async (req, res) => {
         break;
       case 'trustblock':
         testResult = await testTrustBlockKey(apiKey);
+        break;
+      case 'gemini':
+        testResult = await testGeminiKey(apiKey);
         break;
       default:
         return res.status(400).json({ error: 'Unknown service' });
@@ -281,6 +284,28 @@ async function testTrustBlockKey(apiKey) {
     } else {
       return { success: false, message: 'Invalid TrustBlock API key' };
     }
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+}
+
+async function testGeminiKey(apiKey) {
+  try {
+    const fetch = (await import('node-fetch')).default;
+    // Minimal prompt to validate API key; use models/text-bison-001 as a lightweight test
+    const model = 'models/text-bison-001';
+    const url = `https://gemini.googleapis.com/v1/${model}:generateText?key=${apiKey}`;
+    const body = {
+      prompt: { text: 'Say hello' },
+      temperature: 0.0,
+      maxOutputTokens: 10
+    };
+    const response = await fetch(url, { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+    const data = await response.json();
+    if (response.ok && (data?.candidates?.length || data?.output_text || data?.output)) {
+      return { success: true, message: 'Gemini API key appears valid' };
+    }
+    return { success: false, message: data?.error?.message || 'Invalid Gemini API key' };
   } catch (error) {
     return { success: false, message: error.message };
   }

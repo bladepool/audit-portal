@@ -67,6 +67,8 @@ export default function AdvertisementFormPage() {
   const [adImage, setAdImage] = useState('https://analytixaudit-bucket.s3.eu-north-1.amazonaws.com/Group_10_a8c5fddcad.png');
   const [adUrl, setAdUrl] = useState('');
   const [published, setPublished] = useState(false);
+  const [cpm, setCpm] = useState<number | ''>('');
+  const [cpc, setCpc] = useState<number | ''>('');
 
   useEffect(() => {
     if (!isNew) {
@@ -83,6 +85,8 @@ export default function AdvertisementFormPage() {
       setAdImage(ad.ad_image);
       setAdUrl(ad.ad_url);
       setPublished(ad.published);
+      setCpm(typeof ad.cpm === 'number' ? ad.cpm : (ad.cpm ? Number(ad.cpm) : ''));
+      setCpc(typeof ad.cpc === 'number' ? ad.cpc : (ad.cpc ? Number(ad.cpc) : ''));
     } catch (error) {
       console.error('Error loading advertisement:', error);
       alert('Failed to load advertisement');
@@ -106,6 +110,8 @@ export default function AdvertisementFormPage() {
       ad_image: adImage,
       ad_url: adUrl,
       published,
+      cpm: cpm === '' ? 0 : Number(cpm),
+      cpc: cpc === '' ? 0 : Number(cpc),
     };
 
     try {
@@ -211,6 +217,25 @@ export default function AdvertisementFormPage() {
                 Where users will be redirected when they click the advertisement
               </Text>
             </Field>
+
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <Field label="CPM (USD per 1000 impressions)">
+                <Input
+                  type="number"
+                  value={cpm === '' ? '' : String(cpm)}
+                  onChange={(e) => setCpm(e.target.value === '' ? '' : Number(e.target.value))}
+                  placeholder="0.00"
+                />
+              </Field>
+              <Field label="CPC (USD per click)">
+                <Input
+                  type="number"
+                  value={cpc === '' ? '' : String(cpc)}
+                  onChange={(e) => setCpc(e.target.value === '' ? '' : Number(e.target.value))}
+                  placeholder="0.00"
+                />
+              </Field>
+            </div>
 
             <Field label="Publish Advertisement">
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

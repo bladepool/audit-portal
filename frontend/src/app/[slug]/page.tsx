@@ -236,7 +236,7 @@ export default function ProjectPage() {
         <div className={styles.headerContent}>
           <div className={styles.logo} onClick={() => router.push('/')}>
             <img 
-              src="/logo.svg" 
+              src="https://audit.cfg.ninja/logo.svg" 
               alt="CFG Ninja" 
               className={styles.logoImage}
             />
@@ -724,7 +724,7 @@ export default function ProjectPage() {
                       <div className={styles.dateValue}>{formatDate(project.timeline?.onboarding_process || project.createdAt)}</div>
                     </div>
                     <div className={styles.certificateLogo}>
-                      <img src="/logo.svg" alt="CFG Ninja" style={{ width: '64px', height: '64px' }} />
+                      <img src="https://audit.cfg.ninja/logo.svg" alt="CFG Ninja" style={{ width: '64px', height: '64px' }} />
                     </div>
                     <div className={styles.dateBlock}>
                       <div className={styles.dateLabel}>Release At</div>

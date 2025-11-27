@@ -225,7 +225,7 @@ export default function ProjectPage() {
         <div className={styles.headerContent}>
           <div className={styles.logo} onClick={() => router.push('/')}>
             <img 
-              src="/logo.svg" 
+              src="https://audit.cfg.ninja/logo.svg" 
               alt="CFG Ninja" 
               className={styles.logoImage}
             />

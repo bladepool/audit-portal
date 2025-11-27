@@ -85,6 +85,8 @@ interface Advertisement {
   published: boolean;
   createdAt: string;
   updatedAt: string;
+  cpm?: number;
+  cpc?: number;
 }
 
 export default function AdvertisementsPage() {
@@ -94,6 +96,10 @@ export default function AdvertisementsPage() {
   const [filteredAds, setFilteredAds] = useState<Advertisement[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingCpm, setEditingCpm] = useState<number | ''>('');
+  const [editingCpc, setEditingCpc] = useState<number | ''>('');
+  const [editingError, setEditingError] = useState<string | null>(null);
 
   useEffect(() => {
     loadAdvertisements();
@@ -125,6 +131,105 @@ export default function AdvertisementsPage() {
       alert('Failed to load advertisements');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const exportCSV = () => {
+    if (!filteredAds || filteredAds.length === 0) return;
+    const rows = [
+      ['id', 'ad_image', 'ad_url', 'createdAt', 'published', 'cpm', 'cpc']
+    ];
+    filteredAds.forEach(ad => {
+      rows.push([
+        ad._id,
+        ad.ad_image,
+        ad.ad_url,
+        ad.createdAt,
+        ad.published ? 'true' : 'false',
+        typeof ad.cpm === 'number' ? ad.cpm.toString() : '0',
+        typeof ad.cpc === 'number' ? ad.cpc.toString() : '0'
+      ]);
+    });
+
+    const csvContent = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `advertisements_export_${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportCSVServer = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const url = `${process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' && window.location.hostname !== 'localhost' ? 'https://audit-portal-production.up.railway.app/api' : 'http://localhost:5000/api')}/advertisements/admin/export/csv`;
+      const resp = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: token ? `Bearer ${token}` : ''
+        }
+      });
+      if (!resp.ok) {
+        throw new Error(`Server responded ${resp.status}`);
+      }
+      const blob = await resp.blob();
+      const filename = `advertisements_export_${new Date().toISOString().slice(0,10)}.csv`;
+      const urlObj = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = urlObj;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(urlObj);
+    } catch (err) {
+      console.error('Server CSV export failed', err);
+      alert('Server CSV export failed');
+    }
+  };
+
+  const startQuickEdit = (ad: Advertisement) => {
+    setEditingId(ad._id);
+    setEditingCpm(typeof ad.cpm === 'number' ? ad.cpm : '');
+    setEditingCpc(typeof ad.cpc === 'number' ? ad.cpc : '');
+    setEditingError(null);
+  };
+
+  const cancelQuickEdit = () => {
+    setEditingId(null);
+    setEditingCpm('');
+    setEditingCpc('');
+  };
+
+  const saveQuickEdit = async (id: string) => {
+    // Validate before saving
+    const minCpm = 0, maxCpm = 1000;
+    const minCpc = 0, maxCpc = 100;
+    const cpmVal = editingCpm === '' ? 0 : Number(editingCpm);
+    const cpcVal = editingCpc === '' ? 0 : Number(editingCpc);
+    if (Number.isNaN(cpmVal) || cpmVal < minCpm || cpmVal > maxCpm) {
+      setEditingError(`CPM must be between ${minCpm} and ${maxCpm}`);
+      return;
+    }
+    if (Number.isNaN(cpcVal) || cpcVal < minCpc || cpcVal > maxCpc) {
+      setEditingError(`CPC must be between ${minCpc} and ${maxCpc}`);
+      return;
+    }
+
+    try {
+      const data: any = {};
+      data.cpm = cpmVal;
+      data.cpc = cpcVal;
+      await advertisementsAPI.update(id, data);
+      cancelQuickEdit();
+      loadAdvertisements();
+    } catch (err) {
+      console.error('Failed to save CPM/CPC', err);
+      setEditingError('Failed to save CPM/CPC');
     }
   };
 
@@ -189,13 +294,17 @@ export default function AdvertisementsPage() {
               {filteredAds.length} {filteredAds.length === 1 ? 'entry' : 'entries'} found
             </Text>
           </div>
-          <Button
-            appearance="primary"
-            icon={<AddRegular />}
-            onClick={() => router.push('/admin/advertisements/new')}
-          >
-            Create new entry
-          </Button>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Button
+              appearance="primary"
+              icon={<AddRegular />}
+              onClick={() => router.push('/admin/advertisements/new')}
+            >
+              Create new entry
+            </Button>
+            <Button onClick={exportCSV}>Export CSV (Client)</Button>
+            <Button onClick={exportCSVServer}>Export CSV (Server)</Button>
+          </div>
         </div>
 
         <div className={styles.searchBar}>
@@ -207,6 +316,11 @@ export default function AdvertisementsPage() {
             style={{ width: '400px' }}
           />
         </div>
+        {editingError && (
+          <div style={{ marginTop: 12, color: '#d13438' }}>
+            <Text size={200}>{editingError}</Text>
+          </div>
+        )}
       </Card>
 
       <Card className={styles.tableCard}>
@@ -238,6 +352,8 @@ export default function AdvertisementsPage() {
                 <TableHeaderCell>ID</TableHeaderCell>
                 <TableHeaderCell>Ad Image</TableHeaderCell>
                 <TableHeaderCell>Ad URL</TableHeaderCell>
+                <TableHeaderCell>CPM (USD)</TableHeaderCell>
+                <TableHeaderCell>CPC (USD)</TableHeaderCell>
                 <TableHeaderCell>Created At</TableHeaderCell>
                 <TableHeaderCell>State</TableHeaderCell>
                 <TableHeaderCell>Actions</TableHeaderCell>
@@ -282,6 +398,24 @@ export default function AdvertisementsPage() {
                   </TableCell>
                   <TableCell>
                     <TableCellLayout>
+                      {editingId === ad._id ? (
+                        <Input type="number" value={editingCpm === '' ? '' : String(editingCpm)} onChange={(e) => setEditingCpm(e.target.value === '' ? '' : Number(e.target.value))} style={{ width: 100 }} />
+                      ) : (
+                        typeof ad.cpm === 'number' ? `$${ad.cpm.toFixed(2)}` : '$0.00'
+                      )}
+                    </TableCellLayout>
+                  </TableCell>
+                  <TableCell>
+                    <TableCellLayout>
+                      {editingId === ad._id ? (
+                        <Input type="number" value={editingCpc === '' ? '' : String(editingCpc)} onChange={(e) => setEditingCpc(e.target.value === '' ? '' : Number(e.target.value))} style={{ width: 100 }} />
+                      ) : (
+                        typeof ad.cpc === 'number' ? `$${ad.cpc.toFixed(2)}` : '$0.00'
+                      )}
+                    </TableCellLayout>
+                  </TableCell>
+                  <TableCell>
+                    <TableCellLayout>
                       <Text style={{ fontSize: '13px' }}>{formatDate(ad.createdAt)}</Text>
                     </TableCellLayout>
                   </TableCell>
@@ -299,13 +433,23 @@ export default function AdvertisementsPage() {
                   <TableCell>
                     <TableCellLayout>
                       <div className={styles.actionsCell}>
-                        <Button
-                          appearance="subtle"
-                          icon={<EditRegular />}
-                          size="small"
-                          onClick={() => router.push(`/admin/advertisements/${ad._id}`)}
-                          title="Edit"
-                        />
+                        {editingId === ad._id ? (
+                          <>
+                            <Button appearance="primary" size="small" onClick={() => saveQuickEdit(ad._id)}>Save</Button>
+                            <Button size="small" onClick={cancelQuickEdit}>Cancel</Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              appearance="subtle"
+                              icon={<EditRegular />}
+                              size="small"
+                              onClick={() => router.push(`/admin/advertisements/${ad._id}`)}
+                              title="Edit"
+                            />
+                            <Button size="small" onClick={() => startQuickEdit(ad)}>Quick Edit</Button>
+                          </>
+                        )}
                         <Button
                           appearance="subtle"
                           icon={<CopyRegular />}

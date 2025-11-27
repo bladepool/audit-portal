@@ -58,6 +58,13 @@ try {
   console.error('❌ Failed to load settings routes:', error.message);
   process.exit(1);
 }
+let adminUsageRoutes;
+try {
+  adminUsageRoutes = require('./routes/adminUsage');
+  console.log('✅ Admin usage routes loaded');
+} catch (error) {
+  console.warn('⚠️ Admin usage routes not available:', error.message);
+}
 let uploadRoutes;
 try {
   uploadRoutes = require('./routes/upload');
@@ -135,6 +142,22 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ Connected to MongoDB (Mongoose)'))
   .catch((err) => console.error('❌ MongoDB connection error:', err));
 
+// Ensure default settings exist (non-destructive)
+const Settings = require('./models/Settings');
+mongoose.connection.once('open', async () => {
+  try {
+    // Add allow_bot_create_group default = false if not present
+    const existing = await Settings.get('allow_bot_create_group');
+    if (existing === null) {
+      await Settings.set('allow_bot_create_group', false, 'Default: disable programmatic Telegram group creation');
+      console.log('Initialized default setting: allow_bot_create_group = false');
+    }
+    // Do not block startup on errors
+  } catch (err) {
+    console.error('Failed to initialize default settings:', err?.message || err);
+  }
+});
+
 // Also connect native MongoDB driver for trustblock routes
 const mongoClient = new MongoClient(process.env.MONGODB_URI);
 mongoClient.connect()
@@ -156,6 +179,10 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/audit-request', auditRequestRoutes);
 if (telegramRoutes) {
   app.use('/api/telegram', telegramRoutes);
+}
+
+if (adminUsageRoutes) {
+  app.use('/api/admin/usage', adminUsageRoutes);
 }
 
 // Only register admin PDF routes if available

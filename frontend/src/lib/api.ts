@@ -122,4 +122,10 @@ export const settingsAPI = {
     api.post('/settings/bulk', { settings }),
 };
 
+// Admin Usage API
+export const adminUsageAPI = {
+  getUsage: (params?: { startDate?: string; endDate?: string }) =>
+    api.get('/admin/usage', { params }),
+};
+
 export default api;
