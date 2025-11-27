@@ -2,9 +2,12 @@ name: Build and Smoke Test Backend Docker Image
 
 on:
   push:
-    branches: [ main ]
+    # run on main and on feature branches prefixed with feat/
+    branches: [ main, 'feat/**' ]
   pull_request:
     branches: [ main ]
+  # allow manual runs from the Actions UI
+  workflow_dispatch:
 
 jobs:
   build-and-smoke:
