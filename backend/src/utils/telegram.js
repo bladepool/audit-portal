@@ -347,47 +347,56 @@ Feel free to ask any questions!
     // Handle /start command with deep link payload
     if (command === '/start') {
       const parts = text ? text.split(' ') : [];
+      let payload = {};
       if (parts.length > 1) {
         try {
-          const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
-          return this.handleAuditRequestStart(chatId, payload);
+          payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
         } catch (error) {
           console.error('Invalid start payload:', error);
         }
       }
 
-      // Regular start command
+      // Custom welcome and info collection
       await this.sendMessage(chatId, `
-🔒 <b>Welcome to CFG Ninja Audit Bot!</b>
+Hello! Thank you for reaching out. I appreciate your interest. I will be with you shortly to discuss your request. Before we proceed, please provide the following information:
 
-I can help you request smart contract audits.
+1. Contract
+2. Website
+3. Socials
+4. Logo
 
-<b>Commands:</b>
-• /request - Request a new audit
-• /status - Check audit status
-• /help - Get help
+Once I have these details, I will confirm the next steps. Please note that our delivery timeframe for the service is 12 to 24 hours. Thank you for your patience, and I look forward to assisting you further.
 
-Start by sending /request to begin an audit request.
+Every audit includes the following:
+1. Pinksale Audit Badge.
+2. Github PDF.
+3. https://audit.cfg.ninja dedicated page.
+4. Trustblock Audit page.
+5. SafeAnalyzer Audit Badge.
+
+You can reply with each item one by one, or send them all together. When ready, type /contact to create a group with the auditor.
       `.trim(), { parseMode: 'HTML' });
+
+      // Start info collection state
+      if (!this.userStates) this.userStates = {};
+      this.userStates[chatId] = { step: 1, info: {}, started: Date.now() };
+      return;
     }
 
     // Handle /request command
     if (command === '/request') {
       await this.sendMessage(chatId, `
-📋 <b>Audit Request Form</b>
+To request an audit, please provide the following information (one at a time or all together):
+1. Contract
+2. Website
+3. Socials
+4. Logo
 
-Please visit our portal to submit an audit request:
-${process.env.NEXT_PUBLIC_BASE_URL}/request-audit
-
-Or click the button below:
-      `.trim(), {
-        parseMode: 'HTML',
-        replyMarkup: {
-          inline_keyboard: [[
-            { text: '🌐 Request Audit', url: `${process.env.NEXT_PUBLIC_BASE_URL}/request-audit` },
-          ]],
-        },
-      });
+When ready, type /contact to create a group with the auditor.
+      `.trim(), { parseMode: 'HTML' });
+      if (!this.userStates) this.userStates = {};
+      this.userStates[chatId] = { step: 1, info: {}, started: Date.now() };
+      return;
     }
 
     // Handle /help command
@@ -417,6 +426,83 @@ ${process.env.NEXT_PUBLIC_BASE_URL}/dashboard
 
 If you have submitted an audit request, you will be contacted by our team soon.
       `.trim(), { parseMode: 'HTML' });
+      return;
+    }
+
+
+    // Handle /contact command to create group and post info
+    if (command === '/contact') {
+      if (!this.userStates || !this.userStates[chatId] || !this.userStates[chatId].info) {
+        await this.sendMessage(chatId, 'Please provide your contract, website, socials, and logo first.');
+        return;
+      }
+      const info = this.userStates[chatId].info;
+      // Create group with admin and user
+      try {
+        const group = await this.createAuditGroup('Audit Request', message.from.id);
+        // Format info summary
+        let summary = '<b>Audit Request Details</b>\n';
+        if (info.contract) summary += `\n<b>Contract:</b> ${info.contract}`;
+        if (info.website) summary += `\n<b>Website:</b> ${info.website}`;
+        if (info.socials) summary += `\n<b>Socials:</b> ${info.socials}`;
+        if (info.logo) summary += `\n<b>Logo:</b> ${info.logo}`;
+        summary += '\n\nWelcome! The auditor will be with you shortly.';
+        await this.sendMessage(group.chatId, summary, { parseMode: 'HTML' });
+        await this.sendMessage(chatId, 'A group has been created for your audit. Please check your Telegram groups.');
+        // Optionally clear state
+        delete this.userStates[chatId];
+      } catch (err) {
+        await this.sendMessage(chatId, 'Failed to create group. Please try again later or contact support.');
+      }
+      return;
+    }
+
+    // Info collection: if user is in info collection state and message is not a command
+    if (this.userStates && this.userStates[chatId] && text && !text.startsWith('/')) {
+      const state = this.userStates[chatId];
+      // Try to parse info from message
+      // Heuristic: look for keywords or ask in order
+      const lower = text.toLowerCase();
+      if (!state.info.contract && (lower.includes('0x') || lower.includes('contract'))) {
+        state.info.contract = text;
+        await this.sendMessage(chatId, '✅ Contract received. Please provide Website.');
+        return;
+      }
+      if (!state.info.website && (lower.includes('http') || lower.includes('www') || lower.includes('.'))) {
+        state.info.website = text;
+        await this.sendMessage(chatId, '✅ Website received. Please provide Socials.');
+        return;
+      }
+      if (!state.info.socials && (lower.includes('t.me') || lower.includes('twitter') || lower.includes('discord') || lower.includes('@'))) {
+        state.info.socials = text;
+        await this.sendMessage(chatId, '✅ Socials received. Please provide Logo (URL or file).');
+        return;
+      }
+      if (!state.info.logo && (lower.includes('http') && (lower.includes('.png') || lower.includes('.jpg') || lower.includes('.jpeg') || lower.includes('.svg')))) {
+        state.info.logo = text;
+        await this.sendMessage(chatId, '✅ Logo received. When ready, type /contact to create a group with the auditor.');
+        return;
+      }
+      // Fallback: store as "other" or ask for missing
+      if (!state.info.contract) {
+        state.info.contract = text;
+        await this.sendMessage(chatId, '✅ Contract received. Please provide Website.');
+        return;
+      } else if (!state.info.website) {
+        state.info.website = text;
+        await this.sendMessage(chatId, '✅ Website received. Please provide Socials.');
+        return;
+      } else if (!state.info.socials) {
+        state.info.socials = text;
+        await this.sendMessage(chatId, '✅ Socials received. Please provide Logo (URL or file).');
+        return;
+      } else if (!state.info.logo) {
+        state.info.logo = text;
+        await this.sendMessage(chatId, '✅ Logo received. When ready, type /contact to create a group with the auditor.');
+        return;
+      }
+      // If all info collected, remind user to type /contact
+      await this.sendMessage(chatId, 'All info received! Type /contact to create a group with the auditor.');
       return;
     }
 
