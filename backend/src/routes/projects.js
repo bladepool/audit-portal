@@ -135,6 +135,78 @@ router.get('/stats/portfolio', async (req, res) => {
   }
 });
 
+// Aggregated homepage stats and top lists to optimize frontend
+router.get('/stats/homepage', async (req, res) => {
+  try {
+    // total counts
+    const allCount = await Project.countDocuments({});
+    const publishedCount = await Project.countDocuments({ published: true });
+
+    // findings by severity across published projects
+    const publishedProjects = await Project.find({ published: true }).select('critical major medium minor informational');
+    let criticalFound = 0;
+    let highFound = 0;
+    let mediumFound = 0;
+    let lowFound = 0;
+    let infoFound = 0;
+    publishedProjects.forEach(p => {
+      criticalFound += p.critical?.found || 0;
+      highFound += p.major?.found || 0;
+      mediumFound += p.medium?.found || 0;
+      lowFound += p.minor?.found || 0;
+      infoFound += p.informational?.found || 0;
+    });
+
+    // Top voted
+    const topVoted = await Project.find({ published: true })
+      .sort({ total_votes: -1 })
+      .limit(5)
+      .select('name slug logo audit_score total_votes page_view audit_confidence');
+
+    // Most viewed
+    const mostViewed = await Project.find({ published: true })
+      .sort({ page_view: -1 })
+      .limit(5)
+      .select('name slug logo audit_score total_votes page_view audit_confidence');
+
+    // Recently added
+    const recentlyAdded = await Project.find({ published: true })
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .select('name slug logo audit_score total_votes page_view audit_confidence createdAt');
+
+    // Audits by platform
+    const byPlatformAgg = await Project.aggregate([
+      { $match: { published: true } },
+      { $group: { _id: { $ifNull: ['$platform', 'Other'] }, count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ]);
+
+    const auditsByPlatform = byPlatformAgg.map(p => ({ platform: p._id, count: p.count }));
+
+    res.json({
+      totalProjects: allCount,
+      publishedProjects: publishedCount,
+      findings: {
+        critical: criticalFound,
+        high: highFound,
+        medium: mediumFound,
+        low: lowFound,
+        informational: infoFound,
+        total: criticalFound + highFound + mediumFound + lowFound + infoFound
+      },
+      topVoted,
+      mostViewed,
+      recentlyAdded,
+      auditsByPlatform,
+      securedMarketCap: null
+    });
+  } catch (error) {
+    console.error('Error fetching homepage stats:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Get project by slug (public)
 router.get('/:slug', async (req, res) => {
   try {

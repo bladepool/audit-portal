@@ -47,6 +47,9 @@ interface Stats {
 export default function Home() {
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
+  const [topVoted, setTopVoted] = useState<Project[]>([]);
+  const [mostViewed, setMostViewed] = useState<Project[]>([]);
+  const [recentlyAdded, setRecentlyAdded] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -94,9 +97,10 @@ export default function Home() {
 
   const fetchPortfolioStats = async () => {
     try {
-      const response = await projectsAPI.getStats();
+      // Use server-side aggregated homepage stats for performance
+      const response = await api.get('/projects/stats/homepage');
       const statsData = response.data;
-      
+
       setStats(prev => ({
         ...prev,
         totalProjects: statsData.totalProjects,
@@ -105,7 +109,12 @@ export default function Home() {
         highIssues: statsData.findings.high,
         mediumIssues: statsData.findings.medium,
         lowIssues: statsData.findings.low + statsData.findings.informational,
+        securedMarketCap: statsData.securedMarketCap || prev.securedMarketCap
       }));
+
+      setTopVoted(statsData.topVoted || []);
+      setMostViewed(statsData.mostViewed || []);
+      setRecentlyAdded(statsData.recentlyAdded || []);
     } catch (error) {
       console.error('Error fetching portfolio stats:', error);
     }
@@ -483,29 +492,23 @@ export default function Home() {
         <div className={styles.statsGrid}>
           <div className={styles.statCard}>
             <h3 className={styles.statTitle}>🔥 Most Voted</h3>
-            <div className={styles.statItems}>
-              {projects
-                .sort((a, b) => (b.total_votes || 0) - (a.total_votes || 0))
-                .slice(0, 5)
-                .map((project, index) => (
-                <div key={project._id} className={styles.statItem} onClick={() => router.push(`/${project.slug}`)}>
-                  <span className={styles.statRank}>#{index + 1}</span>
-                  <img src={project.logo || '/default-logo.png'} alt={project.name} className={styles.statLogo} />
-                  <span className={styles.statName}>{project.name}</span>
-                  <span className={styles.statBadge}>{getScoreBadge(project.audit_score)}</span>
-                  <span className={styles.statVotes}>👍 {project.total_votes || 0}</span>
-                </div>
-              ))}
-            </div>
+                <div className={styles.statItems}>
+                {topVoted.map((project, index) => (
+                  <div key={project._id} className={styles.statItem} onClick={() => router.push(`/${project.slug}`)}>
+                    <span className={styles.statRank}>#{index + 1}</span>
+                    <img src={project.logo || '/default-logo.png'} alt={project.name} className={styles.statLogo} />
+                    <span className={styles.statName}>{project.name}</span>
+                    <span className={styles.statBadge}>{getScoreBadge(project.audit_score)}</span>
+                    <span className={styles.statVotes}>👍 {project.total_votes || 0}</span>
+                  </div>
+                ))}
+              </div>
           </div>
 
           <div className={styles.statCard}>
             <h3 className={styles.statTitle}>👀 Most Viewed</h3>
             <div className={styles.statItems}>
-              {projects
-                .sort((a, b) => (b.page_view || 0) - (a.page_view || 0))
-                .slice(0, 5)
-                .map((project, index) => (
+              {mostViewed.map((project, index) => (
                 <div key={project._id} className={styles.statItem} onClick={() => router.push(`/${project.slug}`)}>
                   <span className={styles.statRank}>#{index + 1}</span>
                   <img src={project.logo || '/default-logo.png'} alt={project.name} className={styles.statLogo} />
@@ -520,10 +523,7 @@ export default function Home() {
           <div className={styles.statCard}>
             <h3 className={styles.statTitle}>🆕 Recently Added</h3>
             <div className={styles.statItems}>
-              {projects
-                .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
-                .slice(0, 5)
-                .map((project, index) => (
+              {recentlyAdded.map((project, index) => (
                 <div key={project._id} className={styles.statItem} onClick={() => router.push(`/${project.slug}`)}>
                   <span className={styles.statRank}>#{index + 1}</span>
                   <img src={project.logo || '/default-logo.png'} alt={project.name} className={styles.statLogo} />
