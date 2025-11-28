@@ -11,6 +11,7 @@ class TelegramBot {
     this.baseUrl = null;
     this.settingsLoaded = false;
     this.userStates = {};
+    this.pendingAudits = {}; // map callback id -> audit data
   }
 
   async loadSettings() {
@@ -82,12 +83,41 @@ class TelegramBot {
   async createAuditRequest(data) {
     await this.loadSettings();
     if (!this.adminUserId) throw new Error('Telegram admin user ID not configured');
+    const id = `audit_${Date.now()}_${Math.floor(Math.random()*1000)}`;
+    // keep pending audit info so callback handlers can reference it
+    this.pendingAudits[id] = { ...data, id };
+
     const message = `\n🔒 <b>New Audit Request</b>\n\n📋 <b>Project:</b> ${data.projectName || 'Unknown'}\n• Contract: ${data.contractAddress || 'N/A'}\n• Website: ${data.website || 'N/A'}\n\n📝 <b>Description:</b> ${data.description || 'N/A'}\n\nRequester: ${data.userTelegramId || 'Anonymous'}`;
-    await this.sendMessage(this.adminUserId, message, { parseMode: 'HTML' });
+    await this.sendMessage(this.adminUserId, message, {
+      parseMode: 'HTML',
+      replyMarkup: {
+        inline_keyboard: [[
+          { text: '✅ Accept', callback_data: `accept_audit_${id}` },
+          { text: '❌ Decline', callback_data: `decline_audit_${id}` },
+        ]]
+      }
+    });
     if (data.userTelegramId) {
       await this.sendMessage(data.userTelegramId, `✅ Your audit request for ${data.projectName || 'a project'} has been submitted.`, { parseMode: 'HTML' });
     }
     return { success: true };
+  }
+
+  // Attempt to create a group programmatically. Many bot accounts cannot create groups;
+  // this will usually fail — callers should handle null return and fall back to manual instructions.
+  async createAuditGroup(projectName, userTelegramId) {
+    await this.loadSettings();
+    try {
+      // Telegram Bot API does not provide a simple createGroup method for bots in many setups.
+      // Try an endpoint that may exist on some integrations; otherwise return null.
+      const res = await axios.post(`${this.baseUrl}/createGroup`, { title: `Audit: ${projectName}`, user_ids: [this.adminUserId, userTelegramId] });
+      if (res?.data?.result) {
+        return { chatId: res.data.result.id, inviteLink: res.data.result.invite_link };
+      }
+    } catch (err) {
+      if (TELEGRAM_DEBUG) console.info('createAuditGroup not supported or failed:', err?.message || err);
+    }
+    return null;
   }
 
   async handleWebhook(update) {
@@ -110,6 +140,55 @@ class TelegramBot {
 
     if (command === '/request') {
       await this.sendMessage(chatId, `To request an audit, please provide Contract, Website, Socials, Logo. When ready, type /contact.`, { parseMode: 'HTML' });
+      if (!this.userStates[chatId]) this.userStates[chatId] = { step: 1, info: {}, started: Date.now() };
+      return;
+    }
+
+    // /contact: finalize the collected info and notify admin
+    if (command === '/contact') {
+      const state = this.userStates[chatId];
+      if (!state || !state.info || !state.info.projectName) {
+        await this.sendMessage(chatId, 'I don\'t have enough info. Please provide project name, contract address, website and socials, or use /request to start.', { parseMode: 'HTML' });
+        return;
+      }
+
+      // prepare admin notification and optional group creation
+      const info = state.info;
+      // Let AI polish the intro message (non-fatal)
+      let introText = `<b>Audit Request Details</b>\nProject: ${info.projectName || ''}`;
+      try {
+        const aiPrompt = `You are a helpful assistant for CFG Ninja audits. Write a short, polite Telegram group introduction message for an auditor and the project owner. Include these details: Project: ${info.projectName || ''} Contract: ${info.contract || ''} Website: ${info.website || ''} Socials: ${info.socials || ''}`;
+        const ai = await this.generateGeminiText(aiPrompt, { temperature: 0.2, maxTokens: 200 });
+        if (ai && ai.length > 10) {
+          introText = ai.trim() + "\n\nI'm CFG Ninja AI Bot, my name is Ninjalyze, an AI agent for CFG Ninja Audits.";
+        }
+      } catch (e) { /* ignore */ }
+
+      // notify admin and try to create group if allowed
+      try {
+        await this.createAuditRequest({ projectName: info.projectName, contractAddress: info.contract, website: info.website, telegram: info.socials, description: info.description || '', userTelegramId: chatId });
+      } catch (err) {
+        if (TELEGRAM_DEBUG) console.error('Failed to create audit request for admin:', err?.message || err);
+      }
+
+      const allowCreateFlag = (await Settings.get('allow_bot_create_group')) || (process.env.ALLOW_BOT_CREATE_GROUP === 'true');
+      if (allowCreateFlag) {
+        try {
+          const created = await this.createAuditGroup(info.projectName || 'New Project', chatId);
+          if (created && created.chatId) {
+            await this.sendMessage(chatId, `✅ I've created a discussion group for your audit: ${created.inviteLink || ''}`);
+            try { await this.sendMessage(created.chatId, introText, { parseMode: 'HTML' }); } catch (e) { if (TELEGRAM_DEBUG) console.error('failed send intro to group', e?.message || e); }
+            delete this.userStates[chatId];
+            return;
+          }
+        } catch (e) {
+          if (TELEGRAM_DEBUG) console.error('createAuditGroup failed', e?.message || e);
+        }
+      }
+
+      // fallback: instruct user to create group manually and paste intro
+      await this.sendMessage(chatId, ['I couldn\'t create the group automatically. Please create a new Telegram group, add both the auditor account and this bot, then paste the following introduction into the group:', '', introText].join('\n'));
+      delete this.userStates[chatId];
       return;
     }
 
@@ -137,9 +216,68 @@ class TelegramBot {
   }
 
   async handleCallbackQuery(query) {
+    // Acknowledge the callback to remove the loading spinner in Telegram clients
     try {
       await axios.post(`${this.baseUrl}/answerCallbackQuery`, { callback_query_id: query.id });
     } catch (e) { /* ignore */ }
+
+    const data = query.data || '';
+    const adminChatId = query.from?.id || (query.message && query.message.chat && query.message.chat.id);
+
+    // Accept audit
+    if (data.startsWith('accept_audit_')) {
+      const id = data.replace('accept_audit_', '');
+      const audit = this.pendingAudits[id];
+      if (!audit) {
+        if (adminChatId) await this.sendMessage(adminChatId, '⚠️ Audit not found or already handled.');
+        return;
+      }
+
+      // Notify admin
+      if (adminChatId) await this.sendMessage(adminChatId, `✅ Accepted audit request for <b>${audit.projectName || 'project'}</b>.`, { parseMode: 'HTML' });
+
+      // Try to create group and post intro
+      let created = null;
+      try {
+        created = await this.createAuditGroup(audit.projectName || 'New Project', audit.userTelegramId);
+      } catch (e) {
+        if (TELEGRAM_DEBUG) console.error('createAuditGroup on accept failed', e?.message || e);
+      }
+
+      // Notify requester
+      try {
+        if (created && created.chatId) {
+          await this.sendMessage(audit.userTelegramId, `✅ Your audit for <b>${audit.projectName || 'project'}</b> was accepted. We've created a discussion group: ${created.inviteLink || ''}`, { parseMode: 'HTML' });
+        } else {
+          await this.sendMessage(audit.userTelegramId, `✅ Your audit for <b>${audit.projectName || 'project'}</b> was accepted by the admin. We'll reach out via Telegram to coordinate next steps.`, { parseMode: 'HTML' });
+        }
+      } catch (e) {
+        if (TELEGRAM_DEBUG) console.error('failed notifying requester on accept', e?.message || e);
+      }
+
+      // mark handled
+      delete this.pendingAudits[id];
+      return;
+    }
+
+    // Decline audit
+    if (data.startsWith('decline_audit_')) {
+      const id = data.replace('decline_audit_', '');
+      const audit = this.pendingAudits[id];
+      if (!audit) {
+        if (adminChatId) await this.sendMessage(adminChatId, '⚠️ Audit not found or already handled.');
+        return;
+      }
+
+      if (adminChatId) await this.sendMessage(adminChatId, `❌ Declined audit request for <b>${audit.projectName || 'project'}</b>.`, { parseMode: 'HTML' });
+      try {
+        await this.sendMessage(audit.userTelegramId, `❌ Your audit request for <b>${audit.projectName || 'project'}</b> was declined by the admin. You can resubmit with more details or contact support.`, { parseMode: 'HTML' });
+      } catch (e) {
+        if (TELEGRAM_DEBUG) console.error('failed notifying requester on decline', e?.message || e);
+      }
+      delete this.pendingAudits[id];
+      return;
+    }
   }
 }
 
