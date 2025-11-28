@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { projectsAPI, marketCapAPI } from '../lib/api';
+import api from '../lib/api';
 import styles from './page.module.css';
 
 interface Project {
@@ -79,7 +80,8 @@ export default function Home() {
 
   const fetchProjects = async () => {
     try {
-      const response = await projectsAPI.getAll();
+      // Request a larger page size for the public homepage so it shows the full portfolio
+      const response = await api.get('/projects', { params: { limit: 2000 } });
       const projectsData = response.data.projects || response.data; // Handle both formats
       setProjects(projectsData);
       calculateStats(projectsData);
