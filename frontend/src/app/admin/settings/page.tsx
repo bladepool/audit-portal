@@ -98,6 +98,7 @@ export default function SettingsPage() {
   const [messageType, setMessageType] = useState<'success' | 'error'>('success');
   // Admin token for backend admin actions (saved but not shown by default)
   const [adminToken, setAdminToken] = useState('');
+  const [showAdminToken, setShowAdminToken] = useState(false);
 
   // Settings state - GitHub
   const [githubToken, setGithubToken] = useState('');
@@ -484,6 +485,29 @@ export default function SettingsPage() {
         <Text className={styles.subtitle}>
           Configure global settings for the audit portal
         </Text>
+      </Card>
+
+      {/* Admin Token (masked) */}
+      <Card className={styles.section}>
+        <Text className={styles.sectionTitle}>
+          <Key24Regular />
+          Admin Token
+        </Text>
+        <Text style={{ marginBottom: '12px', color: tokens.colorNeutralForeground2' }}>
+          Server admin token used for protected admin actions (masked). You can update it here.
+        </Text>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <Input
+            type={showAdminToken ? 'text' : 'password'}
+            value={adminToken}
+            onChange={(e) => setAdminToken(e.target.value)}
+            placeholder="Admin token (masked)"
+            style={{ flex: 1 }}
+          />
+          <Button appearance="subtle" onClick={() => setShowAdminToken(!showAdminToken)}>
+            {showAdminToken ? 'Hide' : 'Show'}
+          </Button>
+        </div>
       </Card>
 
       {/* AI Settings */}
