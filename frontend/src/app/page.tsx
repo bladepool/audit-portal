@@ -52,7 +52,9 @@ export default function Home() {
   const [recentlyAdded, setRecentlyAdded] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [serverTotal, setServerTotal] = useState(0);
+  const [serverPages, setServerPages] = useState(1);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [stats, setStats] = useState<Stats>({
@@ -71,22 +73,40 @@ export default function Home() {
   });
 
   useEffect(() => {
-    fetchProjects();
-    fetchMarketCap();
+    // load homepage aggregates and first page of projects
     fetchPortfolioStats();
+    fetchMarketCap();
+    fetchProjects(currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Reset to page 1 when search query changes
+  // Reset to page 1 and refetch when search query changes
   useEffect(() => {
     setCurrentPage(1);
+    fetchProjects(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
-  const fetchProjects = async () => {
+  const fetchProjects = async (page = 1) => {
     try {
-      // Request a larger page size for the public homepage so it shows the full portfolio
-      const response = await api.get('/projects', { params: { limit: 2000 } });
-      const projectsData = response.data.projects || response.data; // Handle both formats
+      setLoading(true);
+      const response = await api.get('/projects', {
+        params: {
+          page,
+          limit: itemsPerPage,
+          search: searchQuery || undefined,
+        },
+      });
+
+      // backend returns { projects, pagination }
+      const projectsData = response.data.projects || [];
       setProjects(projectsData);
+      const pagination = response.data.pagination || { total: projectsData.length, page, limit: itemsPerPage, pages: 1 };
+      setServerTotal(pagination.total || 0);
+      setServerPages(pagination.pages || 1);
+      setCurrentPage(pagination.page || page);
+
+      // Update limited stats calculated from page data if needed
       calculateStats(projectsData);
     } catch (error) {
       console.error('Error fetching projects:', error);
@@ -210,18 +230,8 @@ export default function Home() {
     return <span className={styles.badgeFail}>FAIL</span>;
   };
 
-  // Filter projects based on search query
-  const filteredProjects = projects.filter(project => {
-    if (!searchQuery || !searchQuery.trim()) return true;
-    const query = searchQuery.toLowerCase().trim();
-    return (
-      (project.name || '').toLowerCase().includes(query) ||
-      (project.symbol || '').toLowerCase().includes(query) ||
-      (project.slug || '').toLowerCase().includes(query) ||
-      (project.ecosystem || '').toLowerCase().includes(query) ||
-      (project.platform || '').toLowerCase().includes(query)
-    );
-  });
+  // With server-side pagination/search the list is already filtered
+  const filteredProjects = projects;
 
   return (
     <div className={styles.page}>
@@ -229,9 +239,9 @@ export default function Home() {
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.logo}>
-            <img 
-              src="/verified-badge-CFG.png" 
-              alt="CFG Ninja Verified" 
+            <img
+              src="https://audit.cfg.ninja/favicon.ico"
+              alt="CFG Ninja"
               className={styles.logoImage}
             />
           </div>
@@ -431,47 +441,100 @@ export default function Home() {
             <div className={styles.chartContainer}>
               <svg className={styles.donutChart} viewBox="0 0 200 200">
                 {(() => {
-                  const platforms = projects.reduce((acc, p) => {
-                    const platform = p.platform || 'Other';
-                    acc[platform] = (acc[platform] || 0) + 1;
+                  // Normalize platform names and aggregate counts
+                  const normalize = (raw?: string) => {
+                    if (!raw) return 'Other';
+                    const s = raw.toString().trim().toLowerCase();
+                    if (!s) return 'Other';
+                    if (s.includes('binance') || s.includes('bsc') || s.includes('bnbchain')) return 'Binance Smart Chain';
+                    if (s.includes('ethereum') || s === 'eth') return 'Ethereum';
+                    if (s.includes('zksync') || s.includes('zk')) return 'ZkSync';
+                    if (s.includes('arbitrum') || s.includes('arbit')) return 'Arbitrum';
+                    if (s.includes('solana')) return 'Solana';
+                    if (s.includes('base')) return 'Base';
+                    return 'Other';
+                  };
+
+                  const rawCounts = projects.reduce((acc, p) => {
+                    const key = normalize(p.platform);
+                    acc[key] = (acc[key] || 0) + 1;
                     return acc;
                   }, {} as Record<string, number>);
-                  
-                  const total = Object.values(platforms).reduce((sum, count) => sum + count, 0);
+
+                  const total = stats.totalProjects || Object.values(rawCounts).reduce((s, c) => s + c, 0) || 1;
+
+                  // build sorted entries
+                  const entries = Object.entries(rawCounts).map(([platform, count]) => ({ platform, count }));
+                  entries.sort((a, b) => b.count - a.count);
+
+                  const top = entries.slice(0, 3);
+                  const topSum = top.reduce((s, e) => s + e.count, 0);
+                  const otherCount = Math.max(0, total - topSum);
+
+                  const display = [...top];
+                  if (otherCount > 0) display.push({ platform: 'Other', count: otherCount });
+
                   const colors = ['#3b82f6', '#1e40af', '#06b6d4', '#0891b2', '#8b5cf6'];
                   let offset = 0;
-                  
-                  return Object.entries(platforms).map(([platform, count], index) => {
-                    const percentage = (count / total) * 502;
+
+                  return display.map((entry, index) => {
+                    const portion = (entry.count / total) * 502;
                     const color = colors[index % colors.length];
-                    const circle = (
-                      <circle 
-                        key={platform}
-                        cx="100" cy="100" r="80" fill="none" 
-                        stroke={color} 
-                        strokeWidth="40" 
-                        strokeDasharray={`${percentage} 502`} 
-                        strokeDashoffset={`-${offset}`} 
-                        transform="rotate(-90 100 100)" 
+                    return (
+                      <circle
+                        key={entry.platform}
+                        cx="100" cy="100" r="80" fill="none"
+                        stroke={color}
+                        strokeWidth="40"
+                        strokeDasharray={`${portion} 502`}
+                        strokeDashoffset={`-${offset}`}
+                        transform="rotate(-90 100 100)"
                       />
                     );
-                    offset += percentage;
-                    return circle;
                   });
                 })()}
               </svg>
               <div className={styles.chartLegend}>
-                {Object.entries(projects.reduce((acc, p) => {
-                  const platform = p.platform || 'Other';
-                  acc[platform] = (acc[platform] || 0) + 1;
-                  return acc;
-                }, {} as Record<string, number>)).map(([platform, count], index) => (
-                  <div key={platform} className={styles.legendItem}>
-                    <span className={styles.legendColor} style={{background: ['#3b82f6', '#1e40af', '#06b6d4', '#0891b2', '#8b5cf6'][index % 5]}}></span>
-                    <span className={styles.legendText}>{platform}</span>
-                    <span className={styles.legendValue}>{count} ({Math.round((count / stats.totalProjects) * 100)}%)</span>
-                  </div>
-                ))}
+                {(() => {
+                  // recreate the same normalized display list used for the donut
+                  const normalize = (raw?: string) => {
+                    if (!raw) return 'Other';
+                    const s = raw.toString().trim().toLowerCase();
+                    if (!s) return 'Other';
+                    if (s.includes('binance') || s.includes('bsc') || s.includes('bnbchain')) return 'Binance Smart Chain';
+                    if (s.includes('ethereum') || s === 'eth') return 'Ethereum';
+                    if (s.includes('zksync') || s.includes('zk')) return 'ZkSync';
+                    if (s.includes('arbitrum') || s.includes('arbit')) return 'Arbitrum';
+                    if (s.includes('solana')) return 'Solana';
+                    if (s.includes('base')) return 'Base';
+                    return 'Other';
+                  };
+
+                  const rawCounts = projects.reduce((acc, p) => {
+                    const key = normalize(p.platform);
+                    acc[key] = (acc[key] || 0) + 1;
+                    return acc;
+                  }, {} as Record<string, number>);
+
+                  const total = stats.totalProjects || Object.values(rawCounts).reduce((s, c) => s + c, 0) || 1;
+                  const entries = Object.entries(rawCounts).map(([platform, count]) => ({ platform, count }));
+                  entries.sort((a, b) => b.count - a.count);
+                  const top = entries.slice(0, 3);
+                  const topSum = top.reduce((s, e) => s + e.count, 0);
+                  const otherCount = Math.max(0, total - topSum);
+                  const display = [...top];
+                  if (otherCount > 0) display.push({ platform: 'Other', count: otherCount });
+
+                  const colors = ['#3b82f6', '#1e40af', '#06b6d4', '#0891b2', '#8b5cf6'];
+
+                  return display.map((entry, index) => (
+                    <div key={entry.platform} className={styles.legendItem}>
+                      <span className={styles.legendColor} style={{background: colors[index % colors.length]}}></span>
+                      <span className={styles.legendText}>{entry.platform}</span>
+                      <span className={styles.legendValue}>{entry.count} ({Math.round((entry.count / total) * 100)}%)</span>
+                    </div>
+                  ));
+                })()}
               </div>
             </div>
           </div>
@@ -569,41 +632,39 @@ export default function Home() {
                     </td>
                   </tr>
                 ) : (
-                  filteredProjects
-                    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-                    .map((project, index) => {
-                      const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
-                      return (
-                        <tr 
-                          key={project._id} 
-                          onClick={() => router.push(`/${project.slug}`)}
-                          className={styles.tableRow}
-                        >
-                          <td>{globalIndex}</td>
-                          <td>
-                            <div className={styles.projectName}>
-                              {project.logo && (
-                                <img src={project.logo} alt={project.name} className={styles.projectLogo} />
-                              )}
-                              <span>{project.name}</span>
-                            </div>
-                          </td>
-                          <td>
-                            <span className={styles.scoreBadge}>
-                              {getScoreBadge(project.audit_score)}
-                            </span>
-                          </td>
-                          <td>
-                            <span className={styles.ecosystem}>{project.platform || 'BINANCE SMART CHAIN'}</span>
-                          </td>
-                          <td>{project.symbol}</td>
-                          <td>{project.total_votes || 0}</td>
+                  filteredProjects.map((project, index) => {
+                    const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
+                    return (
+                      <tr 
+                        key={project._id} 
+                        onClick={() => router.push(`/${project.slug}`)}
+                        className={styles.tableRow}
+                      >
+                        <td>{globalIndex}</td>
                         <td>
-                          <div className={styles.confidence}>
-                            {renderStars(project.audit_confidence || project.audit_score)}
+                          <div className={styles.projectName}>
+                            {project.logo && (
+                              <img src={project.logo} alt={project.name} className={styles.projectLogo} />
+                            )}
+                            <span>{project.name}</span>
                           </div>
                         </td>
-                      </tr>
+                        <td>
+                          <span className={styles.scoreBadge}>
+                            {getScoreBadge(project.audit_score)}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={styles.ecosystem}>{project.platform || 'BINANCE SMART CHAIN'}</span>
+                        </td>
+                        <td>{project.symbol}</td>
+                        <td>{project.total_votes || 0}</td>
+                      <td>
+                        <div className={styles.confidence}>
+                          {renderStars(project.audit_confidence || project.audit_score)}
+                        </div>
+                      </td>
+                    </tr>
                     );
                   })
                 )}
@@ -614,21 +675,21 @@ export default function Home() {
         
         <div className={styles.pagination}>
           <span className={styles.paginationText}>
-            Showing {(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, filteredProjects.length)} out of {filteredProjects.length}
+            Showing {(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, serverTotal)} out of {serverTotal}
           </span>
           <div className={styles.paginationButtons}>
             <button 
               className={styles.paginationButton}
-              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              onClick={() => fetchProjects(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
             >
               Prev
             </button>
-            <span className={styles.pageNumber}>Page {currentPage} of {Math.ceil(filteredProjects.length / itemsPerPage)}</span>
+            <span className={styles.pageNumber}>Page {currentPage} of {serverPages}</span>
             <button 
               className={styles.paginationButton}
-              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(filteredProjects.length / itemsPerPage), prev + 1))}
-              disabled={currentPage === Math.ceil(filteredProjects.length / itemsPerPage)}
+              onClick={() => fetchProjects(Math.min(serverPages, currentPage + 1))}
+              disabled={currentPage === serverPages}
             >
               Next
             </button>
