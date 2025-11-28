@@ -80,6 +80,28 @@ class TelegramBot {
     return `https://t.me/${this.botUsername}?start=${encoded}`;
   }
 
+  async getMe() {
+    await this.loadSettings();
+    if (!this.botToken) throw new Error('Telegram bot token not configured');
+    try {
+      const res = await axios.get(`${this.baseUrl}/getMe`);
+      return res.data.result;
+    } catch (err) {
+      throw new Error(err?.response?.data?.description || err?.message || 'Failed to get bot info');
+    }
+  }
+
+  async getWebhookInfo() {
+    await this.loadSettings();
+    if (!this.botToken) throw new Error('Telegram bot token not configured');
+    try {
+      const res = await axios.get(`${this.baseUrl}/getWebhookInfo`);
+      return res.data.result;
+    } catch (err) {
+      throw new Error(err?.response?.data?.description || err?.message || 'Failed to get webhook info');
+    }
+  }
+
   async createAuditRequest(data) {
     await this.loadSettings();
     if (!this.adminUserId) throw new Error('Telegram admin user ID not configured');
@@ -101,6 +123,30 @@ class TelegramBot {
       await this.sendMessage(data.userTelegramId, `✅ Your audit request for ${data.projectName || 'a project'} has been submitted.`, { parseMode: 'HTML' });
     }
     return { success: true };
+  }
+
+  async enableWebhook(url) {
+    await this.loadSettings();
+    if (!this.botToken) throw new Error('Telegram bot token not configured');
+    const target = url || process.env.TELEGRAM_WEBHOOK_URL;
+    if (!target) throw new Error('No webhook URL provided');
+    try {
+      const res = await axios.post(`${this.baseUrl}/setWebhook`, { url: target, allowed_updates: ['message', 'callback_query'] });
+      return res.data;
+    } catch (err) {
+      throw new Error(err?.response?.data?.description || err?.message || 'Failed to set webhook');
+    }
+  }
+
+  async disableWebhook() {
+    await this.loadSettings();
+    if (!this.botToken) throw new Error('Telegram bot token not configured');
+    try {
+      const res = await axios.post(`${this.baseUrl}/deleteWebhook`);
+      return res.data;
+    } catch (err) {
+      throw new Error(err?.response?.data?.description || err?.message || 'Failed to delete webhook');
+    }
   }
 
   // Attempt to create a group programmatically. Many bot accounts cannot create groups;
