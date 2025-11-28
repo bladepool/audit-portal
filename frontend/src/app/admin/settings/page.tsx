@@ -1,25 +1,4 @@
-  // Settings state - Server Admin Token
-  const [adminToken, setAdminToken] = useState('');
-  // Load settings including admin token
-  const loadSettings = async () => {
-    setLoading(true);
-    try {
-      const settings = await settingsAPI.getAll();
-      setAdminToken(settings.admin_token || '');
-      // ...existing code...
-      setTelegramBotToken(settings.telegram_bot_token || '');
-      setTelegramBotUsername(settings.telegram_bot_username || '');
-      setTelegramAdminUserId(settings.telegram_admin_user_id || '');
-      setTelegramWebhookUrl(settings.telegram_bot_webhook_url || '');
-      setGeminiApiKey(settings.gemini_api_key || '');
-      setAllowBotCreateGroup(!!settings.allow_bot_create_group);
-    } catch (err) {
-      showMessage('Failed to load settings', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -42,6 +21,13 @@ import {
 import { settingsAPI, telegramAPI } from '@/lib/api';
 import Link from 'next/link';
 // ...existing code...
+
+import api from '@/lib/api';
+
+// Ensure a test helper exists on settingsAPI for testing API keys
+if (!settingsAPI.test) {
+  settingsAPI.test = (service: string, apiKey: string) => api.post(`/settings/test/${service}`, { apiKey });
+}
 
 
 const useStyles = makeStyles({
@@ -563,13 +549,7 @@ export default function SettingsPage() {
             {aiStatus === 'error' && <Text style={{ color: tokens.colorPaletteRedForeground1 }}>{aiStatusMsg}</Text>}
           </div>
         </div>
-        // Add Gemini test API to settingsAPI
-        // (if not already present)
-        import api from '@/lib/api';
-        if (!settingsAPI.test) {
-          settingsAPI.test = (service: string, apiKey: string) =>
-            api.post(`/settings/test/${service}`, { apiKey });
-        }
+        
         <Text className={styles.sectionTitle}>
           <Key24Regular />
           Blockchain Scanner API Keys
