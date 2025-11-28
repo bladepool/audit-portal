@@ -96,6 +96,8 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState<'success' | 'error'>('success');
+  // Admin token for backend admin actions (saved but not shown by default)
+  const [adminToken, setAdminToken] = useState('');
 
   // Settings state - GitHub
   const [githubToken, setGithubToken] = useState('');
@@ -273,6 +275,9 @@ export default function SettingsPage() {
       if (settings.gemini_api_key) {
         setGeminiApiKey(settings.gemini_api_key.value || '');
         setGeminiApiKeyDesc(settings.gemini_api_key.description || geminiApiKeyDesc);
+      }
+      if (settings.admin_token) {
+        setAdminToken(settings.admin_token.value || '');
       }
       if (settings.allow_bot_create_group) {
         setAllowBotCreateGroup(Boolean(settings.allow_bot_create_group.value));
