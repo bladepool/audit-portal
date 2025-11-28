@@ -1,4 +1,6 @@
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 const Settings = require('../models/Settings');
 
 const TELEGRAM_DEBUG = process.env.TELEGRAM_DEBUG === 'true';
@@ -12,6 +14,29 @@ class TelegramBot {
     this.settingsLoaded = false;
     this.userStates = {};
     this.pendingAudits = {}; // map callback id -> audit data
+    this.debugLogPath = process.env.TELEGRAM_DEBUG_LOG_PATH || path.join(__dirname, '..', '..', 'logs', 'telegram-debug.log');
+  }
+
+  async logDebug(entry) {
+    try {
+      const dir = path.dirname(this.debugLogPath);
+      await fs.promises.mkdir(dir, { recursive: true });
+      // rotate if file larger than 5MB
+      try {
+        const st = await fs.promises.stat(this.debugLogPath);
+        const max = 5 * 1024 * 1024;
+        if (st.size > max) {
+          const rotated = this.debugLogPath + '.' + Date.now();
+          await fs.promises.rename(this.debugLogPath, rotated).catch(() => {});
+        }
+      } catch (e) { /* ignore missing file */ }
+
+      const prefix = (new Date()).toISOString();
+      const blob = typeof entry === 'string' ? entry : JSON.stringify(entry, null, 2);
+      await fs.promises.appendFile(this.debugLogPath, `${prefix} ${blob}\n\n`);
+    } catch (e) {
+      if (process.env.TELEGRAM_DEBUG === 'true') console.error('Failed to write telegram debug log', e?.message || e);
+    }
   }
 
   async loadSettings() {
@@ -39,19 +64,53 @@ class TelegramBot {
     await this.loadSettings();
     try {
       const apiKey = (await Settings.get('gemini_api_key')) || process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-      if (!apiKey) return prompt;
+        await this.logDebug({ event: 'gemini.request', model, prompt: String(prompt).slice(0,200) });
+      if (!apiKey) return null; // no key configured -> signal to caller there is no AI available
       const model = opts.model || 'models/text-bison-001';
-      const url = `https://gemini.googleapis.com/v1/${model}:generateText?key=${apiKey}`;
+      const url = `https://gemini.googleapis.com/v1/${model}:generateText`;
       const body = { prompt: { text: prompt }, temperature: opts.temperature || 0.2, maxOutputTokens: opts.maxTokens || 512 };
-      const res = await axios.post(url, body, { timeout: 15000 });
+
+      // prefer header-based API key usage; fall back to query param if needed
+      const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` };
+      let res;
+      try {
+        res = await axios.post(url, body, { headers, timeout: 15000 });
+      } catch (err) {
+        // try with ?key= fallback for older setups
+        try {
+          const urlWithKey = `${url}?key=${apiKey}`;
+          res = await axios.post(urlWithKey, body, { timeout: 15000 });
+        } catch (err2) {
+          throw err2 || err;
+        }
+      }
+
       const data = res.data || {};
-      const candidate = data?.candidates?.[0]?.content || data?.output_text || data?.output?.[0]?.content || data?.response || null;
-      if (candidate && typeof candidate === 'string') return candidate;
-      if (typeof data === 'string') return data;
-      return prompt;
+        const data = res.data || {};
+        // Log a truncated copy of the raw response for diagnostics
+        try { await this.logDebug({ event: 'gemini.response', model, data: JSON.parse(JSON.stringify(data)).length ? JSON.stringify(data).slice(0,5000) : String(data).slice(0,5000) }); } catch(e) { await this.logDebug({ event: 'gemini.response', model, data: String(data).slice(0,2000) }); }
+      const candidate = (data?.candidates && data.candidates[0] && data.candidates[0].content)
+        || data?.output_text
+        || (data?.output && data.output[0] && data.output[0].content)
+        || data?.response
+        || null;
+      if (candidate && typeof candidate === 'string') return candidate.trim();
+        if (candidate && typeof candidate === 'string') {
+          await this.logDebug({ event: 'gemini.candidate', model, candidate: String(candidate).slice(0,300) });
+          return candidate.trim();
+        }
+      if (typeof data === 'string') return data.trim();
+        if (typeof data === 'string') {
+          await this.logDebug({ event: 'gemini.candidate_string', model, data: String(data).slice(0,300) });
+          return data.trim();
+        }
+        await this.logDebug({ event: 'gemini.no_candidate', model });
+      return null;
     } catch (err) {
-      if (TELEGRAM_DEBUG) console.error('Gemini API error:', err?.response?.data || err?.message || err);
-      return prompt;
+        const errInfo = err?.response?.data || err?.message || String(err);
+        await this.logDebug({ event: 'gemini.error', error: errInfo });
+        if (TELEGRAM_DEBUG) console.error('Gemini API error:', errInfo);
+      return null;
     }
   }
 
@@ -206,7 +265,15 @@ class TelegramBot {
         const aiPrompt = `You are a helpful assistant for CFG Ninja audits. Write a short, polite Telegram group introduction message for an auditor and the project owner. Include these details: Project: ${info.projectName || ''} Contract: ${info.contract || ''} Website: ${info.website || ''} Socials: ${info.socials || ''}`;
         const ai = await this.generateGeminiText(aiPrompt, { temperature: 0.2, maxTokens: 200 });
         if (ai && ai.length > 10) {
-          introText = ai.trim() + "\n\nI'm CFG Ninja AI Bot, my name is Ninjalyze, an AI agent for CFG Ninja Audits.";
+          const aiNorm = ai.trim();
+          // Guard: if model simply echoed the prompt or starts with an assistant instruction, treat as no-AI
+          if (!aiNorm.toLowerCase().startsWith('you are') && !aiNorm.includes(aiPrompt)) {
+            introText = aiNorm + "\n\nI'm CFG Ninja AI Bot, my name is Ninjalyze, an AI agent for CFG Ninja Audits.";
+            await this.logDebug({ event: 'ai.used_for_intro', chat: chatId, snippet: aiNorm.slice(0,300) });
+          } else {
+            await this.logDebug({ event: 'ai.ignored_echo_intro', chat: chatId, returned: aiNorm.slice(0,300) });
+            if (TELEGRAM_DEBUG) console.warn('Gemini returned an echoed prompt; ignoring AI result');
+          }
         }
       } catch (e) { /* ignore */ }
 
@@ -243,9 +310,16 @@ class TelegramBot {
         const prompt = `You are CFG Ninja's assistant. Reply concisely to: "${text}"`;
         const ai = await this.generateGeminiText(prompt, { temperature: 0.2, maxTokens: 200 });
         if (ai && ai.length > 5) {
-          const reply = ai.trim() + "\n\nI'm CFG Ninja AI Bot, my name is Ninjalyze, an AI agent for CFG Ninja Audits.";
-          await this.sendMessage(chatId, reply, { parseMode: 'HTML' });
-          return;
+          const aiNorm = ai.trim();
+          if (!aiNorm.toLowerCase().startsWith('you are') && !aiNorm.includes(prompt)) {
+            const reply = aiNorm + "\n\nI'm CFG Ninja AI Bot, my name is Ninjalyze, an AI agent for CFG Ninja Audits.";
+            await this.logDebug({ event: 'ai.reply_sent', chat: chatId, snippet: aiNorm.slice(0,300) });
+            await this.sendMessage(chatId, reply, { parseMode: 'HTML' });
+            return;
+          } else {
+            await this.logDebug({ event: 'ai.ignored_echo_reply', chat: chatId, returned: aiNorm.slice(0,300) });
+            if (TELEGRAM_DEBUG) console.warn('Gemini returned an echoed prompt; ignoring AI result');
+          }
         }
       } catch (e) {
         if (TELEGRAM_DEBUG) console.error('AI reply failed', e?.message || e);
