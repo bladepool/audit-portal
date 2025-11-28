@@ -55,6 +55,7 @@ export default function Home() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [serverTotal, setServerTotal] = useState(0);
   const [serverPages, setServerPages] = useState(1);
+  const [showPlatformDetails, setShowPlatformDetails] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [stats, setStats] = useState<Stats>({
@@ -240,7 +241,7 @@ export default function Home() {
         <div className={styles.headerContent}>
           <div className={styles.logo}>
             <img
-              src="https://audit.cfg.ninja/favicon.ico"
+              src="/favicon.svg"
               alt="CFG Ninja"
               className={styles.logoImage}
             />
@@ -527,13 +528,58 @@ export default function Home() {
 
                   const colors = ['#3b82f6', '#1e40af', '#06b6d4', '#0891b2', '#8b5cf6'];
 
-                  return display.map((entry, index) => (
-                    <div key={entry.platform} className={styles.legendItem}>
-                      <span className={styles.legendColor} style={{background: colors[index % colors.length]}}></span>
-                      <span className={styles.legendText}>{entry.platform}</span>
-                      <span className={styles.legendValue}>{entry.count} ({Math.round((entry.count / total) * 100)}%)</span>
-                    </div>
-                  ));
+                  return (
+                    <>
+                      {display.map((entry, index) => (
+                        <div key={entry.platform} className={styles.legendItem}>
+                          <span className={styles.legendColor} style={{background: colors[index % colors.length]}}></span>
+                          <span className={styles.legendText}>{entry.platform}</span>
+                          <span className={styles.legendValue}>{entry.count} ({Math.round((entry.count / total) * 100)}%)</span>
+                        </div>
+                      ))}
+
+                      <div style={{ marginTop: 8 }}>
+                        <button className={styles.smallButton} onClick={() => setShowPlatformDetails(prev => !prev)}>
+                          {showPlatformDetails ? 'Hide full breakdown' : 'Show full breakdown'}
+                        </button>
+                      </div>
+
+                      {showPlatformDetails && (
+                        <div className={styles.fullPlatformList} style={{ marginTop: 8 }}>
+                          {(() => {
+                            const normalize = (raw?: string) => {
+                              if (!raw) return 'Other';
+                              const s = raw.toString().trim().toLowerCase();
+                              if (!s) return 'Other';
+                              if (s.includes('binance') || s.includes('bsc') || s.includes('bnbchain')) return 'Binance Smart Chain';
+                              if (s.includes('ethereum') || s === 'eth') return 'Ethereum';
+                              if (s.includes('zksync') || s.includes('zk')) return 'ZkSync';
+                              if (s.includes('arbitrum') || s.includes('arbit')) return 'Arbitrum';
+                              if (s.includes('solana')) return 'Solana';
+                              if (s.includes('base')) return 'Base';
+                              return raw || 'Other';
+                            };
+
+                            const counts = projects.reduce((acc, p) => {
+                              const key = normalize(p.platform);
+                              acc[key] = (acc[key] || 0) + 1;
+                              return acc;
+                            }, {} as Record<string, number>);
+
+                            const list = Object.entries(counts).map(([platform, count]) => ({ platform, count }));
+                            list.sort((a, b) => b.count - a.count);
+
+                            return list.map(item => (
+                              <div key={item.platform} className={styles.legendItem} style={{ paddingTop: 4 }}>
+                                <span className={styles.legendText}>{item.platform}</span>
+                                <span className={styles.legendValue}>{item.count} ({Math.round((item.count / (total || 1)) * 100)}%)</span>
+                              </div>
+                            ));
+                          })()}
+                        </div>
+                      )}
+                    </>
+                  );
                 })()}
               </div>
             </div>
