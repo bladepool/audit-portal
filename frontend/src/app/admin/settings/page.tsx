@@ -493,7 +493,7 @@ export default function SettingsPage() {
           <Key24Regular />
           Admin Token
         </Text>
-        <Text style={{ marginBottom: '12px', color: tokens.colorNeutralForeground2' }}>
+        <Text style={{ marginBottom: '12px', color: tokens.colorNeutralForeground2 }}>
           Server admin token used for protected admin actions (masked). You can update it here.
         </Text>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
