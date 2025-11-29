@@ -64,7 +64,6 @@ class TelegramBot {
     await this.loadSettings();
     try {
       const apiKey = (await Settings.get('gemini_api_key')) || process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-        await this.logDebug({ event: 'gemini.request', model, prompt: String(prompt).slice(0,200) });
       if (!apiKey) return null; // no key configured -> signal to caller there is no AI available
       const model = opts.model || 'models/text-bison-001';
       const url = `https://gemini.googleapis.com/v1/${model}:generateText`;
@@ -72,6 +71,7 @@ class TelegramBot {
 
       // prefer header-based API key usage; fall back to query param if needed
       const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` };
+      await this.logDebug({ event: 'gemini.request', model, prompt: String(prompt).slice(0,200) });
       let res;
       try {
         res = await axios.post(url, body, { headers, timeout: 15000 });
@@ -86,30 +86,35 @@ class TelegramBot {
       }
 
       const data = res.data || {};
-        const data = res.data || {};
-        // Log a truncated copy of the raw response for diagnostics
-        try { await this.logDebug({ event: 'gemini.response', model, data: JSON.parse(JSON.stringify(data)).length ? JSON.stringify(data).slice(0,5000) : String(data).slice(0,5000) }); } catch(e) { await this.logDebug({ event: 'gemini.response', model, data: String(data).slice(0,2000) }); }
+      // Log a truncated copy of the raw response for diagnostics
+      try {
+        await this.logDebug({ event: 'gemini.response', model, data: JSON.stringify(data).slice(0,5000) });
+      } catch (e) {
+        await this.logDebug({ event: 'gemini.response', model, data: String(data).slice(0,2000) });
+      }
+
       const candidate = (data?.candidates && data.candidates[0] && data.candidates[0].content)
         || data?.output_text
         || (data?.output && data.output[0] && data.output[0].content)
         || data?.response
         || null;
-      if (candidate && typeof candidate === 'string') return candidate.trim();
-        if (candidate && typeof candidate === 'string') {
-          await this.logDebug({ event: 'gemini.candidate', model, candidate: String(candidate).slice(0,300) });
-          return candidate.trim();
-        }
-      if (typeof data === 'string') return data.trim();
-        if (typeof data === 'string') {
-          await this.logDebug({ event: 'gemini.candidate_string', model, data: String(data).slice(0,300) });
-          return data.trim();
-        }
-        await this.logDebug({ event: 'gemini.no_candidate', model });
+
+      if (candidate && typeof candidate === 'string') {
+        await this.logDebug({ event: 'gemini.candidate', model, candidate: String(candidate).slice(0,300) });
+        return candidate.trim();
+      }
+
+      if (typeof data === 'string') {
+        await this.logDebug({ event: 'gemini.candidate_string', model, data: String(data).slice(0,300) });
+        return data.trim();
+      }
+
+      await this.logDebug({ event: 'gemini.no_candidate', model });
       return null;
     } catch (err) {
-        const errInfo = err?.response?.data || err?.message || String(err);
-        await this.logDebug({ event: 'gemini.error', error: errInfo });
-        if (TELEGRAM_DEBUG) console.error('Gemini API error:', errInfo);
+      const errInfo = err?.response?.data || err?.message || String(err);
+      await this.logDebug({ event: 'gemini.error', error: errInfo });
+      if (TELEGRAM_DEBUG) console.error('Gemini API error:', errInfo);
       return null;
     }
   }
