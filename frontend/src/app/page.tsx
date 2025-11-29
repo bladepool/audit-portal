@@ -241,7 +241,7 @@ export default function Home() {
         <div className={styles.headerContent}>
           <div className={styles.logo}>
             <img
-              src="/favicon.svg"
+              src="/favicon.ico"
               alt="CFG Ninja"
               className={styles.logoImage}
             />
