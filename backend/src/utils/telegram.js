@@ -63,7 +63,15 @@ class TelegramBot {
   async generateGeminiText(prompt, opts = {}) {
     await this.loadSettings();
     try {
-      const apiKey = (await Settings.get('gemini_api_key')) || process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+      // Read Gemini key from Settings if available, but don't let a DB error block us — fall back to env var
+      let apiKey = null;
+      try {
+        apiKey = await Settings.get('gemini_api_key');
+      } catch (e) {
+        // ignore DB read errors here; will use env var fallback
+        if (TELEGRAM_DEBUG) console.warn('Settings.get(gemini_api_key) failed, falling back to env var');
+      }
+      apiKey = apiKey || process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
       if (!apiKey) return null; // no key configured -> signal to caller there is no AI available
       const model = opts.model || 'models/text-bison-001';
       const url = `https://gemini.googleapis.com/v1/${model}:generateText`;
