@@ -81,3 +81,67 @@ router.post('/gemini-test', async (req, res) => {
 });
 
 module.exports = router;
+
+// GET /api/debug/ai-status
+// Returns quick status about AI key presence, allow_ai_replies setting, and recent Gemini logs
+router.get('/ai-status', async (req, res) => {
+  try {
+    const adminTokenEnv = process.env.ADMIN_TOKEN || null;
+    let adminTokenSetting = null;
+    try { adminTokenSetting = await Settings.get('admin_token'); } catch (e) { /* ignore */ }
+    const expected = adminTokenEnv || adminTokenSetting || null;
+
+    const provided = req.headers['x-admin-token'] || req.query.token || '';
+    if (expected && provided !== expected) {
+      return res.status(403).json({ success: false, error: 'Forbidden: invalid admin token' });
+    }
+
+    const hasEnvKey = !!process.env.GEMINI_API_KEY;
+    let settingsKeyPresent = false;
+    try {
+      const sk = await Settings.get('gemini_api_key');
+      settingsKeyPresent = !!sk;
+    } catch (e) {
+      // ignore DB read errors
+    }
+
+    let allowAiReplies = false;
+    try {
+      const s = await Settings.get('allow_ai_replies');
+      if (typeof s === 'string') allowAiReplies = s === 'true';
+      else if (typeof s === 'boolean') allowAiReplies = s;
+      else allowAiReplies = process.env.ALLOW_AI_REPLIES === 'true';
+    } catch (e) {
+      allowAiReplies = process.env.ALLOW_AI_REPLIES === 'true';
+    }
+
+    const logPath = process.env.TELEGRAM_DEBUG_LOG_PATH || path.join(__dirname, '..', '..', 'logs', 'telegram-debug.log');
+    let tail = [];
+    try {
+      if (fs.existsSync(logPath)) {
+        const data = await fs.promises.readFile(logPath, 'utf8');
+        tail = data.split(/\r?\n/).filter(Boolean).slice(-200);
+      }
+    } catch (e) { /* ignore */ }
+
+    const botInfo = {
+      username: telegramBot.botUsername || null,
+      connected: !!telegramBot.botToken,
+    };
+
+    res.json({
+      success: true,
+      ai: {
+        hasEnvKey,
+        settingsKeyPresent,
+        allowAiReplies,
+      },
+      bot: botInfo,
+      logs: tail,
+    });
+  } catch (err) {
+    console.error('Error /api/debug/ai-status:', err?.message || err);
+    res.status(500).json({ success: false, error: 'Failed to compute AI status' });
+  }
+});
+
