@@ -4,6 +4,9 @@ const path = require('path');
 const Settings = require('../models/Settings');
 
 const TELEGRAM_DEBUG = process.env.TELEGRAM_DEBUG === 'true';
+const DEFAULT_GEMINI_MODEL = process.env.DEFAULT_GEMINI_MODEL || 'models/text-bison-001';
+const AI_SIGNATURE = process.env.AI_SIGNATURE_TEXT || "I'm CFG Ninja AI Bot, my name is Ninjalyze, an AI agent for CFG Ninja Audits.";
+const APPEND_AI_SIGNATURE = process.env.APPEND_AI_SIGNATURE !== 'false';
 
 class TelegramBot {
   constructor() {
@@ -83,7 +86,7 @@ class TelegramBot {
         apiKey = apiKey || process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
       }
       if (!apiKey) return null; // no key configured -> signal to caller there is no AI available
-      const model = opts.model || 'models/text-bison-001';
+      const model = opts.model || DEFAULT_GEMINI_MODEL;
       // Use Google Generative Language endpoint (generativelanguage.googleapis.com).
       // Allow overriding via GENAI_HOST env for testing.
       const host = process.env.GENAI_HOST || 'https://generativelanguage.googleapis.com';
@@ -299,8 +302,9 @@ class TelegramBot {
         if (ai && ai.length > 10) {
           const aiNorm = ai.trim();
           // Guard: if model simply echoed the prompt or starts with an assistant instruction, treat as no-AI
-          if (!aiNorm.toLowerCase().startsWith('you are') && !aiNorm.includes(aiPrompt)) {
-            introText = aiNorm + "\n\nI'm CFG Ninja AI Bot, my name is Ninjalyze, an AI agent for CFG Ninja Audits.";
+            if (!aiNorm.toLowerCase().startsWith('you are') && !aiNorm.includes(aiPrompt)) {
+            introText = aiNorm;
+            if (APPEND_AI_SIGNATURE) introText = introText + "\n\n" + AI_SIGNATURE;
             await this.logDebug({ event: 'ai.used_for_intro', chat: chatId, snippet: aiNorm.slice(0,300) });
           } else {
             await this.logDebug({ event: 'ai.ignored_echo_intro', chat: chatId, returned: aiNorm.slice(0,300) });
@@ -343,8 +347,9 @@ class TelegramBot {
         const ai = await this.generateGeminiText(prompt, { temperature: 0.2, maxTokens: 200 });
         if (ai && ai.length > 5) {
           const aiNorm = ai.trim();
-          if (!aiNorm.toLowerCase().startsWith('you are') && !aiNorm.includes(prompt)) {
-            const reply = aiNorm + "\n\nI'm CFG Ninja AI Bot, my name is Ninjalyze, an AI agent for CFG Ninja Audits.";
+            if (!aiNorm.toLowerCase().startsWith('you are') && !aiNorm.includes(prompt)) {
+            let reply = aiNorm;
+            if (APPEND_AI_SIGNATURE) reply = reply + "\n\n" + AI_SIGNATURE;
             await this.logDebug({ event: 'ai.reply_sent', chat: chatId, snippet: aiNorm.slice(0,300) });
             await this.sendMessage(chatId, reply, { parseMode: 'HTML' });
             return;
@@ -353,9 +358,17 @@ class TelegramBot {
             if (TELEGRAM_DEBUG) console.warn('Gemini returned an echoed prompt; ignoring AI result');
           }
         }
-      } catch (e) {
-        if (TELEGRAM_DEBUG) console.error('AI reply failed', e?.message || e);
-      }
+        } catch (e) {
+          if (TELEGRAM_DEBUG) console.error('AI reply failed', e?.message || e);
+        }
+
+        // If AI did not produce a reply, provide a friendly fallback when AI replies are enabled
+        if (allowAIReplies) {
+          try {
+            const fallback = 'I\'m currently unable to generate an AI reply. An admin will respond as soon as possible.';
+            await this.sendMessage(chatId, fallback, { parseMode: 'HTML' });
+          } catch (e) { /* ignore fallback send errors */ }
+        }
     }
 
     // default fallback
