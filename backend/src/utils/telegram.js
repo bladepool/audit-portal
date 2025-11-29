@@ -61,34 +61,53 @@ class TelegramBot {
   }
 
   async generateGeminiText(prompt, opts = {}) {
-    await this.loadSettings();
+    // Prefer an environment-provided Gemini API key. Only attempt a Settings DB read
+    // if no env key is present to avoid blocking when MongoDB is unreachable.
     try {
-      // Read Gemini key from Settings if available, but don't let a DB error block us — fall back to env var
-      let apiKey = null;
-      try {
-        apiKey = await Settings.get('gemini_api_key');
-      } catch (e) {
-        // ignore DB read errors here; will use env var fallback
-        if (TELEGRAM_DEBUG) console.warn('Settings.get(gemini_api_key) failed, falling back to env var');
+      await this.logDebug({ event: 'gemini.start', hasEnvKey: !!process.env.GEMINI_API_KEY });
+    } catch (e) { /* ignore logging failures */ }
+
+    try {
+      let apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY || null;
+      // Only hit the DB if we don't already have an env key
+      if (!apiKey) {
+        try {
+          // attempt to load settings (may fail if DB unreachable)
+          await this.loadSettings();
+        } catch (e) { /* ignore load errors here */ }
+        try {
+          apiKey = await Settings.get('gemini_api_key');
+        } catch (e) {
+          if (TELEGRAM_DEBUG) console.warn('Settings.get(gemini_api_key) failed, falling back to env var');
+        }
+        apiKey = apiKey || process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
       }
-      apiKey = apiKey || process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
       if (!apiKey) return null; // no key configured -> signal to caller there is no AI available
       const model = opts.model || 'models/text-bison-001';
-      const url = `https://gemini.googleapis.com/v1/${model}:generateText`;
+      // Use Google Generative Language endpoint (generativelanguage.googleapis.com).
+      // Allow overriding via GENAI_HOST env for testing.
+      const host = process.env.GENAI_HOST || 'https://generativelanguage.googleapis.com';
+      // Use v1beta2 for the generative language API which exposes generateText for text-bison
+      const apiVersion = process.env.GENAI_API_VERSION || 'v1beta2';
+      const url = `${host}/${apiVersion}/${model}:generateText`;
       const body = { prompt: { text: prompt }, temperature: opts.temperature || 0.2, maxOutputTokens: opts.maxTokens || 512 };
 
       // prefer header-based API key usage; fall back to query param if needed
       const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` };
-      await this.logDebug({ event: 'gemini.request', model, prompt: String(prompt).slice(0,200) });
+      await this.logDebug({ event: 'gemini.request', model, url, prompt: String(prompt).slice(0,200) });
       let res;
       try {
+        await this.logDebug({ event: 'gemini.attempt', attempt: 'header', hasApiKey: !!apiKey });
         res = await axios.post(url, body, { headers, timeout: 15000 });
       } catch (err) {
+        await this.logDebug({ event: 'gemini.attempt_failed', attempt: 'header', error: err?.response?.status || err?.message || String(err) });
         // try with ?key= fallback for older setups
         try {
           const urlWithKey = `${url}?key=${apiKey}`;
+          await this.logDebug({ event: 'gemini.attempt', attempt: 'query', url: String(urlWithKey).slice(0,200) });
           res = await axios.post(urlWithKey, body, { timeout: 15000 });
         } catch (err2) {
+          await this.logDebug({ event: 'gemini.attempt_failed', attempt: 'query', error: err2?.response?.status || err2?.message || String(err2) });
           throw err2 || err;
         }
       }

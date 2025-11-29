@@ -6,8 +6,8 @@
   try {
     const { telegramBot } = require('../src/utils/telegram');
 
-    console.log('Reloading telegram/settings...');
-    await telegramBot.reloadSettings();
+    // Don't touch Settings / MongoDB here so local tests don't block when DB is down.
+    console.log('Env GEMINI key present:', !!process.env.GEMINI_API_KEY);
 
     const prompt = `You are CFG Ninja's assistant. In one short paragraph, explain what I should include when requesting a smart contract audit.`;
     console.log('Sending prompt to Gemini...');
