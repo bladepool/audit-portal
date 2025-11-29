@@ -88,6 +88,13 @@ try {
 } catch (error) {
   console.error('❌ Failed to load telegram routes:', error.message);
 }
+let debugRoutes;
+try {
+  debugRoutes = require('./routes/debug');
+  console.log('✅ Debug routes loaded');
+} catch (error) {
+  console.warn('⚠️ Debug routes not available:', error.message);
+}
 // Admin PDF routes - only available when PDF generation path exists
 let adminPdfRoutes = null;
 const fs = require('fs');
@@ -179,6 +186,10 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/audit-request', auditRequestRoutes);
 if (telegramRoutes) {
   app.use('/api/telegram', telegramRoutes);
+}
+
+if (debugRoutes) {
+  app.use('/api/debug', debugRoutes);
 }
 
 if (adminUsageRoutes) {
