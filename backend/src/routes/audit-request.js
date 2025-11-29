@@ -102,7 +102,18 @@ router.get('/telegram-link', (req, res) => {
 router.post('/webhook', async (req, res) => {
   try {
     const update = req.body;
-    
+
+    // Validate incoming webhook secret token if configured
+    const enableSecure = process.env.ENABLE_SECURE_WEBHOOK_TOKEN !== 'false';
+    if (enableSecure) {
+      const incoming = req.headers['x-telegram-bot-api-secret-token'] || req.headers['X-Telegram-Bot-Api-Secret-Token'];
+      const secret = process.env.TELEGRAM_WEBHOOK_SECRET || null;
+      if (secret && (!incoming || incoming !== secret)) {
+        console.warn('Rejected webhook: invalid secret token');
+        return res.status(403).json({ error: 'Forbidden: invalid webhook token' });
+      }
+    }
+
     console.log('Received Telegram webhook:', JSON.stringify(update, null, 2));
 
     const { telegramBot } = require('../utils/telegram');

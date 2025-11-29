@@ -87,6 +87,8 @@ class TelegramBot {
       }
       if (!apiKey) return null; // no key configured -> signal to caller there is no AI available
       const model = opts.model || DEFAULT_GEMINI_MODEL;
+      // Delegate to gemini-client wrapper (SDK preferred, HTTP fallback)
+      const geminiClient = require('./gemini-client');
       // Use Google Generative Language endpoint (generativelanguage.googleapis.com).
       // Allow overriding via GENAI_HOST env for testing.
       const host = process.env.GENAI_HOST || 'https://generativelanguage.googleapis.com';
@@ -97,25 +99,16 @@ class TelegramBot {
 
       // prefer header-based API key usage; fall back to query param if needed
       const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` };
-      await this.logDebug({ event: 'gemini.request', model, url, prompt: String(prompt).slice(0,200) });
-      let res;
+      await this.logDebug({ event: 'gemini.request', model, prompt: String(prompt).slice(0,200) });
+      let data = null;
       try {
-        await this.logDebug({ event: 'gemini.attempt', attempt: 'header', hasApiKey: !!apiKey });
-        res = await axios.post(url, body, { headers, timeout: 15000 });
-      } catch (err) {
-        await this.logDebug({ event: 'gemini.attempt_failed', attempt: 'header', error: err?.response?.status || err?.message || String(err) });
-        // try with ?key= fallback for older setups
-        try {
-          const urlWithKey = `${url}?key=${apiKey}`;
-          await this.logDebug({ event: 'gemini.attempt', attempt: 'query', url: String(urlWithKey).slice(0,200) });
-          res = await axios.post(urlWithKey, body, { timeout: 15000 });
-        } catch (err2) {
-          await this.logDebug({ event: 'gemini.attempt_failed', attempt: 'query', error: err2?.response?.status || err2?.message || String(err2) });
-          throw err2 || err;
-        }
+        await this.logDebug({ event: 'gemini.client_call', method: 'start' });
+        data = await geminiClient.generateText(prompt, { model, temperature: opts.temperature, maxTokens: opts.maxTokens });
+        await this.logDebug({ event: 'gemini.client_call', method: 'done' });
+      } catch (e) {
+        await this.logDebug({ event: 'gemini.client_error', error: e?.response?.data || e?.message || String(e) });
+        throw e;
       }
-
-      const data = res.data || {};
       // Log a truncated copy of the raw response for diagnostics
       try {
         await this.logDebug({ event: 'gemini.response', model, data: JSON.stringify(data).slice(0,5000) });
